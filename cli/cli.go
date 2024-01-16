@@ -57,6 +57,7 @@ func makeClient(cmd *cobra.Command, args []string) (*client.LatitudeShAPI, error
 	// set custom producer and consumer to use the default ones
 
 	r.Consumers["application/json"] = runtime.JSONConsumer()
+	r.Consumers["application/vnd.api+json"] = runtime.JSONConsumer()
 
 	r.Producers["application/json"] = runtime.JSONProducer()
 
@@ -99,6 +100,14 @@ func MakeRootCmd() (*cobra.Command, error) {
 	if err := registerAuthInoWriterFlags(rootCmd); err != nil {
 		return nil, err
 	}
+
+	// add login with api -oken
+	operationLoginCmd, err := makeOperationLoginCmd()
+	if err != nil {
+		return nil, err
+	}
+	rootCmd.AddCommand(operationLoginCmd)
+
 	// add all operation groups
 	operationGroupAccountCmd, err := makeOperationGroupAccountCmd()
 	if err != nil {
