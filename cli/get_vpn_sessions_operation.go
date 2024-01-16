@@ -10,6 +10,7 @@ import (
 	"fmt"
 
 	"github.com/latitudesh/cli/client/v_p_n_sessions"
+	"github.com/latitudesh/cli/internal/utils"
 
 	"github.com/go-openapi/swag"
 	"github.com/spf13/cobra"
@@ -56,7 +57,7 @@ func runOperationVpnSessionsGetVpnSessions(cmd *cobra.Command, args []string) er
 	}
 	if !debug {
 
-		fmt.Println(msgStr)
+		fmt.Println(utils.PrettifyJson(msgStr))
 	}
 	return nil
 }

@@ -9,6 +9,7 @@ import (
 	"fmt"
 
 	"github.com/latitudesh/cli/client/ssh_keys"
+	"github.com/latitudesh/cli/internal/utils"
 
 	"github.com/spf13/cobra"
 )
@@ -58,7 +59,7 @@ func runOperationSSHKeysDeleteProjectSSHKey(cmd *cobra.Command, args []string) e
 	}
 	if !debug {
 
-		fmt.Println(msgStr)
+		fmt.Println(utils.PrettifyJson(msgStr))
 	}
 	return nil
 }

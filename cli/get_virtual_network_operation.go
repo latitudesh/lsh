@@ -10,6 +10,7 @@ import (
 	"fmt"
 
 	"github.com/latitudesh/cli/client/virtual_networks"
+	"github.com/latitudesh/cli/internal/utils"
 	"github.com/latitudesh/cli/models"
 
 	"github.com/go-openapi/swag"
@@ -58,7 +59,7 @@ func runOperationVirtualNetworksGetVirtualNetwork(cmd *cobra.Command, args []str
 	}
 	if !debug {
 
-		fmt.Println(msgStr)
+		fmt.Println(utils.PrettifyJson(msgStr))
 	}
 	return nil
 }

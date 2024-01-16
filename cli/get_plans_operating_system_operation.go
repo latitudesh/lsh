@@ -10,6 +10,7 @@ import (
 	"fmt"
 
 	"github.com/latitudesh/cli/client/operating_systems"
+	"github.com/latitudesh/cli/internal/utils"
 
 	"github.com/go-openapi/swag"
 	"github.com/spf13/cobra"
@@ -54,7 +55,7 @@ func runOperationOperatingSystemsGetPlansOperatingSystem(cmd *cobra.Command, arg
 	}
 	if !debug {
 
-		fmt.Println(msgStr)
+		fmt.Println(utils.PrettifyJson(msgStr))
 	}
 	return nil
 }

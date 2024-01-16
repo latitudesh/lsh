@@ -10,6 +10,7 @@ import (
 	"fmt"
 
 	"github.com/latitudesh/cli/client/deploy_config"
+	"github.com/latitudesh/cli/internal/utils"
 
 	"github.com/go-openapi/swag"
 	"github.com/spf13/cobra"
@@ -59,7 +60,7 @@ func runOperationDeployConfigUpdateServerDeployConfig(cmd *cobra.Command, args [
 	}
 	if !debug {
 
-		fmt.Println(msgStr)
+		fmt.Println(utils.PrettifyJson(msgStr))
 	}
 	return nil
 }
