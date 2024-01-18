@@ -62,7 +62,8 @@ func runOperationBandwidthGetTrafficConsumption(cmd *cobra.Command, args []strin
 	// make request and then print result
 	msgStr, err := parseOperationBandwidthGetTrafficConsumptionResult(appCli.Bandwidth.GetTrafficConsumption(params, nil))
 	if err != nil {
-		return err
+		fmt.Println(utils.FormatErrorOutput(err.Error()))
+		return nil
 	}
 	if !debug {
 

@@ -12,6 +12,7 @@ import (
 	"github.com/go-openapi/runtime"
 	"github.com/go-openapi/strfmt"
 
+	"github.com/latitudesh/cli/internal"
 	"github.com/latitudesh/cli/models"
 )
 
@@ -29,6 +30,12 @@ func (o *GetTrafficConsumptionReader) ReadResponse(response runtime.ClientRespon
 			return nil, err
 		}
 		return result, nil
+	case 422:
+		result := internal.NewUnprocessableEntityError()
+		if err := result.ReadResponse(response, consumer, o.formats); err != nil {
+			return nil, err
+		}
+		return nil, runtime.NewAPIError("[GET /traffic] get-traffic-consumption", result.Payload, response.Code())
 	default:
 		return nil, runtime.NewAPIError("[GET /traffic] get-traffic-consumption", response, response.Code())
 	}
