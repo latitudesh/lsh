@@ -40,6 +40,7 @@ func runOperationSSHKeysGetProjectSSHKeys(cmd *cobra.Command, args []string) err
 	}
 	// retrieve flag values from cmd and fill params
 	params := ssh_keys.NewGetProjectSSHKeysParams()
+	params.SetDefaults()
 	if err, _ := retrieveOperationSSHKeysGetProjectSSHKeysAPIVersionFlag(params, "", cmd); err != nil {
 		return err
 	}

@@ -43,6 +43,7 @@ func runOperationPowerActionsCreateServerAction(cmd *cobra.Command, args []strin
 	}
 	// retrieve flag values from cmd and fill params
 	params := power_actions.NewCreateServerActionParams()
+	params.SetDefaults()
 	if err, _ := retrieveOperationPowerActionsCreateServerActionAPIVersionFlag(params, "", cmd); err != nil {
 		return err
 	}

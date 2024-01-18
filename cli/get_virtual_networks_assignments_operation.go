@@ -40,6 +40,7 @@ func runOperationVirtualNetworkAssignmentsGetVirtualNetworksAssignments(cmd *cob
 	}
 	// retrieve flag values from cmd and fill params
 	params := virtual_network_assignments.NewGetVirtualNetworksAssignmentsParams()
+	params.SetDefaults()
 	if err, _ := retrieveOperationVirtualNetworkAssignmentsGetVirtualNetworksAssignmentsAPIVersionFlag(params, "", cmd); err != nil {
 		return err
 	}

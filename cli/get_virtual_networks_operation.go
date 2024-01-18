@@ -40,6 +40,7 @@ func runOperationVirtualNetworksGetVirtualNetworks(cmd *cobra.Command, args []st
 	}
 	// retrieve flag values from cmd and fill params
 	params := virtual_networks.NewGetVirtualNetworksParams()
+	params.SetDefaults()
 	if err, _ := retrieveOperationVirtualNetworksGetVirtualNetworksAPIVersionFlag(params, "", cmd); err != nil {
 		return err
 	}

@@ -39,6 +39,7 @@ func runOperationDeployConfigGetServerDeployConfig(cmd *cobra.Command, args []st
 	}
 	// retrieve flag values from cmd and fill params
 	params := deploy_config.NewGetServerDeployConfigParams()
+	params.SetDefaults()
 	if err, _ := retrieveOperationDeployConfigGetServerDeployConfigAPIVersionFlag(params, "", cmd); err != nil {
 		return err
 	}

@@ -43,6 +43,7 @@ func runOperationIPmiCredentialsCreateIpmiSession(cmd *cobra.Command, args []str
 	}
 	// retrieve flag values from cmd and fill params
 	params := ip_m_i_credentials.NewCreateIpmiSessionParams()
+	params.SetDefaults()
 	if err, _ := retrieveOperationIPmiCredentialsCreateIpmiSessionAPIVersionFlag(params, "", cmd); err != nil {
 		return err
 	}

@@ -40,6 +40,7 @@ func runOperationVirtualNetworksDestroyVirtualNetwork(cmd *cobra.Command, args [
 	}
 	// retrieve flag values from cmd and fill params
 	params := virtual_networks.NewDestroyVirtualNetworkParams()
+	params.SetDefaults()
 	if err, _ := retrieveOperationVirtualNetworksDestroyVirtualNetworkAPIVersionFlag(params, "", cmd); err != nil {
 		return err
 	}

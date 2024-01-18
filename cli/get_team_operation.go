@@ -39,6 +39,7 @@ func runOperationTeamsGetTeam(cmd *cobra.Command, args []string) error {
 	}
 	// retrieve flag values from cmd and fill params
 	params := teams.NewGetTeamParams()
+	params.SetDefaults()
 	if err, _ := retrieveOperationTeamsGetTeamAPIVersionFlag(params, "", cmd); err != nil {
 		return err
 	}

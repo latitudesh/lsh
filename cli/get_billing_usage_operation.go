@@ -40,6 +40,7 @@ func runOperationBillingUsageGetBillingUsage(cmd *cobra.Command, args []string) 
 	}
 	// retrieve flag values from cmd and fill params
 	params := billing_usage.NewGetBillingUsageParams()
+	params.SetDefaults()
 	if err, _ := retrieveOperationBillingUsageGetBillingUsageAPIVersionFlag(params, "", cmd); err != nil {
 		return err
 	}

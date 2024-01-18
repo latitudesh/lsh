@@ -40,6 +40,7 @@ func runOperationVirtualNetworkAssignmentsDeleteVirtualNetworksAssignments(cmd *
 	}
 	// retrieve flag values from cmd and fill params
 	params := virtual_network_assignments.NewDeleteVirtualNetworksAssignmentsParams()
+	params.SetDefaults()
 	if err, _ := retrieveOperationVirtualNetworkAssignmentsDeleteVirtualNetworksAssignmentsAPIVersionFlag(params, "", cmd); err != nil {
 		return err
 	}

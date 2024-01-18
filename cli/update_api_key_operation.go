@@ -41,6 +41,7 @@ func runOperationAPIKeysUpdateAPIKey(cmd *cobra.Command, args []string) error {
 	}
 	// retrieve flag values from cmd and fill params
 	params := api_keys.NewUpdateAPIKeyParams()
+	params.SetDefaults()
 	if err, _ := retrieveOperationAPIKeysUpdateAPIKeyAPIVersionFlag(params, "", cmd); err != nil {
 		return err
 	}

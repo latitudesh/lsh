@@ -101,7 +101,7 @@ func MakeRootCmd() (*cobra.Command, error) {
 		return nil, err
 	}
 
-	// add login with api -oken
+	// add login with api-token
 	operationLoginCmd, err := makeOperationLoginCmd()
 	if err != nil {
 		return nil, err

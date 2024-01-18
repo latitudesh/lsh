@@ -40,6 +40,7 @@ func runOperationTeamsPostTeam(cmd *cobra.Command, args []string) error {
 	}
 	// retrieve flag values from cmd and fill params
 	params := teams.NewPostTeamParams()
+	params.SetDefaults()
 	if err, _ := retrieveOperationTeamsPostTeamAPIVersionFlag(params, "", cmd); err != nil {
 		return err
 	}

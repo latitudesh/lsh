@@ -40,6 +40,7 @@ func runOperationVpnSessionsDeleteVpnSession(cmd *cobra.Command, args []string) 
 	}
 	// retrieve flag values from cmd and fill params
 	params := v_p_n_sessions.NewDeleteVpnSessionParams()
+	params.SetDefaults()
 	if err, _ := retrieveOperationVpnSessionsDeleteVpnSessionAPIVersionFlag(params, "", cmd); err != nil {
 		return err
 	}

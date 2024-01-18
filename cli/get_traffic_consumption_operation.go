@@ -39,6 +39,7 @@ func runOperationBandwidthGetTrafficConsumption(cmd *cobra.Command, args []strin
 	}
 	// retrieve flag values from cmd and fill params
 	params := bandwidth.NewGetTrafficConsumptionParams()
+	params.SetDefaults()
 	if err, _ := retrieveOperationBandwidthGetTrafficConsumptionAPIVersionFlag(params, "", cmd); err != nil {
 		return err
 	}

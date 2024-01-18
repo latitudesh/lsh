@@ -39,6 +39,7 @@ func runOperationPlansGetPlan(cmd *cobra.Command, args []string) error {
 	}
 	// retrieve flag values from cmd and fill params
 	params := plans.NewGetPlanParams()
+	params.SetDefaults()
 	if err, _ := retrieveOperationPlansGetPlanAPIVersionFlag(params, "", cmd); err != nil {
 		return err
 	}

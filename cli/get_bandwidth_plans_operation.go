@@ -39,6 +39,7 @@ func runOperationPlansGetBandwidthPlans(cmd *cobra.Command, args []string) error
 	}
 	// retrieve flag values from cmd and fill params
 	params := plans.NewGetBandwidthPlansParams()
+	params.SetDefaults()
 	if err, _ := retrieveOperationPlansGetBandwidthPlansAPIVersionFlag(params, "", cmd); err != nil {
 		return err
 	}

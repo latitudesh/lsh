@@ -41,6 +41,7 @@ func runOperationAccountPatchUserProfile(cmd *cobra.Command, args []string) erro
 	}
 	// retrieve flag values from cmd and fill params
 	params := account.NewPatchUserProfileParams()
+	params.SetDefaults()
 	if err, _ := retrieveOperationAccountPatchUserProfileAPIVersionFlag(params, "", cmd); err != nil {
 		return err
 	}

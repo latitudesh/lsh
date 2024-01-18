@@ -39,6 +39,7 @@ func runOperationServerReinstallCreateServerReinstall(cmd *cobra.Command, args [
 	}
 	// retrieve flag values from cmd and fill params
 	params := server_reinstall.NewCreateServerReinstallParams()
+	params.SetDefaults()
 	if err, _ := retrieveOperationServerReinstallCreateServerReinstallAPIVersionFlag(params, "", cmd); err != nil {
 		return err
 	}

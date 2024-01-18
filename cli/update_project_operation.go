@@ -40,6 +40,7 @@ func runOperationProjectsUpdateProject(cmd *cobra.Command, args []string) error 
 	}
 	// retrieve flag values from cmd and fill params
 	params := projects.NewUpdateProjectParams()
+	params.SetDefaults()
 	if err, _ := retrieveOperationProjectsUpdateProjectAPIVersionFlag(params, "", cmd); err != nil {
 		return err
 	}

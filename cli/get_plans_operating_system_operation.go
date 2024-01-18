@@ -40,6 +40,7 @@ func runOperationOperatingSystemsGetPlansOperatingSystem(cmd *cobra.Command, arg
 	}
 	// retrieve flag values from cmd and fill params
 	params := operating_systems.NewGetPlansOperatingSystemParams()
+	params.SetDefaults()
 	if err, _ := retrieveOperationOperatingSystemsGetPlansOperatingSystemAPIVersionFlag(params, "", cmd); err != nil {
 		return err
 	}

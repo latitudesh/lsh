@@ -39,6 +39,7 @@ func runOperationMembersDestroyTeamMember(cmd *cobra.Command, args []string) err
 	}
 	// retrieve flag values from cmd and fill params
 	params := members.NewDestroyTeamMemberParams()
+	params.SetDefaults()
 	if err, _ := retrieveOperationMembersDestroyTeamMemberAPIVersionFlag(params, "", cmd); err != nil {
 		return err
 	}

@@ -39,6 +39,7 @@ func runOperationRegionsGetRegion(cmd *cobra.Command, args []string) error {
 	}
 	// retrieve flag values from cmd and fill params
 	params := regions.NewGetRegionParams()
+	params.SetDefaults()
 	if err, _ := retrieveOperationRegionsGetRegionAPIVersionFlag(params, "", cmd); err != nil {
 		return err
 	}

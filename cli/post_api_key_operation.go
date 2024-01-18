@@ -41,6 +41,7 @@ func runOperationAPIKeysPostAPIKey(cmd *cobra.Command, args []string) error {
 	}
 	// retrieve flag values from cmd and fill params
 	params := api_keys.NewPostAPIKeyParams()
+	params.SetDefaults()
 	if err, _ := retrieveOperationAPIKeysPostAPIKeyAPIVersionFlag(params, "", cmd); err != nil {
 		return err
 	}

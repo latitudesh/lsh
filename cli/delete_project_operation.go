@@ -39,6 +39,7 @@ func runOperationProjectsDeleteProject(cmd *cobra.Command, args []string) error 
 	}
 	// retrieve flag values from cmd and fill params
 	params := projects.NewDeleteProjectParams()
+	params.SetDefaults()
 	if err, _ := retrieveOperationProjectsDeleteProjectAPIVersionFlag(params, "", cmd); err != nil {
 		return err
 	}

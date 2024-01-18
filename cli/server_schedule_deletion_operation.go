@@ -39,6 +39,7 @@ func runOperationServersServerScheduleDeletion(cmd *cobra.Command, args []string
 	}
 	// retrieve flag values from cmd and fill params
 	params := servers.NewServerScheduleDeletionParams()
+	params.SetDefaults()
 	if err, _ := retrieveOperationServersServerScheduleDeletionAPIVersionFlag(params, "", cmd); err != nil {
 		return err
 	}

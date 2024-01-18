@@ -39,6 +39,10 @@ func runOperationIPAddressesGetIP(cmd *cobra.Command, args []string) error {
 	}
 	// retrieve flag values from cmd and fill params
 	params := ip_addresses.NewGetIPParams()
+	params.SetDefaults()
+	if err, _ := retrieveOperationIPAddressesGetIPAPIVersionFlag(params, "", cmd); err != nil {
+		return err
+	}
 	if err, _ := retrieveOperationIPAddressesGetIPExtraFieldsIPAddressesFlag(params, "", cmd); err != nil {
 		return err
 	}
@@ -64,12 +68,33 @@ func runOperationIPAddressesGetIP(cmd *cobra.Command, args []string) error {
 
 // registerOperationIPAddressesGetIPParamFlags registers all flags needed to fill params
 func registerOperationIPAddressesGetIPParamFlags(cmd *cobra.Command) error {
+	if err := registerOperationIPAddressesGetIPAPIVersionParamFlags("", cmd); err != nil {
+		return err
+	}
 	if err := registerOperationIPAddressesGetIPExtraFieldsIPAddressesParamFlags("", cmd); err != nil {
 		return err
 	}
 	if err := registerOperationIPAddressesGetIPIDParamFlags("", cmd); err != nil {
 		return err
 	}
+	return nil
+}
+
+func registerOperationIPAddressesGetIPAPIVersionParamFlags(cmdPrefix string, cmd *cobra.Command) error {
+
+	apiVersionDescription := ``
+
+	var apiVersionFlagName string
+	if cmdPrefix == "" {
+		apiVersionFlagName = "API-Version"
+	} else {
+		apiVersionFlagName = fmt.Sprintf("%v.API-Version", cmdPrefix)
+	}
+
+	var apiVersionFlagDefault string = "2023-06-01"
+
+	_ = cmd.PersistentFlags().String(apiVersionFlagName, apiVersionFlagDefault, apiVersionDescription)
+
 	return nil
 }
 
@@ -108,6 +133,26 @@ func registerOperationIPAddressesGetIPIDParamFlags(cmdPrefix string, cmd *cobra.
 	return nil
 }
 
+func retrieveOperationIPAddressesGetIPAPIVersionFlag(m *ip_addresses.GetIPParams, cmdPrefix string, cmd *cobra.Command) (error, bool) {
+	retAdded := false
+	if cmd.Flags().Changed("API-Version") {
+
+		var apiVersionFlagName string
+		if cmdPrefix == "" {
+			apiVersionFlagName = "API-Version"
+		} else {
+			apiVersionFlagName = fmt.Sprintf("%v.API-Version", cmdPrefix)
+		}
+
+		apiVersionFlagValue, err := cmd.Flags().GetString(apiVersionFlagName)
+		if err != nil {
+			return err, false
+		}
+		m.APIVersion = &apiVersionFlagValue
+
+	}
+	return nil, retAdded
+}
 func retrieveOperationIPAddressesGetIPExtraFieldsIPAddressesFlag(m *ip_addresses.GetIPParams, cmdPrefix string, cmd *cobra.Command) (error, bool) {
 	retAdded := false
 	if cmd.Flags().Changed("extra_fields[ip_addresses]") {

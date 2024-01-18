@@ -38,6 +38,7 @@ func runOperationSSHKeysDeleteProjectSSHKey(cmd *cobra.Command, args []string) e
 	}
 	// retrieve flag values from cmd and fill params
 	params := ssh_keys.NewDeleteProjectSSHKeyParams()
+	params.SetDefaults()
 	if err, _ := retrieveOperationSSHKeysDeleteProjectSSHKeyAPIVersionFlag(params, "", cmd); err != nil {
 		return err
 	}

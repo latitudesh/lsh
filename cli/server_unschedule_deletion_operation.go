@@ -39,6 +39,7 @@ func runOperationServersServerUnscheduleDeletion(cmd *cobra.Command, args []stri
 	}
 	// retrieve flag values from cmd and fill params
 	params := servers.NewServerUnscheduleDeletionParams()
+	params.SetDefaults()
 	if err, _ := retrieveOperationServersServerUnscheduleDeletionAPIVersionFlag(params, "", cmd); err != nil {
 		return err
 	}

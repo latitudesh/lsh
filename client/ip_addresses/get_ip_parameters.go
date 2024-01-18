@@ -61,6 +61,9 @@ GetIPParams contains all the parameters to send to the API endpoint
 */
 type GetIPParams struct {
 
+	// Default: "2023-06-01"
+	APIVersion *string
+
 	/* ExtraFieldsIPAddresses.
 
 	   The `region` and `server` are provided as extra attributes that is lazy loaded. To request it, just set `extra_fields[ip_addresses]=region,server` in the query string.

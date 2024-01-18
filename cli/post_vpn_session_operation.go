@@ -41,6 +41,7 @@ func runOperationVpnSessionsPostVpnSession(cmd *cobra.Command, args []string) er
 	}
 	// retrieve flag values from cmd and fill params
 	params := v_p_n_sessions.NewPostVpnSessionParams()
+	params.SetDefaults()
 	if err, _ := retrieveOperationVpnSessionsPostVpnSessionAPIVersionFlag(params, "", cmd); err != nil {
 		return err
 	}

@@ -40,6 +40,7 @@ func runOperationUserDataGetProjectUsersData(cmd *cobra.Command, args []string) 
 	}
 	// retrieve flag values from cmd and fill params
 	params := user_data.NewGetProjectUsersDataParams()
+	params.SetDefaults()
 	if err, _ := retrieveOperationUserDataGetProjectUsersDataAPIVersionFlag(params, "", cmd); err != nil {
 		return err
 	}

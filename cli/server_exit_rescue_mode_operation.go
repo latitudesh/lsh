@@ -39,6 +39,7 @@ func runOperationRescueModeServerExitRescueMode(cmd *cobra.Command, args []strin
 	}
 	// retrieve flag values from cmd and fill params
 	params := rescue_mode.NewServerExitRescueModeParams()
+	params.SetDefaults()
 	if err, _ := retrieveOperationRescueModeServerExitRescueModeAPIVersionFlag(params, "", cmd); err != nil {
 		return err
 	}

@@ -40,6 +40,7 @@ func runOperationEventsGetEvents(cmd *cobra.Command, args []string) error {
 	}
 	// retrieve flag values from cmd and fill params
 	params := events.NewGetEventsParams()
+	params.SetDefaults()
 	if err, _ := retrieveOperationEventsGetEventsAPIVersionFlag(params, "", cmd); err != nil {
 		return err
 	}

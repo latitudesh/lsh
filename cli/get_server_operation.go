@@ -40,6 +40,7 @@ func runOperationServersGetServer(cmd *cobra.Command, args []string) error {
 	}
 	// retrieve flag values from cmd and fill params
 	params := servers.NewGetServerParams()
+	params.SetDefaults()
 	if err, _ := retrieveOperationServersGetServerAPIVersionFlag(params, "", cmd); err != nil {
 		return err
 	}

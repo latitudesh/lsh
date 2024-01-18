@@ -39,6 +39,7 @@ func runOperationOutOfBandGetServerOutOfBand(cmd *cobra.Command, args []string) 
 	}
 	// retrieve flag values from cmd and fill params
 	params := out_of_band.NewGetServerOutOfBandParams()
+	params.SetDefaults()
 	if err, _ := retrieveOperationOutOfBandGetServerOutOfBandAPIVersionFlag(params, "", cmd); err != nil {
 		return err
 	}

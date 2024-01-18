@@ -40,6 +40,7 @@ func runOperationRolesGetRoles(cmd *cobra.Command, args []string) error {
 	}
 	// retrieve flag values from cmd and fill params
 	params := roles.NewGetRolesParams()
+	params.SetDefaults()
 	if err, _ := retrieveOperationRolesGetRolesAPIVersionFlag(params, "", cmd); err != nil {
 		return err
 	}
