@@ -1256,7 +1256,7 @@ func (m *PlanDataAttributesSpecsGpu) UnmarshalBinary(b []byte) error {
 type PlanDataAttributesSpecsMemory struct {
 
 	// total
-	Total string `json:"total,omitempty"`
+	Total int `json:"total,omitempty"`
 }
 
 // Validate validates this plan data attributes specs memory

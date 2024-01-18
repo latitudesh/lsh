@@ -8,6 +8,7 @@ package cli
 import (
 	"encoding/json"
 	"fmt"
+	"strconv"
 
 	"github.com/go-openapi/swag"
 	"github.com/latitudesh/cli/models"
@@ -2131,7 +2132,12 @@ func retrievePlanDataAttributesSpecsMemoryTotalFlags(depth int, m *models.PlanDa
 		if err != nil {
 			return err, false
 		}
-		m.Total = totalFlagValue
+
+		parsedFlag, err := strconv.Atoi(totalFlagValue)
+		if err!= nil {
+			return err, false
+		}
+		m.Total = parsedFlag
 
 		retAdded = true
 	}
