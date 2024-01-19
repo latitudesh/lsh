@@ -19,8 +19,8 @@ import (
 // makeOperationServersUpdateServerCmd returns a cmd to handle operation updateServer
 func makeOperationServersUpdateServerCmd() (*cobra.Command, error) {
 	cmd := &cobra.Command{
-		Use:   "update-server",
-		Short: ``,
+		Use:   "update",
+		Short: `Update server information`,
 		RunE:  runOperationServersUpdateServer,
 	}
 
@@ -99,10 +99,10 @@ func registerOperationServersUpdateServerAPIVersionParamFlags(cmdPrefix string, 
 func registerOperationServersUpdateServerBodyParamFlags(cmdPrefix string, cmd *cobra.Command) error {
 
 	var bodyFlagName string
-	if cmdPrefix == "" {
-		bodyFlagName = "body"
-	} else {
-		bodyFlagName = fmt.Sprintf("%v.body", cmdPrefix)
+if cmdPrefix == "" {
+	bodyFlagName = "body"
+} else {
+	bodyFlagName = fmt.Sprintf("%v.body", cmdPrefix)
 	}
 
 	_ = cmd.PersistentFlags().String(bodyFlagName, "", "Optional json string for [body]. ")
@@ -117,12 +117,12 @@ func registerOperationServersUpdateServerBodyParamFlags(cmdPrefix string, cmd *c
 func registerOperationServersUpdateServerServerIDParamFlags(cmdPrefix string, cmd *cobra.Command) error {
 
 	serverIdDescription := `Required. `
-
+	
 	var serverIdFlagName string
 	if cmdPrefix == "" {
-		serverIdFlagName = "server_id"
+	serverIdFlagName = "server_id"
 	} else {
-		serverIdFlagName = fmt.Sprintf("%v.server_id", cmdPrefix)
+	serverIdFlagName = fmt.Sprintf("%v.server_id", cmdPrefix)
 	}
 
 	var serverIdFlagDefault string

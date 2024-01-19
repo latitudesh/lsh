@@ -19,7 +19,7 @@ import (
 // makeOperationServersServerScheduleDeletionCmd returns a cmd to handle operation serverScheduleDeletion
 func makeOperationServersServerScheduleDeletionCmd() (*cobra.Command, error) {
 	cmd := &cobra.Command{
-		Use:   "server-schedule-deletion",
+		Use:   "schedule-deletion",
 		Short: `Schedules the server to be removed at the end of the billing cycle.`,
 		RunE:  runOperationServersServerScheduleDeletion,
 	}

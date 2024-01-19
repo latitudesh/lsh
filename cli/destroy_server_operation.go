@@ -19,8 +19,8 @@ import (
 // makeOperationServersDestroyServerCmd returns a cmd to handle operation destroyServer
 func makeOperationServersDestroyServerCmd() (*cobra.Command, error) {
 	cmd := &cobra.Command{
-		Use:   "destroy-server",
-		Short: ``,
+		Use:   "destroy",
+		Short: `Remove a server`,
 		RunE:  runOperationServersDestroyServer,
 	}
 

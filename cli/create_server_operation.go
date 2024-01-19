@@ -19,8 +19,8 @@ import (
 // makeOperationServersCreateServerCmd returns a cmd to handle operation createServer
 func makeOperationServersCreateServerCmd() (*cobra.Command, error) {
 	cmd := &cobra.Command{
-		Use:   "create-server",
-		Short: ``,
+		Use:   "create",
+		Short: `Deploy a new server`,
 		RunE:  runOperationServersCreateServer,
 	}
 
