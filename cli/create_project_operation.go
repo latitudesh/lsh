@@ -20,8 +20,8 @@ import (
 // makeOperationProjectsCreateProjectCmd returns a cmd to handle operation createProject
 func makeOperationProjectsCreateProjectCmd() (*cobra.Command, error) {
 	cmd := &cobra.Command{
-		Use:   "create-project",
-		Short: ``,
+		Use:   "create",
+		Short: `Creates a project`,
 		RunE:  runOperationProjectsCreateProject,
 	}
 

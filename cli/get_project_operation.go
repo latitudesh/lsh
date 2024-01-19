@@ -20,8 +20,8 @@ import (
 // makeOperationProjectsGetProjectCmd returns a cmd to handle operation getProject
 func makeOperationProjectsGetProjectCmd() (*cobra.Command, error) {
 	cmd := &cobra.Command{
-		Use:   "get-project",
-		Short: ``,
+		Use:   "get",
+		Short: `Returns a project from the current team`,
 		RunE:  runOperationProjectsGetProject,
 	}
 
