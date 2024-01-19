@@ -10,30 +10,13 @@ import (
 	httptransport "github.com/go-openapi/runtime/client"
 	"github.com/go-openapi/strfmt"
 
-	"github.com/latitudesh/cli/client/account"
 	"github.com/latitudesh/cli/client/api_keys"
-	"github.com/latitudesh/cli/client/bandwidth"
-	"github.com/latitudesh/cli/client/bandwidth_packages"
-	"github.com/latitudesh/cli/client/billing_usage"
-	"github.com/latitudesh/cli/client/deploy_config"
-	"github.com/latitudesh/cli/client/events"
-	"github.com/latitudesh/cli/client/ip_addresses"
-	"github.com/latitudesh/cli/client/ip_m_i_credentials"
-	"github.com/latitudesh/cli/client/members"
-	"github.com/latitudesh/cli/client/operating_systems"
-	"github.com/latitudesh/cli/client/out_of_band"
 	"github.com/latitudesh/cli/client/plans"
 	"github.com/latitudesh/cli/client/power_actions"
 	"github.com/latitudesh/cli/client/projects"
-	"github.com/latitudesh/cli/client/regions"
-	"github.com/latitudesh/cli/client/rescue_mode"
-	"github.com/latitudesh/cli/client/roles"
 	"github.com/latitudesh/cli/client/server_reinstall"
 	"github.com/latitudesh/cli/client/servers"
 	"github.com/latitudesh/cli/client/ssh_keys"
-	"github.com/latitudesh/cli/client/teams"
-	"github.com/latitudesh/cli/client/user_data"
-	"github.com/latitudesh/cli/client/v_p_n_sessions"
 	"github.com/latitudesh/cli/client/virtual_network_assignments"
 	"github.com/latitudesh/cli/client/virtual_networks"
 )
@@ -80,30 +63,13 @@ func New(transport runtime.ClientTransport, formats strfmt.Registry) *LatitudeSh
 
 	cli := new(LatitudeShAPI)
 	cli.Transport = transport
-	cli.Account = account.New(transport, formats)
 	cli.APIKeys = api_keys.New(transport, formats)
-	cli.Bandwidth = bandwidth.New(transport, formats)
-	cli.BandwidthPackages = bandwidth_packages.New(transport, formats)
-	cli.BillingUsage = billing_usage.New(transport, formats)
-	cli.DeployConfig = deploy_config.New(transport, formats)
-	cli.Events = events.New(transport, formats)
-	cli.IPAddresses = ip_addresses.New(transport, formats)
-	cli.IPmiCredentials = ip_m_i_credentials.New(transport, formats)
-	cli.Members = members.New(transport, formats)
-	cli.OperatingSystems = operating_systems.New(transport, formats)
-	cli.OutOfBand = out_of_band.New(transport, formats)
 	cli.Plans = plans.New(transport, formats)
 	cli.PowerActions = power_actions.New(transport, formats)
 	cli.Projects = projects.New(transport, formats)
-	cli.Regions = regions.New(transport, formats)
-	cli.RescueMode = rescue_mode.New(transport, formats)
-	cli.Roles = roles.New(transport, formats)
 	cli.ServerReinstall = server_reinstall.New(transport, formats)
 	cli.Servers = servers.New(transport, formats)
 	cli.SSHKeys = ssh_keys.New(transport, formats)
-	cli.Teams = teams.New(transport, formats)
-	cli.UserData = user_data.New(transport, formats)
-	cli.VpnSessions = v_p_n_sessions.New(transport, formats)
 	cli.VirtualNetworkAssignments = virtual_network_assignments.New(transport, formats)
 	cli.VirtualNetworks = virtual_networks.New(transport, formats)
 	return cli
@@ -150,29 +116,8 @@ func (cfg *TransportConfig) WithSchemes(schemes []string) *TransportConfig {
 
 // LatitudeShAPI is a client for latitude sh API
 type LatitudeShAPI struct {
-	Account account.ClientService
 
 	APIKeys api_keys.ClientService
-
-	Bandwidth bandwidth.ClientService
-
-	BandwidthPackages bandwidth_packages.ClientService
-
-	BillingUsage billing_usage.ClientService
-
-	DeployConfig deploy_config.ClientService
-
-	Events events.ClientService
-
-	IPAddresses ip_addresses.ClientService
-
-	IPmiCredentials ip_m_i_credentials.ClientService
-
-	Members members.ClientService
-
-	OperatingSystems operating_systems.ClientService
-
-	OutOfBand out_of_band.ClientService
 
 	Plans plans.ClientService
 
@@ -180,23 +125,11 @@ type LatitudeShAPI struct {
 
 	Projects projects.ClientService
 
-	Regions regions.ClientService
-
-	RescueMode rescue_mode.ClientService
-
-	Roles roles.ClientService
-
 	ServerReinstall server_reinstall.ClientService
 
 	Servers servers.ClientService
 
 	SSHKeys ssh_keys.ClientService
-
-	Teams teams.ClientService
-
-	UserData user_data.ClientService
-
-	VpnSessions v_p_n_sessions.ClientService
 
 	VirtualNetworkAssignments virtual_network_assignments.ClientService
 
@@ -208,30 +141,13 @@ type LatitudeShAPI struct {
 // SetTransport changes the transport on the client and all its subresources
 func (c *LatitudeShAPI) SetTransport(transport runtime.ClientTransport) {
 	c.Transport = transport
-	c.Account.SetTransport(transport)
 	c.APIKeys.SetTransport(transport)
-	c.Bandwidth.SetTransport(transport)
-	c.BandwidthPackages.SetTransport(transport)
-	c.BillingUsage.SetTransport(transport)
-	c.DeployConfig.SetTransport(transport)
-	c.Events.SetTransport(transport)
-	c.IPAddresses.SetTransport(transport)
-	c.IPmiCredentials.SetTransport(transport)
-	c.Members.SetTransport(transport)
-	c.OperatingSystems.SetTransport(transport)
-	c.OutOfBand.SetTransport(transport)
 	c.Plans.SetTransport(transport)
 	c.PowerActions.SetTransport(transport)
 	c.Projects.SetTransport(transport)
-	c.Regions.SetTransport(transport)
-	c.RescueMode.SetTransport(transport)
-	c.Roles.SetTransport(transport)
 	c.ServerReinstall.SetTransport(transport)
 	c.Servers.SetTransport(transport)
 	c.SSHKeys.SetTransport(transport)
-	c.Teams.SetTransport(transport)
-	c.UserData.SetTransport(transport)
-	c.VpnSessions.SetTransport(transport)
 	c.VirtualNetworkAssignments.SetTransport(transport)
 	c.VirtualNetworks.SetTransport(transport)
 }
