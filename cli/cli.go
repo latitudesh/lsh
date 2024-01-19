@@ -759,7 +759,7 @@ func makeOperationGroupServersCmd() (*cobra.Command, error) {
 }
 func makeOperationGroupSSHKeysCmd() (*cobra.Command, error) {
 	operationGroupSSHKeysCmd := &cobra.Command{
-		Use:  "ssh_keys",
+		Use:  "sshkeys",
 		Long: ``,
 	}
 
