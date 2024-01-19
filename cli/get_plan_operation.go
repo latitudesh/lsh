@@ -56,8 +56,7 @@ func runOperationPlansGetPlan(cmd *cobra.Command, args []string) error {
 		return err
 	}
 	if !debug {
-
-		fmt.Println(utils.PrettifyJson(msgStr))
+		utils.PrintOutput(msgStr)
 	}
 	return nil
 }
@@ -104,6 +103,7 @@ func registerOperationPlansGetPlanPlanIDParamFlags(cmdPrefix string, cmd *cobra.
 	var planIdFlagDefault string
 
 	_ = cmd.PersistentFlags().String(planIdFlagName, planIdFlagDefault, planIdDescription)
+	cmd.MarkPersistentFlagRequired(planIdFlagName)
 
 	return nil
 }
