@@ -19,7 +19,7 @@ import (
 // makeOperationVirtualNetworksGetVirtualNetworksCmd returns a cmd to handle operation getVirtualNetworks
 func makeOperationVirtualNetworksGetVirtualNetworksCmd() (*cobra.Command, error) {
 	cmd := &cobra.Command{
-		Use: "get-virtual-networks",
+		Use: "list",
 		Short: `Lists virtual networks assigned to a project
 `,
 		RunE: runOperationVirtualNetworksGetVirtualNetworks,

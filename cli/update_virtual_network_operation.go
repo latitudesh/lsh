@@ -19,7 +19,7 @@ import (
 // makeOperationVirtualNetworksUpdateVirtualNetworkCmd returns a cmd to handle operation updateVirtualNetwork
 func makeOperationVirtualNetworksUpdateVirtualNetworkCmd() (*cobra.Command, error) {
 	cmd := &cobra.Command{
-		Use: "update-virtual-network",
+		Use: "update",
 		Short: `Update a Virtual Network.
 `,
 		RunE: runOperationVirtualNetworksUpdateVirtualNetwork,

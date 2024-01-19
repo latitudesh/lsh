@@ -19,7 +19,7 @@ import (
 // makeOperationVirtualNetworksDestroyVirtualNetworkCmd returns a cmd to handle operation destroyVirtualNetwork
 func makeOperationVirtualNetworksDestroyVirtualNetworkCmd() (*cobra.Command, error) {
 	cmd := &cobra.Command{
-		Use: "destroy-virtual-network",
+		Use: "destroy",
 		Short: `Delete virtual network
 `,
 		RunE: runOperationVirtualNetworksDestroyVirtualNetwork,

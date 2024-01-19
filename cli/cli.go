@@ -919,7 +919,7 @@ func makeOperationGroupVirtualNetworkAssignmentsCmd() (*cobra.Command, error) {
 }
 func makeOperationGroupVirtualNetworksCmd() (*cobra.Command, error) {
 	operationGroupVirtualNetworksCmd := &cobra.Command{
-		Use:  "virtual_networks",
+		Use:  "vnetworks",
 		Long: ``,
 	}
 
