@@ -108,78 +108,11 @@ func MakeRootCmd() (*cobra.Command, error) {
 	}
 	rootCmd.AddCommand(operationLoginCmd)
 
-	// add all operation groups
-	operationGroupAccountCmd, err := makeOperationGroupAccountCmd()
-	if err != nil {
-		return nil, err
-	}
-	rootCmd.AddCommand(operationGroupAccountCmd)
-
 	operationGroupAPIKeysCmd, err := makeOperationGroupAPIKeysCmd()
 	if err != nil {
 		return nil, err
 	}
 	rootCmd.AddCommand(operationGroupAPIKeysCmd)
-
-	operationGroupBandwidthCmd, err := makeOperationGroupBandwidthCmd()
-	if err != nil {
-		return nil, err
-	}
-	rootCmd.AddCommand(operationGroupBandwidthCmd)
-
-	operationGroupBandwidthPackagesCmd, err := makeOperationGroupBandwidthPackagesCmd()
-	if err != nil {
-		return nil, err
-	}
-	rootCmd.AddCommand(operationGroupBandwidthPackagesCmd)
-
-	operationGroupBillingUsageCmd, err := makeOperationGroupBillingUsageCmd()
-	if err != nil {
-		return nil, err
-	}
-	rootCmd.AddCommand(operationGroupBillingUsageCmd)
-
-	operationGroupDeployConfigCmd, err := makeOperationGroupDeployConfigCmd()
-	if err != nil {
-		return nil, err
-	}
-	rootCmd.AddCommand(operationGroupDeployConfigCmd)
-
-	operationGroupEventsCmd, err := makeOperationGroupEventsCmd()
-	if err != nil {
-		return nil, err
-	}
-	rootCmd.AddCommand(operationGroupEventsCmd)
-
-	operationGroupIPAddressesCmd, err := makeOperationGroupIPAddressesCmd()
-	if err != nil {
-		return nil, err
-	}
-	rootCmd.AddCommand(operationGroupIPAddressesCmd)
-
-	operationGroupIPmiCredentialsCmd, err := makeOperationGroupIPmiCredentialsCmd()
-	if err != nil {
-		return nil, err
-	}
-	rootCmd.AddCommand(operationGroupIPmiCredentialsCmd)
-
-	operationGroupMembersCmd, err := makeOperationGroupMembersCmd()
-	if err != nil {
-		return nil, err
-	}
-	rootCmd.AddCommand(operationGroupMembersCmd)
-
-	operationGroupOperatingSystemsCmd, err := makeOperationGroupOperatingSystemsCmd()
-	if err != nil {
-		return nil, err
-	}
-	rootCmd.AddCommand(operationGroupOperatingSystemsCmd)
-
-	operationGroupOutOfBandCmd, err := makeOperationGroupOutOfBandCmd()
-	if err != nil {
-		return nil, err
-	}
-	rootCmd.AddCommand(operationGroupOutOfBandCmd)
 
 	operationGroupPlansCmd, err := makeOperationGroupPlansCmd()
 	if err != nil {
@@ -199,24 +132,6 @@ func MakeRootCmd() (*cobra.Command, error) {
 	}
 	rootCmd.AddCommand(operationGroupProjectsCmd)
 
-	operationGroupRegionsCmd, err := makeOperationGroupRegionsCmd()
-	if err != nil {
-		return nil, err
-	}
-	rootCmd.AddCommand(operationGroupRegionsCmd)
-
-	operationGroupRescueModeCmd, err := makeOperationGroupRescueModeCmd()
-	if err != nil {
-		return nil, err
-	}
-	rootCmd.AddCommand(operationGroupRescueModeCmd)
-
-	operationGroupRolesCmd, err := makeOperationGroupRolesCmd()
-	if err != nil {
-		return nil, err
-	}
-	rootCmd.AddCommand(operationGroupRolesCmd)
-
 	operationGroupServerReinstallCmd, err := makeOperationGroupServerReinstallCmd()
 	if err != nil {
 		return nil, err
@@ -234,24 +149,6 @@ func MakeRootCmd() (*cobra.Command, error) {
 		return nil, err
 	}
 	rootCmd.AddCommand(operationGroupSSHKeysCmd)
-
-	operationGroupTeamsCmd, err := makeOperationGroupTeamsCmd()
-	if err != nil {
-		return nil, err
-	}
-	rootCmd.AddCommand(operationGroupTeamsCmd)
-
-	operationGroupUserDataCmd, err := makeOperationGroupUserDataCmd()
-	if err != nil {
-		return nil, err
-	}
-	rootCmd.AddCommand(operationGroupUserDataCmd)
-
-	operationGroupVpnSessionsCmd, err := makeOperationGroupVpnSessionsCmd()
-	if err != nil {
-		return nil, err
-	}
-	rootCmd.AddCommand(operationGroupVpnSessionsCmd)
 
 	operationGroupVirtualNetworksCmd, err := makeOperationGroupVirtualNetworksCmd()
 	if err != nil {
@@ -315,32 +212,6 @@ func makeAuthInfoWriter(cmd *cobra.Command) (runtime.ClientAuthInfoWriter, error
 	return httptransport.Compose(auths...), nil
 }
 
-func makeOperationGroupAccountCmd() (*cobra.Command, error) {
-	operationGroupAccountCmd := &cobra.Command{
-		Use:  "account",
-		Long: ``,
-	}
-
-	operationGetUserProfileCmd, err := makeOperationAccountGetUserProfileCmd()
-	if err != nil {
-		return nil, err
-	}
-	operationGroupAccountCmd.AddCommand(operationGetUserProfileCmd)
-
-	operationGetUserTeamsCmd, err := makeOperationAccountGetUserTeamsCmd()
-	if err != nil {
-		return nil, err
-	}
-	operationGroupAccountCmd.AddCommand(operationGetUserTeamsCmd)
-
-	operationPatchUserProfileCmd, err := makeOperationAccountPatchUserProfileCmd()
-	if err != nil {
-		return nil, err
-	}
-	operationGroupAccountCmd.AddCommand(operationPatchUserProfileCmd)
-
-	return operationGroupAccountCmd, nil
-}
 func makeOperationGroupAPIKeysCmd() (*cobra.Command, error) {
 	operationGroupAPIKeysCmd := &cobra.Command{
 		Use:  "apikeys",
@@ -372,182 +243,6 @@ func makeOperationGroupAPIKeysCmd() (*cobra.Command, error) {
 	operationGroupAPIKeysCmd.AddCommand(operationUpdateAPIKeyCmd)
 
 	return operationGroupAPIKeysCmd, nil
-}
-func makeOperationGroupBandwidthCmd() (*cobra.Command, error) {
-	operationGroupBandwidthCmd := &cobra.Command{
-		Use:  "bandwidth",
-		Long: ``,
-	}
-
-	operationGetTrafficConsumptionCmd, err := makeOperationBandwidthGetTrafficConsumptionCmd()
-	if err != nil {
-		return nil, err
-	}
-	operationGroupBandwidthCmd.AddCommand(operationGetTrafficConsumptionCmd)
-
-	operationGetTrafficQuotaCmd, err := makeOperationBandwidthGetTrafficQuotaCmd()
-	if err != nil {
-		return nil, err
-	}
-	operationGroupBandwidthCmd.AddCommand(operationGetTrafficQuotaCmd)
-
-	return operationGroupBandwidthCmd, nil
-}
-func makeOperationGroupBandwidthPackagesCmd() (*cobra.Command, error) {
-	operationGroupBandwidthPackagesCmd := &cobra.Command{
-		Use:  "bandwidth_packages",
-		Long: ``,
-	}
-
-	operationUpdatePlansBandwidthCmd, err := makeOperationBandwidthPackagesUpdatePlansBandwidthCmd()
-	if err != nil {
-		return nil, err
-	}
-	operationGroupBandwidthPackagesCmd.AddCommand(operationUpdatePlansBandwidthCmd)
-
-	return operationGroupBandwidthPackagesCmd, nil
-}
-func makeOperationGroupBillingUsageCmd() (*cobra.Command, error) {
-	operationGroupBillingUsageCmd := &cobra.Command{
-		Use:  "billing_usage",
-		Long: ``,
-	}
-
-	operationGetBillingUsageCmd, err := makeOperationBillingUsageGetBillingUsageCmd()
-	if err != nil {
-		return nil, err
-	}
-	operationGroupBillingUsageCmd.AddCommand(operationGetBillingUsageCmd)
-
-	return operationGroupBillingUsageCmd, nil
-}
-func makeOperationGroupDeployConfigCmd() (*cobra.Command, error) {
-	operationGroupDeployConfigCmd := &cobra.Command{
-		Use:  "deploy_config",
-		Long: ``,
-	}
-
-	operationGetServerDeployConfigCmd, err := makeOperationDeployConfigGetServerDeployConfigCmd()
-	if err != nil {
-		return nil, err
-	}
-	operationGroupDeployConfigCmd.AddCommand(operationGetServerDeployConfigCmd)
-
-	operationUpdateServerDeployConfigCmd, err := makeOperationDeployConfigUpdateServerDeployConfigCmd()
-	if err != nil {
-		return nil, err
-	}
-	operationGroupDeployConfigCmd.AddCommand(operationUpdateServerDeployConfigCmd)
-
-	return operationGroupDeployConfigCmd, nil
-}
-func makeOperationGroupEventsCmd() (*cobra.Command, error) {
-	operationGroupEventsCmd := &cobra.Command{
-		Use:  "events",
-		Long: ``,
-	}
-
-	operationGetEventsCmd, err := makeOperationEventsGetEventsCmd()
-	if err != nil {
-		return nil, err
-	}
-	operationGroupEventsCmd.AddCommand(operationGetEventsCmd)
-
-	return operationGroupEventsCmd, nil
-}
-func makeOperationGroupIPAddressesCmd() (*cobra.Command, error) {
-	operationGroupIPAddressesCmd := &cobra.Command{
-		Use:  "ip_addresses",
-		Long: ``,
-	}
-
-	operationGetIPCmd, err := makeOperationIPAddressesGetIPCmd()
-	if err != nil {
-		return nil, err
-	}
-	operationGroupIPAddressesCmd.AddCommand(operationGetIPCmd)
-
-	operationGetIpsCmd, err := makeOperationIPAddressesGetIpsCmd()
-	if err != nil {
-		return nil, err
-	}
-	operationGroupIPAddressesCmd.AddCommand(operationGetIpsCmd)
-
-	return operationGroupIPAddressesCmd, nil
-}
-func makeOperationGroupIPmiCredentialsCmd() (*cobra.Command, error) {
-	operationGroupIPmiCredentialsCmd := &cobra.Command{
-		Use:  "ip_m_i_credentials",
-		Long: ``,
-	}
-
-	operationCreateIpmiSessionCmd, err := makeOperationIPmiCredentialsCreateIpmiSessionCmd()
-	if err != nil {
-		return nil, err
-	}
-	operationGroupIPmiCredentialsCmd.AddCommand(operationCreateIpmiSessionCmd)
-
-	return operationGroupIPmiCredentialsCmd, nil
-}
-func makeOperationGroupMembersCmd() (*cobra.Command, error) {
-	operationGroupMembersCmd := &cobra.Command{
-		Use:  "members",
-		Long: ``,
-	}
-
-	operationDestroyTeamMemberCmd, err := makeOperationMembersDestroyTeamMemberCmd()
-	if err != nil {
-		return nil, err
-	}
-	operationGroupMembersCmd.AddCommand(operationDestroyTeamMemberCmd)
-
-	operationGetTeamMembersCmd, err := makeOperationMembersGetTeamMembersCmd()
-	if err != nil {
-		return nil, err
-	}
-	operationGroupMembersCmd.AddCommand(operationGetTeamMembersCmd)
-
-	operationPostTeamMembersCmd, err := makeOperationMembersPostTeamMembersCmd()
-	if err != nil {
-		return nil, err
-	}
-	operationGroupMembersCmd.AddCommand(operationPostTeamMembersCmd)
-
-	return operationGroupMembersCmd, nil
-}
-func makeOperationGroupOperatingSystemsCmd() (*cobra.Command, error) {
-	operationGroupOperatingSystemsCmd := &cobra.Command{
-		Use:  "operating_systems",
-		Long: ``,
-	}
-
-	operationGetPlansOperatingSystemCmd, err := makeOperationOperatingSystemsGetPlansOperatingSystemCmd()
-	if err != nil {
-		return nil, err
-	}
-	operationGroupOperatingSystemsCmd.AddCommand(operationGetPlansOperatingSystemCmd)
-
-	return operationGroupOperatingSystemsCmd, nil
-}
-func makeOperationGroupOutOfBandCmd() (*cobra.Command, error) {
-	operationGroupOutOfBandCmd := &cobra.Command{
-		Use:  "out_of_band",
-		Long: ``,
-	}
-
-	operationCreateServerOutOfBandCmd, err := makeOperationOutOfBandCreateServerOutOfBandCmd()
-	if err != nil {
-		return nil, err
-	}
-	operationGroupOutOfBandCmd.AddCommand(operationCreateServerOutOfBandCmd)
-
-	operationGetServerOutOfBandCmd, err := makeOperationOutOfBandGetServerOutOfBandCmd()
-	if err != nil {
-		return nil, err
-	}
-	operationGroupOutOfBandCmd.AddCommand(operationGetServerOutOfBandCmd)
-
-	return operationGroupOutOfBandCmd, nil
 }
 func makeOperationGroupPlansCmd() (*cobra.Command, error) {
 	operationGroupPlansCmd := &cobra.Command{
@@ -626,66 +321,6 @@ func makeOperationGroupProjectsCmd() (*cobra.Command, error) {
 	operationGroupProjectsCmd.AddCommand(operationUpdateProjectCmd)
 
 	return operationGroupProjectsCmd, nil
-}
-func makeOperationGroupRegionsCmd() (*cobra.Command, error) {
-	operationGroupRegionsCmd := &cobra.Command{
-		Use:  "regions",
-		Long: ``,
-	}
-
-	operationGetRegionCmd, err := makeOperationRegionsGetRegionCmd()
-	if err != nil {
-		return nil, err
-	}
-	operationGroupRegionsCmd.AddCommand(operationGetRegionCmd)
-
-	operationGetRegionsCmd, err := makeOperationRegionsGetRegionsCmd()
-	if err != nil {
-		return nil, err
-	}
-	operationGroupRegionsCmd.AddCommand(operationGetRegionsCmd)
-
-	return operationGroupRegionsCmd, nil
-}
-func makeOperationGroupRescueModeCmd() (*cobra.Command, error) {
-	operationGroupRescueModeCmd := &cobra.Command{
-		Use:  "rescue_mode",
-		Long: ``,
-	}
-
-	operationServerExitRescueModeCmd, err := makeOperationRescueModeServerExitRescueModeCmd()
-	if err != nil {
-		return nil, err
-	}
-	operationGroupRescueModeCmd.AddCommand(operationServerExitRescueModeCmd)
-
-	operationServerStartRescueModeCmd, err := makeOperationRescueModeServerStartRescueModeCmd()
-	if err != nil {
-		return nil, err
-	}
-	operationGroupRescueModeCmd.AddCommand(operationServerStartRescueModeCmd)
-
-	return operationGroupRescueModeCmd, nil
-}
-func makeOperationGroupRolesCmd() (*cobra.Command, error) {
-	operationGroupRolesCmd := &cobra.Command{
-		Use:  "roles",
-		Long: ``,
-	}
-
-	operationGetRoleIDCmd, err := makeOperationRolesGetRoleIDCmd()
-	if err != nil {
-		return nil, err
-	}
-	operationGroupRolesCmd.AddCommand(operationGetRoleIDCmd)
-
-	operationGetRolesCmd, err := makeOperationRolesGetRolesCmd()
-	if err != nil {
-		return nil, err
-	}
-	operationGroupRolesCmd.AddCommand(operationGetRolesCmd)
-
-	return operationGroupRolesCmd, nil
 }
 func makeOperationGroupServerReinstallCmd() (*cobra.Command, error) {
 	operationGroupServerReinstallCmd := &cobra.Command{
@@ -789,102 +424,7 @@ func makeOperationGroupSSHKeysCmd() (*cobra.Command, error) {
 
 	return operationGroupSSHKeysCmd, nil
 }
-func makeOperationGroupTeamsCmd() (*cobra.Command, error) {
-	operationGroupTeamsCmd := &cobra.Command{
-		Use:  "teams",
-		Long: ``,
-	}
 
-	operationGetTeamCmd, err := makeOperationTeamsGetTeamCmd()
-	if err != nil {
-		return nil, err
-	}
-	operationGroupTeamsCmd.AddCommand(operationGetTeamCmd)
-
-	operationPatchCurrentTeamCmd, err := makeOperationTeamsPatchCurrentTeamCmd()
-	if err != nil {
-		return nil, err
-	}
-	operationGroupTeamsCmd.AddCommand(operationPatchCurrentTeamCmd)
-
-	operationPostTeamCmd, err := makeOperationTeamsPostTeamCmd()
-	if err != nil {
-		return nil, err
-	}
-	operationGroupTeamsCmd.AddCommand(operationPostTeamCmd)
-
-	return operationGroupTeamsCmd, nil
-}
-func makeOperationGroupUserDataCmd() (*cobra.Command, error) {
-	operationGroupUserDataCmd := &cobra.Command{
-		Use:  "user_data",
-		Long: ``,
-	}
-
-	operationDeleteProjectUserDataCmd, err := makeOperationUserDataDeleteProjectUserDataCmd()
-	if err != nil {
-		return nil, err
-	}
-	operationGroupUserDataCmd.AddCommand(operationDeleteProjectUserDataCmd)
-
-	operationGetProjectUserDataCmd, err := makeOperationUserDataGetProjectUserDataCmd()
-	if err != nil {
-		return nil, err
-	}
-	operationGroupUserDataCmd.AddCommand(operationGetProjectUserDataCmd)
-
-	operationGetProjectUsersDataCmd, err := makeOperationUserDataGetProjectUsersDataCmd()
-	if err != nil {
-		return nil, err
-	}
-	operationGroupUserDataCmd.AddCommand(operationGetProjectUsersDataCmd)
-
-	operationPostProjectUserDataCmd, err := makeOperationUserDataPostProjectUserDataCmd()
-	if err != nil {
-		return nil, err
-	}
-	operationGroupUserDataCmd.AddCommand(operationPostProjectUserDataCmd)
-
-	operationPutProjectUserDataCmd, err := makeOperationUserDataPutProjectUserDataCmd()
-	if err != nil {
-		return nil, err
-	}
-	operationGroupUserDataCmd.AddCommand(operationPutProjectUserDataCmd)
-
-	return operationGroupUserDataCmd, nil
-}
-func makeOperationGroupVpnSessionsCmd() (*cobra.Command, error) {
-	operationGroupVpnSessionsCmd := &cobra.Command{
-		Use:  "v_p_n_sessions",
-		Long: ``,
-	}
-
-	operationDeleteVpnSessionCmd, err := makeOperationVpnSessionsDeleteVpnSessionCmd()
-	if err != nil {
-		return nil, err
-	}
-	operationGroupVpnSessionsCmd.AddCommand(operationDeleteVpnSessionCmd)
-
-	operationGetVpnSessionsCmd, err := makeOperationVpnSessionsGetVpnSessionsCmd()
-	if err != nil {
-		return nil, err
-	}
-	operationGroupVpnSessionsCmd.AddCommand(operationGetVpnSessionsCmd)
-
-	operationPostVpnSessionCmd, err := makeOperationVpnSessionsPostVpnSessionCmd()
-	if err != nil {
-		return nil, err
-	}
-	operationGroupVpnSessionsCmd.AddCommand(operationPostVpnSessionCmd)
-
-	operationPutVpnSessionCmd, err := makeOperationVpnSessionsPutVpnSessionCmd()
-	if err != nil {
-		return nil, err
-	}
-	operationGroupVpnSessionsCmd.AddCommand(operationPutVpnSessionCmd)
-
-	return operationGroupVpnSessionsCmd, nil
-}
 func makeOperationGroupVirtualNetworksCmd() (*cobra.Command, error) {
 	operationGroupVirtualNetworksCmd := &cobra.Command{
 		Use:  "vnetworks",
