@@ -19,8 +19,8 @@ import (
 // makeOperationVirtualNetworkAssignmentsAssignServerVirtualNetworkCmd returns a cmd to handle operation assignServerVirtualNetwork
 func makeOperationVirtualNetworkAssignmentsAssignServerVirtualNetworkCmd() (*cobra.Command, error) {
 	cmd := &cobra.Command{
-		Use:   "assign-server-virtual-network",
-		Short: ``,
+		Use:   "create",
+		Short: `Assign a server to a virtual network.`,
 		RunE:  runOperationVirtualNetworkAssignmentsAssignServerVirtualNetwork,
 	}
 

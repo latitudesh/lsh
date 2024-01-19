@@ -253,12 +253,6 @@ func MakeRootCmd() (*cobra.Command, error) {
 	}
 	rootCmd.AddCommand(operationGroupVpnSessionsCmd)
 
-	operationGroupVirtualNetworkAssignmentsCmd, err := makeOperationGroupVirtualNetworkAssignmentsCmd()
-	if err != nil {
-		return nil, err
-	}
-	rootCmd.AddCommand(operationGroupVirtualNetworkAssignmentsCmd)
-
 	operationGroupVirtualNetworksCmd, err := makeOperationGroupVirtualNetworksCmd()
 	if err != nil {
 		return nil, err
@@ -891,32 +885,6 @@ func makeOperationGroupVpnSessionsCmd() (*cobra.Command, error) {
 
 	return operationGroupVpnSessionsCmd, nil
 }
-func makeOperationGroupVirtualNetworkAssignmentsCmd() (*cobra.Command, error) {
-	operationGroupVirtualNetworkAssignmentsCmd := &cobra.Command{
-		Use:  "virtual_network_assignments",
-		Long: ``,
-	}
-
-	operationAssignServerVirtualNetworkCmd, err := makeOperationVirtualNetworkAssignmentsAssignServerVirtualNetworkCmd()
-	if err != nil {
-		return nil, err
-	}
-	operationGroupVirtualNetworkAssignmentsCmd.AddCommand(operationAssignServerVirtualNetworkCmd)
-
-	operationDeleteVirtualNetworksAssignmentsCmd, err := makeOperationVirtualNetworkAssignmentsDeleteVirtualNetworksAssignmentsCmd()
-	if err != nil {
-		return nil, err
-	}
-	operationGroupVirtualNetworkAssignmentsCmd.AddCommand(operationDeleteVirtualNetworksAssignmentsCmd)
-
-	operationGetVirtualNetworksAssignmentsCmd, err := makeOperationVirtualNetworkAssignmentsGetVirtualNetworksAssignmentsCmd()
-	if err != nil {
-		return nil, err
-	}
-	operationGroupVirtualNetworkAssignmentsCmd.AddCommand(operationGetVirtualNetworksAssignmentsCmd)
-
-	return operationGroupVirtualNetworkAssignmentsCmd, nil
-}
 func makeOperationGroupVirtualNetworksCmd() (*cobra.Command, error) {
 	operationGroupVirtualNetworksCmd := &cobra.Command{
 		Use:  "vnetworks",
@@ -952,6 +920,12 @@ func makeOperationGroupVirtualNetworksCmd() (*cobra.Command, error) {
 		return nil, err
 	}
 	operationGroupVirtualNetworksCmd.AddCommand(operationUpdateVirtualNetworkCmd)
+
+	operationVirtualNetworkAssignmentCmd, err := makeOperationGroupVirtualNetworkAssignmentCmd()
+	if err != nil {
+		return nil, err
+	}
+	operationGroupVirtualNetworksCmd.AddCommand(operationVirtualNetworkAssignmentCmd)
 
 	return operationGroupVirtualNetworksCmd, nil
 }
