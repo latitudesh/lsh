@@ -349,7 +349,7 @@ func makeOperationGroupAccountCmd() (*cobra.Command, error) {
 }
 func makeOperationGroupAPIKeysCmd() (*cobra.Command, error) {
 	operationGroupAPIKeysCmd := &cobra.Command{
-		Use:  "api_keys",
+		Use:  "apikeys",
 		Long: ``,
 	}
 
