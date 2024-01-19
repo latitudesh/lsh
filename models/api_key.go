@@ -26,6 +26,10 @@ type APIKey struct {
 	ID string `json:"id,omitempty"`
 }
 
+type APIKeys struct {
+	Data []*APIKey `json:"data"`
+}
+
 // Validate validates this api key
 func (m *APIKey) Validate(formats strfmt.Registry) error {
 	var res []error
