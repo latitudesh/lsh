@@ -61,7 +61,7 @@ func runOperationProjectsGetProject(cmd *cobra.Command, args []string) error {
 	}
 	if !debug {
 
-		fmt.Println(utils.PrettifyJson(msgStr))
+		utils.PrintOutput(msgStr)
 	}
 	return nil
 }
@@ -128,6 +128,7 @@ func registerOperationProjectsGetProjectIDOrSlugParamFlags(cmdPrefix string, cmd
 	var idOrSlugFlagDefault string
 
 	_ = cmd.PersistentFlags().String(idOrSlugFlagName, idOrSlugFlagDefault, idOrSlugDescription)
+	cmd.MarkPersistentFlagRequired(idOrSlugFlagName)
 
 	return nil
 }
