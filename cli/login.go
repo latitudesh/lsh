@@ -45,6 +45,7 @@ func runOperationLogin(cmd *cobra.Command, args []string) error {
 	}
 	defer f.Close()
 
+	viper.Set("API-Version", "2023-06-01")
 	viper.Set("authorization", args[0])
 	viper.WriteConfig()
 	fmt.Println("Success, configuration file updated!")
