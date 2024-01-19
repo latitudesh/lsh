@@ -142,6 +142,7 @@ func registerUpdateAPIKeyDataID(depth int, cmdPrefix string, cmd *cobra.Command)
 	var idFlagDefault string
 
 	_ = cmd.PersistentFlags().String(idFlagName, idFlagDefault, idDescription)
+	cmd.MarkPersistentFlagRequired(idFlagName)
 
 	return nil
 }
@@ -163,6 +164,7 @@ func registerUpdateAPIKeyDataType(depth int, cmdPrefix string, cmd *cobra.Comman
 	var typeFlagDefault string
 
 	_ = cmd.PersistentFlags().String(typeFlagName, typeFlagDefault, typeDescription)
+	cmd.MarkPersistentFlagRequired(typeFlagName)
 
 	if err := cmd.RegisterFlagCompletionFunc(typeFlagName,
 		func(cmd *cobra.Command, args []string, toComplete string) ([]string, cobra.ShellCompDirective) {

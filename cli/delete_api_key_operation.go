@@ -57,8 +57,7 @@ func runOperationAPIKeysDeleteAPIKey(cmd *cobra.Command, args []string) error {
 		return err
 	}
 	if !debug {
-
-		fmt.Println(utils.PrettifyJson(msgStr))
+		utils.PrintOutput(msgStr)
 	}
 	return nil
 }
@@ -105,6 +104,7 @@ func registerOperationAPIKeysDeleteAPIKeyIDParamFlags(cmdPrefix string, cmd *cob
 	var idFlagDefault string
 
 	_ = cmd.PersistentFlags().String(idFlagName, idFlagDefault, idDescription)
+	cmd.MarkPersistentFlagRequired(idFlagName)
 
 	return nil
 }
@@ -131,6 +131,7 @@ func retrieveOperationAPIKeysDeleteAPIKeyAPIVersionFlag(m *api_keys.DeleteAPIKey
 }
 func retrieveOperationAPIKeysDeleteAPIKeyIDFlag(m *api_keys.DeleteAPIKeyParams, cmdPrefix string, cmd *cobra.Command) (error, bool) {
 	retAdded := false
+
 	if cmd.Flags().Changed("id") {
 
 		var idFlagName string
