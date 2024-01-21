@@ -231,21 +231,13 @@ func parseOperationSSHKeysPostProjectSSHKeyResult(resp0 *ssh_keys.PostProjectSSH
 			}
 		}
 
-		unprocessableEntityErrorMessage, err := api.ParseErrorResponse(respErr)
+		parsedErrorResponse, err := api.ParseErrorResponse(respErr)
 
 		if err != nil {
 			return "", err
 		}
 
-		if len(unprocessableEntityErrorMessage) > 0 {
-			return unprocessableEntityErrorMessage, nil
-		}
-
-		// Non schema case: warning postProjectSshKeyBadRequest is not supported
-
-		// Non schema case: warning postProjectSshKeyUnprocessableEntity is not supported
-
-		return "", respErr
+		return parsedErrorResponse, nil
 	}
 
 	if !swag.IsZero(resp0) && !swag.IsZero(resp0.Payload) {

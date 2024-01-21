@@ -275,21 +275,13 @@ func parseOperationSSHKeysPutProjectSSHKeyResult(resp0 *ssh_keys.PutProjectSSHKe
 			}
 		}
 
-		notFoundErrorMessage, err := api.ParseErrorResponse(respErr)
+		parsedErrorResponse, err := api.ParseErrorResponse(respErr)
 
 		if err != nil {
 			return "", err
 		}
 
-		if len(notFoundErrorMessage) > 0 {
-			return notFoundErrorMessage, nil
-		}
-
-		// Non schema case: warning putProjectSshKeyBadRequest is not supported
-
-		// Non schema case: warning putProjectSshKeyUnprocessableEntity is not supported
-
-		return "", respErr
+		return parsedErrorResponse, nil
 	}
 
 	if !swag.IsZero(resp0) && !swag.IsZero(resp0.Payload) {

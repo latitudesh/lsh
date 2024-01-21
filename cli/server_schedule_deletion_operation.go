@@ -191,17 +191,13 @@ func parseOperationServersServerScheduleDeletionResult(resp0 *servers.ServerSche
 			}
 		}
 
-		notFoundErrorMessage, err := api.ParseErrorResponse(respErr)
+		parsedErrorResponse, err := api.ParseErrorResponse(respErr)
 
 		if err != nil {
 			return "", err
 		}
 
-		if len(notFoundErrorMessage) > 0 {
-			return notFoundErrorMessage, nil
-		}
-
-		return "", respErr
+		return parsedErrorResponse, nil
 	}
 
 	if !swag.IsZero(resp0) && !swag.IsZero(resp0.Payload) {

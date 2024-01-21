@@ -197,22 +197,13 @@ func retrieveOperationSSHKeysDeleteProjectSSHKeySSHKeyIDFlag(m *ssh_keys.DeleteP
 // parseOperationSSHKeysDeleteProjectSSHKeyResult parses request result and return the string content
 func parseOperationSSHKeysDeleteProjectSSHKeyResult(resp0 *ssh_keys.DeleteProjectSSHKeyOK, respErr error) (string, error) {
 	if respErr != nil {
-
-		// Non schema case: warning deleteProjectSshKeyOK is not supported
-
-		// Non schema case: warning deleteProjectSshKeyNotFound is not supported
-
-		notFoundErrorMessage, err := api.ParseErrorResponse(respErr)
+		parsedErrorResponse, err := api.ParseErrorResponse(respErr)
 
 		if err != nil {
 			return "", err
 		}
 
-		if len(notFoundErrorMessage) > 0 {
-			return notFoundErrorMessage, nil
-		}
-
-		return "", respErr
+		return parsedErrorResponse, nil
 	}
 
 	// warning: non schema response deleteProjectSshKeyOK is not supported by go-swagger cli yet.
