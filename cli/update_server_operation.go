@@ -10,7 +10,7 @@ import (
 	"fmt"
 
 	"github.com/latitudesh/cli/client/servers"
-	"github.com/latitudesh/cli/internal"
+	"github.com/latitudesh/cli/internal/api"
 	"github.com/latitudesh/cli/internal/utils"
 
 	"github.com/go-openapi/swag"
@@ -253,7 +253,7 @@ func parseOperationServersUpdateServerResult(resp0 *servers.UpdateServerOK, resp
 			}
 		}
 
-		notFoundErrorMessage, err := internal.ParseNotFoundError(respErr)
+		notFoundErrorMessage, err := api.ParseErrorResponse(respErr)
 
 		if err != nil {
 			return "", err

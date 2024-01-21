@@ -17,7 +17,7 @@ import (
 	"github.com/go-openapi/swag"
 	"github.com/go-openapi/validate"
 
-	"github.com/latitudesh/cli/internal"
+	"github.com/latitudesh/cli/internal/api"
 	"github.com/latitudesh/cli/models"
 )
 
@@ -42,7 +42,7 @@ func (o *PutProjectSSHKeyReader) ReadResponse(response runtime.ClientResponse, c
 		}
 		return nil, result
 	case 404:
-		result := internal.NewNotFoundError()
+		result := api.NewErrorResponse()
 		if err := result.ReadResponse(response, consumer, o.formats); err != nil {
 			return nil, err
 		}

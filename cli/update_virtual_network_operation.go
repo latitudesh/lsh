@@ -10,7 +10,7 @@ import (
 	"fmt"
 
 	"github.com/latitudesh/cli/client/virtual_networks"
-	"github.com/latitudesh/cli/internal"
+	"github.com/latitudesh/cli/internal/api"
 	"github.com/latitudesh/cli/internal/utils"
 
 	"github.com/go-openapi/swag"
@@ -242,7 +242,7 @@ func parseOperationVirtualNetworksUpdateVirtualNetworkResult(resp0 *virtual_netw
 			}
 		}
 
-		notFoundErrorMessage, err := internal.ParseNotFoundError(respErr)
+		notFoundErrorMessage, err := api.ParseErrorResponse(respErr)
 
 		if err != nil {
 			return "", err

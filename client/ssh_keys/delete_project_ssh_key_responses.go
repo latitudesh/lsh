@@ -10,7 +10,7 @@ import (
 
 	"github.com/go-openapi/runtime"
 	"github.com/go-openapi/strfmt"
-	"github.com/latitudesh/cli/internal"
+	"github.com/latitudesh/cli/internal/api"
 )
 
 // DeleteProjectSSHKeyReader is a Reader for the DeleteProjectSSHKey structure.
@@ -28,7 +28,7 @@ func (o *DeleteProjectSSHKeyReader) ReadResponse(response runtime.ClientResponse
 		}
 		return result, nil
 	case 404:
-		result := internal.NewNotFoundError()
+		result := api.NewErrorResponse()
 		if err := result.ReadResponse(response, consumer, o.formats); err != nil {
 			return nil, err
 		}

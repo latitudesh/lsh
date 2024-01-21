@@ -10,7 +10,7 @@ import (
 	"fmt"
 
 	"github.com/latitudesh/cli/client/ssh_keys"
-	"github.com/latitudesh/cli/internal"
+	"github.com/latitudesh/cli/internal/api"
 	"github.com/latitudesh/cli/internal/utils"
 	"github.com/latitudesh/cli/models"
 
@@ -231,7 +231,7 @@ func parseOperationSSHKeysPostProjectSSHKeyResult(resp0 *ssh_keys.PostProjectSSH
 			}
 		}
 
-		unprocessableEntityErrorMessage, err := internal.ParseUnprocessableEntityError(respErr)
+		unprocessableEntityErrorMessage, err := api.ParseErrorResponse(respErr)
 
 		if err != nil {
 			return "", err
