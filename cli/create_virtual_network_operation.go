@@ -10,6 +10,7 @@ import (
 	"fmt"
 
 	"github.com/latitudesh/cli/client/virtual_networks"
+	"github.com/latitudesh/cli/internal"
 	"github.com/latitudesh/cli/internal/utils"
 
 	"github.com/go-openapi/swag"
@@ -195,6 +196,16 @@ func parseOperationVirtualNetworksCreateVirtualNetworkResult(resp0 *virtual_netw
 				}
 				return string(msgStr), nil
 			}
+		}
+
+		notFoundErrorMessage, err := internal.ParseNotFoundError(respErr)
+
+		if err != nil {
+			return "", err
+		}
+
+		if len(notFoundErrorMessage) > 0 {
+			return notFoundErrorMessage, nil
 		}
 
 		return "", respErr
@@ -454,6 +465,7 @@ func registerCreateVirtualNetworkParamsBodyDataAttributesDescription(depth int, 
 	var descriptionFlagDefault string
 
 	_ = cmd.PersistentFlags().String(descriptionFlagName, descriptionFlagDefault, descriptionDescription)
+	cmd.MarkPersistentFlagRequired(descriptionFlagName)
 
 	return nil
 }
@@ -475,6 +487,7 @@ func registerCreateVirtualNetworkParamsBodyDataAttributesProject(depth int, cmdP
 	var projectFlagDefault string
 
 	_ = cmd.PersistentFlags().String(projectFlagName, projectFlagDefault, projectDescription)
+	cmd.MarkPersistentFlagRequired(projectFlagName)
 
 	return nil
 }
@@ -496,6 +509,7 @@ func registerCreateVirtualNetworkParamsBodyDataAttributesSite(depth int, cmdPref
 	var siteFlagDefault string
 
 	_ = cmd.PersistentFlags().String(siteFlagName, siteFlagDefault, siteDescription)
+	cmd.MarkPersistentFlagRequired(siteFlagName)
 
 	if err := cmd.RegisterFlagCompletionFunc(siteFlagName,
 		func(cmd *cobra.Command, args []string, toComplete string) ([]string, cobra.ShellCompDirective) {

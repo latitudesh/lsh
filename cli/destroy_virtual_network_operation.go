@@ -10,6 +10,7 @@ import (
 	"fmt"
 
 	"github.com/latitudesh/cli/client/virtual_networks"
+	"github.com/latitudesh/cli/internal"
 	"github.com/latitudesh/cli/internal/utils"
 
 	"github.com/go-openapi/swag"
@@ -105,6 +106,7 @@ func registerOperationVirtualNetworksDestroyVirtualNetworkIDParamFlags(cmdPrefix
 	var idFlagDefault int64
 
 	_ = cmd.PersistentFlags().Int64(idFlagName, idFlagDefault, idDescription)
+	cmd.MarkPersistentFlagRequired(idFlagName)
 
 	return nil
 }
@@ -166,6 +168,16 @@ func parseOperationVirtualNetworksDestroyVirtualNetworkResult(resp0 *virtual_net
 				}
 				return string(msgStr), nil
 			}
+		}
+
+		notFoundErrorMessage, err := internal.ParseNotFoundError(respErr)
+
+		if err != nil {
+			return "", err
+		}
+
+		if len(notFoundErrorMessage) > 0 {
+			return notFoundErrorMessage, nil
 		}
 
 		return "", respErr

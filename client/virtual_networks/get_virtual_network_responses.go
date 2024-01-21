@@ -15,6 +15,7 @@ import (
 	"github.com/go-openapi/strfmt"
 	"github.com/go-openapi/swag"
 
+	"github.com/latitudesh/cli/internal"
 	"github.com/latitudesh/cli/models"
 )
 
@@ -32,6 +33,12 @@ func (o *GetVirtualNetworkReader) ReadResponse(response runtime.ClientResponse, 
 			return nil, err
 		}
 		return result, nil
+	case 404:
+		result := internal.NewNotFoundError()
+		if err := result.ReadResponse(response, consumer, o.formats); err != nil {
+			return nil, err
+		}
+		return nil, result
 	default:
 		return nil, runtime.NewAPIError("[GET /virtual_networks/{id}] get-virtual-network", response, response.Code())
 	}
