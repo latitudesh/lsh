@@ -59,7 +59,7 @@ func runOperationVirtualNetworksGetVirtualNetwork(cmd *cobra.Command, args []str
 	}
 	if !debug {
 
-		fmt.Println(utils.PrettifyJson(msgStr))
+		utils.PrintOutput(msgStr)
 	}
 	return nil
 }

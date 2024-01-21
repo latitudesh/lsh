@@ -57,7 +57,7 @@ func runOperationServersCreateServer(cmd *cobra.Command, args []string) error {
 	}
 	if !debug {
 
-		fmt.Println(utils.PrettifyJson(msgStr))
+		utils.PrintOutput(msgStr)
 	}
 	return nil
 }
@@ -525,6 +525,7 @@ func registerCreateServerParamsBodyDataAttributesHostname(depth int, cmdPrefix s
 	var hostnameFlagDefault string
 
 	_ = cmd.PersistentFlags().String(hostnameFlagName, hostnameFlagDefault, hostnameDescription)
+	cmd.MarkPersistentFlagRequired(hostnameFlagName)
 
 	return nil
 }
@@ -567,6 +568,7 @@ func registerCreateServerParamsBodyDataAttributesOperatingSystem(depth int, cmdP
 	var operatingSystemFlagDefault string
 
 	_ = cmd.PersistentFlags().String(operatingSystemFlagName, operatingSystemFlagDefault, operatingSystemDescription)
+	cmd.MarkPersistentFlagRequired(operatingSystemFlagName)
 
 	if err := cmd.RegisterFlagCompletionFunc(operatingSystemFlagName,
 		func(cmd *cobra.Command, args []string, toComplete string) ([]string, cobra.ShellCompDirective) {
@@ -599,6 +601,7 @@ func registerCreateServerParamsBodyDataAttributesPlan(depth int, cmdPrefix strin
 	var planFlagDefault string
 
 	_ = cmd.PersistentFlags().String(planFlagName, planFlagDefault, planDescription)
+	cmd.MarkPersistentFlagRequired(planFlagName)
 
 	if err := cmd.RegisterFlagCompletionFunc(planFlagName,
 		func(cmd *cobra.Command, args []string, toComplete string) ([]string, cobra.ShellCompDirective) {
@@ -631,6 +634,7 @@ func registerCreateServerParamsBodyDataAttributesProject(depth int, cmdPrefix st
 	var projectFlagDefault string
 
 	_ = cmd.PersistentFlags().String(projectFlagName, projectFlagDefault, projectDescription)
+	cmd.MarkPersistentFlagRequired(projectFlagName)
 
 	return nil
 }
@@ -684,6 +688,7 @@ func registerCreateServerParamsBodyDataAttributesSite(depth int, cmdPrefix strin
 	var siteFlagDefault string
 
 	_ = cmd.PersistentFlags().String(siteFlagName, siteFlagDefault, siteDescription)
+	cmd.MarkPersistentFlagRequired(siteFlagName)
 
 	if err := cmd.RegisterFlagCompletionFunc(siteFlagName,
 		func(cmd *cobra.Command, args []string, toComplete string) ([]string, cobra.ShellCompDirective) {

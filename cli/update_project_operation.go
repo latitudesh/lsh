@@ -61,7 +61,7 @@ func runOperationProjectsUpdateProject(cmd *cobra.Command, args []string) error 
 	}
 	if !debug {
 
-		fmt.Println(utils.PrettifyJson(msgStr))
+		utils.PrintOutput(msgStr)
 	}
 	return nil
 }

@@ -64,7 +64,7 @@ func runOperationPowerActionsCreateServerAction(cmd *cobra.Command, args []strin
 	}
 	if !debug {
 
-		fmt.Println(utils.PrettifyJson(msgStr))
+		utils.PrintOutput(msgStr)
 	}
 	return nil
 }

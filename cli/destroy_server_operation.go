@@ -55,9 +55,9 @@ func runOperationServersDestroyServer(cmd *cobra.Command, args []string) error {
 	if err != nil {
 		return err
 	}
-	if !debug {
 
-		fmt.Println(utils.PrettifyJson(msgStr))
+	if !debug {
+		utils.PrintOutput(msgStr)
 	}
 	return nil
 }

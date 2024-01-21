@@ -61,7 +61,7 @@ func runOperationServersGetServer(cmd *cobra.Command, args []string) error {
 	}
 	if !debug {
 
-		fmt.Println(utils.PrettifyJson(msgStr))
+		utils.PrintOutput(msgStr)
 	}
 	return nil
 }
@@ -128,6 +128,7 @@ func registerOperationServersGetServerServerIDParamFlags(cmdPrefix string, cmd *
 	var serverIdFlagDefault string
 
 	_ = cmd.PersistentFlags().String(serverIdFlagName, serverIdFlagDefault, serverIdDescription)
+	cmd.MarkPersistentFlagRequired(serverIdFlagName)
 
 	return nil
 }

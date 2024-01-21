@@ -64,7 +64,7 @@ func runOperationVirtualNetworkAssignmentsGetVirtualNetworksAssignments(cmd *cob
 	}
 	if !debug {
 
-		fmt.Println(utils.PrettifyJson(msgStr))
+		utils.PrintOutput(msgStr)
 	}
 	return nil
 }
