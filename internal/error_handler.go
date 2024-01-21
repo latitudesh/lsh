@@ -42,11 +42,11 @@ func (o *NotFoundError) Code() int {
 }
 
 func (o *NotFoundError) Error() string {
-	return fmt.Sprintf("[DELETE /auth/api_keys/{id}][%d] NotFoundError  %+v", 404, o.Payload)
+	return fmt.Sprintf("[%d] NotFoundError  %+v", 404, o.Payload)
 }
 
 func (o *NotFoundError) String() string {
-	return fmt.Sprintf("[DELETE /auth/api_keys/{id}][%d] NotFoundError  %+v", 404, o.Payload)
+	return fmt.Sprintf("[%d] NotFoundError  %+v", 404, o.Payload)
 }
 
 func (o *NotFoundError) GetPayload() *models.ErrorObject {

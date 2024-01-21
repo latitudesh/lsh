@@ -10,6 +10,7 @@ import (
 
 	"github.com/go-openapi/runtime"
 	"github.com/go-openapi/strfmt"
+	"github.com/latitudesh/cli/internal"
 )
 
 // DeleteProjectSSHKeyReader is a Reader for the DeleteProjectSSHKey structure.
@@ -27,8 +28,8 @@ func (o *DeleteProjectSSHKeyReader) ReadResponse(response runtime.ClientResponse
 		}
 		return result, nil
 	case 404:
-		result := NewDeleteProjectSSHKeyNotFound()
-		if err := result.readResponse(response, consumer, o.formats); err != nil {
+		result := internal.NewNotFoundError()
+		if err := result.ReadResponse(response, consumer, o.formats); err != nil {
 			return nil, err
 		}
 		return nil, result
@@ -89,62 +90,6 @@ func (o *DeleteProjectSSHKeyOK) String() string {
 }
 
 func (o *DeleteProjectSSHKeyOK) readResponse(response runtime.ClientResponse, consumer runtime.Consumer, formats strfmt.Registry) error {
-
-	return nil
-}
-
-// NewDeleteProjectSSHKeyNotFound creates a DeleteProjectSSHKeyNotFound with default headers values
-func NewDeleteProjectSSHKeyNotFound() *DeleteProjectSSHKeyNotFound {
-	return &DeleteProjectSSHKeyNotFound{}
-}
-
-/*
-DeleteProjectSSHKeyNotFound describes a response with status code 404, with default header values.
-
-Not Found
-*/
-type DeleteProjectSSHKeyNotFound struct {
-}
-
-// IsSuccess returns true when this delete project Ssh key not found response has a 2xx status code
-func (o *DeleteProjectSSHKeyNotFound) IsSuccess() bool {
-	return false
-}
-
-// IsRedirect returns true when this delete project Ssh key not found response has a 3xx status code
-func (o *DeleteProjectSSHKeyNotFound) IsRedirect() bool {
-	return false
-}
-
-// IsClientError returns true when this delete project Ssh key not found response has a 4xx status code
-func (o *DeleteProjectSSHKeyNotFound) IsClientError() bool {
-	return true
-}
-
-// IsServerError returns true when this delete project Ssh key not found response has a 5xx status code
-func (o *DeleteProjectSSHKeyNotFound) IsServerError() bool {
-	return false
-}
-
-// IsCode returns true when this delete project Ssh key not found response a status code equal to that given
-func (o *DeleteProjectSSHKeyNotFound) IsCode(code int) bool {
-	return code == 404
-}
-
-// Code gets the status code for the delete project Ssh key not found response
-func (o *DeleteProjectSSHKeyNotFound) Code() int {
-	return 404
-}
-
-func (o *DeleteProjectSSHKeyNotFound) Error() string {
-	return fmt.Sprintf("[DELETE /projects/{project_id_or_slug}/ssh_keys/{ssh_key_id}][%d] deleteProjectSshKeyNotFound ", 404)
-}
-
-func (o *DeleteProjectSSHKeyNotFound) String() string {
-	return fmt.Sprintf("[DELETE /projects/{project_id_or_slug}/ssh_keys/{ssh_key_id}][%d] deleteProjectSshKeyNotFound ", 404)
-}
-
-func (o *DeleteProjectSSHKeyNotFound) readResponse(response runtime.ClientResponse, consumer runtime.Consumer, formats strfmt.Registry) error {
 
 	return nil
 }

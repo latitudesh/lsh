@@ -10,6 +10,7 @@ import (
 	"fmt"
 
 	"github.com/latitudesh/cli/client/ssh_keys"
+	"github.com/latitudesh/cli/internal"
 	"github.com/latitudesh/cli/internal/utils"
 	"github.com/latitudesh/cli/models"
 
@@ -136,6 +137,7 @@ func registerOperationSSHKeysPutProjectSSHKeyProjectIDOrSlugParamFlags(cmdPrefix
 	var projectIdOrSlugFlagDefault string
 
 	_ = cmd.PersistentFlags().String(projectIdOrSlugFlagName, projectIdOrSlugFlagDefault, projectIdOrSlugDescription)
+	cmd.MarkPersistentFlagRequired(projectIdOrSlugFlagName)
 
 	return nil
 }
@@ -153,6 +155,7 @@ func registerOperationSSHKeysPutProjectSSHKeySSHKeyIDParamFlags(cmdPrefix string
 	var sshKeyIdFlagDefault string
 
 	_ = cmd.PersistentFlags().String(sshKeyIdFlagName, sshKeyIdFlagDefault, sshKeyIdDescription)
+	cmd.MarkPersistentFlagRequired(sshKeyIdFlagName)
 
 	return nil
 }
@@ -270,6 +273,16 @@ func parseOperationSSHKeysPutProjectSSHKeyResult(resp0 *ssh_keys.PutProjectSSHKe
 				}
 				return string(msgStr), nil
 			}
+		}
+
+		notFoundErrorMessage, err := internal.ParseNotFoundError(respErr)
+
+		if err != nil {
+			return "", err
+		}
+
+		if len(notFoundErrorMessage) > 0 {
+			return notFoundErrorMessage, nil
 		}
 
 		// Non schema case: warning putProjectSshKeyBadRequest is not supported
@@ -482,6 +495,7 @@ func registerPutProjectSSHKeyParamsBodyDataID(depth int, cmdPrefix string, cmd *
 	var idFlagDefault string
 
 	_ = cmd.PersistentFlags().String(idFlagName, idFlagDefault, idDescription)
+	cmd.MarkPersistentFlagRequired(idFlagName)
 
 	return nil
 }
