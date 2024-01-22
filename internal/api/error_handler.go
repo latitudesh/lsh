@@ -28,7 +28,7 @@ func parseUnprocessableEntityError(respErr *UnprocessableEntity) (string, error)
 		return "", nil
 	}
 
-	fmt.Println("The following errors have been found:")
+	fmt.Printf("\n The following errors have been found: \n")
 
 	for _, err := range respErr.GetPayload().Errors {
 		if err.Meta.Attribute == "" {
@@ -37,6 +37,8 @@ func parseUnprocessableEntityError(respErr *UnprocessableEntity) (string, error)
 			fmt.Printf("     • '%s' %s\n", err.Meta.Attribute, err.Meta.Message)
 		}
 	}
+
+	fmt.Printf("\n")
 
 	return string("msgStr"), nil
 }

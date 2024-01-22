@@ -10,7 +10,7 @@ import (
 	"fmt"
 
 	"github.com/latitudesh/cli/client/servers"
-	"github.com/latitudesh/cli/internal"
+	"github.com/latitudesh/cli/internal/api"
 	"github.com/latitudesh/cli/internal/utils"
 
 	"github.com/go-openapi/swag"
@@ -212,7 +212,7 @@ func parseOperationServersGetServerResult(resp0 *servers.GetServerOK, respErr er
 		}
 
 		var iResp1 interface{} = respErr
-		resp1, ok := iResp1.(*internal.NotFoundError)
+		resp1, ok := iResp1.(*api.NotFound)
 		if ok {
 			if !swag.IsZero(resp1) && !swag.IsZero(resp1.Payload) {
 				msgStr, err := json.Marshal(resp1.Payload)
