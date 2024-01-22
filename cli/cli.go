@@ -132,12 +132,6 @@ func MakeRootCmd() (*cobra.Command, error) {
 	}
 	rootCmd.AddCommand(operationGroupProjectsCmd)
 
-	operationGroupServerReinstallCmd, err := makeOperationGroupServerReinstallCmd()
-	if err != nil {
-		return nil, err
-	}
-	rootCmd.AddCommand(operationGroupServerReinstallCmd)
-
 	operationGroupServersCmd, err := makeOperationGroupServersCmd()
 	if err != nil {
 		return nil, err
@@ -322,20 +316,6 @@ func makeOperationGroupProjectsCmd() (*cobra.Command, error) {
 
 	return operationGroupProjectsCmd, nil
 }
-func makeOperationGroupServerReinstallCmd() (*cobra.Command, error) {
-	operationGroupServerReinstallCmd := &cobra.Command{
-		Use:  "server_reinstall",
-		Long: ``,
-	}
-
-	operationCreateServerReinstallCmd, err := makeOperationServerReinstallCreateServerReinstallCmd()
-	if err != nil {
-		return nil, err
-	}
-	operationGroupServerReinstallCmd.AddCommand(operationCreateServerReinstallCmd)
-
-	return operationGroupServerReinstallCmd, nil
-}
 func makeOperationGroupServersCmd() (*cobra.Command, error) {
 	operationGroupServersCmd := &cobra.Command{
 		Use:  "servers",
@@ -383,6 +363,12 @@ func makeOperationGroupServersCmd() (*cobra.Command, error) {
 		return nil, err
 	}
 	operationGroupServersCmd.AddCommand(operationUpdateServerCmd)
+
+	operationServerReinstallCmd, err := makeOperationServerReinstallCmd()
+	if err != nil {
+		return nil, err
+	}
+	operationGroupServersCmd.AddCommand(operationServerReinstallCmd)
 
 	return operationGroupServersCmd, nil
 }

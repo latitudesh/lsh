@@ -20,7 +20,7 @@ import (
 func makeOperationServersCreateServerCmd() (*cobra.Command, error) {
 	cmd := &cobra.Command{
 		Use:   "create",
-		Short: `Deploy a new server`,
+		Short: `Deploy a new server.`,
 		RunE:  runOperationServersCreateServer,
 	}
 

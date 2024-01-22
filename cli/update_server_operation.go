@@ -20,7 +20,7 @@ import (
 func makeOperationServersUpdateServerCmd() (*cobra.Command, error) {
 	cmd := &cobra.Command{
 		Use:   "update",
-		Short: `Update server information`,
+		Short: `Update server information.`,
 		RunE:  runOperationServersUpdateServer,
 	}
 

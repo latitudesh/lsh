@@ -20,8 +20,7 @@ import (
 func makeOperationServersGetServersCmd() (*cobra.Command, error) {
 	cmd := &cobra.Command{
 		Use: "list",
-		Short: `Returns a list of all servers belonging to the team.
-`,
+		Short: `Returns a list of all servers belonging to the team.`,
 		RunE: runOperationServersGetServers,
 	}
 

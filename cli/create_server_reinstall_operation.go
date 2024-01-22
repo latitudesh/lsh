@@ -17,10 +17,10 @@ import (
 )
 
 // makeOperationServerReinstallCreateServerReinstallCmd returns a cmd to handle operation createServerReinstall
-func makeOperationServerReinstallCreateServerReinstallCmd() (*cobra.Command, error) {
+func makeOperationServerReinstallCmd() (*cobra.Command, error) {
 	cmd := &cobra.Command{
-		Use:   "create-server-reinstall",
-		Short: ``,
+		Use:   "reinstall",
+		Short: `Submit a reinstall request to a server.`,
 		RunE:  runOperationServerReinstallCreateServerReinstall,
 	}
 
