@@ -275,13 +275,7 @@ func parseOperationSSHKeysPutProjectSSHKeyResult(resp0 *ssh_keys.PutProjectSSHKe
 			}
 		}
 
-		parsedErrorResponse, err := api.ParseErrorResponse(respErr)
-
-		if err != nil {
-			return "", err
-		}
-
-		return parsedErrorResponse, nil
+		return api.RenderErrorOutput(respErr)
 	}
 
 	if !swag.IsZero(resp0) && !swag.IsZero(resp0.Payload) {

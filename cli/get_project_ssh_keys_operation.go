@@ -10,6 +10,7 @@ import (
 	"fmt"
 
 	"github.com/latitudesh/cli/client/ssh_keys"
+	"github.com/latitudesh/cli/internal/api"
 	"github.com/latitudesh/cli/internal/utils"
 
 	"github.com/go-openapi/swag"
@@ -105,6 +106,7 @@ func registerOperationSSHKeysGetProjectSSHKeysProjectIDOrSlugParamFlags(cmdPrefi
 	var projectIdOrSlugFlagDefault string
 
 	_ = cmd.PersistentFlags().String(projectIdOrSlugFlagName, projectIdOrSlugFlagDefault, projectIdOrSlugDescription)
+	cmd.MarkPersistentFlagRequired(projectIdOrSlugFlagName)
 
 	return nil
 }
@@ -166,7 +168,7 @@ func parseOperationSSHKeysGetProjectSSHKeysResult(resp0 *ssh_keys.GetProjectSSHK
 			}
 		}
 
-		return "", respErr
+		return api.RenderErrorOutput(respErr)
 	}
 
 	if !swag.IsZero(resp0) && !swag.IsZero(resp0.Payload) {

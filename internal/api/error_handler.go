@@ -1,57 +1,86 @@
 package api
 
 import (
-	"encoding/json"
 	"errors"
+	"fmt"
 
 	"github.com/go-openapi/swag"
+	apierrors "github.com/latitudesh/cli/internal/api/errors"
 )
 
-func ParseErrorResponse(respErr error) (string, error) {
+func RenderErrorOutput(respErr error) (string, error) {
 	switch e := respErr.(type) {
+	case *BadRequest:
+		parseBadRequestError(e)
 	case *Forbidden:
-		return parseForbiddenError(e)
+		parseForbiddenError(e)
 	case *NotFound:
-		return parseNotFoundError(e)
+		parseNotFoundError(e)
 	case *UnprocessableEntity:
-		return parseUnprocessableEntityError(e)
-	default:
-		return "", errors.New("Unknown error type")
+		parseUnprocessableEntityError(e)
 	}
+
+	return "", errors.New("An unknown error occurred.")
 }
 
 func parseUnprocessableEntityError(respErr *UnprocessableEntity) (string, error) {
-	if !swag.IsZero(respErr) && !swag.IsZero(respErr.Payload) {
-		msgStr, err := json.Marshal(respErr.Payload)
-		if err != nil {
-			return "", err
-		}
-		return string(msgStr), nil
+	if swag.IsZero(respErr) || swag.IsZero(respErr.Payload) {
+		return "", nil
 	}
 
-	return "", nil
+	fmt.Println("The following errors have been found:")
+
+	for _, err := range respErr.GetPayload().Errors {
+		if err.Meta.Attribute == "" {
+			renderGenericError(&err)
+		} else {
+			fmt.Printf("     • '%s' %s\n", err.Meta.Attribute, err.Meta.Message)
+		}
+	}
+
+	return string("msgStr"), nil
 }
 
 func parseNotFoundError(respErr *NotFound) (string, error) {
-	if !swag.IsZero(respErr) && !swag.IsZero(respErr.Payload) {
-		msgStr, err := json.Marshal(respErr.Payload)
-		if err != nil {
-			return "", err
-		}
-		return string(msgStr), nil
+	if swag.IsZero(respErr) || swag.IsZero(respErr.Payload) {
+		return "", nil
 	}
 
-	return "", nil
+	refError := respErr.Payload.Errors[0]
+
+	fmt.Printf("\n")
+	fmt.Printf("     • Error: %s\n", refError.Detail)
+	fmt.Printf("\n")
+
+	return string("msgStr"), nil
 }
 
 func parseForbiddenError(respErr *Forbidden) (string, error) {
-	if !swag.IsZero(respErr) && !swag.IsZero(respErr.Payload) {
-		msgStr, err := json.Marshal(respErr.Payload)
-		if err != nil {
-			return "", err
-		}
-		return string(msgStr), nil
+	if swag.IsZero(respErr) || swag.IsZero(respErr.Payload) {
+		return "", nil
 	}
 
-	return "", nil
+	refError := respErr.Payload.Errors[0]
+
+	fmt.Printf("\n")
+	fmt.Printf("     • Error: %s\n", refError.Detail)
+	fmt.Printf("\n")
+
+	return string("msgStr"), nil
+}
+
+func parseBadRequestError(respErr *BadRequest) (string, error) {
+	if swag.IsZero(respErr) || swag.IsZero(respErr.Payload) {
+		return "", nil
+	}
+
+	renderGenericError(&respErr.Payload.Errors[0])
+
+	return string("msgStr"), nil
+}
+
+func renderGenericError(respErr *apierrors.ErrorDetail) {
+	fmt.Printf("\n %s: \n", respErr.Title)
+	fmt.Printf("     • %s\n", respErr.Detail)
+	fmt.Printf("\n")
 }

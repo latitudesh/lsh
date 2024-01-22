@@ -12,6 +12,7 @@ import (
 	"github.com/go-openapi/runtime"
 	"github.com/go-openapi/strfmt"
 
+	"github.com/latitudesh/cli/internal/api"
 	"github.com/latitudesh/cli/models"
 )
 
@@ -29,6 +30,12 @@ func (o *GetProjectSSHKeysReader) ReadResponse(response runtime.ClientResponse, 
 			return nil, err
 		}
 		return result, nil
+	case 404:
+		result := api.NewNotFound()
+		if err := result.ReadResponse(response, consumer, o.formats); err != nil {
+			return nil, err
+		}
+		return nil, result
 	default:
 		return nil, runtime.NewAPIError("[GET /projects/{project_id_or_slug}/ssh_keys] get-project-ssh-keys", response, response.Code())
 	}

@@ -31,7 +31,7 @@ func (o *DestroyVirtualNetworkReader) ReadResponse(response runtime.ClientRespon
 		}
 		return result, nil
 	case 404:
-		result := api.NewErrorResponse()
+		result := api.NewNotFound()
 		if err := result.ReadResponse(response, consumer, o.formats); err != nil {
 			return nil, err
 		}

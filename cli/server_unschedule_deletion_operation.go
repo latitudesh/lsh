@@ -169,13 +169,7 @@ func parseOperationServersServerUnscheduleDeletionResult(resp0 *servers.ServerUn
 			}
 		}
 
-		parsedErrorResponse, err := api.ParseErrorResponse(respErr)
-
-		if err != nil {
-			return "", err
-		}
-
-		return parsedErrorResponse, nil
+		return api.RenderErrorOutput(respErr)
 	}
 
 	// warning: non schema response serverUnscheduleDeletionNoContent is not supported by go-swagger cli yet.

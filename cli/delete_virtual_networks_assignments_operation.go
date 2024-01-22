@@ -170,17 +170,7 @@ func parseOperationVirtualNetworkAssignmentsDeleteVirtualNetworksAssignmentsResu
 			}
 		}
 
-		notFoundErrorMessage, err := api.ParseErrorResponse(respErr)
-
-		if err != nil {
-			return "", err
-		}
-
-		if len(notFoundErrorMessage) > 0 {
-			return notFoundErrorMessage, nil
-		}
-
-		return "", respErr
+		return api.RenderErrorOutput(respErr)
 	}
 
 	// warning: non schema response deleteVirtualNetworksAssignmentsNoContent is not supported by go-swagger cli yet.

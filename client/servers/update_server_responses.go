@@ -42,7 +42,7 @@ func (o *UpdateServerReader) ReadResponse(response runtime.ClientResponse, consu
 		}
 		return nil, result
 	case 404:
-		result := api.NewErrorResponse()
+		result := api.NewNotFound()
 		if err := result.ReadResponse(response, consumer, o.formats); err != nil {
 			return nil, err
 		}

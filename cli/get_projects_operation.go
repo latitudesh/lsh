@@ -368,7 +368,6 @@ func retrieveOperationProjectsGetProjectsFilterSlugFlag(m *projects.GetProjectsP
 // parseOperationProjectsGetProjectsResult parses request result and return the string content
 func parseOperationProjectsGetProjectsResult(resp0 *projects.GetProjectsOK, respErr error) (string, error) {
 	if respErr != nil {
-
 		var iResp0 interface{} = respErr
 		resp0, ok := iResp0.(*projects.GetProjectsOK)
 		if ok {

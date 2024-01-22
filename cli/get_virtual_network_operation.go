@@ -169,13 +169,7 @@ func parseOperationVirtualNetworksGetVirtualNetworkResult(resp0 *virtual_network
 			}
 		}
 
-		parsedErrorResponse, err := api.ParseErrorResponse(respErr)
-
-		if err != nil {
-			return "", err
-		}
-
-		return parsedErrorResponse, nil
+		return api.RenderErrorOutput(respErr)
 	}
 
 	if !swag.IsZero(resp0) && !swag.IsZero(resp0.Payload) {

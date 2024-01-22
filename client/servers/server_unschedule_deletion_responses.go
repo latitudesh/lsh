@@ -37,7 +37,7 @@ func (o *ServerUnscheduleDeletionReader) ReadResponse(response runtime.ClientRes
 		}
 		return nil, result
 	case 404:
-		result := api.NewErrorResponse()
+		result := api.NewNotFound()
 		if err := result.ReadResponse(response, consumer, o.formats); err != nil {
 			return nil, err
 		}

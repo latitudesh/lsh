@@ -170,13 +170,7 @@ func parseOperationVirtualNetworksDestroyVirtualNetworkResult(resp0 *virtual_net
 			}
 		}
 
-		parsedErrorResponse, err := api.ParseErrorResponse(respErr)
-
-		if err != nil {
-			return "", err
-		}
-
-		return parsedErrorResponse, nil
+		return api.RenderErrorOutput(respErr)
 	}
 
 	// warning: non schema response destroyVirtualNetworkNoContent is not supported by go-swagger cli yet.

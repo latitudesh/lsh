@@ -42,7 +42,7 @@ func (o *PostProjectSSHKeyReader) ReadResponse(response runtime.ClientResponse, 
 		}
 		return nil, result
 	case 422:
-		result := api.NewErrorResponse()
+		result := api.NewNotFound()
 		if err := result.ReadResponse(response, consumer, o.formats); err != nil {
 			return nil, err
 		}

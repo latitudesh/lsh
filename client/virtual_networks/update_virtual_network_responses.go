@@ -42,7 +42,7 @@ func (o *UpdateVirtualNetworkReader) ReadResponse(response runtime.ClientRespons
 		}
 		return nil, result
 	case 404:
-		result := api.NewErrorResponse()
+		result := api.NewNotFound()
 		if err := result.ReadResponse(response, consumer, o.formats); err != nil {
 			return nil, err
 		}
