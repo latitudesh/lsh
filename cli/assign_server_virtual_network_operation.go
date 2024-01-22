@@ -102,7 +102,7 @@ func registerOperationVirtualNetworkAssignmentsAssignServerVirtualNetworkBodyPar
 	_ = cmd.PersistentFlags().String(bodyFlagName, "", "Optional json string for [body]. ")
 
 	// add flags for body
-	if err := registerModelAssignServerVirtualNetworkBodyFlags(0, "assignServerVirtualNetworkBody", cmd); err != nil {
+	if err := registerModelAssignServerVirtualNetworkBodyFlags(0, "", cmd); err != nil {
 		return err
 	}
 
@@ -148,7 +148,7 @@ func retrieveOperationVirtualNetworkAssignmentsAssignServerVirtualNetworkBodyFla
 	if swag.IsZero(bodyValueModel) {
 		bodyValueModel = virtual_network_assignments.AssignServerVirtualNetworkBody{}
 	}
-	err, added := retrieveModelAssignServerVirtualNetworkBodyFlags(0, &bodyValueModel, "assignServerVirtualNetworkBody", cmd)
+	err, added := retrieveModelAssignServerVirtualNetworkBodyFlags(0, &bodyValueModel, "", cmd)
 	if err != nil {
 		return err, false
 	}
@@ -237,12 +237,7 @@ func registerAssignServerVirtualNetworkBodyData(depth int, cmdPrefix string, cmd
 		return nil
 	}
 
-	var dataFlagName string
-	if cmdPrefix == "" {
-		dataFlagName = "data"
-	} else {
-		dataFlagName = fmt.Sprintf("%v.data", cmdPrefix)
-	}
+	var dataFlagName = ""
 
 	if err := registerModelAssignServerVirtualNetworkParamsBodyDataFlags(depth+1, dataFlagName, cmd); err != nil {
 		return err
@@ -270,7 +265,7 @@ func retrieveAssignServerVirtualNetworkBodyDataFlags(depth int, m *virtual_netwo
 	}
 	retAdded := false
 
-	dataFlagName := fmt.Sprintf("%v.data", cmdPrefix)
+	dataFlagName := fmt.Sprintf("%vdata", cmdPrefix)
 	if cmd.Flags().Changed(dataFlagName) {
 		// info: complex object data AssignServerVirtualNetworkParamsBodyData is retrieved outside this Changed() block
 	}
@@ -279,6 +274,7 @@ func retrieveAssignServerVirtualNetworkBodyDataFlags(depth int, m *virtual_netwo
 		dataFlagValue = &virtual_network_assignments.AssignServerVirtualNetworkParamsBodyData{}
 	}
 
+	dataFlagName = ""
 	err, dataAdded := retrieveModelAssignServerVirtualNetworkParamsBodyDataFlags(depth+1, dataFlagValue, dataFlagName, cmd)
 	if err != nil {
 		return err, false
@@ -310,12 +306,7 @@ func registerAssignServerVirtualNetworkParamsBodyDataAttributes(depth int, cmdPr
 		return nil
 	}
 
-	var attributesFlagName string
-	if cmdPrefix == "" {
-		attributesFlagName = "attributes"
-	} else {
-		attributesFlagName = fmt.Sprintf("%v.attributes", cmdPrefix)
-	}
+	var attributesFlagName = ""
 
 	if err := registerModelAssignServerVirtualNetworkParamsBodyDataAttributesFlags(depth+1, attributesFlagName, cmd); err != nil {
 		return err
@@ -331,12 +322,7 @@ func registerAssignServerVirtualNetworkParamsBodyDataType(depth int, cmdPrefix s
 
 	typeDescription := `Enum: ["virtual_network_assignment"]. Required. `
 
-	var typeFlagName string
-	if cmdPrefix == "" {
-		typeFlagName = "type"
-	} else {
-		typeFlagName = fmt.Sprintf("%v.type", cmdPrefix)
-	}
+	var typeFlagName = "type"
 
 	var typeFlagDefault string
 
@@ -381,7 +367,7 @@ func retrieveAssignServerVirtualNetworkParamsBodyDataAttributesFlags(depth int, 
 	}
 	retAdded := false
 
-	attributesFlagName := fmt.Sprintf("%v.attributes", cmdPrefix)
+	attributesFlagName := fmt.Sprintf("%vattributes", cmdPrefix)
 	if cmd.Flags().Changed(attributesFlagName) {
 		// info: complex object attributes AssignServerVirtualNetworkParamsBodyDataAttributes is retrieved outside this Changed() block
 	}
@@ -390,6 +376,7 @@ func retrieveAssignServerVirtualNetworkParamsBodyDataAttributesFlags(depth int, 
 		attributesFlagValue = &virtual_network_assignments.AssignServerVirtualNetworkParamsBodyDataAttributes{}
 	}
 
+	attributesFlagName = ""
 	err, attributesAdded := retrieveModelAssignServerVirtualNetworkParamsBodyDataAttributesFlags(depth+1, attributesFlagValue, attributesFlagName, cmd)
 	if err != nil {
 		return err, false
@@ -408,15 +395,8 @@ func retrieveAssignServerVirtualNetworkParamsBodyDataTypeFlags(depth int, m *vir
 	}
 	retAdded := false
 
-	typeFlagName := fmt.Sprintf("%v.type", cmdPrefix)
+	var typeFlagName = "type"
 	if cmd.Flags().Changed(typeFlagName) {
-
-		var typeFlagName string
-		if cmdPrefix == "" {
-			typeFlagName = "type"
-		} else {
-			typeFlagName = fmt.Sprintf("%v.type", cmdPrefix)
-		}
 
 		typeFlagValue, err := cmd.Flags().GetString(typeFlagName)
 		if err != nil {
@@ -451,12 +431,7 @@ func registerAssignServerVirtualNetworkParamsBodyDataAttributesServerID(depth in
 
 	serverIdDescription := `Required. `
 
-	var serverIdFlagName string
-	if cmdPrefix == "" {
-		serverIdFlagName = "server_id"
-	} else {
-		serverIdFlagName = fmt.Sprintf("%v.server_id", cmdPrefix)
-	}
+	var serverIdFlagName = "server_id"
 
 	var serverIdFlagDefault int64
 
@@ -472,12 +447,7 @@ func registerAssignServerVirtualNetworkParamsBodyDataAttributesVirtualNetworkID(
 
 	virtualNetworkIdDescription := `Required. `
 
-	var virtualNetworkIdFlagName string
-	if cmdPrefix == "" {
-		virtualNetworkIdFlagName = "virtual_network_id"
-	} else {
-		virtualNetworkIdFlagName = fmt.Sprintf("%v.virtual_network_id", cmdPrefix)
-	}
+	var virtualNetworkIdFlagName = "virtual_network_id"
 
 	var virtualNetworkIdFlagDefault int64
 
@@ -511,15 +481,8 @@ func retrieveAssignServerVirtualNetworkParamsBodyDataAttributesServerIDFlags(dep
 	}
 	retAdded := false
 
-	serverIdFlagName := fmt.Sprintf("%v.server_id", cmdPrefix)
+	var serverIdFlagName = "server_id"
 	if cmd.Flags().Changed(serverIdFlagName) {
-
-		var serverIdFlagName string
-		if cmdPrefix == "" {
-			serverIdFlagName = "server_id"
-		} else {
-			serverIdFlagName = fmt.Sprintf("%v.server_id", cmdPrefix)
-		}
 
 		serverIdFlagValue, err := cmd.Flags().GetInt64(serverIdFlagName)
 		if err != nil {
@@ -539,15 +502,8 @@ func retrieveAssignServerVirtualNetworkParamsBodyDataAttributesVirtualNetworkIDF
 	}
 	retAdded := false
 
-	virtualNetworkIdFlagName := fmt.Sprintf("%v.virtual_network_id", cmdPrefix)
+	var virtualNetworkIdFlagName = "virtual_network_id"
 	if cmd.Flags().Changed(virtualNetworkIdFlagName) {
-
-		var virtualNetworkIdFlagName string
-		if cmdPrefix == "" {
-			virtualNetworkIdFlagName = "virtual_network_id"
-		} else {
-			virtualNetworkIdFlagName = fmt.Sprintf("%v.virtual_network_id", cmdPrefix)
-		}
 
 		virtualNetworkIdFlagValue, err := cmd.Flags().GetInt64(virtualNetworkIdFlagName)
 		if err != nil {
