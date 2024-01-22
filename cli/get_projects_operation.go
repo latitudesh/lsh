@@ -20,8 +20,7 @@ import (
 func makeOperationProjectsGetProjectsCmd() (*cobra.Command, error) {
 	cmd := &cobra.Command{
 		Use: "list",
-		Short: `Returns a list of all projects for the current team
-`,
+		Short: `Returns a list of all projects for the current team`,
 		RunE: runOperationProjectsGetProjects,
 	}
 

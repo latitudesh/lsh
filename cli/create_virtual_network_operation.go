@@ -20,8 +20,7 @@ import (
 func makeOperationVirtualNetworksCreateVirtualNetworkCmd() (*cobra.Command, error) {
 	cmd := &cobra.Command{
 		Use: "create",
-		Short: `Creates a new Virtual Network.
-`,
+		Short: `Creates a new Virtual Network.`,
 		RunE: runOperationVirtualNetworksCreateVirtualNetwork,
 	}
 

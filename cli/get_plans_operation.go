@@ -20,8 +20,7 @@ import (
 func makeOperationPlansGetPlansCmd() (*cobra.Command, error) {
 	cmd := &cobra.Command{
 		Use: "list",
-		Short: `Lists all plans. Availability by region is included in ` + "`" + `attributes.regions.locations.available[*]` + "`" + ` node for a given plan.
-`,
+		Short: `Lists all plans. Availability by region is included in ` + "`" + `attributes.regions.locations.available[*]` + "`" + ` node for a given plan.`,
 		RunE: runOperationPlansGetPlans,
 	}
 

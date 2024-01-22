@@ -21,8 +21,7 @@ import (
 func makeOperationAPIKeysPostAPIKeyCmd() (*cobra.Command, error) {
 	cmd := &cobra.Command{
 		Use: "create",
-		Short: `Create a new API Key that is tied to the current user account. The created API key is only listed ONCE upon creation. It can however be regenerated or deleted.
-`,
+		Short: `Create a new API Key that is tied to the current user account. The created API key is only listed ONCE upon creation. It can however be regenerated or deleted.`,
 		RunE: runOperationAPIKeysPostAPIKey,
 	}
 

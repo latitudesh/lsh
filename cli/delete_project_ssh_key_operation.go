@@ -18,8 +18,7 @@ import (
 func makeOperationSSHKeysDeleteProjectSSHKeyCmd() (*cobra.Command, error) {
 	cmd := &cobra.Command{
 		Use: "destroy",
-		Short: `Allow you remove SSH Keys in a project. Remove a SSH Key from the project won't revoke the SSH Keys access for previously deploy and reinstall actions.
-`,
+		Short: `Allow you remove SSH Keys in a project. Remove a SSH Key from the project won't revoke the SSH Keys access for previously deploy and reinstall actions.`,
 		RunE: runOperationSSHKeysDeleteProjectSSHKey,
 	}
 

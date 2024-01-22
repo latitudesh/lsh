@@ -208,7 +208,7 @@ func makeAuthInfoWriter(cmd *cobra.Command) (runtime.ClientAuthInfoWriter, error
 
 func makeOperationGroupAPIKeysCmd() (*cobra.Command, error) {
 	operationGroupAPIKeysCmd := &cobra.Command{
-		Use:  "apikeys",
+		Use:  "api_keys",
 		Long: ``,
 	}
 
@@ -374,7 +374,7 @@ func makeOperationGroupServersCmd() (*cobra.Command, error) {
 }
 func makeOperationGroupSSHKeysCmd() (*cobra.Command, error) {
 	operationGroupSSHKeysCmd := &cobra.Command{
-		Use:  "sshkeys",
+		Use:  "ssh_keys",
 		Long: ``,
 	}
 
@@ -413,7 +413,7 @@ func makeOperationGroupSSHKeysCmd() (*cobra.Command, error) {
 
 func makeOperationGroupVirtualNetworksCmd() (*cobra.Command, error) {
 	operationGroupVirtualNetworksCmd := &cobra.Command{
-		Use:  "vnetworks",
+		Use:  "virtual_networks",
 		Long: ``,
 	}
 

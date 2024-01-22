@@ -20,8 +20,8 @@ import (
 // makeOperationProjectsUpdateProjectCmd returns a cmd to handle operation updateProject
 func makeOperationProjectsUpdateProjectCmd() (*cobra.Command, error) {
 	cmd := &cobra.Command{
-		Use:   "update-project",
-		Short: ``,
+		Use:   "update",
+		Short: `Updates a project`,
 		RunE:  runOperationProjectsUpdateProject,
 	}
 
