@@ -103,7 +103,7 @@ func registerOperationAPIKeysPostAPIKeyBodyParamFlags(cmdPrefix string, cmd *cob
 	_ = cmd.PersistentFlags().String(bodyFlagName, "", "Optional json string for [body]. ")
 
 	// add flags for body
-	if err := registerModelCreateAPIKeyFlags(0, "createApiKey", cmd); err != nil {
+	if err := registerModelCreateAPIKeyFlags(0, "", cmd); err != nil {
 		return err
 	}
 
@@ -149,7 +149,7 @@ func retrieveOperationAPIKeysPostAPIKeyBodyFlag(m *api_keys.PostAPIKeyParams, cm
 	if swag.IsZero(bodyValueModel) {
 		bodyValueModel = &models.CreateAPIKey{}
 	}
-	err, added := retrieveModelCreateAPIKeyFlags(0, bodyValueModel, "createApiKey", cmd)
+	err, added := retrieveModelCreateAPIKeyFlags(0, bodyValueModel, "", cmd)
 	if err != nil {
 		return err, false
 	}
