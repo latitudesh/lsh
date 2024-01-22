@@ -108,7 +108,7 @@ if cmdPrefix == "" {
 	_ = cmd.PersistentFlags().String(bodyFlagName, "", "Optional json string for [body]. ")
 
 	// add flags for body
-	if err := registerModelUpdateServerBodyFlags(0, "updateServerBody", cmd); err != nil {
+	if err := registerModelUpdateServerBodyFlags(0, "", cmd); err != nil {
 		return err
 	}
 
@@ -171,7 +171,7 @@ func retrieveOperationServersUpdateServerBodyFlag(m *servers.UpdateServerParams,
 	if swag.IsZero(bodyValueModel) {
 		bodyValueModel = servers.UpdateServerBody{}
 	}
-	err, added := retrieveModelUpdateServerBodyFlags(0, &bodyValueModel, "updateServerBody", cmd)
+	err, added := retrieveModelUpdateServerBodyFlags(0, &bodyValueModel, "", cmd)
 	if err != nil {
 		return err, false
 	}
@@ -288,12 +288,7 @@ func registerUpdateServerBodyAttributes(depth int, cmdPrefix string, cmd *cobra.
 		return nil
 	}
 
-	var attributesFlagName string
-	if cmdPrefix == "" {
-		attributesFlagName = "attributes"
-	} else {
-		attributesFlagName = fmt.Sprintf("%v.attributes", cmdPrefix)
-	}
+	var attributesFlagName = "attributes"
 
 	if err := registerModelUpdateServerParamsBodyAttributesFlags(depth+1, attributesFlagName, cmd); err != nil {
 		return err
@@ -309,12 +304,7 @@ func registerUpdateServerBodyID(depth int, cmdPrefix string, cmd *cobra.Command)
 
 	idDescription := ``
 
-	var idFlagName string
-	if cmdPrefix == "" {
-		idFlagName = "id"
-	} else {
-		idFlagName = fmt.Sprintf("%v.id", cmdPrefix)
-	}
+	var idFlagName = "id"
 
 	var idFlagDefault string
 
@@ -330,12 +320,7 @@ func registerUpdateServerBodyType(depth int, cmdPrefix string, cmd *cobra.Comman
 
 	typeDescription := `Enum: ["servers"]. `
 
-	var typeFlagName string
-	if cmdPrefix == "" {
-		typeFlagName = "type"
-	} else {
-		typeFlagName = fmt.Sprintf("%v.type", cmdPrefix)
-	}
+	var typeFlagName = "type"
 
 	var typeFlagDefault string
 
@@ -386,7 +371,7 @@ func retrieveUpdateServerBodyAttributesFlags(depth int, m *servers.UpdateServerB
 	}
 	retAdded := false
 
-	attributesFlagName := fmt.Sprintf("%v.attributes", cmdPrefix)
+	attributesFlagName := fmt.Sprintf("%vattributes", cmdPrefix)
 	if cmd.Flags().Changed(attributesFlagName) {
 		// info: complex object attributes UpdateServerParamsBodyAttributes is retrieved outside this Changed() block
 	}
@@ -395,6 +380,7 @@ func retrieveUpdateServerBodyAttributesFlags(depth int, m *servers.UpdateServerB
 		attributesFlagValue = &servers.UpdateServerParamsBodyAttributes{}
 	}
 
+	attributesFlagName = ""
 	err, attributesAdded := retrieveModelUpdateServerParamsBodyAttributesFlags(depth+1, attributesFlagValue, attributesFlagName, cmd)
 	if err != nil {
 		return err, false
@@ -413,15 +399,8 @@ func retrieveUpdateServerBodyIDFlags(depth int, m *servers.UpdateServerBody, cmd
 	}
 	retAdded := false
 
-	idFlagName := fmt.Sprintf("%v.id", cmdPrefix)
+	var idFlagName = "id"
 	if cmd.Flags().Changed(idFlagName) {
-
-		var idFlagName string
-		if cmdPrefix == "" {
-			idFlagName = "id"
-		} else {
-			idFlagName = fmt.Sprintf("%v.id", cmdPrefix)
-		}
 
 		idFlagValue, err := cmd.Flags().GetString(idFlagName)
 		if err != nil {
@@ -441,15 +420,8 @@ func retrieveUpdateServerBodyTypeFlags(depth int, m *servers.UpdateServerBody, c
 	}
 	retAdded := false
 
-	typeFlagName := fmt.Sprintf("%v.type", cmdPrefix)
+	var typeFlagName = "type"
 	if cmd.Flags().Changed(typeFlagName) {
-
-		var typeFlagName string
-		if cmdPrefix == "" {
-			typeFlagName = "type"
-		} else {
-			typeFlagName = fmt.Sprintf("%v.type", cmdPrefix)
-		}
 
 		typeFlagValue, err := cmd.Flags().GetString(typeFlagName)
 		if err != nil {
@@ -484,12 +456,7 @@ func registerUpdateServerParamsBodyAttributesBilling(depth int, cmdPrefix string
 
 	billingDescription := ``
 
-	var billingFlagName string
-	if cmdPrefix == "" {
-		billingFlagName = "billing"
-	} else {
-		billingFlagName = fmt.Sprintf("%v.billing", cmdPrefix)
-	}
+	var billingFlagName = "billing"
 
 	var billingFlagDefault string
 
@@ -505,12 +472,7 @@ func registerUpdateServerParamsBodyAttributesHostname(depth int, cmdPrefix strin
 
 	hostnameDescription := ``
 
-	var hostnameFlagName string
-	if cmdPrefix == "" {
-		hostnameFlagName = "hostname"
-	} else {
-		hostnameFlagName = fmt.Sprintf("%v.hostname", cmdPrefix)
-	}
+	var hostnameFlagName = "hostname"
 
 	var hostnameFlagDefault string
 
@@ -544,15 +506,8 @@ func retrieveUpdateServerParamsBodyAttributesBillingFlags(depth int, m *servers.
 	}
 	retAdded := false
 
-	billingFlagName := fmt.Sprintf("%v.billing", cmdPrefix)
+	var billingFlagName = "billing"
 	if cmd.Flags().Changed(billingFlagName) {
-
-		var billingFlagName string
-		if cmdPrefix == "" {
-			billingFlagName = "billing"
-		} else {
-			billingFlagName = fmt.Sprintf("%v.billing", cmdPrefix)
-		}
 
 		billingFlagValue, err := cmd.Flags().GetString(billingFlagName)
 		if err != nil {
@@ -572,15 +527,8 @@ func retrieveUpdateServerParamsBodyAttributesHostnameFlags(depth int, m *servers
 	}
 	retAdded := false
 
-	hostnameFlagName := fmt.Sprintf("%v.hostname", cmdPrefix)
+	var hostnameFlagName = "hostname"
 	if cmd.Flags().Changed(hostnameFlagName) {
-
-		var hostnameFlagName string
-		if cmdPrefix == "" {
-			hostnameFlagName = "hostname"
-		} else {
-			hostnameFlagName = fmt.Sprintf("%v.hostname", cmdPrefix)
-		}
 
 		hostnameFlagValue, err := cmd.Flags().GetString(hostnameFlagName)
 		if err != nil {

@@ -102,7 +102,7 @@ func registerOperationServersCreateServerBodyParamFlags(cmdPrefix string, cmd *c
 	_ = cmd.PersistentFlags().String(bodyFlagName, "", "Optional json string for [body]. ")
 
 	// add flags for body
-	if err := registerModelCreateServerBodyFlags(0, "createServerBody", cmd); err != nil {
+	if err := registerModelCreateServerBodyFlags(0, "", cmd); err != nil {
 		return err
 	}
 
@@ -148,7 +148,7 @@ func retrieveOperationServersCreateServerBodyFlag(m *servers.CreateServerParams,
 	if swag.IsZero(bodyValueModel) {
 		bodyValueModel = servers.CreateServerBody{}
 	}
-	err, added := retrieveModelCreateServerBodyFlags(0, &bodyValueModel, "createServerBody", cmd)
+	err, added := retrieveModelCreateServerBodyFlags(0, &bodyValueModel, "", cmd)
 	if err != nil {
 		return err, false
 	}
@@ -237,12 +237,7 @@ func registerCreateServerBodyData(depth int, cmdPrefix string, cmd *cobra.Comman
 		return nil
 	}
 
-	var dataFlagName string
-	if cmdPrefix == "" {
-		dataFlagName = "data"
-	} else {
-		dataFlagName = fmt.Sprintf("%v.data", cmdPrefix)
-	}
+	var dataFlagName = ""
 
 	if err := registerModelCreateServerParamsBodyDataFlags(depth+1, dataFlagName, cmd); err != nil {
 		return err
@@ -270,7 +265,7 @@ func retrieveCreateServerBodyDataFlags(depth int, m *servers.CreateServerBody, c
 	}
 	retAdded := false
 
-	dataFlagName := fmt.Sprintf("%v.data", cmdPrefix)
+	dataFlagName := fmt.Sprintf("%vdata", cmdPrefix)
 	if cmd.Flags().Changed(dataFlagName) {
 		// info: complex object data CreateServerParamsBodyData is retrieved outside this Changed() block
 	}
@@ -279,6 +274,7 @@ func retrieveCreateServerBodyDataFlags(depth int, m *servers.CreateServerBody, c
 		dataFlagValue = &servers.CreateServerParamsBodyData{}
 	}
 
+	dataFlagName = ""
 	err, dataAdded := retrieveModelCreateServerParamsBodyDataFlags(depth+1, dataFlagValue, dataFlagName, cmd)
 	if err != nil {
 		return err, false
@@ -310,12 +306,7 @@ func registerCreateServerParamsBodyDataAttributes(depth int, cmdPrefix string, c
 		return nil
 	}
 
-	var attributesFlagName string
-	if cmdPrefix == "" {
-		attributesFlagName = "attributes"
-	} else {
-		attributesFlagName = fmt.Sprintf("%v.attributes", cmdPrefix)
-	}
+	var attributesFlagName = ""
 
 	if err := registerModelCreateServerParamsBodyDataAttributesFlags(depth+1, attributesFlagName, cmd); err != nil {
 		return err
@@ -331,12 +322,7 @@ func registerCreateServerParamsBodyDataType(depth int, cmdPrefix string, cmd *co
 
 	typeDescription := `Enum: ["servers"]. Required. `
 
-	var typeFlagName string
-	if cmdPrefix == "" {
-		typeFlagName = "type"
-	} else {
-		typeFlagName = fmt.Sprintf("%v.type", cmdPrefix)
-	}
+	var typeFlagName = "type"
 
 	var typeFlagDefault string
 
@@ -381,7 +367,7 @@ func retrieveCreateServerParamsBodyDataAttributesFlags(depth int, m *servers.Cre
 	}
 	retAdded := false
 
-	attributesFlagName := fmt.Sprintf("%v.attributes", cmdPrefix)
+	attributesFlagName := fmt.Sprintf("%vattributes", cmdPrefix)
 	if cmd.Flags().Changed(attributesFlagName) {
 		// info: complex object attributes CreateServerParamsBodyDataAttributes is retrieved outside this Changed() block
 	}
@@ -390,6 +376,7 @@ func retrieveCreateServerParamsBodyDataAttributesFlags(depth int, m *servers.Cre
 		attributesFlagValue = &servers.CreateServerParamsBodyDataAttributes{}
 	}
 
+	attributesFlagName = ""
 	err, attributesAdded := retrieveModelCreateServerParamsBodyDataAttributesFlags(depth+1, attributesFlagValue, attributesFlagName, cmd)
 	if err != nil {
 		return err, false
@@ -408,15 +395,8 @@ func retrieveCreateServerParamsBodyDataTypeFlags(depth int, m *servers.CreateSer
 	}
 	retAdded := false
 
-	typeFlagName := fmt.Sprintf("%v.type", cmdPrefix)
+	var typeFlagName = "type"
 	if cmd.Flags().Changed(typeFlagName) {
-
-		var typeFlagName string
-		if cmdPrefix == "" {
-			typeFlagName = "type"
-		} else {
-			typeFlagName = fmt.Sprintf("%v.type", cmdPrefix)
-		}
 
 		typeFlagValue, err := cmd.Flags().GetString(typeFlagName)
 		if err != nil {
@@ -483,12 +463,7 @@ func registerCreateServerParamsBodyDataAttributesBilling(depth int, cmdPrefix st
 
 	billingDescription := `Enum: ["hourly","monthly","yearly"]. The server billing type. Accepts ` + "`" + `hourly` + "`" + ` and ` + "`" + `monthly` + "`" + ` for on demand projects and ` + "`" + `yearly` + "`" + ` for reserved projects.`
 
-	var billingFlagName string
-	if cmdPrefix == "" {
-		billingFlagName = "billing"
-	} else {
-		billingFlagName = fmt.Sprintf("%v.billing", cmdPrefix)
-	}
+	var billingFlagName = "billing"
 
 	var billingFlagDefault string
 
@@ -515,12 +490,7 @@ func registerCreateServerParamsBodyDataAttributesHostname(depth int, cmdPrefix s
 
 	hostnameDescription := `The server hostname`
 
-	var hostnameFlagName string
-	if cmdPrefix == "" {
-		hostnameFlagName = "hostname"
-	} else {
-		hostnameFlagName = fmt.Sprintf("%v.hostname", cmdPrefix)
-	}
+	var hostnameFlagName = "hostname"
 
 	var hostnameFlagDefault string
 
@@ -536,12 +506,7 @@ func registerCreateServerParamsBodyDataAttributesIpxeURL(depth int, cmdPrefix st
 
 	ipxeUrlDescription := `URL where iPXE script is stored on, necessary for custom image deployments.This attribute is required when iPXE is selected as operating system.`
 
-	var ipxeUrlFlagName string
-	if cmdPrefix == "" {
-		ipxeUrlFlagName = "ipxe_url"
-	} else {
-		ipxeUrlFlagName = fmt.Sprintf("%v.ipxe_url", cmdPrefix)
-	}
+	var ipxeUrlFlagName = "ipxe_url"
 
 	var ipxeUrlFlagDefault string
 
@@ -557,12 +522,7 @@ func registerCreateServerParamsBodyDataAttributesOperatingSystem(depth int, cmdP
 
 	operatingSystemDescription := `Enum: ["ipxe","windows_server_2019_std_v1","ubuntu_22_04_x64_lts","debian_11","rockylinux_8","debian_10","rhel8","centos_7_4_x64","centos_8_x64","ubuntu_20_04_x64_lts","debian_12","ubuntu22_ml_in_a_box","windows2022"]. The operating system for the new server`
 
-	var operatingSystemFlagName string
-	if cmdPrefix == "" {
-		operatingSystemFlagName = "operating_system"
-	} else {
-		operatingSystemFlagName = fmt.Sprintf("%v.operating_system", cmdPrefix)
-	}
+	var operatingSystemFlagName = "operating_system"
 
 	var operatingSystemFlagDefault string
 
@@ -589,12 +549,7 @@ func registerCreateServerParamsBodyDataAttributesPlan(depth int, cmdPrefix strin
 
 	planDescription := `Enum: ["c2-large-x86","c2-medium-x86","c2-small-x86","c3-large-x86","c3-medium-x86","c3-small-x86","c3-xlarge-x86","g3-large-x86","g3-medium-x86","g3-small-x86","g3-xlarge-x86","m3-large-x86","s2-small-x86","s3-large-x86"]. The plan to choose server from`
 
-	var planFlagName string
-	if cmdPrefix == "" {
-		planFlagName = "plan"
-	} else {
-		planFlagName = fmt.Sprintf("%v.plan", cmdPrefix)
-	}
+	var planFlagName = "plan"
 
 	var planFlagDefault string
 
@@ -621,12 +576,7 @@ func registerCreateServerParamsBodyDataAttributesProject(depth int, cmdPrefix st
 
 	projectDescription := `The project (ID or Slug) to deploy the server`
 
-	var projectFlagName string
-	if cmdPrefix == "" {
-		projectFlagName = "project"
-	} else {
-		projectFlagName = fmt.Sprintf("%v.project", cmdPrefix)
-	}
+	var projectFlagName  = "project"
 
 	var projectFlagDefault string
 
@@ -642,12 +592,7 @@ func registerCreateServerParamsBodyDataAttributesRaid(depth int, cmdPrefix strin
 
 	raidDescription := `Enum: ["raid-0","raid-1"]. RAID mode for the server`
 
-	var raidFlagName string
-	if cmdPrefix == "" {
-		raidFlagName = "raid"
-	} else {
-		raidFlagName = fmt.Sprintf("%v.raid", cmdPrefix)
-	}
+	var raidFlagName = "raid"
 
 	var raidFlagDefault string
 
@@ -674,12 +619,7 @@ func registerCreateServerParamsBodyDataAttributesSite(depth int, cmdPrefix strin
 
 	siteDescription := `Enum: ["ASH","BGT","BUE","CHI","DAL","FRA","LAX","LON","MEX","MEX2","MIA","MIA2","NYC","SAN","SAN2","SAO","SAO2","SYD","TYO","TYO2"]. The site to deploy the server`
 
-	var siteFlagName string
-	if cmdPrefix == "" {
-		siteFlagName = "site"
-	} else {
-		siteFlagName = fmt.Sprintf("%v.site", cmdPrefix)
-	}
+	var siteFlagName = "site"
 
 	var siteFlagDefault string
 
@@ -716,12 +656,7 @@ func registerCreateServerParamsBodyDataAttributesUserData(depth int, cmdPrefix s
 
 	userDataDescription := `User data to set on the server`
 
-	var userDataFlagName string
-	if cmdPrefix == "" {
-		userDataFlagName = "user_data"
-	} else {
-		userDataFlagName = fmt.Sprintf("%v.user_data", cmdPrefix)
-	}
+	var userDataFlagName = "user_data"
 
 	var userDataFlagDefault int64
 
@@ -803,15 +738,8 @@ func retrieveCreateServerParamsBodyDataAttributesBillingFlags(depth int, m *serv
 	}
 	retAdded := false
 
-	billingFlagName := fmt.Sprintf("%v.billing", cmdPrefix)
+	var billingFlagName = "billing"
 	if cmd.Flags().Changed(billingFlagName) {
-
-		var billingFlagName string
-		if cmdPrefix == "" {
-			billingFlagName = "billing"
-		} else {
-			billingFlagName = fmt.Sprintf("%v.billing", cmdPrefix)
-		}
 
 		billingFlagValue, err := cmd.Flags().GetString(billingFlagName)
 		if err != nil {
@@ -831,15 +759,8 @@ func retrieveCreateServerParamsBodyDataAttributesHostnameFlags(depth int, m *ser
 	}
 	retAdded := false
 
-	hostnameFlagName := fmt.Sprintf("%v.hostname", cmdPrefix)
+	var hostnameFlagName = "hostname"
 	if cmd.Flags().Changed(hostnameFlagName) {
-
-		var hostnameFlagName string
-		if cmdPrefix == "" {
-			hostnameFlagName = "hostname"
-		} else {
-			hostnameFlagName = fmt.Sprintf("%v.hostname", cmdPrefix)
-		}
 
 		hostnameFlagValue, err := cmd.Flags().GetString(hostnameFlagName)
 		if err != nil {
@@ -859,15 +780,8 @@ func retrieveCreateServerParamsBodyDataAttributesIpxeURLFlags(depth int, m *serv
 	}
 	retAdded := false
 
-	ipxeUrlFlagName := fmt.Sprintf("%v.ipxe_url", cmdPrefix)
+	var ipxeUrlFlagName = "ipxe_url"
 	if cmd.Flags().Changed(ipxeUrlFlagName) {
-
-		var ipxeUrlFlagName string
-		if cmdPrefix == "" {
-			ipxeUrlFlagName = "ipxe_url"
-		} else {
-			ipxeUrlFlagName = fmt.Sprintf("%v.ipxe_url", cmdPrefix)
-		}
 
 		ipxeUrlFlagValue, err := cmd.Flags().GetString(ipxeUrlFlagName)
 		if err != nil {
@@ -887,15 +801,8 @@ func retrieveCreateServerParamsBodyDataAttributesOperatingSystemFlags(depth int,
 	}
 	retAdded := false
 
-	operatingSystemFlagName := fmt.Sprintf("%v.operating_system", cmdPrefix)
+	var operatingSystemFlagName = "operating_system"
 	if cmd.Flags().Changed(operatingSystemFlagName) {
-
-		var operatingSystemFlagName string
-		if cmdPrefix == "" {
-			operatingSystemFlagName = "operating_system"
-		} else {
-			operatingSystemFlagName = fmt.Sprintf("%v.operating_system", cmdPrefix)
-		}
 
 		operatingSystemFlagValue, err := cmd.Flags().GetString(operatingSystemFlagName)
 		if err != nil {
@@ -915,15 +822,8 @@ func retrieveCreateServerParamsBodyDataAttributesPlanFlags(depth int, m *servers
 	}
 	retAdded := false
 
-	planFlagName := fmt.Sprintf("%v.plan", cmdPrefix)
+	var planFlagName = "plan"
 	if cmd.Flags().Changed(planFlagName) {
-
-		var planFlagName string
-		if cmdPrefix == "" {
-			planFlagName = "plan"
-		} else {
-			planFlagName = fmt.Sprintf("%v.plan", cmdPrefix)
-		}
 
 		planFlagValue, err := cmd.Flags().GetString(planFlagName)
 		if err != nil {
@@ -943,15 +843,8 @@ func retrieveCreateServerParamsBodyDataAttributesProjectFlags(depth int, m *serv
 	}
 	retAdded := false
 
-	projectFlagName := fmt.Sprintf("%v.project", cmdPrefix)
+	var projectFlagName = "project"
 	if cmd.Flags().Changed(projectFlagName) {
-
-		var projectFlagName string
-		if cmdPrefix == "" {
-			projectFlagName = "project"
-		} else {
-			projectFlagName = fmt.Sprintf("%v.project", cmdPrefix)
-		}
 
 		projectFlagValue, err := cmd.Flags().GetString(projectFlagName)
 		if err != nil {
@@ -971,15 +864,8 @@ func retrieveCreateServerParamsBodyDataAttributesRaidFlags(depth int, m *servers
 	}
 	retAdded := false
 
-	raidFlagName := fmt.Sprintf("%v.raid", cmdPrefix)
+	var raidFlagName = "raid"
 	if cmd.Flags().Changed(raidFlagName) {
-
-		var raidFlagName string
-		if cmdPrefix == "" {
-			raidFlagName = "raid"
-		} else {
-			raidFlagName = fmt.Sprintf("%v.raid", cmdPrefix)
-		}
 
 		raidFlagValue, err := cmd.Flags().GetString(raidFlagName)
 		if err != nil {
@@ -999,15 +885,8 @@ func retrieveCreateServerParamsBodyDataAttributesSiteFlags(depth int, m *servers
 	}
 	retAdded := false
 
-	siteFlagName := fmt.Sprintf("%v.site", cmdPrefix)
+	var siteFlagName = "site"
 	if cmd.Flags().Changed(siteFlagName) {
-
-		var siteFlagName string
-		if cmdPrefix == "" {
-			siteFlagName = "site"
-		} else {
-			siteFlagName = fmt.Sprintf("%v.site", cmdPrefix)
-		}
 
 		siteFlagValue, err := cmd.Flags().GetString(siteFlagName)
 		if err != nil {
@@ -1027,7 +906,7 @@ func retrieveCreateServerParamsBodyDataAttributesSSHKeysFlags(depth int, m *serv
 	}
 	retAdded := false
 
-	sshKeysFlagName := fmt.Sprintf("%v.ssh_keys", cmdPrefix)
+	var sshKeysFlagName = "ssh_keys"
 	if cmd.Flags().Changed(sshKeysFlagName) {
 		// warning: ssh_keys array type []string is not supported by go-swagger cli yet
 	}
@@ -1041,15 +920,8 @@ func retrieveCreateServerParamsBodyDataAttributesUserDataFlags(depth int, m *ser
 	}
 	retAdded := false
 
-	userDataFlagName := fmt.Sprintf("%v.user_data", cmdPrefix)
+	var userDataFlagName = "user_data"
 	if cmd.Flags().Changed(userDataFlagName) {
-
-		var userDataFlagName string
-		if cmdPrefix == "" {
-			userDataFlagName = "user_data"
-		} else {
-			userDataFlagName = fmt.Sprintf("%v.user_data", cmdPrefix)
-		}
 
 		userDataFlagValue, err := cmd.Flags().GetInt64(userDataFlagName)
 		if err != nil {
