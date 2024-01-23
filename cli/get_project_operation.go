@@ -9,9 +9,9 @@ import (
 	"encoding/json"
 	"fmt"
 
-	"github.com/latitudesh/cli/client/projects"
-	"github.com/latitudesh/cli/internal/utils"
-	"github.com/latitudesh/cli/models"
+	"github.com/latitudesh/lsh/client/projects"
+	"github.com/latitudesh/lsh/internal/utils"
+	"github.com/latitudesh/lsh/models"
 
 	"github.com/go-openapi/swag"
 	"github.com/spf13/cobra"

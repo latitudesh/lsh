@@ -9,8 +9,8 @@ import (
 	"encoding/json"
 	"fmt"
 
-	"github.com/latitudesh/cli/client/server_reinstall"
-	"github.com/latitudesh/cli/internal/utils"
+	"github.com/latitudesh/lsh/client/server_reinstall"
+	"github.com/latitudesh/lsh/internal/utils"
 
 	"github.com/go-openapi/swag"
 	"github.com/spf13/cobra"

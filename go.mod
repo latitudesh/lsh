@@ -1,4 +1,4 @@
-module github.com/latitudesh/cli
+module github.com/latitudesh/lsh
 
 go 1.21
 

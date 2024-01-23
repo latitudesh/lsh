@@ -10,7 +10,7 @@ import (
 
 	"github.com/go-openapi/runtime"
 	"github.com/go-openapi/strfmt"
-	"github.com/latitudesh/cli/internal"
+	"github.com/latitudesh/lsh/internal"
 )
 
 // DeleteProjectSSHKeyReader is a Reader for the DeleteProjectSSHKey structure.

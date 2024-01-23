@@ -15,8 +15,8 @@ import (
 	"github.com/go-openapi/strfmt"
 	"github.com/go-openapi/swag"
 
-	"github.com/latitudesh/cli/internal"
-	"github.com/latitudesh/cli/models"
+	"github.com/latitudesh/lsh/internal"
+	"github.com/latitudesh/lsh/models"
 )
 
 // GetProjectSSHKeyReader is a Reader for the GetProjectSSHKey structure.

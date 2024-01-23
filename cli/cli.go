@@ -12,7 +12,7 @@ import (
 	"path"
 	"path/filepath"
 
-	"github.com/latitudesh/cli/client"
+	"github.com/latitudesh/lsh/client"
 
 	"github.com/go-openapi/runtime"
 	httptransport "github.com/go-openapi/runtime/client"

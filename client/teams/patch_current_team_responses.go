@@ -17,7 +17,7 @@ import (
 	"github.com/go-openapi/swag"
 	"github.com/go-openapi/validate"
 
-	"github.com/latitudesh/cli/models"
+	"github.com/latitudesh/lsh/models"
 )
 
 // PatchCurrentTeamReader is a Reader for the PatchCurrentTeam structure.
