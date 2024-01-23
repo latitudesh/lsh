@@ -10,6 +10,7 @@ import (
 	"fmt"
 
 	"github.com/latitudesh/cli/client/projects"
+	"github.com/latitudesh/cli/internal/api"
 	"github.com/latitudesh/cli/internal/utils"
 
 	"github.com/go-openapi/swag"
@@ -66,8 +67,14 @@ func runOperationProjectsGetProjects(cmd *cobra.Command, args []string) error {
 		logDebugf("dry-run flag specified. Skip sending request.")
 		return nil
 	}
-	// make request and then print result
-	msgStr, err := parseOperationProjectsGetProjectsResult(appCli.Projects.GetProjects(params, nil))
+
+	result, err := appCli.Projects.GetProjects(params, nil)
+	if err != nil {
+		api.RenderErrorOutput(err)
+		return nil
+	}
+
+	msgStr, err := parseOperationProjectsGetProjectsResult(result)
 	if err != nil {
 		return err
 	}
@@ -366,23 +373,7 @@ func retrieveOperationProjectsGetProjectsFilterSlugFlag(m *projects.GetProjectsP
 }
 
 // parseOperationProjectsGetProjectsResult parses request result and return the string content
-func parseOperationProjectsGetProjectsResult(resp0 *projects.GetProjectsOK, respErr error) (string, error) {
-	if respErr != nil {
-		var iResp0 interface{} = respErr
-		resp0, ok := iResp0.(*projects.GetProjectsOK)
-		if ok {
-			if !swag.IsZero(resp0) && !swag.IsZero(resp0.Payload) {
-				msgStr, err := json.Marshal(resp0.Payload)
-				if err != nil {
-					return "", err
-				}
-				return string(msgStr), nil
-			}
-		}
-
-		return "", respErr
-	}
-
+func parseOperationProjectsGetProjectsResult(resp0 *projects.GetProjectsOK) (string, error) {
 	if !swag.IsZero(resp0) && !swag.IsZero(resp0.Payload) {
 		msgStr, err := json.Marshal(resp0.Payload)
 		if err != nil {

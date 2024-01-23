@@ -10,6 +10,7 @@ import (
 	"fmt"
 
 	"github.com/latitudesh/cli/client/servers"
+	"github.com/latitudesh/cli/internal/api"
 	"github.com/latitudesh/cli/internal/utils"
 
 	"github.com/go-openapi/swag"
@@ -93,8 +94,14 @@ func runOperationServersGetServers(cmd *cobra.Command, args []string) error {
 		logDebugf("dry-run flag specified. Skip sending request.")
 		return nil
 	}
-	// make request and then print result
-	msgStr, err := parseOperationServersGetServersResult(appCli.Servers.GetServers(params, nil))
+
+	result, err := appCli.Servers.GetServers(params, nil)
+	if err != nil {
+		api.RenderErrorOutput(err)
+		return nil
+	}
+
+	msgStr, err := parseOperationServersGetServersResult(result)
 	if err != nil {
 		return err
 	}
@@ -756,24 +763,7 @@ func retrieveOperationServersGetServersFilterStatusFlag(m *servers.GetServersPar
 }
 
 // parseOperationServersGetServersResult parses request result and return the string content
-func parseOperationServersGetServersResult(resp0 *servers.GetServersOK, respErr error) (string, error) {
-	if respErr != nil {
-
-		var iResp0 interface{} = respErr
-		resp0, ok := iResp0.(*servers.GetServersOK)
-		if ok {
-			if !swag.IsZero(resp0) && !swag.IsZero(resp0.Payload) {
-				msgStr, err := json.Marshal(resp0.Payload)
-				if err != nil {
-					return "", err
-				}
-				return string(msgStr), nil
-			}
-		}
-
-		return "", respErr
-	}
-
+func parseOperationServersGetServersResult(resp0 *servers.GetServersOK) (string, error) {
 	if !swag.IsZero(resp0) && !swag.IsZero(resp0.Payload) {
 		msgStr, err := json.Marshal(resp0.Payload)
 		if err != nil {

@@ -53,8 +53,14 @@ func runOperationVirtualNetworksGetVirtualNetwork(cmd *cobra.Command, args []str
 		logDebugf("dry-run flag specified. Skip sending request.")
 		return nil
 	}
-	// make request and then print result
-	msgStr, err := parseOperationVirtualNetworksGetVirtualNetworkResult(appCli.VirtualNetworks.GetVirtualNetwork(params, nil))
+
+	result, err := appCli.VirtualNetworks.GetVirtualNetwork(params, nil)
+	if err != nil {
+		api.RenderErrorOutput(err)
+		return nil
+	}
+
+	msgStr, err := parseOperationVirtualNetworksGetVirtualNetworkResult(result)
 	if err != nil {
 		return err
 	}
@@ -154,24 +160,7 @@ func retrieveOperationVirtualNetworksGetVirtualNetworkIDFlag(m *virtual_networks
 }
 
 // parseOperationVirtualNetworksGetVirtualNetworkResult parses request result and return the string content
-func parseOperationVirtualNetworksGetVirtualNetworkResult(resp0 *virtual_networks.GetVirtualNetworkOK, respErr error) (string, error) {
-	if respErr != nil {
-
-		var iResp0 interface{} = respErr
-		resp0, ok := iResp0.(*virtual_networks.GetVirtualNetworkOK)
-		if ok {
-			if !swag.IsZero(resp0) && !swag.IsZero(resp0.Payload) {
-				msgStr, err := json.Marshal(resp0.Payload)
-				if err != nil {
-					return "", err
-				}
-				return string(msgStr), nil
-			}
-		}
-
-		return api.RenderErrorOutput(respErr)
-	}
-
+func parseOperationVirtualNetworksGetVirtualNetworkResult(resp0 *virtual_networks.GetVirtualNetworkOK) (string, error) {
 	if !swag.IsZero(resp0) && !swag.IsZero(resp0.Payload) {
 		msgStr, err := json.Marshal(resp0.Payload)
 		if err != nil {

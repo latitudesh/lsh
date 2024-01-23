@@ -56,8 +56,14 @@ func runOperationSSHKeysPostProjectSSHKey(cmd *cobra.Command, args []string) err
 		logDebugf("dry-run flag specified. Skip sending request.")
 		return nil
 	}
-	// make request and then print result
-	msgStr, err := parseOperationSSHKeysPostProjectSSHKeyResult(appCli.SSHKeys.PostProjectSSHKey(params, nil))
+
+	result, err := appCli.SSHKeys.PostProjectSSHKey(params, nil)
+	if err != nil {
+		api.RenderErrorOutput(err)
+		return nil
+	}
+
+	msgStr, err := parseOperationSSHKeysPostProjectSSHKeyResult(result)
 	if err != nil {
 		return err
 	}
@@ -216,24 +222,7 @@ func retrieveOperationSSHKeysPostProjectSSHKeyProjectIDOrSlugFlag(m *ssh_keys.Po
 }
 
 // parseOperationSSHKeysPostProjectSSHKeyResult parses request result and return the string content
-func parseOperationSSHKeysPostProjectSSHKeyResult(resp0 *ssh_keys.PostProjectSSHKeyCreated, respErr error) (string, error) {
-	if respErr != nil {
-
-		var iResp0 interface{} = respErr
-		resp0, ok := iResp0.(*ssh_keys.PostProjectSSHKeyCreated)
-		if ok {
-			if !swag.IsZero(resp0) && !swag.IsZero(resp0.Payload) {
-				msgStr, err := json.Marshal(resp0.Payload)
-				if err != nil {
-					return "", err
-				}
-				return string(msgStr), nil
-			}
-		}
-
-		return api.RenderErrorOutput(respErr)
-	}
-
+func parseOperationSSHKeysPostProjectSSHKeyResult(resp0 *ssh_keys.PostProjectSSHKeyCreated) (string, error) {
 	if !swag.IsZero(resp0) && !swag.IsZero(resp0.Payload) {
 		msgStr, err := json.Marshal(resp0.Payload)
 		if err != nil {

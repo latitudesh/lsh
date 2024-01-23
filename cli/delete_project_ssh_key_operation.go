@@ -54,7 +54,13 @@ func runOperationSSHKeysDeleteProjectSSHKey(cmd *cobra.Command, args []string) e
 		return nil
 	}
 	// make request and then print result
-	msgStr, err := parseOperationSSHKeysDeleteProjectSSHKeyResult(appCli.SSHKeys.DeleteProjectSSHKey(params, nil))
+	result, err := appCli.SSHKeys.DeleteProjectSSHKey(params, nil)
+	if err != nil {
+		api.RenderErrorOutput(err)
+		return nil
+	}
+
+	msgStr, err := parseOperationSSHKeysDeleteProjectSSHKeyResult(result)
 	if err != nil {
 		return err
 	}
@@ -195,11 +201,7 @@ func retrieveOperationSSHKeysDeleteProjectSSHKeySSHKeyIDFlag(m *ssh_keys.DeleteP
 }
 
 // parseOperationSSHKeysDeleteProjectSSHKeyResult parses request result and return the string content
-func parseOperationSSHKeysDeleteProjectSSHKeyResult(resp0 *ssh_keys.DeleteProjectSSHKeyOK, respErr error) (string, error) {
-	if respErr != nil {
-		return api.RenderErrorOutput(respErr)
-	}
-
+func parseOperationSSHKeysDeleteProjectSSHKeyResult(resp0 *ssh_keys.DeleteProjectSSHKeyOK) (string, error) {
 	// warning: non schema response deleteProjectSshKeyOK is not supported by go-swagger cli yet.
 
 	return "", nil

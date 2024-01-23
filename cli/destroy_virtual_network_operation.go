@@ -52,8 +52,14 @@ func runOperationVirtualNetworksDestroyVirtualNetwork(cmd *cobra.Command, args [
 		logDebugf("dry-run flag specified. Skip sending request.")
 		return nil
 	}
-	// make request and then print result
-	msgStr, err := parseOperationVirtualNetworksDestroyVirtualNetworkResult(appCli.VirtualNetworks.DestroyVirtualNetwork(params, nil))
+
+	result, err := appCli.VirtualNetworks.DestroyVirtualNetwork(params, nil)
+	if err != nil {
+		api.RenderErrorOutput(err)
+		return nil
+	}
+
+	msgStr, err := parseOperationVirtualNetworksDestroyVirtualNetworkResult(result)
 	if err != nil {
 		return err
 	}
@@ -153,26 +159,7 @@ func retrieveOperationVirtualNetworksDestroyVirtualNetworkIDFlag(m *virtual_netw
 }
 
 // parseOperationVirtualNetworksDestroyVirtualNetworkResult parses request result and return the string content
-func parseOperationVirtualNetworksDestroyVirtualNetworkResult(resp0 *virtual_networks.DestroyVirtualNetworkNoContent, respErr error) (string, error) {
-	if respErr != nil {
-
-		// Non schema case: warning destroyVirtualNetworkNoContent is not supported
-
-		var iResp1 interface{} = respErr
-		resp1, ok := iResp1.(*virtual_networks.DestroyVirtualNetworkNotAcceptable)
-		if ok {
-			if !swag.IsZero(resp1) && !swag.IsZero(resp1.Payload) {
-				msgStr, err := json.Marshal(resp1.Payload)
-				if err != nil {
-					return "", err
-				}
-				return string(msgStr), nil
-			}
-		}
-
-		return api.RenderErrorOutput(respErr)
-	}
-
+func parseOperationVirtualNetworksDestroyVirtualNetworkResult(resp0 *virtual_networks.DestroyVirtualNetworkNoContent) (string, error) {
 	// warning: non schema response destroyVirtualNetworkNoContent is not supported by go-swagger cli yet.
 
 	return "", nil

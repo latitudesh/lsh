@@ -6,14 +6,12 @@ package cli
 // Editing this file might prove futile when you re-run the swagger generate command
 
 import (
-	"encoding/json"
 	"fmt"
 
 	"github.com/latitudesh/cli/client/virtual_network_assignments"
 	"github.com/latitudesh/cli/internal/api"
 	"github.com/latitudesh/cli/internal/utils"
 
-	"github.com/go-openapi/swag"
 	"github.com/spf13/cobra"
 )
 
@@ -52,8 +50,14 @@ func runOperationVirtualNetworkAssignmentsDeleteVirtualNetworksAssignments(cmd *
 		logDebugf("dry-run flag specified. Skip sending request.")
 		return nil
 	}
-	// make request and then print result
-	msgStr, err := parseOperationVirtualNetworkAssignmentsDeleteVirtualNetworksAssignmentsResult(appCli.VirtualNetworkAssignments.DeleteVirtualNetworksAssignments(params, nil))
+
+	result, err := appCli.VirtualNetworkAssignments.DeleteVirtualNetworksAssignments(params, nil)
+	if err != nil {
+		api.RenderErrorOutput(err)
+		return nil
+	}
+
+	msgStr, err := parseOperationVirtualNetworkAssignmentsDeleteVirtualNetworksAssignmentsResult(result)
 	if err != nil {
 		return err
 	}
@@ -153,26 +157,7 @@ func retrieveOperationVirtualNetworkAssignmentsDeleteVirtualNetworksAssignmentsA
 }
 
 // parseOperationVirtualNetworkAssignmentsDeleteVirtualNetworksAssignmentsResult parses request result and return the string content
-func parseOperationVirtualNetworkAssignmentsDeleteVirtualNetworksAssignmentsResult(resp0 *virtual_network_assignments.DeleteVirtualNetworksAssignmentsNoContent, respErr error) (string, error) {
-	if respErr != nil {
-
-		// Non schema case: warning deleteVirtualNetworksAssignmentsNoContent is not supported
-
-		var iResp1 interface{} = respErr
-		resp1, ok := iResp1.(*virtual_network_assignments.DeleteVirtualNetworksAssignmentsForbidden)
-		if ok {
-			if !swag.IsZero(resp1) && !swag.IsZero(resp1.Payload) {
-				msgStr, err := json.Marshal(resp1.Payload)
-				if err != nil {
-					return "", err
-				}
-				return string(msgStr), nil
-			}
-		}
-
-		return api.RenderErrorOutput(respErr)
-	}
-
+func parseOperationVirtualNetworkAssignmentsDeleteVirtualNetworksAssignmentsResult(resp0 *virtual_network_assignments.DeleteVirtualNetworksAssignmentsNoContent) (string, error) {
 	// warning: non schema response deleteVirtualNetworksAssignmentsNoContent is not supported by go-swagger cli yet.
 
 	return "", nil

@@ -51,8 +51,14 @@ func runOperationServersServerUnscheduleDeletion(cmd *cobra.Command, args []stri
 		logDebugf("dry-run flag specified. Skip sending request.")
 		return nil
 	}
-	// make request and then print result
-	msgStr, err := parseOperationServersServerUnscheduleDeletionResult(appCli.Servers.ServerUnscheduleDeletion(params, nil))
+
+	result, err := appCli.Servers.ServerUnscheduleDeletion(params, nil)
+	if err != nil {
+		api.RenderErrorOutput(err)
+		return nil
+	}
+
+	msgStr, err := parseOperationServersServerUnscheduleDeletionResult(result)
 	if err != nil {
 		return err
 	}
@@ -152,26 +158,7 @@ func retrieveOperationServersServerUnscheduleDeletionServerIDFlag(m *servers.Ser
 }
 
 // parseOperationServersServerUnscheduleDeletionResult parses request result and return the string content
-func parseOperationServersServerUnscheduleDeletionResult(resp0 *servers.ServerUnscheduleDeletionNoContent, respErr error) (string, error) {
-	if respErr != nil {
-
-		// Non schema case: warning serverUnscheduleDeletionNoContent is not supported
-
-		var iResp1 interface{} = respErr
-		resp1, ok := iResp1.(*servers.ServerUnscheduleDeletionForbidden)
-		if ok {
-			if !swag.IsZero(resp1) && !swag.IsZero(resp1.Payload) {
-				msgStr, err := json.Marshal(resp1.Payload)
-				if err != nil {
-					return "", err
-				}
-				return string(msgStr), nil
-			}
-		}
-
-		return api.RenderErrorOutput(respErr)
-	}
-
+func parseOperationServersServerUnscheduleDeletionResult(resp0 *servers.ServerUnscheduleDeletionNoContent) (string, error) {
 	// warning: non schema response serverUnscheduleDeletionNoContent is not supported by go-swagger cli yet.
 
 	return "", nil

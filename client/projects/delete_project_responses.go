@@ -7,12 +7,11 @@ package projects
 
 import (
 	"fmt"
-	"io"
 
 	"github.com/go-openapi/runtime"
 	"github.com/go-openapi/strfmt"
 
-	"github.com/latitudesh/cli/models"
+	"github.com/latitudesh/cli/internal/api"
 )
 
 // DeleteProjectReader is a Reader for the DeleteProject structure.
@@ -30,20 +29,20 @@ func (o *DeleteProjectReader) ReadResponse(response runtime.ClientResponse, cons
 		}
 		return result, nil
 	case 403:
-		result := NewDeleteProjectForbidden()
-		if err := result.readResponse(response, consumer, o.formats); err != nil {
+		result := api.NewForbidden()
+		if err := result.ReadResponse(response, consumer, o.formats); err != nil {
 			return nil, err
 		}
 		return nil, result
 	case 404:
-		result := NewDeleteProjectNotFound()
-		if err := result.readResponse(response, consumer, o.formats); err != nil {
+		result := api.NewNotFound()
+		if err := result.ReadResponse(response, consumer, o.formats); err != nil {
 			return nil, err
 		}
 		return nil, result
 	case 406:
-		result := NewDeleteProjectNotAcceptable()
-		if err := result.readResponse(response, consumer, o.formats); err != nil {
+		result := api.NewNotAcceptable()
+		if err := result.ReadResponse(response, consumer, o.formats); err != nil {
 			return nil, err
 		}
 		return nil, result
@@ -104,210 +103,6 @@ func (o *DeleteProjectNoContent) String() string {
 }
 
 func (o *DeleteProjectNoContent) readResponse(response runtime.ClientResponse, consumer runtime.Consumer, formats strfmt.Registry) error {
-
-	return nil
-}
-
-// NewDeleteProjectForbidden creates a DeleteProjectForbidden with default headers values
-func NewDeleteProjectForbidden() *DeleteProjectForbidden {
-	return &DeleteProjectForbidden{}
-}
-
-/*
-DeleteProjectForbidden describes a response with status code 403, with default header values.
-
-Forbidden
-*/
-type DeleteProjectForbidden struct {
-	Payload *models.ErrorObject
-}
-
-// IsSuccess returns true when this delete project forbidden response has a 2xx status code
-func (o *DeleteProjectForbidden) IsSuccess() bool {
-	return false
-}
-
-// IsRedirect returns true when this delete project forbidden response has a 3xx status code
-func (o *DeleteProjectForbidden) IsRedirect() bool {
-	return false
-}
-
-// IsClientError returns true when this delete project forbidden response has a 4xx status code
-func (o *DeleteProjectForbidden) IsClientError() bool {
-	return true
-}
-
-// IsServerError returns true when this delete project forbidden response has a 5xx status code
-func (o *DeleteProjectForbidden) IsServerError() bool {
-	return false
-}
-
-// IsCode returns true when this delete project forbidden response a status code equal to that given
-func (o *DeleteProjectForbidden) IsCode(code int) bool {
-	return code == 403
-}
-
-// Code gets the status code for the delete project forbidden response
-func (o *DeleteProjectForbidden) Code() int {
-	return 403
-}
-
-func (o *DeleteProjectForbidden) Error() string {
-	return fmt.Sprintf("[DELETE /projects/{id_or_slug}][%d] deleteProjectForbidden  %+v", 403, o.Payload)
-}
-
-func (o *DeleteProjectForbidden) String() string {
-	return fmt.Sprintf("[DELETE /projects/{id_or_slug}][%d] deleteProjectForbidden  %+v", 403, o.Payload)
-}
-
-func (o *DeleteProjectForbidden) GetPayload() *models.ErrorObject {
-	return o.Payload
-}
-
-func (o *DeleteProjectForbidden) readResponse(response runtime.ClientResponse, consumer runtime.Consumer, formats strfmt.Registry) error {
-
-	o.Payload = new(models.ErrorObject)
-
-	// response payload
-	if err := consumer.Consume(response.Body(), o.Payload); err != nil && err != io.EOF {
-		return err
-	}
-
-	return nil
-}
-
-// NewDeleteProjectNotFound creates a DeleteProjectNotFound with default headers values
-func NewDeleteProjectNotFound() *DeleteProjectNotFound {
-	return &DeleteProjectNotFound{}
-}
-
-/*
-DeleteProjectNotFound describes a response with status code 404, with default header values.
-
-Not found
-*/
-type DeleteProjectNotFound struct {
-	Payload *models.ErrorObject
-}
-
-// IsSuccess returns true when this delete project not found response has a 2xx status code
-func (o *DeleteProjectNotFound) IsSuccess() bool {
-	return false
-}
-
-// IsRedirect returns true when this delete project not found response has a 3xx status code
-func (o *DeleteProjectNotFound) IsRedirect() bool {
-	return false
-}
-
-// IsClientError returns true when this delete project not found response has a 4xx status code
-func (o *DeleteProjectNotFound) IsClientError() bool {
-	return true
-}
-
-// IsServerError returns true when this delete project not found response has a 5xx status code
-func (o *DeleteProjectNotFound) IsServerError() bool {
-	return false
-}
-
-// IsCode returns true when this delete project not found response a status code equal to that given
-func (o *DeleteProjectNotFound) IsCode(code int) bool {
-	return code == 404
-}
-
-// Code gets the status code for the delete project not found response
-func (o *DeleteProjectNotFound) Code() int {
-	return 404
-}
-
-func (o *DeleteProjectNotFound) Error() string {
-	return fmt.Sprintf("[DELETE /projects/{id_or_slug}][%d] deleteProjectNotFound  %+v", 404, o.Payload)
-}
-
-func (o *DeleteProjectNotFound) String() string {
-	return fmt.Sprintf("[DELETE /projects/{id_or_slug}][%d] deleteProjectNotFound  %+v", 404, o.Payload)
-}
-
-func (o *DeleteProjectNotFound) GetPayload() *models.ErrorObject {
-	return o.Payload
-}
-
-func (o *DeleteProjectNotFound) readResponse(response runtime.ClientResponse, consumer runtime.Consumer, formats strfmt.Registry) error {
-
-	o.Payload = new(models.ErrorObject)
-
-	// response payload
-	if err := consumer.Consume(response.Body(), o.Payload); err != nil && err != io.EOF {
-		return err
-	}
-
-	return nil
-}
-
-// NewDeleteProjectNotAcceptable creates a DeleteProjectNotAcceptable with default headers values
-func NewDeleteProjectNotAcceptable() *DeleteProjectNotAcceptable {
-	return &DeleteProjectNotAcceptable{}
-}
-
-/*
-DeleteProjectNotAcceptable describes a response with status code 406, with default header values.
-
-Not Acceptable
-*/
-type DeleteProjectNotAcceptable struct {
-	Payload *models.ErrorObject
-}
-
-// IsSuccess returns true when this delete project not acceptable response has a 2xx status code
-func (o *DeleteProjectNotAcceptable) IsSuccess() bool {
-	return false
-}
-
-// IsRedirect returns true when this delete project not acceptable response has a 3xx status code
-func (o *DeleteProjectNotAcceptable) IsRedirect() bool {
-	return false
-}
-
-// IsClientError returns true when this delete project not acceptable response has a 4xx status code
-func (o *DeleteProjectNotAcceptable) IsClientError() bool {
-	return true
-}
-
-// IsServerError returns true when this delete project not acceptable response has a 5xx status code
-func (o *DeleteProjectNotAcceptable) IsServerError() bool {
-	return false
-}
-
-// IsCode returns true when this delete project not acceptable response a status code equal to that given
-func (o *DeleteProjectNotAcceptable) IsCode(code int) bool {
-	return code == 406
-}
-
-// Code gets the status code for the delete project not acceptable response
-func (o *DeleteProjectNotAcceptable) Code() int {
-	return 406
-}
-
-func (o *DeleteProjectNotAcceptable) Error() string {
-	return fmt.Sprintf("[DELETE /projects/{id_or_slug}][%d] deleteProjectNotAcceptable  %+v", 406, o.Payload)
-}
-
-func (o *DeleteProjectNotAcceptable) String() string {
-	return fmt.Sprintf("[DELETE /projects/{id_or_slug}][%d] deleteProjectNotAcceptable  %+v", 406, o.Payload)
-}
-
-func (o *DeleteProjectNotAcceptable) GetPayload() *models.ErrorObject {
-	return o.Payload
-}
-
-func (o *DeleteProjectNotAcceptable) readResponse(response runtime.ClientResponse, consumer runtime.Consumer, formats strfmt.Registry) error {
-
-	o.Payload = new(models.ErrorObject)
-
-	// response payload
-	if err := consumer.Consume(response.Body(), o.Payload); err != nil && err != io.EOF {
-		return err
-	}
 
 	return nil
 }

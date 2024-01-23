@@ -10,6 +10,7 @@ import (
 	"fmt"
 
 	"github.com/latitudesh/cli/client/api_keys"
+	"github.com/latitudesh/cli/internal/api"
 	"github.com/latitudesh/cli/internal/utils"
 	"github.com/latitudesh/cli/models"
 
@@ -55,8 +56,14 @@ func runOperationAPIKeysUpdateAPIKey(cmd *cobra.Command, args []string) error {
 		logDebugf("dry-run flag specified. Skip sending request.")
 		return nil
 	}
-	// make request and then print result
-	msgStr, err := parseOperationAPIKeysUpdateAPIKeyResult(appCli.APIKeys.UpdateAPIKey(params, nil))
+
+	result, err := appCli.APIKeys.UpdateAPIKey(params, nil)
+	if err != nil {
+		api.RenderErrorOutput(err)
+		return nil
+	}
+
+	msgStr, err := parseOperationAPIKeysUpdateAPIKeyResult(result)
 	if err != nil {
 		return err
 	}
@@ -214,48 +221,7 @@ func retrieveOperationAPIKeysUpdateAPIKeyIDFlag(m *api_keys.UpdateAPIKeyParams, 
 }
 
 // parseOperationAPIKeysUpdateAPIKeyResult parses request result and return the string content
-func parseOperationAPIKeysUpdateAPIKeyResult(resp0 *api_keys.UpdateAPIKeyOK, respErr error) (string, error) {
-	if respErr != nil {
-
-		var iResp0 interface{} = respErr
-		resp0, ok := iResp0.(*api_keys.UpdateAPIKeyOK)
-		if ok {
-			if !swag.IsZero(resp0) && !swag.IsZero(resp0.Payload) {
-				msgStr, err := json.Marshal(resp0.Payload)
-				if err != nil {
-					return "", err
-				}
-				return string(msgStr), nil
-			}
-		}
-
-		var iResp1 interface{} = respErr
-		resp1, ok := iResp1.(*api_keys.UpdateAPIKeyBadRequest)
-		if ok {
-			if !swag.IsZero(resp1) && !swag.IsZero(resp1.Payload) {
-				msgStr, err := json.Marshal(resp1.Payload)
-				if err != nil {
-					return "", err
-				}
-				return string(msgStr), nil
-			}
-		}
-
-		var iResp2 interface{} = respErr
-		resp2, ok := iResp2.(*api_keys.UpdateAPIKeyNotFound)
-		if ok {
-			if !swag.IsZero(resp2) && !swag.IsZero(resp2.Payload) {
-				msgStr, err := json.Marshal(resp2.Payload)
-				if err != nil {
-					return "", err
-				}
-				return string(msgStr), nil
-			}
-		}
-
-		return "", respErr
-	}
-
+func parseOperationAPIKeysUpdateAPIKeyResult(resp0 *api_keys.UpdateAPIKeyOK) (string, error) {
 	if !swag.IsZero(resp0) && !swag.IsZero(resp0.Payload) {
 		msgStr, err := json.Marshal(resp0.Payload)
 		if err != nil {

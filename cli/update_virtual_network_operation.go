@@ -55,8 +55,14 @@ func runOperationVirtualNetworksUpdateVirtualNetwork(cmd *cobra.Command, args []
 		logDebugf("dry-run flag specified. Skip sending request.")
 		return nil
 	}
-	// make request and then print result
-	msgStr, err := parseOperationVirtualNetworksUpdateVirtualNetworkResult(appCli.VirtualNetworks.UpdateVirtualNetwork(params, nil))
+
+	result, err := appCli.VirtualNetworks.UpdateVirtualNetwork(params, nil)
+	if err != nil {
+		api.RenderErrorOutput(err)
+		return nil
+	}
+
+	msgStr, err := parseOperationVirtualNetworksUpdateVirtualNetworkResult(result)
 	if err != nil {
 		return err
 	}
@@ -215,36 +221,7 @@ func retrieveOperationVirtualNetworksUpdateVirtualNetworkVirtualNetworkIDFlag(m 
 }
 
 // parseOperationVirtualNetworksUpdateVirtualNetworkResult parses request result and return the string content
-func parseOperationVirtualNetworksUpdateVirtualNetworkResult(resp0 *virtual_networks.UpdateVirtualNetworkOK, respErr error) (string, error) {
-	if respErr != nil {
-
-		var iResp0 interface{} = respErr
-		resp0, ok := iResp0.(*virtual_networks.UpdateVirtualNetworkOK)
-		if ok {
-			if !swag.IsZero(resp0) && !swag.IsZero(resp0.Payload) {
-				msgStr, err := json.Marshal(resp0.Payload)
-				if err != nil {
-					return "", err
-				}
-				return string(msgStr), nil
-			}
-		}
-
-		var iResp1 interface{} = respErr
-		resp1, ok := iResp1.(*virtual_networks.UpdateVirtualNetworkForbidden)
-		if ok {
-			if !swag.IsZero(resp1) && !swag.IsZero(resp1.Payload) {
-				msgStr, err := json.Marshal(resp1.Payload)
-				if err != nil {
-					return "", err
-				}
-				return string(msgStr), nil
-			}
-		}
-
-		return api.RenderErrorOutput(respErr)
-	}
-
+func parseOperationVirtualNetworksUpdateVirtualNetworkResult(resp0 *virtual_networks.UpdateVirtualNetworkOK) (string, error) {
 	if !swag.IsZero(resp0) && !swag.IsZero(resp0.Payload) {
 		msgStr, err := json.Marshal(resp0.Payload)
 		if err != nil {

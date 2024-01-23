@@ -10,6 +10,7 @@ import (
 	"fmt"
 
 	"github.com/latitudesh/cli/client/power_actions"
+	"github.com/latitudesh/cli/internal/api"
 	"github.com/latitudesh/cli/internal/utils"
 
 	"github.com/go-openapi/swag"
@@ -57,8 +58,14 @@ func runOperationPowerActionsCreateServerAction(cmd *cobra.Command, args []strin
 		logDebugf("dry-run flag specified. Skip sending request.")
 		return nil
 	}
-	// make request and then print result
-	msgStr, err := parseOperationPowerActionsCreateServerActionResult(appCli.PowerActions.CreateServerAction(params, nil))
+
+	result, err := appCli.PowerActions.CreateServerAction(params, nil)
+	if err != nil {
+		api.RenderErrorOutput(err)
+		return nil
+	}
+
+	msgStr, err := parseOperationPowerActionsCreateServerActionResult(result)
 	if err != nil {
 		return err
 	}
@@ -216,48 +223,7 @@ func retrieveOperationPowerActionsCreateServerActionServerIDFlag(m *power_action
 }
 
 // parseOperationPowerActionsCreateServerActionResult parses request result and return the string content
-func parseOperationPowerActionsCreateServerActionResult(resp0 *power_actions.CreateServerActionCreated, respErr error) (string, error) {
-	if respErr != nil {
-
-		var iResp0 interface{} = respErr
-		resp0, ok := iResp0.(*power_actions.CreateServerActionCreated)
-		if ok {
-			if !swag.IsZero(resp0) && !swag.IsZero(resp0.Payload) {
-				msgStr, err := json.Marshal(resp0.Payload)
-				if err != nil {
-					return "", err
-				}
-				return string(msgStr), nil
-			}
-		}
-
-		var iResp1 interface{} = respErr
-		resp1, ok := iResp1.(*power_actions.CreateServerActionForbidden)
-		if ok {
-			if !swag.IsZero(resp1) && !swag.IsZero(resp1.Payload) {
-				msgStr, err := json.Marshal(resp1.Payload)
-				if err != nil {
-					return "", err
-				}
-				return string(msgStr), nil
-			}
-		}
-
-		var iResp2 interface{} = respErr
-		resp2, ok := iResp2.(*power_actions.CreateServerActionNotAcceptable)
-		if ok {
-			if !swag.IsZero(resp2) && !swag.IsZero(resp2.Payload) {
-				msgStr, err := json.Marshal(resp2.Payload)
-				if err != nil {
-					return "", err
-				}
-				return string(msgStr), nil
-			}
-		}
-
-		return "", respErr
-	}
-
+func parseOperationPowerActionsCreateServerActionResult(resp0 *power_actions.CreateServerActionCreated) (string, error) {
 	if !swag.IsZero(resp0) && !swag.IsZero(resp0.Payload) {
 		msgStr, err := json.Marshal(resp0.Payload)
 		if err != nil {
