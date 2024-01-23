@@ -10,6 +10,7 @@ import (
 	"fmt"
 
 	"github.com/latitudesh/cli/client/virtual_network_assignments"
+	"github.com/latitudesh/cli/internal"
 	"github.com/latitudesh/cli/internal/utils"
 
 	"github.com/go-openapi/swag"
@@ -58,7 +59,7 @@ func runOperationVirtualNetworkAssignmentsDeleteVirtualNetworksAssignments(cmd *
 	}
 	if !debug {
 
-		fmt.Println(utils.PrettifyJson(msgStr))
+		utils.PrintOutput(msgStr)
 	}
 	return nil
 }
@@ -105,6 +106,7 @@ func registerOperationVirtualNetworkAssignmentsDeleteVirtualNetworksAssignmentsA
 	var assignmentIdFlagDefault string
 
 	_ = cmd.PersistentFlags().String(assignmentIdFlagName, assignmentIdFlagDefault, assignmentIdDescription)
+	cmd.MarkPersistentFlagRequired(assignmentIdFlagName)
 
 	return nil
 }
@@ -166,6 +168,16 @@ func parseOperationVirtualNetworkAssignmentsDeleteVirtualNetworksAssignmentsResu
 				}
 				return string(msgStr), nil
 			}
+		}
+
+		notFoundErrorMessage, err := internal.ParseNotFoundError(respErr)
+
+		if err != nil {
+			return "", err
+		}
+
+		if len(notFoundErrorMessage) > 0 {
+			return notFoundErrorMessage, nil
 		}
 
 		return "", respErr

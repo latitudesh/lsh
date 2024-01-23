@@ -60,7 +60,7 @@ func runOperationServerReinstallCreateServerReinstall(cmd *cobra.Command, args [
 	}
 	if !debug {
 
-		fmt.Println(utils.PrettifyJson(msgStr))
+		utils.PrintOutput(msgStr)
 	}
 	return nil
 }
@@ -128,6 +128,7 @@ func registerOperationServerReinstallCreateServerReinstallServerIDParamFlags(cmd
 	var serverIdFlagDefault string
 
 	_ = cmd.PersistentFlags().String(serverIdFlagName, serverIdFlagDefault, serverIdDescription)
+	cmd.MarkPersistentFlagRequired(serverIdFlagName)
 
 	return nil
 }
@@ -380,6 +381,7 @@ func registerCreateServerReinstallParamsBodyDataType(depth int, cmdPrefix string
 	var typeFlagDefault string
 
 	_ = cmd.PersistentFlags().String(typeFlagName, typeFlagDefault, typeDescription)
+	cmd.MarkPersistentFlagRequired(typeFlagName)
 
 	if err := cmd.RegisterFlagCompletionFunc(typeFlagName,
 		func(cmd *cobra.Command, args []string, toComplete string) ([]string, cobra.ShellCompDirective) {

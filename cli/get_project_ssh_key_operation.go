@@ -10,6 +10,7 @@ import (
 	"fmt"
 
 	"github.com/latitudesh/cli/client/ssh_keys"
+	"github.com/latitudesh/cli/internal"
 	"github.com/latitudesh/cli/internal/utils"
 	"github.com/latitudesh/cli/models"
 
@@ -62,7 +63,7 @@ func runOperationSSHKeysGetProjectSSHKey(cmd *cobra.Command, args []string) erro
 	}
 	if !debug {
 
-		fmt.Println(utils.PrettifyJson(msgStr))
+		utils.PrintOutput(msgStr)
 	}
 	return nil
 }
@@ -112,6 +113,7 @@ func registerOperationSSHKeysGetProjectSSHKeyProjectIDOrSlugParamFlags(cmdPrefix
 	var projectIdOrSlugFlagDefault string
 
 	_ = cmd.PersistentFlags().String(projectIdOrSlugFlagName, projectIdOrSlugFlagDefault, projectIdOrSlugDescription)
+	cmd.MarkPersistentFlagRequired(projectIdOrSlugFlagName)
 
 	return nil
 }
@@ -129,6 +131,7 @@ func registerOperationSSHKeysGetProjectSSHKeySSHKeyIDParamFlags(cmdPrefix string
 	var sshKeyIdFlagDefault string
 
 	_ = cmd.PersistentFlags().String(sshKeyIdFlagName, sshKeyIdFlagDefault, sshKeyIdDescription)
+	cmd.MarkPersistentFlagRequired(sshKeyIdFlagName)
 
 	return nil
 }
@@ -208,6 +211,16 @@ func parseOperationSSHKeysGetProjectSSHKeyResult(resp0 *ssh_keys.GetProjectSSHKe
 				}
 				return string(msgStr), nil
 			}
+		}
+
+		notFoundErrorMessage, err := internal.ParseNotFoundError(respErr)
+
+		if err != nil {
+			return "", err
+		}
+
+		if len(notFoundErrorMessage) > 0 {
+			return notFoundErrorMessage, nil
 		}
 
 		return "", respErr

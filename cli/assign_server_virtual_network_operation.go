@@ -10,6 +10,7 @@ import (
 	"fmt"
 
 	"github.com/latitudesh/cli/client/virtual_network_assignments"
+	"github.com/latitudesh/cli/internal"
 	"github.com/latitudesh/cli/internal/utils"
 
 	"github.com/go-openapi/swag"
@@ -57,7 +58,7 @@ func runOperationVirtualNetworkAssignmentsAssignServerVirtualNetwork(cmd *cobra.
 	}
 	if !debug {
 
-		fmt.Println(utils.PrettifyJson(msgStr))
+		utils.PrintOutput(msgStr)
 	}
 	return nil
 }
@@ -206,6 +207,16 @@ func parseOperationVirtualNetworkAssignmentsAssignServerVirtualNetworkResult(res
 				}
 				return string(msgStr), nil
 			}
+		}
+
+		notFoundErrorMessage, err := internal.ParseNotFoundError(respErr)
+
+		if err != nil {
+			return "", err
+		}
+
+		if len(notFoundErrorMessage) > 0 {
+			return notFoundErrorMessage, nil
 		}
 
 		return "", respErr
@@ -461,6 +472,7 @@ func registerAssignServerVirtualNetworkParamsBodyDataAttributesServerID(depth in
 	var serverIdFlagDefault int64
 
 	_ = cmd.PersistentFlags().Int64(serverIdFlagName, serverIdFlagDefault, serverIdDescription)
+	cmd.MarkPersistentFlagRequired(serverIdFlagName)
 
 	return nil
 }
@@ -482,6 +494,7 @@ func registerAssignServerVirtualNetworkParamsBodyDataAttributesVirtualNetworkID(
 	var virtualNetworkIdFlagDefault int64
 
 	_ = cmd.PersistentFlags().Int64(virtualNetworkIdFlagName, virtualNetworkIdFlagDefault, virtualNetworkIdDescription)
+	cmd.MarkPersistentFlagRequired(virtualNetworkIdFlagName)
 
 	return nil
 }

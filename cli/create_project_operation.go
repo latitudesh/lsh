@@ -58,7 +58,7 @@ func runOperationProjectsCreateProject(cmd *cobra.Command, args []string) error 
 	}
 	if !debug {
 
-		fmt.Println(utils.PrettifyJson(msgStr))
+		utils.PrintOutput(msgStr)
 	}
 	return nil
 }
@@ -604,6 +604,7 @@ func registerCreateProjectParamsBodyDataAttributesName(depth int, cmdPrefix stri
 	var nameFlagDefault string
 
 	_ = cmd.PersistentFlags().String(nameFlagName, nameFlagDefault, nameDescription)
+	cmd.MarkPersistentFlagRequired(nameFlagName)
 
 	return nil
 }
@@ -625,6 +626,7 @@ func registerCreateProjectParamsBodyDataAttributesProvisioningType(depth int, cm
 	var provisioningTypeFlagDefault string
 
 	_ = cmd.PersistentFlags().String(provisioningTypeFlagName, provisioningTypeFlagDefault, provisioningTypeDescription)
+	cmd.MarkPersistentFlagRequired(provisioningTypeFlagName)
 
 	if err := cmd.RegisterFlagCompletionFunc(provisioningTypeFlagName,
 		func(cmd *cobra.Command, args []string, toComplete string) ([]string, cobra.ShellCompDirective) {

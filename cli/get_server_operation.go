@@ -10,6 +10,7 @@ import (
 	"fmt"
 
 	"github.com/latitudesh/cli/client/servers"
+	"github.com/latitudesh/cli/internal"
 	"github.com/latitudesh/cli/internal/utils"
 
 	"github.com/go-openapi/swag"
@@ -61,7 +62,7 @@ func runOperationServersGetServer(cmd *cobra.Command, args []string) error {
 	}
 	if !debug {
 
-		fmt.Println(utils.PrettifyJson(msgStr))
+		utils.PrintOutput(msgStr)
 	}
 	return nil
 }
@@ -128,6 +129,7 @@ func registerOperationServersGetServerServerIDParamFlags(cmdPrefix string, cmd *
 	var serverIdFlagDefault string
 
 	_ = cmd.PersistentFlags().String(serverIdFlagName, serverIdFlagDefault, serverIdDescription)
+	cmd.MarkPersistentFlagRequired(serverIdFlagName)
 
 	return nil
 }
@@ -202,6 +204,18 @@ func parseOperationServersGetServerResult(resp0 *servers.GetServerOK, respErr er
 		if ok {
 			if !swag.IsZero(resp0) && !swag.IsZero(resp0.Payload) {
 				msgStr, err := json.Marshal(resp0.Payload)
+				if err != nil {
+					return "", err
+				}
+				return string(msgStr), nil
+			}
+		}
+
+		var iResp1 interface{} = respErr
+		resp1, ok := iResp1.(*internal.NotFoundError)
+		if ok {
+			if !swag.IsZero(resp1) && !swag.IsZero(resp1.Payload) {
+				msgStr, err := json.Marshal(resp1.Payload)
 				if err != nil {
 					return "", err
 				}

@@ -61,8 +61,7 @@ func runOperationAPIKeysUpdateAPIKey(cmd *cobra.Command, args []string) error {
 		return err
 	}
 	if !debug {
-
-		fmt.Println(utils.PrettifyJson(msgStr))
+		utils.PrintOutput(msgStr)
 	}
 	return nil
 }
@@ -130,6 +129,7 @@ func registerOperationAPIKeysUpdateAPIKeyIDParamFlags(cmdPrefix string, cmd *cob
 	var idFlagDefault string
 
 	_ = cmd.PersistentFlags().String(idFlagName, idFlagDefault, idDescription)
+	cmd.MarkPersistentFlagRequired(idFlagName)
 
 	return nil
 }

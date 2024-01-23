@@ -12,6 +12,7 @@ import (
 	"github.com/go-openapi/runtime"
 	"github.com/go-openapi/strfmt"
 
+	"github.com/latitudesh/cli/internal"
 	"github.com/latitudesh/cli/models"
 )
 
@@ -29,6 +30,12 @@ func (o *DestroyVirtualNetworkReader) ReadResponse(response runtime.ClientRespon
 			return nil, err
 		}
 		return result, nil
+	case 404:
+		result := internal.NewNotFoundError()
+		if err := result.ReadResponse(response, consumer, o.formats); err != nil {
+			return nil, err
+		}
+		return nil, result
 	case 406:
 		result := NewDestroyVirtualNetworkNotAcceptable()
 		if err := result.readResponse(response, consumer, o.formats); err != nil {

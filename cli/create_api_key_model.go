@@ -281,6 +281,7 @@ func registerCreateAPIKeyDataAttributesName(depth int, cmdPrefix string, cmd *co
 	var nameFlagDefault string
 
 	_ = cmd.PersistentFlags().String(nameFlagName, nameFlagDefault, nameDescription)
+	cmd.MarkPersistentFlagRequired(nameFlagName)
 
 	return nil
 }

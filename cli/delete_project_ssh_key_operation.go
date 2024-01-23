@@ -9,6 +9,7 @@ import (
 	"fmt"
 
 	"github.com/latitudesh/cli/client/ssh_keys"
+	"github.com/latitudesh/cli/internal"
 	"github.com/latitudesh/cli/internal/utils"
 
 	"github.com/spf13/cobra"
@@ -59,7 +60,7 @@ func runOperationSSHKeysDeleteProjectSSHKey(cmd *cobra.Command, args []string) e
 	}
 	if !debug {
 
-		fmt.Println(utils.PrettifyJson(msgStr))
+		utils.PrintOutput(msgStr)
 	}
 	return nil
 }
@@ -109,6 +110,7 @@ func registerOperationSSHKeysDeleteProjectSSHKeyProjectIDOrSlugParamFlags(cmdPre
 	var projectIdOrSlugFlagDefault string
 
 	_ = cmd.PersistentFlags().String(projectIdOrSlugFlagName, projectIdOrSlugFlagDefault, projectIdOrSlugDescription)
+	cmd.MarkPersistentFlagRequired(projectIdOrSlugFlagName)
 
 	return nil
 }
@@ -126,6 +128,7 @@ func registerOperationSSHKeysDeleteProjectSSHKeySSHKeyIDParamFlags(cmdPrefix str
 	var sshKeyIdFlagDefault string
 
 	_ = cmd.PersistentFlags().String(sshKeyIdFlagName, sshKeyIdFlagDefault, sshKeyIdDescription)
+	cmd.MarkPersistentFlagRequired(sshKeyIdFlagName)
 
 	return nil
 }
@@ -198,6 +201,16 @@ func parseOperationSSHKeysDeleteProjectSSHKeyResult(resp0 *ssh_keys.DeleteProjec
 		// Non schema case: warning deleteProjectSshKeyOK is not supported
 
 		// Non schema case: warning deleteProjectSshKeyNotFound is not supported
+
+		notFoundErrorMessage, err := internal.ParseNotFoundError(respErr)
+
+		if err != nil {
+			return "", err
+		}
+
+		if len(notFoundErrorMessage) > 0 {
+			return notFoundErrorMessage, nil
+		}
 
 		return "", respErr
 	}

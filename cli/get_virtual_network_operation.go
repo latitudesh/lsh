@@ -10,6 +10,7 @@ import (
 	"fmt"
 
 	"github.com/latitudesh/cli/client/virtual_networks"
+	"github.com/latitudesh/cli/internal"
 	"github.com/latitudesh/cli/internal/utils"
 	"github.com/latitudesh/cli/models"
 
@@ -59,7 +60,7 @@ func runOperationVirtualNetworksGetVirtualNetwork(cmd *cobra.Command, args []str
 	}
 	if !debug {
 
-		fmt.Println(utils.PrettifyJson(msgStr))
+		utils.PrintOutput(msgStr)
 	}
 	return nil
 }
@@ -106,6 +107,7 @@ func registerOperationVirtualNetworksGetVirtualNetworkIDParamFlags(cmdPrefix str
 	var idFlagDefault string
 
 	_ = cmd.PersistentFlags().String(idFlagName, idFlagDefault, idDescription)
+	cmd.MarkPersistentFlagRequired(idFlagName)
 
 	return nil
 }
@@ -165,6 +167,16 @@ func parseOperationVirtualNetworksGetVirtualNetworkResult(resp0 *virtual_network
 				}
 				return string(msgStr), nil
 			}
+		}
+
+		notFoundErrorMessage, err := internal.ParseNotFoundError(respErr)
+
+		if err != nil {
+			return "", err
+		}
+
+		if len(notFoundErrorMessage) > 0 {
+			return notFoundErrorMessage, nil
 		}
 
 		return "", respErr

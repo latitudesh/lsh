@@ -10,6 +10,7 @@ import (
 	"fmt"
 
 	"github.com/latitudesh/cli/client/servers"
+	"github.com/latitudesh/cli/internal"
 	"github.com/latitudesh/cli/internal/utils"
 
 	"github.com/go-openapi/swag"
@@ -57,7 +58,7 @@ func runOperationServersServerUnscheduleDeletion(cmd *cobra.Command, args []stri
 	}
 	if !debug {
 
-		fmt.Println(utils.PrettifyJson(msgStr))
+		utils.PrintOutput(msgStr)
 	}
 	return nil
 }
@@ -104,6 +105,7 @@ func registerOperationServersServerUnscheduleDeletionServerIDParamFlags(cmdPrefi
 	var serverIdFlagDefault string
 
 	_ = cmd.PersistentFlags().String(serverIdFlagName, serverIdFlagDefault, serverIdDescription)
+	cmd.MarkPersistentFlagRequired(serverIdFlagName)
 
 	return nil
 }
@@ -165,6 +167,16 @@ func parseOperationServersServerUnscheduleDeletionResult(resp0 *servers.ServerUn
 				}
 				return string(msgStr), nil
 			}
+		}
+
+		notFoundErrorMessage, err := internal.ParseNotFoundError(respErr)
+
+		if err != nil {
+			return "", err
+		}
+
+		if len(notFoundErrorMessage) > 0 {
+			return notFoundErrorMessage, nil
 		}
 
 		return "", respErr

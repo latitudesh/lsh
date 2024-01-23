@@ -58,8 +58,7 @@ func runOperationAPIKeysPostAPIKey(cmd *cobra.Command, args []string) error {
 		return err
 	}
 	if !debug {
-
-		fmt.Println(utils.PrettifyJson(msgStr))
+		utils.PrintOutput(msgStr)
 	}
 	return nil
 }
