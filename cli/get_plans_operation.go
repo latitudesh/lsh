@@ -20,9 +20,8 @@ import (
 // makeOperationPlansGetPlansCmd returns a cmd to handle operation getPlans
 func makeOperationPlansGetPlansCmd() (*cobra.Command, error) {
 	cmd := &cobra.Command{
-		Use: "get-plans",
-		Short: `Lists all plans. Availability by region is included in ` + "`" + `attributes.regions.locations.available[*]` + "`" + ` node for a given plan.
-`,
+		Use: "list",
+		Short: `Lists all plans. Availability by region is included in ` + "`" + `attributes.regions.locations.available[*]` + "`" + ` node for a given plan.`,
 		RunE: runOperationPlansGetPlans,
 	}
 

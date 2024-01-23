@@ -20,9 +20,8 @@ import (
 // makeOperationAPIKeysDeleteAPIKeyCmd returns a cmd to handle operation deleteApiKey
 func makeOperationAPIKeysDeleteAPIKeyCmd() (*cobra.Command, error) {
 	cmd := &cobra.Command{
-		Use: "delete-api-key",
-		Short: `Delete an existing API Key. Once deleted, the API Key can no longer be used to access the API.
-`,
+		Use: "destroy",
+		Short: `Delete an existing API Key. Once deleted, the API Key can no longer be used to access the API.`,
 		RunE: runOperationAPIKeysDeleteAPIKey,
 	}
 

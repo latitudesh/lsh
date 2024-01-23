@@ -21,8 +21,8 @@ import (
 // makeOperationProjectsCreateProjectCmd returns a cmd to handle operation createProject
 func makeOperationProjectsCreateProjectCmd() (*cobra.Command, error) {
 	cmd := &cobra.Command{
-		Use:   "create-project",
-		Short: ``,
+		Use:   "create",
+		Short: `Creates a project`,
 		RunE:  runOperationProjectsCreateProject,
 	}
 
@@ -109,7 +109,7 @@ func registerOperationProjectsCreateProjectBodyParamFlags(cmdPrefix string, cmd 
 	_ = cmd.PersistentFlags().String(bodyFlagName, "", "Optional json string for [body]. ")
 
 	// add flags for body
-	if err := registerModelCreateProjectBodyFlags(0, "createProjectBody", cmd); err != nil {
+	if err := registerModelCreateProjectBodyFlags(0, "", cmd); err != nil {
 		return err
 	}
 
@@ -155,7 +155,7 @@ func retrieveOperationProjectsCreateProjectBodyFlag(m *projects.CreateProjectPar
 	if swag.IsZero(bodyValueModel) {
 		bodyValueModel = projects.CreateProjectBody{}
 	}
-	err, added := retrieveModelCreateProjectBodyFlags(0, &bodyValueModel, "createProjectBody", cmd)
+	err, added := retrieveModelCreateProjectBodyFlags(0, &bodyValueModel, "", cmd)
 	if err != nil {
 		return err, false
 	}
@@ -203,12 +203,7 @@ func registerCreateProjectBodyData(depth int, cmdPrefix string, cmd *cobra.Comma
 		return nil
 	}
 
-	var dataFlagName string
-	if cmdPrefix == "" {
-		dataFlagName = "data"
-	} else {
-		dataFlagName = fmt.Sprintf("%v.data", cmdPrefix)
-	}
+	var dataFlagName = ""
 
 	if err := registerModelCreateProjectParamsBodyDataFlags(depth+1, dataFlagName, cmd); err != nil {
 		return err
@@ -236,7 +231,7 @@ func retrieveCreateProjectBodyDataFlags(depth int, m *projects.CreateProjectBody
 	}
 	retAdded := false
 
-	dataFlagName := fmt.Sprintf("%v.data", cmdPrefix)
+	dataFlagName := fmt.Sprintf("data")
 	if cmd.Flags().Changed(dataFlagName) {
 		// info: complex object data CreateProjectParamsBodyData is retrieved outside this Changed() block
 	}
@@ -245,6 +240,7 @@ func retrieveCreateProjectBodyDataFlags(depth int, m *projects.CreateProjectBody
 		dataFlagValue = &projects.CreateProjectParamsBodyData{}
 	}
 
+	dataFlagName = ""
 	err, dataAdded := retrieveModelCreateProjectParamsBodyDataFlags(depth+1, dataFlagValue, dataFlagName, cmd)
 	if err != nil {
 		return err, false
@@ -272,13 +268,8 @@ func registerCreateProjectCreatedBodyData(depth int, cmdPrefix string, cmd *cobr
 		return nil
 	}
 
-	var dataFlagName string
-	if cmdPrefix == "" {
-		dataFlagName = "data"
-	} else {
-		dataFlagName = fmt.Sprintf("%v.data", cmdPrefix)
-	}
-
+	var dataFlagName = ""
+	
 	if err := registerModelProjectFlags(depth+1, dataFlagName, cmd); err != nil {
 		return err
 	}
@@ -345,12 +336,7 @@ func registerCreateProjectParamsBodyDataAttributes(depth int, cmdPrefix string, 
 		return nil
 	}
 
-	var attributesFlagName string
-	if cmdPrefix == "" {
-		attributesFlagName = "attributes"
-	} else {
-		attributesFlagName = fmt.Sprintf("%v.attributes", cmdPrefix)
-	}
+	var attributesFlagName = ""
 
 	if err := registerModelCreateProjectParamsBodyDataAttributesFlags(depth+1, attributesFlagName, cmd); err != nil {
 		return err
@@ -416,7 +402,7 @@ func retrieveCreateProjectParamsBodyDataAttributesFlags(depth int, m *projects.C
 	}
 	retAdded := false
 
-	attributesFlagName := fmt.Sprintf("%v.attributes", cmdPrefix)
+	attributesFlagName := fmt.Sprintf("%vattributes", cmdPrefix)
 	if cmd.Flags().Changed(attributesFlagName) {
 		// info: complex object attributes CreateProjectParamsBodyDataAttributes is retrieved outside this Changed() block
 	}
@@ -425,6 +411,7 @@ func retrieveCreateProjectParamsBodyDataAttributesFlags(depth int, m *projects.C
 		attributesFlagValue = &projects.CreateProjectParamsBodyDataAttributes{}
 	}
 
+	attributesFlagName = ""
 	err, attributesAdded := retrieveModelCreateProjectParamsBodyDataAttributesFlags(depth+1, attributesFlagValue, attributesFlagName, cmd)
 	if err != nil {
 		return err, false
@@ -443,15 +430,8 @@ func retrieveCreateProjectParamsBodyDataTypeFlags(depth int, m *projects.CreateP
 	}
 	retAdded := false
 
-	typeFlagName := fmt.Sprintf("%v.type", cmdPrefix)
+	var typeFlagName = "type"
 	if cmd.Flags().Changed(typeFlagName) {
-
-		var typeFlagName string
-		if cmdPrefix == "" {
-			typeFlagName = "type"
-		} else {
-			typeFlagName = fmt.Sprintf("%v.type", cmdPrefix)
-		}
 
 		typeFlagValue, err := cmd.Flags().GetString(typeFlagName)
 		if err != nil {
@@ -494,12 +474,7 @@ func registerCreateProjectParamsBodyDataAttributesDescription(depth int, cmdPref
 
 	descriptionDescription := `The project description.`
 
-	var descriptionFlagName string
-	if cmdPrefix == "" {
-		descriptionFlagName = "description"
-	} else {
-		descriptionFlagName = fmt.Sprintf("%v.description", cmdPrefix)
-	}
+	var descriptionFlagName = "description"
 
 	var descriptionFlagDefault string
 
@@ -515,12 +490,7 @@ func registerCreateProjectParamsBodyDataAttributesEnvironment(depth int, cmdPref
 
 	environmentDescription := `Enum: ["Development","Staging","Production"]. `
 
-	var environmentFlagName string
-	if cmdPrefix == "" {
-		environmentFlagName = "environment"
-	} else {
-		environmentFlagName = fmt.Sprintf("%v.environment", cmdPrefix)
-	}
+	var environmentFlagName = "environment"
 
 	var environmentFlagDefault string
 
@@ -547,12 +517,7 @@ func registerCreateProjectParamsBodyDataAttributesName(depth int, cmdPrefix stri
 
 	nameDescription := `Required. The project name. Must be unique.`
 
-	var nameFlagName string
-	if cmdPrefix == "" {
-		nameFlagName = "name"
-	} else {
-		nameFlagName = fmt.Sprintf("%v.name", cmdPrefix)
-	}
+	var nameFlagName = "name"
 
 	var nameFlagDefault string
 
@@ -569,12 +534,7 @@ func registerCreateProjectParamsBodyDataAttributesProvisioningType(depth int, cm
 
 	provisioningTypeDescription := `Enum: ["reserved","on_demand"]. Required. The provisioning type of the project. Default: on_demand`
 
-	var provisioningTypeFlagName string
-	if cmdPrefix == "" {
-		provisioningTypeFlagName = "provisioning_type"
-	} else {
-		provisioningTypeFlagName = fmt.Sprintf("%v.provisioning_type", cmdPrefix)
-	}
+	var provisioningTypeFlagName = "provisioning_type"
 
 	var provisioningTypeFlagDefault string
 
@@ -632,15 +592,8 @@ func retrieveCreateProjectParamsBodyDataAttributesDescriptionFlags(depth int, m 
 	}
 	retAdded := false
 
-	descriptionFlagName := fmt.Sprintf("%v.description", cmdPrefix)
+	var descriptionFlagName = "description"
 	if cmd.Flags().Changed(descriptionFlagName) {
-
-		var descriptionFlagName string
-		if cmdPrefix == "" {
-			descriptionFlagName = "description"
-		} else {
-			descriptionFlagName = fmt.Sprintf("%v.description", cmdPrefix)
-		}
 
 		descriptionFlagValue, err := cmd.Flags().GetString(descriptionFlagName)
 		if err != nil {
@@ -660,15 +613,8 @@ func retrieveCreateProjectParamsBodyDataAttributesEnvironmentFlags(depth int, m 
 	}
 	retAdded := false
 
-	environmentFlagName := fmt.Sprintf("%v.environment", cmdPrefix)
+	var environmentFlagName = "environment"
 	if cmd.Flags().Changed(environmentFlagName) {
-
-		var environmentFlagName string
-		if cmdPrefix == "" {
-			environmentFlagName = "environment"
-		} else {
-			environmentFlagName = fmt.Sprintf("%v.environment", cmdPrefix)
-		}
 
 		environmentFlagValue, err := cmd.Flags().GetString(environmentFlagName)
 		if err != nil {
@@ -688,15 +634,8 @@ func retrieveCreateProjectParamsBodyDataAttributesNameFlags(depth int, m *projec
 	}
 	retAdded := false
 
-	nameFlagName := fmt.Sprintf("%v.name", cmdPrefix)
+	var nameFlagName = "name"
 	if cmd.Flags().Changed(nameFlagName) {
-
-		var nameFlagName string
-		if cmdPrefix == "" {
-			nameFlagName = "name"
-		} else {
-			nameFlagName = fmt.Sprintf("%v.name", cmdPrefix)
-		}
 
 		nameFlagValue, err := cmd.Flags().GetString(nameFlagName)
 		if err != nil {
@@ -716,15 +655,8 @@ func retrieveCreateProjectParamsBodyDataAttributesProvisioningTypeFlags(depth in
 	}
 	retAdded := false
 
-	provisioningTypeFlagName := fmt.Sprintf("%v.provisioning_type", cmdPrefix)
+	var provisioningTypeFlagName = "provisioning_type"
 	if cmd.Flags().Changed(provisioningTypeFlagName) {
-
-		var provisioningTypeFlagName string
-		if cmdPrefix == "" {
-			provisioningTypeFlagName = "provisioning_type"
-		} else {
-			provisioningTypeFlagName = fmt.Sprintf("%v.provisioning_type", cmdPrefix)
-		}
 
 		provisioningTypeFlagValue, err := cmd.Flags().GetString(provisioningTypeFlagName)
 		if err != nil {

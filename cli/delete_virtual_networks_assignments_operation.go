@@ -18,9 +18,8 @@ import (
 // makeOperationVirtualNetworkAssignmentsDeleteVirtualNetworksAssignmentsCmd returns a cmd to handle operation deleteVirtualNetworksAssignments
 func makeOperationVirtualNetworkAssignmentsDeleteVirtualNetworksAssignmentsCmd() (*cobra.Command, error) {
 	cmd := &cobra.Command{
-		Use: "delete-virtual-networks-assignments",
-		Short: `Allow you to remove a Virtual Network assignment.
-`,
+		Use: "destroy",
+		Short: `Allow you to remove a Virtual Network assignment.`,
 		RunE: runOperationVirtualNetworkAssignmentsDeleteVirtualNetworksAssignments,
 	}
 

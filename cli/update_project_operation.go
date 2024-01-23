@@ -21,8 +21,8 @@ import (
 // makeOperationProjectsUpdateProjectCmd returns a cmd to handle operation updateProject
 func makeOperationProjectsUpdateProjectCmd() (*cobra.Command, error) {
 	cmd := &cobra.Command{
-		Use:   "update-project",
-		Short: ``,
+		Use:   "update",
+		Short: `Updates a project`,
 		RunE:  runOperationProjectsUpdateProject,
 	}
 
@@ -115,8 +115,8 @@ func registerOperationProjectsUpdateProjectBodyParamFlags(cmdPrefix string, cmd 
 
 	_ = cmd.PersistentFlags().String(bodyFlagName, "", "Optional json string for [body]. ")
 
-	// add flags for body
-	if err := registerModelUpdateProjectBodyFlags(0, "updateProjectBody", cmd); err != nil {
+	// add flags for body 
+	if err := registerModelUpdateProjectBodyFlags(0, "", cmd); err != nil {
 		return err
 	}
 
@@ -179,7 +179,7 @@ func retrieveOperationProjectsUpdateProjectBodyFlag(m *projects.UpdateProjectPar
 	if swag.IsZero(bodyValueModel) {
 		bodyValueModel = projects.UpdateProjectBody{}
 	}
-	err, added := retrieveModelUpdateProjectBodyFlags(0, &bodyValueModel, "updateProjectBody", cmd)
+	err, added := retrieveModelUpdateProjectBodyFlags(0, &bodyValueModel, "", cmd)
 	if err != nil {
 		return err, false
 	}
@@ -247,12 +247,7 @@ func registerUpdateProjectBodyData(depth int, cmdPrefix string, cmd *cobra.Comma
 		return nil
 	}
 
-	var dataFlagName string
-	if cmdPrefix == "" {
-		dataFlagName = "data"
-	} else {
-		dataFlagName = fmt.Sprintf("%v.data", cmdPrefix)
-	}
+	var dataFlagName = ""
 
 	if err := registerModelUpdateProjectParamsBodyDataFlags(depth+1, dataFlagName, cmd); err != nil {
 		return err
@@ -280,7 +275,7 @@ func retrieveUpdateProjectBodyDataFlags(depth int, m *projects.UpdateProjectBody
 	}
 	retAdded := false
 
-	dataFlagName := fmt.Sprintf("%v.data", cmdPrefix)
+	dataFlagName := fmt.Sprintf("data")
 	if cmd.Flags().Changed(dataFlagName) {
 		// info: complex object data UpdateProjectParamsBodyData is retrieved outside this Changed() block
 	}
@@ -289,6 +284,7 @@ func retrieveUpdateProjectBodyDataFlags(depth int, m *projects.UpdateProjectBody
 		dataFlagValue = &projects.UpdateProjectParamsBodyData{}
 	}
 
+	dataFlagName = ""
 	err, dataAdded := retrieveModelUpdateProjectParamsBodyDataFlags(depth+1, dataFlagValue, dataFlagName, cmd)
 	if err != nil {
 		return err, false
@@ -393,12 +389,7 @@ func registerUpdateProjectParamsBodyDataAttributes(depth int, cmdPrefix string, 
 		return nil
 	}
 
-	var attributesFlagName string
-	if cmdPrefix == "" {
-		attributesFlagName = "attributes"
-	} else {
-		attributesFlagName = fmt.Sprintf("%v.attributes", cmdPrefix)
-	}
+	var attributesFlagName = ""
 
 	if err := registerModelUpdateProjectParamsBodyDataAttributesFlags(depth+1, attributesFlagName, cmd); err != nil {
 		return err
@@ -491,7 +482,7 @@ func retrieveUpdateProjectParamsBodyDataAttributesFlags(depth int, m *projects.U
 	}
 	retAdded := false
 
-	attributesFlagName := fmt.Sprintf("%v.attributes", cmdPrefix)
+	attributesFlagName := fmt.Sprintf("%vattributes", cmdPrefix)
 	if cmd.Flags().Changed(attributesFlagName) {
 		// info: complex object attributes UpdateProjectParamsBodyDataAttributes is retrieved outside this Changed() block
 	}
@@ -500,6 +491,7 @@ func retrieveUpdateProjectParamsBodyDataAttributesFlags(depth int, m *projects.U
 		attributesFlagValue = &projects.UpdateProjectParamsBodyDataAttributes{}
 	}
 
+	attributesFlagName = ""
 	err, attributesAdded := retrieveModelUpdateProjectParamsBodyDataAttributesFlags(depth+1, attributesFlagValue, attributesFlagName, cmd)
 	if err != nil {
 		return err, false
@@ -518,15 +510,8 @@ func retrieveUpdateProjectParamsBodyDataIDFlags(depth int, m *projects.UpdatePro
 	}
 	retAdded := false
 
-	idFlagName := fmt.Sprintf("%v.id", cmdPrefix)
+	var idFlagName = "id"
 	if cmd.Flags().Changed(idFlagName) {
-
-		var idFlagName string
-		if cmdPrefix == "" {
-			idFlagName = "id"
-		} else {
-			idFlagName = fmt.Sprintf("%v.id", cmdPrefix)
-		}
 
 		idFlagValue, err := cmd.Flags().GetString(idFlagName)
 		if err != nil {
@@ -546,15 +531,8 @@ func retrieveUpdateProjectParamsBodyDataTypeFlags(depth int, m *projects.UpdateP
 	}
 	retAdded := false
 
-	typeFlagName := fmt.Sprintf("%v.type", cmdPrefix)
+	var typeFlagName = "type"
 	if cmd.Flags().Changed(typeFlagName) {
-
-		var typeFlagName string
-		if cmdPrefix == "" {
-			typeFlagName = "type"
-		} else {
-			typeFlagName = fmt.Sprintf("%v.type", cmdPrefix)
-		}
 
 		typeFlagValue, err := cmd.Flags().GetString(typeFlagName)
 		if err != nil {
@@ -725,12 +703,7 @@ func retrieveUpdateProjectParamsBodyDataAttributesBandwidthAlertFlags(depth int,
 	bandwidthAlertFlagName := fmt.Sprintf("%v.bandwidth_alert", cmdPrefix)
 	if cmd.Flags().Changed(bandwidthAlertFlagName) {
 
-		var bandwidthAlertFlagName string
-		if cmdPrefix == "" {
-			bandwidthAlertFlagName = "bandwidth_alert"
-		} else {
-			bandwidthAlertFlagName = fmt.Sprintf("%v.bandwidth_alert", cmdPrefix)
-		}
+		var bandwidthAlertFlagName = "bandwidth_alert"
 
 		bandwidthAlertFlagValue, err := cmd.Flags().GetBool(bandwidthAlertFlagName)
 		if err != nil {
@@ -753,12 +726,7 @@ func retrieveUpdateProjectParamsBodyDataAttributesDescriptionFlags(depth int, m 
 	descriptionFlagName := fmt.Sprintf("%v.description", cmdPrefix)
 	if cmd.Flags().Changed(descriptionFlagName) {
 
-		var descriptionFlagName string
-		if cmdPrefix == "" {
-			descriptionFlagName = "description"
-		} else {
-			descriptionFlagName = fmt.Sprintf("%v.description", cmdPrefix)
-		}
+		var descriptionFlagName = "description"
 
 		descriptionFlagValue, err := cmd.Flags().GetString(descriptionFlagName)
 		if err != nil {
@@ -781,12 +749,7 @@ func retrieveUpdateProjectParamsBodyDataAttributesEnvironmentFlags(depth int, m 
 	environmentFlagName := fmt.Sprintf("%v.environment", cmdPrefix)
 	if cmd.Flags().Changed(environmentFlagName) {
 
-		var environmentFlagName string
-		if cmdPrefix == "" {
-			environmentFlagName = "environment"
-		} else {
-			environmentFlagName = fmt.Sprintf("%v.environment", cmdPrefix)
-		}
+		var environmentFlagName = "environment"
 
 		environmentFlagValue, err := cmd.Flags().GetString(environmentFlagName)
 		if err != nil {
@@ -806,15 +769,8 @@ func retrieveUpdateProjectParamsBodyDataAttributesNameFlags(depth int, m *projec
 	}
 	retAdded := false
 
-	nameFlagName := fmt.Sprintf("%v.name", cmdPrefix)
+	var nameFlagName = "name"
 	if cmd.Flags().Changed(nameFlagName) {
-
-		var nameFlagName string
-		if cmdPrefix == "" {
-			nameFlagName = "name"
-		} else {
-			nameFlagName = fmt.Sprintf("%v.name", cmdPrefix)
-		}
 
 		nameFlagValue, err := cmd.Flags().GetString(nameFlagName)
 		if err != nil {

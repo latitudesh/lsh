@@ -18,8 +18,8 @@ import (
 // makeOperationProjectsDeleteProjectCmd returns a cmd to handle operation deleteProject
 func makeOperationProjectsDeleteProjectCmd() (*cobra.Command, error) {
 	cmd := &cobra.Command{
-		Use:   "delete-project",
-		Short: ``,
+		Use:   "destroy",
+		Short: `Deletes a project from the current team`,
 		RunE:  runOperationProjectsDeleteProject,
 	}
 

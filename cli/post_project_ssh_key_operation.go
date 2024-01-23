@@ -21,9 +21,8 @@ import (
 // makeOperationSSHKeysPostProjectSSHKeyCmd returns a cmd to handle operation postProjectSshKey
 func makeOperationSSHKeysPostProjectSSHKeyCmd() (*cobra.Command, error) {
 	cmd := &cobra.Command{
-		Use: "post-project-ssh-key",
-		Short: `Allow you create SSH Keys in a project. These keys can be used to access servers after deploy and reinstall actions.
-`,
+		Use: "create",
+		Short: `Allow you create SSH Keys in a project. These keys can be used to access servers after deploy and reinstall actions.`,
 		RunE: runOperationSSHKeysPostProjectSSHKey,
 	}
 
@@ -117,7 +116,7 @@ func registerOperationSSHKeysPostProjectSSHKeyBodyParamFlags(cmdPrefix string, c
 	_ = cmd.PersistentFlags().String(bodyFlagName, "", "Optional json string for [body]. ")
 
 	// add flags for body
-	if err := registerModelPostProjectSSHKeyBodyFlags(0, "postProjectSshKeyBody", cmd); err != nil {
+	if err := registerModelPostProjectSSHKeyBodyFlags(0, "", cmd); err != nil {
 		return err
 	}
 
@@ -181,7 +180,7 @@ func retrieveOperationSSHKeysPostProjectSSHKeyBodyFlag(m *ssh_keys.PostProjectSS
 	if swag.IsZero(bodyValueModel) {
 		bodyValueModel = ssh_keys.PostProjectSSHKeyBody{}
 	}
-	err, added := retrieveModelPostProjectSSHKeyBodyFlags(0, &bodyValueModel, "postProjectSshKeyBody", cmd)
+	err, added := retrieveModelPostProjectSSHKeyBodyFlags(0, &bodyValueModel, "", cmd)
 	if err != nil {
 		return err, false
 	}
@@ -249,12 +248,7 @@ func registerPostProjectSSHKeyBodyData(depth int, cmdPrefix string, cmd *cobra.C
 		return nil
 	}
 
-	var dataFlagName string
-	if cmdPrefix == "" {
-		dataFlagName = "data"
-	} else {
-		dataFlagName = fmt.Sprintf("%v.data", cmdPrefix)
-	}
+	var dataFlagName = ""
 
 	if err := registerModelPostProjectSSHKeyParamsBodyDataFlags(depth+1, dataFlagName, cmd); err != nil {
 		return err
@@ -282,7 +276,7 @@ func retrievePostProjectSSHKeyBodyDataFlags(depth int, m *ssh_keys.PostProjectSS
 	}
 	retAdded := false
 
-	dataFlagName := fmt.Sprintf("%v.data", cmdPrefix)
+	dataFlagName := fmt.Sprintf("%vdata", cmdPrefix)
 	if cmd.Flags().Changed(dataFlagName) {
 		// info: complex object data PostProjectSSHKeyParamsBodyData is retrieved outside this Changed() block
 	}
@@ -291,6 +285,7 @@ func retrievePostProjectSSHKeyBodyDataFlags(depth int, m *ssh_keys.PostProjectSS
 		dataFlagValue = &ssh_keys.PostProjectSSHKeyParamsBodyData{}
 	}
 
+	dataFlagName = ""
 	err, dataAdded := retrieveModelPostProjectSSHKeyParamsBodyDataFlags(depth+1, dataFlagValue, dataFlagName, cmd)
 	if err != nil {
 		return err, false
@@ -318,12 +313,7 @@ func registerPostProjectSSHKeyCreatedBodyData(depth int, cmdPrefix string, cmd *
 		return nil
 	}
 
-	var dataFlagName string
-	if cmdPrefix == "" {
-		dataFlagName = "data"
-	} else {
-		dataFlagName = fmt.Sprintf("%v.data", cmdPrefix)
-	}
+	var dataFlagName = ""
 
 	if err := registerModelSSHKeyDataFlags(depth+1, dataFlagName, cmd); err != nil {
 		return err
@@ -351,7 +341,7 @@ func retrievePostProjectSSHKeyCreatedBodyDataFlags(depth int, m *ssh_keys.PostPr
 	}
 	retAdded := false
 
-	dataFlagName := fmt.Sprintf("%v.data", cmdPrefix)
+	dataFlagName := fmt.Sprintf("%vdata", cmdPrefix)
 	if cmd.Flags().Changed(dataFlagName) {
 		// info: complex object data models.SSHKeyData is retrieved outside this Changed() block
 	}
@@ -360,6 +350,7 @@ func retrievePostProjectSSHKeyCreatedBodyDataFlags(depth int, m *ssh_keys.PostPr
 		dataFlagValue = &models.SSHKeyData{}
 	}
 
+	dataFlagName = ""
 	err, dataAdded := retrieveModelSSHKeyDataFlags(depth+1, dataFlagValue, dataFlagName, cmd)
 	if err != nil {
 		return err, false
@@ -391,12 +382,7 @@ func registerPostProjectSSHKeyParamsBodyDataAttributes(depth int, cmdPrefix stri
 		return nil
 	}
 
-	var attributesFlagName string
-	if cmdPrefix == "" {
-		attributesFlagName = "attributes"
-	} else {
-		attributesFlagName = fmt.Sprintf("%v.attributes", cmdPrefix)
-	}
+	var attributesFlagName = ""
 
 	if err := registerModelPostProjectSSHKeyParamsBodyDataAttributesFlags(depth+1, attributesFlagName, cmd); err != nil {
 		return err
@@ -412,12 +398,7 @@ func registerPostProjectSSHKeyParamsBodyDataType(depth int, cmdPrefix string, cm
 
 	typeDescription := `Enum: ["ssh_keys"]. Required. `
 
-	var typeFlagName string
-	if cmdPrefix == "" {
-		typeFlagName = "type"
-	} else {
-		typeFlagName = fmt.Sprintf("%v.type", cmdPrefix)
-	}
+	var typeFlagName = "type"
 
 	var typeFlagDefault string
 
@@ -462,7 +443,7 @@ func retrievePostProjectSSHKeyParamsBodyDataAttributesFlags(depth int, m *ssh_ke
 	}
 	retAdded := false
 
-	attributesFlagName := fmt.Sprintf("%v.attributes", cmdPrefix)
+	attributesFlagName := fmt.Sprintf("%vattributes", cmdPrefix)
 	if cmd.Flags().Changed(attributesFlagName) {
 		// info: complex object attributes PostProjectSSHKeyParamsBodyDataAttributes is retrieved outside this Changed() block
 	}
@@ -471,6 +452,7 @@ func retrievePostProjectSSHKeyParamsBodyDataAttributesFlags(depth int, m *ssh_ke
 		attributesFlagValue = &ssh_keys.PostProjectSSHKeyParamsBodyDataAttributes{}
 	}
 
+	attributesFlagName = ""
 	err, attributesAdded := retrieveModelPostProjectSSHKeyParamsBodyDataAttributesFlags(depth+1, attributesFlagValue, attributesFlagName, cmd)
 	if err != nil {
 		return err, false
@@ -489,15 +471,8 @@ func retrievePostProjectSSHKeyParamsBodyDataTypeFlags(depth int, m *ssh_keys.Pos
 	}
 	retAdded := false
 
-	typeFlagName := fmt.Sprintf("%v.type", cmdPrefix)
+	var typeFlagName = "type"
 	if cmd.Flags().Changed(typeFlagName) {
-
-		var typeFlagName string
-		if cmdPrefix == "" {
-			typeFlagName = "type"
-		} else {
-			typeFlagName = fmt.Sprintf("%v.type", cmdPrefix)
-		}
 
 		typeFlagValue, err := cmd.Flags().GetString(typeFlagName)
 		if err != nil {
@@ -532,12 +507,7 @@ func registerPostProjectSSHKeyParamsBodyDataAttributesName(depth int, cmdPrefix 
 
 	nameDescription := `Name of the SSH Key`
 
-	var nameFlagName string
-	if cmdPrefix == "" {
-		nameFlagName = "name"
-	} else {
-		nameFlagName = fmt.Sprintf("%v.name", cmdPrefix)
-	}
+	var nameFlagName = "name"
 
 	var nameFlagDefault string
 
@@ -553,12 +523,7 @@ func registerPostProjectSSHKeyParamsBodyDataAttributesPublicKey(depth int, cmdPr
 
 	publicKeyDescription := `SSH Public Key`
 
-	var publicKeyFlagName string
-	if cmdPrefix == "" {
-		publicKeyFlagName = "public_key"
-	} else {
-		publicKeyFlagName = fmt.Sprintf("%v.public_key", cmdPrefix)
-	}
+	var publicKeyFlagName = "public_key"
 
 	var publicKeyFlagDefault string
 
@@ -593,15 +558,8 @@ func retrievePostProjectSSHKeyParamsBodyDataAttributesNameFlags(depth int, m *ss
 	}
 	retAdded := false
 
-	nameFlagName := fmt.Sprintf("%v.name", cmdPrefix)
+	var nameFlagName = "name"
 	if cmd.Flags().Changed(nameFlagName) {
-
-		var nameFlagName string
-		if cmdPrefix == "" {
-			nameFlagName = "name"
-		} else {
-			nameFlagName = fmt.Sprintf("%v.name", cmdPrefix)
-		}
 
 		nameFlagValue, err := cmd.Flags().GetString(nameFlagName)
 		if err != nil {
@@ -621,15 +579,8 @@ func retrievePostProjectSSHKeyParamsBodyDataAttributesPublicKeyFlags(depth int, 
 	}
 	retAdded := false
 
-	publicKeyFlagName := fmt.Sprintf("%v.public_key", cmdPrefix)
+	var publicKeyFlagName = "public_key"
 	if cmd.Flags().Changed(publicKeyFlagName) {
-
-		var publicKeyFlagName string
-		if cmdPrefix == "" {
-			publicKeyFlagName = "public_key"
-		} else {
-			publicKeyFlagName = fmt.Sprintf("%v.public_key", cmdPrefix)
-		}
 
 		publicKeyFlagValue, err := cmd.Flags().GetString(publicKeyFlagName)
 		if err != nil {

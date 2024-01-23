@@ -21,9 +21,8 @@ import (
 // makeOperationAPIKeysUpdateAPIKeyCmd returns a cmd to handle operation updateApiKey
 func makeOperationAPIKeysUpdateAPIKeyCmd() (*cobra.Command, error) {
 	cmd := &cobra.Command{
-		Use: "update-api-key",
-		Short: `Regenerate an existing API Key that is tied to the current user. This overrides the previous key.
-`,
+		Use: "update",
+		Short: `Regenerate an existing API Key that is tied to the current user. This overrides the previous key.`,
 		RunE: runOperationAPIKeysUpdateAPIKey,
 	}
 
