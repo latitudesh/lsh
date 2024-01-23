@@ -17,6 +17,7 @@ import (
 	"github.com/go-openapi/swag"
 	"github.com/go-openapi/validate"
 
+	"github.com/latitudesh/cli/internal/api"
 	"github.com/latitudesh/cli/models"
 )
 
@@ -35,14 +36,14 @@ func (o *PatchCurrentTeamReader) ReadResponse(response runtime.ClientResponse, c
 		}
 		return result, nil
 	case 403:
-		result := NewPatchCurrentTeamForbidden()
-		if err := result.readResponse(response, consumer, o.formats); err != nil {
+		result := api.NewForbidden()
+		if err := result.ReadResponse(response, consumer, o.formats); err != nil {
 			return nil, err
 		}
 		return nil, result
 	case 404:
-		result := NewPatchCurrentTeamNotFound()
-		if err := result.readResponse(response, consumer, o.formats); err != nil {
+		result := api.NewNotFound()
+		if err := result.ReadResponse(response, consumer, o.formats); err != nil {
 			return nil, err
 		}
 		return nil, result

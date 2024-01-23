@@ -17,6 +17,7 @@ import (
 	"github.com/go-openapi/swag"
 	"github.com/go-openapi/validate"
 
+	"github.com/latitudesh/cli/internal/api"
 	"github.com/latitudesh/cli/models"
 )
 
@@ -35,14 +36,14 @@ func (o *PostTeamReader) ReadResponse(response runtime.ClientResponse, consumer 
 		}
 		return result, nil
 	case 406:
-		result := NewPostTeamNotAcceptable()
-		if err := result.readResponse(response, consumer, o.formats); err != nil {
+		result := api.NewNotAcceptable()
+		if err := result.ReadResponse(response, consumer, o.formats); err != nil {
 			return nil, err
 		}
 		return nil, result
 	case 422:
-		result := NewPostTeamUnprocessableEntity()
-		if err := result.readResponse(response, consumer, o.formats); err != nil {
+		result := api.NewUnprocessableEntity()
+		if err := result.ReadResponse(response, consumer, o.formats); err != nil {
 			return nil, err
 		}
 		return nil, result

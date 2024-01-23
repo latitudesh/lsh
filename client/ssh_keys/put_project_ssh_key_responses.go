@@ -36,8 +36,8 @@ func (o *PutProjectSSHKeyReader) ReadResponse(response runtime.ClientResponse, c
 		}
 		return result, nil
 	case 400:
-		result := NewPutProjectSSHKeyBadRequest()
-		if err := result.readResponse(response, consumer, o.formats); err != nil {
+		result := api.NewBadRequest()
+		if err := result.ReadResponse(response, consumer, o.formats); err != nil {
 			return nil, err
 		}
 		return nil, result
@@ -48,8 +48,8 @@ func (o *PutProjectSSHKeyReader) ReadResponse(response runtime.ClientResponse, c
 		}
 		return nil, result
 	case 422:
-		result := NewPutProjectSSHKeyUnprocessableEntity()
-		if err := result.readResponse(response, consumer, o.formats); err != nil {
+		result := api.NewUnprocessableEntity()
+		if err := result.ReadResponse(response, consumer, o.formats); err != nil {
 			return nil, err
 		}
 		return nil, result

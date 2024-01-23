@@ -15,6 +15,7 @@ import (
 	"github.com/go-openapi/strfmt"
 	"github.com/go-openapi/swag"
 
+	"github.com/latitudesh/cli/internal/api"
 	"github.com/latitudesh/cli/models"
 )
 
@@ -33,8 +34,8 @@ func (o *GetProjectReader) ReadResponse(response runtime.ClientResponse, consume
 		}
 		return result, nil
 	case 404:
-		result := NewGetProjectNotFound()
-		if err := result.readResponse(response, consumer, o.formats); err != nil {
+		result := api.NewNotFound()
+		if err := result.ReadResponse(response, consumer, o.formats); err != nil {
 			return nil, err
 		}
 		return nil, result

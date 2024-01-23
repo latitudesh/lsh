@@ -31,8 +31,8 @@ func (o *DestroyServerReader) ReadResponse(response runtime.ClientResponse, cons
 		}
 		return result, nil
 	case 403:
-		result := NewDestroyServerForbidden()
-		if err := result.readResponse(response, consumer, o.formats); err != nil {
+		result := api.NewForbidden()
+		if err := result.ReadResponse(response, consumer, o.formats); err != nil {
 			return nil, err
 		}
 		return nil, result
@@ -43,14 +43,14 @@ func (o *DestroyServerReader) ReadResponse(response runtime.ClientResponse, cons
 		}
 		return nil, result
 	case 406:
-		result := NewDestroyServerNotAcceptable()
-		if err := result.readResponse(response, consumer, o.formats); err != nil {
+		result := api.NewNotAcceptable()
+		if err := result.ReadResponse(response, consumer, o.formats); err != nil {
 			return nil, err
 		}
 		return nil, result
 	case 422:
-		result := NewDestroyServerUnprocessableEntity()
-		if err := result.readResponse(response, consumer, o.formats); err != nil {
+		result := api.NewUnprocessableEntity()
+		if err := result.ReadResponse(response, consumer, o.formats); err != nil {
 			return nil, err
 		}
 		return nil, result

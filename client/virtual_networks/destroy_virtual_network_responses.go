@@ -37,8 +37,8 @@ func (o *DestroyVirtualNetworkReader) ReadResponse(response runtime.ClientRespon
 		}
 		return nil, result
 	case 406:
-		result := NewDestroyVirtualNetworkNotAcceptable()
-		if err := result.readResponse(response, consumer, o.formats); err != nil {
+		result := api.NewNotAcceptable()
+		if err := result.ReadResponse(response, consumer, o.formats); err != nil {
 			return nil, err
 		}
 		return nil, result

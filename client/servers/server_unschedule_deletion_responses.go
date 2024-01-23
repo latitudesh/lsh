@@ -31,8 +31,8 @@ func (o *ServerUnscheduleDeletionReader) ReadResponse(response runtime.ClientRes
 		}
 		return result, nil
 	case 403:
-		result := NewServerUnscheduleDeletionForbidden()
-		if err := result.readResponse(response, consumer, o.formats); err != nil {
+		result := api.NewForbidden()
+		if err := result.ReadResponse(response, consumer, o.formats); err != nil {
 			return nil, err
 		}
 		return nil, result

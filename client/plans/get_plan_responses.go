@@ -12,6 +12,7 @@ import (
 	"github.com/go-openapi/runtime"
 	"github.com/go-openapi/strfmt"
 
+	"github.com/latitudesh/cli/internal/api"
 	"github.com/latitudesh/cli/models"
 )
 
@@ -30,8 +31,8 @@ func (o *GetPlanReader) ReadResponse(response runtime.ClientResponse, consumer r
 		}
 		return result, nil
 	case 404:
-		result := NewGetPlanNotFound()
-		if err := result.readResponse(response, consumer, o.formats); err != nil {
+		result := api.NewNotFound()
+		if err := result.ReadResponse(response, consumer, o.formats); err != nil {
 			return nil, err
 		}
 		return nil, result
