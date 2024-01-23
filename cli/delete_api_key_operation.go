@@ -6,23 +6,21 @@ package cli
 // Editing this file might prove futile when you re-run the swagger generate command
 
 import (
-	"encoding/json"
 	"fmt"
 
 	"github.com/latitudesh/cli/client/api_keys"
 	"github.com/latitudesh/cli/internal/api"
 	"github.com/latitudesh/cli/internal/utils"
 
-	"github.com/go-openapi/swag"
 	"github.com/spf13/cobra"
 )
 
 // makeOperationAPIKeysDeleteAPIKeyCmd returns a cmd to handle operation deleteApiKey
 func makeOperationAPIKeysDeleteAPIKeyCmd() (*cobra.Command, error) {
 	cmd := &cobra.Command{
-		Use: "destroy",
+		Use:   "destroy",
 		Short: `Delete an existing API Key. Once deleted, the API Key can no longer be used to access the API.`,
-		RunE: runOperationAPIKeysDeleteAPIKey,
+		RunE:  runOperationAPIKeysDeleteAPIKey,
 	}
 
 	if err := registerOperationAPIKeysDeleteAPIKeyParamFlags(cmd); err != nil {

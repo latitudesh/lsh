@@ -115,7 +115,7 @@ func registerOperationProjectsUpdateProjectBodyParamFlags(cmdPrefix string, cmd 
 
 	_ = cmd.PersistentFlags().String(bodyFlagName, "", "Optional json string for [body]. ")
 
-	// add flags for body 
+	// add flags for body
 	if err := registerModelUpdateProjectBodyFlags(0, "", cmd); err != nil {
 		return err
 	}

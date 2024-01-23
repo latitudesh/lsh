@@ -21,9 +21,9 @@ import (
 // makeOperationSSHKeysPutProjectSSHKeyCmd returns a cmd to handle operation putProjectSshKey
 func makeOperationSSHKeysPutProjectSSHKeyCmd() (*cobra.Command, error) {
 	cmd := &cobra.Command{
-		Use: "update",
+		Use:   "update",
 		Short: `Allow you update SSH Key in a project. These keys can be used to access servers after deploy and reinstall actions.`,
-		RunE: runOperationSSHKeysPutProjectSSHKey,
+		RunE:  runOperationSSHKeysPutProjectSSHKey,
 	}
 
 	if err := registerOperationSSHKeysPutProjectSSHKeyParamFlags(cmd); err != nil {

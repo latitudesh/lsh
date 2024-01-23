@@ -52,7 +52,6 @@ func runOperationVirtualNetworkAssignmentsAssignServerVirtualNetwork(cmd *cobra.
 		return nil
 	}
 
-
 	result, err := appCli.VirtualNetworkAssignments.AssignServerVirtualNetwork(params, nil)
 	if err != nil {
 		api.RenderErrorOutput(err)

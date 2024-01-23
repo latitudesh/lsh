@@ -20,9 +20,9 @@ import (
 // makeOperationVirtualNetworksCreateVirtualNetworkCmd returns a cmd to handle operation createVirtualNetwork
 func makeOperationVirtualNetworksCreateVirtualNetworkCmd() (*cobra.Command, error) {
 	cmd := &cobra.Command{
-		Use: "create",
+		Use:   "create",
 		Short: `Creates a new Virtual Network.`,
-		RunE: runOperationVirtualNetworksCreateVirtualNetwork,
+		RunE:  runOperationVirtualNetworksCreateVirtualNetwork,
 	}
 
 	if err := registerOperationVirtualNetworksCreateVirtualNetworkParamFlags(cmd); err != nil {
@@ -436,7 +436,7 @@ func registerCreateVirtualNetworkParamsBodyDataAttributesSite(depth int, cmdPref
 	siteDescription := `Enum: ["ASH","BGT","BUE","CHI","DAL","FRA","LAX","LON","MEX","MEX2","MIA","MIA2","NYC","SAN","SAN2","SAO","SAO2","SYD","TYO","TYO2"]. Site ID or slug`
 
 	var siteFlagName = "site"
-	
+
 	var siteFlagDefault string
 
 	_ = cmd.PersistentFlags().String(siteFlagName, siteFlagDefault, siteDescription)

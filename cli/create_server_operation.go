@@ -545,7 +545,7 @@ func registerCreateServerParamsBodyDataAttributesProject(depth int, cmdPrefix st
 
 	projectDescription := `The project (ID or Slug) to deploy the server`
 
-	var projectFlagName  = "project"
+	var projectFlagName = "project"
 
 	var projectFlagDefault string
 

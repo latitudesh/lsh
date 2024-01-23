@@ -6,14 +6,12 @@ package cli
 // Editing this file might prove futile when you re-run the swagger generate command
 
 import (
-	"encoding/json"
 	"fmt"
 
 	"github.com/latitudesh/cli/client/servers"
 	"github.com/latitudesh/cli/internal/api"
 	"github.com/latitudesh/cli/internal/utils"
 
-	"github.com/go-openapi/swag"
 	"github.com/spf13/cobra"
 )
 

@@ -656,7 +656,7 @@ func retrieveCreateServerReinstallParamsBodyDataAttributesOperatingSystemFlags(d
 	operatingSystemFlagName := fmt.Sprintf("%v.operating_system", cmdPrefix)
 	if cmd.Flags().Changed(operatingSystemFlagName) {
 
-		var operatingSystemFlagName  = "operating_system"
+		var operatingSystemFlagName = "operating_system"
 
 		operatingSystemFlagValue, err := cmd.Flags().GetString(operatingSystemFlagName)
 		if err != nil {

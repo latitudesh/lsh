@@ -106,10 +106,10 @@ func registerOperationServersUpdateServerAPIVersionParamFlags(cmdPrefix string, 
 func registerOperationServersUpdateServerBodyParamFlags(cmdPrefix string, cmd *cobra.Command) error {
 
 	var bodyFlagName string
-if cmdPrefix == "" {
-	bodyFlagName = "body"
-} else {
-	bodyFlagName = fmt.Sprintf("%v.body", cmdPrefix)
+	if cmdPrefix == "" {
+		bodyFlagName = "body"
+	} else {
+		bodyFlagName = fmt.Sprintf("%v.body", cmdPrefix)
 	}
 
 	_ = cmd.PersistentFlags().String(bodyFlagName, "", "Optional json string for [body]. ")
@@ -124,12 +124,12 @@ if cmdPrefix == "" {
 func registerOperationServersUpdateServerServerIDParamFlags(cmdPrefix string, cmd *cobra.Command) error {
 
 	serverIdDescription := `Required. `
-	
+
 	var serverIdFlagName string
 	if cmdPrefix == "" {
-	serverIdFlagName = "server_id"
+		serverIdFlagName = "server_id"
 	} else {
-	serverIdFlagName = fmt.Sprintf("%v.server_id", cmdPrefix)
+		serverIdFlagName = fmt.Sprintf("%v.server_id", cmdPrefix)
 	}
 
 	var serverIdFlagDefault string

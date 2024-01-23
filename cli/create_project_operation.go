@@ -269,7 +269,7 @@ func registerCreateProjectCreatedBodyData(depth int, cmdPrefix string, cmd *cobr
 	}
 
 	var dataFlagName = ""
-	
+
 	if err := registerModelProjectFlags(depth+1, dataFlagName, cmd); err != nil {
 		return err
 	}

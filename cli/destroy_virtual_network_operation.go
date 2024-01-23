@@ -6,23 +6,21 @@ package cli
 // Editing this file might prove futile when you re-run the swagger generate command
 
 import (
-	"encoding/json"
 	"fmt"
 
 	"github.com/latitudesh/cli/client/virtual_networks"
 	"github.com/latitudesh/cli/internal/api"
 	"github.com/latitudesh/cli/internal/utils"
 
-	"github.com/go-openapi/swag"
 	"github.com/spf13/cobra"
 )
 
 // makeOperationVirtualNetworksDestroyVirtualNetworkCmd returns a cmd to handle operation destroyVirtualNetwork
 func makeOperationVirtualNetworksDestroyVirtualNetworkCmd() (*cobra.Command, error) {
 	cmd := &cobra.Command{
-		Use: "destroy",
+		Use:   "destroy",
 		Short: `Delete virtual network.`,
-		RunE: runOperationVirtualNetworksDestroyVirtualNetwork,
+		RunE:  runOperationVirtualNetworksDestroyVirtualNetwork,
 	}
 
 	if err := registerOperationVirtualNetworksDestroyVirtualNetworkParamFlags(cmd); err != nil {

@@ -20,9 +20,9 @@ import (
 // makeOperationSSHKeysGetProjectSSHKeysCmd returns a cmd to handle operation getProjectSshKeys
 func makeOperationSSHKeysGetProjectSSHKeysCmd() (*cobra.Command, error) {
 	cmd := &cobra.Command{
-		Use: "list",
+		Use:   "list",
 		Short: `List all SSH Keys in the project. These keys can be used to access servers after deploy and reinstall actions.`,
-		RunE: runOperationSSHKeysGetProjectSSHKeys,
+		RunE:  runOperationSSHKeysGetProjectSSHKeys,
 	}
 
 	if err := registerOperationSSHKeysGetProjectSSHKeysParamFlags(cmd); err != nil {

@@ -2134,7 +2134,7 @@ func retrievePlanDataAttributesSpecsMemoryTotalFlags(depth int, m *models.PlanDa
 		}
 
 		parsedFlag, err := strconv.Atoi(totalFlagValue)
-		if err!= nil {
+		if err != nil {
 			return err, false
 		}
 		m.Total = parsedFlag

@@ -20,9 +20,9 @@ import (
 // makeOperationServersGetServerCmd returns a cmd to handle operation getServer
 func makeOperationServersGetServerCmd() (*cobra.Command, error) {
 	cmd := &cobra.Command{
-		Use: "get",
+		Use:   "get",
 		Short: `Returns a server that belongs to the team.`,
-		RunE: runOperationServersGetServer,
+		RunE:  runOperationServersGetServer,
 	}
 
 	if err := registerOperationServersGetServerParamFlags(cmd); err != nil {

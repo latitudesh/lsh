@@ -20,9 +20,9 @@ import (
 // makeOperationVirtualNetworksUpdateVirtualNetworkCmd returns a cmd to handle operation updateVirtualNetwork
 func makeOperationVirtualNetworksUpdateVirtualNetworkCmd() (*cobra.Command, error) {
 	cmd := &cobra.Command{
-		Use: "update",
+		Use:   "update",
 		Short: `Update a Virtual Network.`,
-		RunE: runOperationVirtualNetworksUpdateVirtualNetwork,
+		RunE:  runOperationVirtualNetworksUpdateVirtualNetwork,
 	}
 
 	if err := registerOperationVirtualNetworksUpdateVirtualNetworkParamFlags(cmd); err != nil {
@@ -408,7 +408,6 @@ func retrieveUpdateVirtualNetworkParamsBodyDataTypeFlags(depth int, m *virtual_n
 
 	var typeFlagName = "type"
 	if cmd.Flags().Changed(typeFlagName) {
-
 
 		typeFlagValue, err := cmd.Flags().GetString(typeFlagName)
 		if err != nil {
