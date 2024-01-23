@@ -41,6 +41,12 @@ func (o *PostProjectSSHKeyReader) ReadResponse(response runtime.ClientResponse, 
 			return nil, err
 		}
 		return nil, result
+	case 401:
+		result := api.NewUnauthorized()
+		if err := result.ReadResponse(response, consumer, o.formats); err != nil {
+			return nil, err
+		}
+		return nil, result
 	case 422:
 		result := api.NewUnprocessableEntity()
 		if err := result.ReadResponse(response, consumer, o.formats); err != nil {

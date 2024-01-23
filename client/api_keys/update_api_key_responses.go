@@ -39,6 +39,12 @@ func (o *UpdateAPIKeyReader) ReadResponse(response runtime.ClientResponse, consu
 			return nil, err
 		}
 		return nil, result
+	case 401:
+		result := api.NewUnauthorized()
+		if err := result.ReadResponse(response, consumer, o.formats); err != nil {
+			return nil, err
+		}
+		return nil, result
 	case 404:
 		result := api.NewNotFound()
 		if err := result.ReadResponse(response, consumer, o.formats); err != nil {

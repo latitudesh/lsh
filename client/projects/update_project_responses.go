@@ -35,6 +35,12 @@ func (o *UpdateProjectReader) ReadResponse(response runtime.ClientResponse, cons
 			return nil, err
 		}
 		return result, nil
+	case 401:
+		result := api.NewUnauthorized()
+		if err := result.ReadResponse(response, consumer, o.formats); err != nil {
+			return nil, err
+		}
+		return nil, result
 	case 403:
 		result := api.NewForbidden()
 		if err := result.ReadResponse(response, consumer, o.formats); err != nil {

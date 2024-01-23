@@ -16,6 +16,7 @@ import (
 	"github.com/go-openapi/strfmt"
 	"github.com/go-openapi/swag"
 
+	"github.com/latitudesh/cli/internal/api"
 	"github.com/latitudesh/cli/models"
 )
 
@@ -33,6 +34,12 @@ func (o *GetPlansReader) ReadResponse(response runtime.ClientResponse, consumer 
 			return nil, err
 		}
 		return result, nil
+	case 401:
+		result := api.NewUnauthorized()
+		if err := result.ReadResponse(response, consumer, o.formats); err != nil {
+			return nil, err
+		}
+		return nil, result
 	default:
 		return nil, runtime.NewAPIError("[GET /plans] get-plans", response, response.Code())
 	}

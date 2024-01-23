@@ -35,6 +35,12 @@ func (o *PostTeamReader) ReadResponse(response runtime.ClientResponse, consumer 
 			return nil, err
 		}
 		return result, nil
+	case 401:
+		result := api.NewUnauthorized()
+		if err := result.ReadResponse(response, consumer, o.formats); err != nil {
+			return nil, err
+		}
+		return nil, result
 	case 406:
 		result := api.NewNotAcceptable()
 		if err := result.ReadResponse(response, consumer, o.formats); err != nil {
