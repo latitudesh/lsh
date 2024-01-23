@@ -32,12 +32,7 @@ func registerCreateAPIKeyData(depth int, cmdPrefix string, cmd *cobra.Command) e
 		return nil
 	}
 
-	var dataFlagName string
-	if cmdPrefix == "" {
-		dataFlagName = "data"
-	} else {
-		dataFlagName = fmt.Sprintf("%v.data", cmdPrefix)
-	}
+	var dataFlagName = ""
 
 	if err := registerModelCreateAPIKeyDataFlags(depth+1, dataFlagName, cmd); err != nil {
 		return err
@@ -65,7 +60,7 @@ func retrieveCreateAPIKeyDataFlags(depth int, m *models.CreateAPIKey, cmdPrefix 
 	}
 	retAdded := false
 
-	dataFlagName := fmt.Sprintf("%v.data", cmdPrefix)
+	dataFlagName := fmt.Sprintf("%vdata", cmdPrefix)
 	if cmd.Flags().Changed(dataFlagName) {
 		// info: complex object data CreateAPIKeyData is retrieved outside this Changed() block
 	}
@@ -74,6 +69,7 @@ func retrieveCreateAPIKeyDataFlags(depth int, m *models.CreateAPIKey, cmdPrefix 
 		dataFlagValue = &models.CreateAPIKeyData{}
 	}
 
+	dataFlagName = ""
 	err, dataAdded := retrieveModelCreateAPIKeyDataFlags(depth+1, dataFlagValue, dataFlagName, cmd)
 	if err != nil {
 		return err, false
@@ -107,12 +103,7 @@ func registerCreateAPIKeyDataAttributes(depth int, cmdPrefix string, cmd *cobra.
 		return nil
 	}
 
-	var attributesFlagName string
-	if cmdPrefix == "" {
-		attributesFlagName = "attributes"
-	} else {
-		attributesFlagName = fmt.Sprintf("%v.attributes", cmdPrefix)
-	}
+	var attributesFlagName = ""
 
 	if err := registerModelCreateAPIKeyDataAttributesFlags(depth+1, attributesFlagName, cmd); err != nil {
 		return err
@@ -128,12 +119,7 @@ func registerCreateAPIKeyDataType(depth int, cmdPrefix string, cmd *cobra.Comman
 
 	typeDescription := `Enum: ["api_keys"]. Required. `
 
-	var typeFlagName string
-	if cmdPrefix == "" {
-		typeFlagName = "type"
-	} else {
-		typeFlagName = fmt.Sprintf("%v.type", cmdPrefix)
-	}
+	var typeFlagName = "type"
 
 	var typeFlagDefault string
 
@@ -178,7 +164,7 @@ func retrieveCreateAPIKeyDataAttributesFlags(depth int, m *models.CreateAPIKeyDa
 	}
 	retAdded := false
 
-	attributesFlagName := fmt.Sprintf("%v.attributes", cmdPrefix)
+	attributesFlagName := fmt.Sprintf("%vattributes", cmdPrefix)
 	if cmd.Flags().Changed(attributesFlagName) {
 		// info: complex object attributes CreateAPIKeyDataAttributes is retrieved outside this Changed() block
 	}
@@ -187,6 +173,7 @@ func retrieveCreateAPIKeyDataAttributesFlags(depth int, m *models.CreateAPIKeyDa
 		attributesFlagValue = &models.CreateAPIKeyDataAttributes{}
 	}
 
+	attributesFlagName = ""
 	err, attributesAdded := retrieveModelCreateAPIKeyDataAttributesFlags(depth+1, attributesFlagValue, attributesFlagName, cmd)
 	if err != nil {
 		return err, false
@@ -205,15 +192,8 @@ func retrieveCreateAPIKeyDataTypeFlags(depth int, m *models.CreateAPIKeyData, cm
 	}
 	retAdded := false
 
-	typeFlagName := fmt.Sprintf("%v.type", cmdPrefix)
+	var typeFlagName = "type"
 	if cmd.Flags().Changed(typeFlagName) {
-
-		var typeFlagName string
-		if cmdPrefix == "" {
-			typeFlagName = "type"
-		} else {
-			typeFlagName = fmt.Sprintf("%v.type", cmdPrefix)
-		}
 
 		typeFlagValue, err := cmd.Flags().GetString(typeFlagName)
 		if err != nil {
@@ -250,12 +230,7 @@ func registerCreateAPIKeyDataAttributesAPIVersion(depth int, cmdPrefix string, c
 
 	apiVersionDescription := `The API version to use`
 
-	var apiVersionFlagName string
-	if cmdPrefix == "" {
-		apiVersionFlagName = "api_version"
-	} else {
-		apiVersionFlagName = fmt.Sprintf("%v.api_version", cmdPrefix)
-	}
+	var apiVersionFlagName = "api_version"
 
 	var apiVersionFlagDefault string
 
@@ -271,12 +246,7 @@ func registerCreateAPIKeyDataAttributesName(depth int, cmdPrefix string, cmd *co
 
 	nameDescription := `Required. Name of the API Key`
 
-	var nameFlagName string
-	if cmdPrefix == "" {
-		nameFlagName = "name"
-	} else {
-		nameFlagName = fmt.Sprintf("%v.name", cmdPrefix)
-	}
+	var nameFlagName = "name"
 
 	var nameFlagDefault string
 
@@ -311,15 +281,8 @@ func retrieveCreateAPIKeyDataAttributesAPIVersionFlags(depth int, m *models.Crea
 	}
 	retAdded := false
 
-	apiVersionFlagName := fmt.Sprintf("%v.api_version", cmdPrefix)
+	var apiVersionFlagName = "api_version"
 	if cmd.Flags().Changed(apiVersionFlagName) {
-
-		var apiVersionFlagName string
-		if cmdPrefix == "" {
-			apiVersionFlagName = "api_version"
-		} else {
-			apiVersionFlagName = fmt.Sprintf("%v.api_version", cmdPrefix)
-		}
 
 		apiVersionFlagValue, err := cmd.Flags().GetString(apiVersionFlagName)
 		if err != nil {
@@ -339,15 +302,8 @@ func retrieveCreateAPIKeyDataAttributesNameFlags(depth int, m *models.CreateAPIK
 	}
 	retAdded := false
 
-	nameFlagName := fmt.Sprintf("%v.name", cmdPrefix)
+	var nameFlagName = "name"
 	if cmd.Flags().Changed(nameFlagName) {
-
-		var nameFlagName string
-		if cmdPrefix == "" {
-			nameFlagName = "name"
-		} else {
-			nameFlagName = fmt.Sprintf("%v.name", cmdPrefix)
-		}
 
 		nameFlagValue, err := cmd.Flags().GetString(nameFlagName)
 		if err != nil {

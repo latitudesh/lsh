@@ -19,8 +19,8 @@ import (
 // makeOperationPlansGetPlanCmd returns a cmd to handle operation getPlan
 func makeOperationPlansGetPlanCmd() (*cobra.Command, error) {
 	cmd := &cobra.Command{
-		Use:   "get-plan",
-		Short: ``,
+		Use:   "get",
+		Short: `Returns a plan`,
 		RunE:  runOperationPlansGetPlan,
 	}
 

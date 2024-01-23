@@ -17,10 +17,10 @@ import (
 )
 
 // makeOperationServerReinstallCreateServerReinstallCmd returns a cmd to handle operation createServerReinstall
-func makeOperationServerReinstallCreateServerReinstallCmd() (*cobra.Command, error) {
+func makeOperationServerReinstallCmd() (*cobra.Command, error) {
 	cmd := &cobra.Command{
-		Use:   "create-server-reinstall",
-		Short: ``,
+		Use:   "reinstall",
+		Short: `Submit a reinstall request to a server.`,
 		RunE:  runOperationServerReinstallCreateServerReinstall,
 	}
 
@@ -108,7 +108,7 @@ func registerOperationServerReinstallCreateServerReinstallBodyParamFlags(cmdPref
 	_ = cmd.PersistentFlags().String(bodyFlagName, "", "Optional json string for [body]. ")
 
 	// add flags for body
-	if err := registerModelCreateServerReinstallBodyFlags(0, "createServerReinstallBody", cmd); err != nil {
+	if err := registerModelCreateServerReinstallBodyFlags(0, "", cmd); err != nil {
 		return err
 	}
 
@@ -172,7 +172,7 @@ func retrieveOperationServerReinstallCreateServerReinstallBodyFlag(m *server_rei
 	if swag.IsZero(bodyValueModel) {
 		bodyValueModel = server_reinstall.CreateServerReinstallBody{}
 	}
-	err, added := retrieveModelCreateServerReinstallBodyFlags(0, &bodyValueModel, "createServerReinstallBody", cmd)
+	err, added := retrieveModelCreateServerReinstallBodyFlags(0, &bodyValueModel, "", cmd)
 	if err != nil {
 		return err, false
 	}
@@ -277,12 +277,7 @@ func registerCreateServerReinstallBodyData(depth int, cmdPrefix string, cmd *cob
 		return nil
 	}
 
-	var dataFlagName string
-	if cmdPrefix == "" {
-		dataFlagName = "data"
-	} else {
-		dataFlagName = fmt.Sprintf("%v.data", cmdPrefix)
-	}
+	var dataFlagName = ""
 
 	if err := registerModelCreateServerReinstallParamsBodyDataFlags(depth+1, dataFlagName, cmd); err != nil {
 		return err
@@ -310,7 +305,7 @@ func retrieveCreateServerReinstallBodyDataFlags(depth int, m *server_reinstall.C
 	}
 	retAdded := false
 
-	dataFlagName := fmt.Sprintf("%v.data", cmdPrefix)
+	dataFlagName := fmt.Sprintf("%vdata", cmdPrefix)
 	if cmd.Flags().Changed(dataFlagName) {
 		// info: complex object data CreateServerReinstallParamsBodyData is retrieved outside this Changed() block
 	}
@@ -319,6 +314,7 @@ func retrieveCreateServerReinstallBodyDataFlags(depth int, m *server_reinstall.C
 		dataFlagValue = &server_reinstall.CreateServerReinstallParamsBodyData{}
 	}
 
+	dataFlagName = ""
 	err, dataAdded := retrieveModelCreateServerReinstallParamsBodyDataFlags(depth+1, dataFlagValue, dataFlagName, cmd)
 	if err != nil {
 		return err, false
@@ -350,12 +346,7 @@ func registerCreateServerReinstallParamsBodyDataAttributes(depth int, cmdPrefix 
 		return nil
 	}
 
-	var attributesFlagName string
-	if cmdPrefix == "" {
-		attributesFlagName = "attributes"
-	} else {
-		attributesFlagName = fmt.Sprintf("%v.attributes", cmdPrefix)
-	}
+	var attributesFlagName = ""
 
 	if err := registerModelCreateServerReinstallParamsBodyDataAttributesFlags(depth+1, attributesFlagName, cmd); err != nil {
 		return err
@@ -371,12 +362,7 @@ func registerCreateServerReinstallParamsBodyDataType(depth int, cmdPrefix string
 
 	typeDescription := `Enum: ["reinstalls"]. Required. `
 
-	var typeFlagName string
-	if cmdPrefix == "" {
-		typeFlagName = "type"
-	} else {
-		typeFlagName = fmt.Sprintf("%v.type", cmdPrefix)
-	}
+	var typeFlagName = "type"
 
 	var typeFlagDefault string
 
@@ -422,7 +408,7 @@ func retrieveCreateServerReinstallParamsBodyDataAttributesFlags(depth int, m *se
 	}
 	retAdded := false
 
-	attributesFlagName := fmt.Sprintf("%v.attributes", cmdPrefix)
+	attributesFlagName := fmt.Sprintf("%vattributes", cmdPrefix)
 	if cmd.Flags().Changed(attributesFlagName) {
 		// info: complex object attributes CreateServerReinstallParamsBodyDataAttributes is retrieved outside this Changed() block
 	}
@@ -431,6 +417,7 @@ func retrieveCreateServerReinstallParamsBodyDataAttributesFlags(depth int, m *se
 		attributesFlagValue = &server_reinstall.CreateServerReinstallParamsBodyDataAttributes{}
 	}
 
+	attributesFlagName = ""
 	err, attributesAdded := retrieveModelCreateServerReinstallParamsBodyDataAttributesFlags(depth+1, attributesFlagValue, attributesFlagName, cmd)
 	if err != nil {
 		return err, false
@@ -449,15 +436,8 @@ func retrieveCreateServerReinstallParamsBodyDataTypeFlags(depth int, m *server_r
 	}
 	retAdded := false
 
-	typeFlagName := fmt.Sprintf("%v.type", cmdPrefix)
+	var typeFlagName = "type"
 	if cmd.Flags().Changed(typeFlagName) {
-
-		var typeFlagName string
-		if cmdPrefix == "" {
-			typeFlagName = "type"
-		} else {
-			typeFlagName = fmt.Sprintf("%v.type", cmdPrefix)
-		}
 
 		typeFlagValue, err := cmd.Flags().GetString(typeFlagName)
 		if err != nil {
@@ -508,12 +488,7 @@ func registerCreateServerReinstallParamsBodyDataAttributesHostname(depth int, cm
 
 	hostnameDescription := `The server hostname to set upon reinstall`
 
-	var hostnameFlagName string
-	if cmdPrefix == "" {
-		hostnameFlagName = "hostname"
-	} else {
-		hostnameFlagName = fmt.Sprintf("%v.hostname", cmdPrefix)
-	}
+	var hostnameFlagName = "hostname"
 
 	var hostnameFlagDefault string
 
@@ -550,12 +525,7 @@ func registerCreateServerReinstallParamsBodyDataAttributesOperatingSystem(depth 
 
 	operatingSystemDescription := `Enum: ["ipxe","windows_server_2019_std_v1","ubuntu_22_04_x64_lts","debian_11","rockylinux_8","debian_10","rhel8","centos_7_4_x64","centos_8_x64","ubuntu_20_04_x64_lts","debian_12","ubuntu22_ml_in_a_box","windows2022"]. The OS selected for the reinstall process`
 
-	var operatingSystemFlagName string
-	if cmdPrefix == "" {
-		operatingSystemFlagName = "operating_system"
-	} else {
-		operatingSystemFlagName = fmt.Sprintf("%v.operating_system", cmdPrefix)
-	}
+	var operatingSystemFlagName = "operating_system"
 
 	var operatingSystemFlagDefault string
 
@@ -582,12 +552,7 @@ func registerCreateServerReinstallParamsBodyDataAttributesRaid(depth int, cmdPre
 
 	raidDescription := `Enum: ["raid-0","raid-1"]. RAID mode for the server`
 
-	var raidFlagName string
-	if cmdPrefix == "" {
-		raidFlagName = "raid"
-	} else {
-		raidFlagName = fmt.Sprintf("%v.raid", cmdPrefix)
-	}
+	var raidFlagName = "raid"
 
 	var raidFlagDefault string
 
@@ -624,12 +589,7 @@ func registerCreateServerReinstallParamsBodyDataAttributesUserData(depth int, cm
 
 	userDataDescription := `User data to set upon reinstall`
 
-	var userDataFlagName string
-	if cmdPrefix == "" {
-		userDataFlagName = "user_data"
-	} else {
-		userDataFlagName = fmt.Sprintf("%v.user_data", cmdPrefix)
-	}
+	var userDataFlagName = "user_data"
 
 	var userDataFlagDefault int64
 
@@ -687,15 +647,8 @@ func retrieveCreateServerReinstallParamsBodyDataAttributesHostnameFlags(depth in
 	}
 	retAdded := false
 
-	hostnameFlagName := fmt.Sprintf("%v.hostname", cmdPrefix)
+	var hostnameFlagName = "hostname"
 	if cmd.Flags().Changed(hostnameFlagName) {
-
-		var hostnameFlagName string
-		if cmdPrefix == "" {
-			hostnameFlagName = "hostname"
-		} else {
-			hostnameFlagName = fmt.Sprintf("%v.hostname", cmdPrefix)
-		}
 
 		hostnameFlagValue, err := cmd.Flags().GetString(hostnameFlagName)
 		if err != nil {
@@ -715,15 +668,8 @@ func retrieveCreateServerReinstallParamsBodyDataAttributesIpxeURLFlags(depth int
 	}
 	retAdded := false
 
-	ipxeUrlFlagName := fmt.Sprintf("%v.ipxe_url", cmdPrefix)
+	var ipxeUrlFlagName = "ipxe_url"
 	if cmd.Flags().Changed(ipxeUrlFlagName) {
-
-		var ipxeUrlFlagName string
-		if cmdPrefix == "" {
-			ipxeUrlFlagName = "ipxe_url"
-		} else {
-			ipxeUrlFlagName = fmt.Sprintf("%v.ipxe_url", cmdPrefix)
-		}
 
 		ipxeUrlFlagValue, err := cmd.Flags().GetString(ipxeUrlFlagName)
 		if err != nil {
@@ -746,12 +692,7 @@ func retrieveCreateServerReinstallParamsBodyDataAttributesOperatingSystemFlags(d
 	operatingSystemFlagName := fmt.Sprintf("%v.operating_system", cmdPrefix)
 	if cmd.Flags().Changed(operatingSystemFlagName) {
 
-		var operatingSystemFlagName string
-		if cmdPrefix == "" {
-			operatingSystemFlagName = "operating_system"
-		} else {
-			operatingSystemFlagName = fmt.Sprintf("%v.operating_system", cmdPrefix)
-		}
+		var operatingSystemFlagName  = "operating_system"
 
 		operatingSystemFlagValue, err := cmd.Flags().GetString(operatingSystemFlagName)
 		if err != nil {
@@ -771,15 +712,8 @@ func retrieveCreateServerReinstallParamsBodyDataAttributesRaidFlags(depth int, m
 	}
 	retAdded := false
 
-	raidFlagName := fmt.Sprintf("%v.raid", cmdPrefix)
+	var raidFlagName = "raid"
 	if cmd.Flags().Changed(raidFlagName) {
-
-		var raidFlagName string
-		if cmdPrefix == "" {
-			raidFlagName = "raid"
-		} else {
-			raidFlagName = fmt.Sprintf("%v.raid", cmdPrefix)
-		}
 
 		raidFlagValue, err := cmd.Flags().GetString(raidFlagName)
 		if err != nil {
@@ -799,7 +733,7 @@ func retrieveCreateServerReinstallParamsBodyDataAttributesSSHKeysFlags(depth int
 	}
 	retAdded := false
 
-	sshKeysFlagName := fmt.Sprintf("%v.ssh_keys", cmdPrefix)
+	var sshKeysFlagName = "ssh_keys"
 	if cmd.Flags().Changed(sshKeysFlagName) {
 		// warning: ssh_keys array type []string is not supported by go-swagger cli yet
 	}
@@ -816,12 +750,7 @@ func retrieveCreateServerReinstallParamsBodyDataAttributesUserDataFlags(depth in
 	userDataFlagName := fmt.Sprintf("%v.user_data", cmdPrefix)
 	if cmd.Flags().Changed(userDataFlagName) {
 
-		var userDataFlagName string
-		if cmdPrefix == "" {
-			userDataFlagName = "user_data"
-		} else {
-			userDataFlagName = fmt.Sprintf("%v.user_data", cmdPrefix)
-		}
+		var userDataFlagName = "user_data"
 
 		userDataFlagValue, err := cmd.Flags().GetInt64(userDataFlagName)
 		if err != nil {

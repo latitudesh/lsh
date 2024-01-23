@@ -20,9 +20,8 @@ import (
 // makeOperationVirtualNetworksCreateVirtualNetworkCmd returns a cmd to handle operation createVirtualNetwork
 func makeOperationVirtualNetworksCreateVirtualNetworkCmd() (*cobra.Command, error) {
 	cmd := &cobra.Command{
-		Use: "create-virtual-network",
-		Short: `Creates a new Virtual Network.
-`,
+		Use: "create",
+		Short: `Creates a new Virtual Network.`,
 		RunE: runOperationVirtualNetworksCreateVirtualNetwork,
 	}
 
@@ -104,7 +103,7 @@ func registerOperationVirtualNetworksCreateVirtualNetworkBodyParamFlags(cmdPrefi
 	_ = cmd.PersistentFlags().String(bodyFlagName, "", "Optional json string for [body]. ")
 
 	// add flags for body
-	if err := registerModelCreateVirtualNetworkBodyFlags(0, "createVirtualNetworkBody", cmd); err != nil {
+	if err := registerModelCreateVirtualNetworkBodyFlags(0, "", cmd); err != nil {
 		return err
 	}
 
@@ -150,7 +149,7 @@ func retrieveOperationVirtualNetworksCreateVirtualNetworkBodyFlag(m *virtual_net
 	if swag.IsZero(bodyValueModel) {
 		bodyValueModel = virtual_networks.CreateVirtualNetworkBody{}
 	}
-	err, added := retrieveModelCreateVirtualNetworkBodyFlags(0, &bodyValueModel, "createVirtualNetworkBody", cmd)
+	err, added := retrieveModelCreateVirtualNetworkBodyFlags(0, &bodyValueModel, "", cmd)
 	if err != nil {
 		return err, false
 	}
@@ -237,12 +236,7 @@ func registerCreateVirtualNetworkBodyData(depth int, cmdPrefix string, cmd *cobr
 		return nil
 	}
 
-	var dataFlagName string
-	if cmdPrefix == "" {
-		dataFlagName = "data"
-	} else {
-		dataFlagName = fmt.Sprintf("%v.data", cmdPrefix)
-	}
+	var dataFlagName = ""
 
 	if err := registerModelCreateVirtualNetworkParamsBodyDataFlags(depth+1, dataFlagName, cmd); err != nil {
 		return err
@@ -270,7 +264,7 @@ func retrieveCreateVirtualNetworkBodyDataFlags(depth int, m *virtual_networks.Cr
 	}
 	retAdded := false
 
-	dataFlagName := fmt.Sprintf("%v.data", cmdPrefix)
+	dataFlagName := fmt.Sprintf("%vdata", cmdPrefix)
 	if cmd.Flags().Changed(dataFlagName) {
 		// info: complex object data CreateVirtualNetworkParamsBodyData is retrieved outside this Changed() block
 	}
@@ -279,6 +273,7 @@ func retrieveCreateVirtualNetworkBodyDataFlags(depth int, m *virtual_networks.Cr
 		dataFlagValue = &virtual_networks.CreateVirtualNetworkParamsBodyData{}
 	}
 
+	dataFlagName = ""
 	err, dataAdded := retrieveModelCreateVirtualNetworkParamsBodyDataFlags(depth+1, dataFlagValue, dataFlagName, cmd)
 	if err != nil {
 		return err, false
@@ -310,12 +305,7 @@ func registerCreateVirtualNetworkParamsBodyDataAttributes(depth int, cmdPrefix s
 		return nil
 	}
 
-	var attributesFlagName string
-	if cmdPrefix == "" {
-		attributesFlagName = "attributes"
-	} else {
-		attributesFlagName = fmt.Sprintf("%v.attributes", cmdPrefix)
-	}
+	var attributesFlagName = ""
 
 	if err := registerModelCreateVirtualNetworkParamsBodyDataAttributesFlags(depth+1, attributesFlagName, cmd); err != nil {
 		return err
@@ -331,12 +321,7 @@ func registerCreateVirtualNetworkParamsBodyDataType(depth int, cmdPrefix string,
 
 	typeDescription := `Enum: ["virtual_network"]. Required. `
 
-	var typeFlagName string
-	if cmdPrefix == "" {
-		typeFlagName = "type"
-	} else {
-		typeFlagName = fmt.Sprintf("%v.type", cmdPrefix)
-	}
+	var typeFlagName = "type"
 
 	var typeFlagDefault string
 
@@ -381,7 +366,7 @@ func retrieveCreateVirtualNetworkParamsBodyDataAttributesFlags(depth int, m *vir
 	}
 	retAdded := false
 
-	attributesFlagName := fmt.Sprintf("%v.attributes", cmdPrefix)
+	attributesFlagName := fmt.Sprintf("%vattributes", cmdPrefix)
 	if cmd.Flags().Changed(attributesFlagName) {
 		// info: complex object attributes CreateVirtualNetworkParamsBodyDataAttributes is retrieved outside this Changed() block
 	}
@@ -390,6 +375,7 @@ func retrieveCreateVirtualNetworkParamsBodyDataAttributesFlags(depth int, m *vir
 		attributesFlagValue = &virtual_networks.CreateVirtualNetworkParamsBodyDataAttributes{}
 	}
 
+	attributesFlagName = ""
 	err, attributesAdded := retrieveModelCreateVirtualNetworkParamsBodyDataAttributesFlags(depth+1, attributesFlagValue, attributesFlagName, cmd)
 	if err != nil {
 		return err, false
@@ -408,15 +394,8 @@ func retrieveCreateVirtualNetworkParamsBodyDataTypeFlags(depth int, m *virtual_n
 	}
 	retAdded := false
 
-	typeFlagName := fmt.Sprintf("%v.type", cmdPrefix)
+	var typeFlagName = "type"
 	if cmd.Flags().Changed(typeFlagName) {
-
-		var typeFlagName string
-		if cmdPrefix == "" {
-			typeFlagName = "type"
-		} else {
-			typeFlagName = fmt.Sprintf("%v.type", cmdPrefix)
-		}
 
 		typeFlagValue, err := cmd.Flags().GetString(typeFlagName)
 		if err != nil {
@@ -455,12 +434,7 @@ func registerCreateVirtualNetworkParamsBodyDataAttributesDescription(depth int, 
 
 	descriptionDescription := `Required. `
 
-	var descriptionFlagName string
-	if cmdPrefix == "" {
-		descriptionFlagName = "description"
-	} else {
-		descriptionFlagName = fmt.Sprintf("%v.description", cmdPrefix)
-	}
+	var descriptionFlagName = "description"
 
 	var descriptionFlagDefault string
 
@@ -477,12 +451,7 @@ func registerCreateVirtualNetworkParamsBodyDataAttributesProject(depth int, cmdP
 
 	projectDescription := `Required. Project ID or slug`
 
-	var projectFlagName string
-	if cmdPrefix == "" {
-		projectFlagName = "project"
-	} else {
-		projectFlagName = fmt.Sprintf("%v.project", cmdPrefix)
-	}
+	var projectFlagName = "project"
 
 	var projectFlagDefault string
 
@@ -499,13 +468,8 @@ func registerCreateVirtualNetworkParamsBodyDataAttributesSite(depth int, cmdPref
 
 	siteDescription := `Enum: ["ASH","BGT","BUE","CHI","DAL","FRA","LAX","LON","MEX","MEX2","MIA","MIA2","NYC","SAN","SAN2","SAO","SAO2","SYD","TYO","TYO2"]. Site ID or slug`
 
-	var siteFlagName string
-	if cmdPrefix == "" {
-		siteFlagName = "site"
-	} else {
-		siteFlagName = fmt.Sprintf("%v.site", cmdPrefix)
-	}
-
+	var siteFlagName = "site"
+	
 	var siteFlagDefault string
 
 	_ = cmd.PersistentFlags().String(siteFlagName, siteFlagDefault, siteDescription)
@@ -556,15 +520,8 @@ func retrieveCreateVirtualNetworkParamsBodyDataAttributesDescriptionFlags(depth 
 	}
 	retAdded := false
 
-	descriptionFlagName := fmt.Sprintf("%v.description", cmdPrefix)
+	var descriptionFlagName = "description"
 	if cmd.Flags().Changed(descriptionFlagName) {
-
-		var descriptionFlagName string
-		if cmdPrefix == "" {
-			descriptionFlagName = "description"
-		} else {
-			descriptionFlagName = fmt.Sprintf("%v.description", cmdPrefix)
-		}
 
 		descriptionFlagValue, err := cmd.Flags().GetString(descriptionFlagName)
 		if err != nil {
@@ -584,15 +541,8 @@ func retrieveCreateVirtualNetworkParamsBodyDataAttributesProjectFlags(depth int,
 	}
 	retAdded := false
 
-	projectFlagName := fmt.Sprintf("%v.project", cmdPrefix)
+	var projectFlagName = "project"
 	if cmd.Flags().Changed(projectFlagName) {
-
-		var projectFlagName string
-		if cmdPrefix == "" {
-			projectFlagName = "project"
-		} else {
-			projectFlagName = fmt.Sprintf("%v.project", cmdPrefix)
-		}
 
 		projectFlagValue, err := cmd.Flags().GetString(projectFlagName)
 		if err != nil {
@@ -612,15 +562,8 @@ func retrieveCreateVirtualNetworkParamsBodyDataAttributesSiteFlags(depth int, m 
 	}
 	retAdded := false
 
-	siteFlagName := fmt.Sprintf("%v.site", cmdPrefix)
+	var siteFlagName = "site"
 	if cmd.Flags().Changed(siteFlagName) {
-
-		var siteFlagName string
-		if cmdPrefix == "" {
-			siteFlagName = "site"
-		} else {
-			siteFlagName = fmt.Sprintf("%v.site", cmdPrefix)
-		}
 
 		siteFlagValue, err := cmd.Flags().GetString(siteFlagName)
 		if err != nil {

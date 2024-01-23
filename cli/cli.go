@@ -132,12 +132,6 @@ func MakeRootCmd() (*cobra.Command, error) {
 	}
 	rootCmd.AddCommand(operationGroupProjectsCmd)
 
-	operationGroupServerReinstallCmd, err := makeOperationGroupServerReinstallCmd()
-	if err != nil {
-		return nil, err
-	}
-	rootCmd.AddCommand(operationGroupServerReinstallCmd)
-
 	operationGroupServersCmd, err := makeOperationGroupServersCmd()
 	if err != nil {
 		return nil, err
@@ -149,12 +143,6 @@ func MakeRootCmd() (*cobra.Command, error) {
 		return nil, err
 	}
 	rootCmd.AddCommand(operationGroupSSHKeysCmd)
-
-	operationGroupVirtualNetworkAssignmentsCmd, err := makeOperationGroupVirtualNetworkAssignmentsCmd()
-	if err != nil {
-		return nil, err
-	}
-	rootCmd.AddCommand(operationGroupVirtualNetworkAssignmentsCmd)
 
 	operationGroupVirtualNetworksCmd, err := makeOperationGroupVirtualNetworksCmd()
 	if err != nil {
@@ -328,20 +316,6 @@ func makeOperationGroupProjectsCmd() (*cobra.Command, error) {
 
 	return operationGroupProjectsCmd, nil
 }
-func makeOperationGroupServerReinstallCmd() (*cobra.Command, error) {
-	operationGroupServerReinstallCmd := &cobra.Command{
-		Use:  "server_reinstall",
-		Long: ``,
-	}
-
-	operationCreateServerReinstallCmd, err := makeOperationServerReinstallCreateServerReinstallCmd()
-	if err != nil {
-		return nil, err
-	}
-	operationGroupServerReinstallCmd.AddCommand(operationCreateServerReinstallCmd)
-
-	return operationGroupServerReinstallCmd, nil
-}
 func makeOperationGroupServersCmd() (*cobra.Command, error) {
 	operationGroupServersCmd := &cobra.Command{
 		Use:  "servers",
@@ -390,6 +364,12 @@ func makeOperationGroupServersCmd() (*cobra.Command, error) {
 	}
 	operationGroupServersCmd.AddCommand(operationUpdateServerCmd)
 
+	operationServerReinstallCmd, err := makeOperationServerReinstallCmd()
+	if err != nil {
+		return nil, err
+	}
+	operationGroupServersCmd.AddCommand(operationServerReinstallCmd)
+
 	return operationGroupServersCmd, nil
 }
 func makeOperationGroupSSHKeysCmd() (*cobra.Command, error) {
@@ -430,32 +410,7 @@ func makeOperationGroupSSHKeysCmd() (*cobra.Command, error) {
 
 	return operationGroupSSHKeysCmd, nil
 }
-func makeOperationGroupVirtualNetworkAssignmentsCmd() (*cobra.Command, error) {
-	operationGroupVirtualNetworkAssignmentsCmd := &cobra.Command{
-		Use:  "virtual_network_assignments",
-		Long: ``,
-	}
 
-	operationAssignServerVirtualNetworkCmd, err := makeOperationVirtualNetworkAssignmentsAssignServerVirtualNetworkCmd()
-	if err != nil {
-		return nil, err
-	}
-	operationGroupVirtualNetworkAssignmentsCmd.AddCommand(operationAssignServerVirtualNetworkCmd)
-
-	operationDeleteVirtualNetworksAssignmentsCmd, err := makeOperationVirtualNetworkAssignmentsDeleteVirtualNetworksAssignmentsCmd()
-	if err != nil {
-		return nil, err
-	}
-	operationGroupVirtualNetworkAssignmentsCmd.AddCommand(operationDeleteVirtualNetworksAssignmentsCmd)
-
-	operationGetVirtualNetworksAssignmentsCmd, err := makeOperationVirtualNetworkAssignmentsGetVirtualNetworksAssignmentsCmd()
-	if err != nil {
-		return nil, err
-	}
-	operationGroupVirtualNetworkAssignmentsCmd.AddCommand(operationGetVirtualNetworksAssignmentsCmd)
-
-	return operationGroupVirtualNetworkAssignmentsCmd, nil
-}
 func makeOperationGroupVirtualNetworksCmd() (*cobra.Command, error) {
 	operationGroupVirtualNetworksCmd := &cobra.Command{
 		Use:  "virtual_networks",
@@ -491,6 +446,12 @@ func makeOperationGroupVirtualNetworksCmd() (*cobra.Command, error) {
 		return nil, err
 	}
 	operationGroupVirtualNetworksCmd.AddCommand(operationUpdateVirtualNetworkCmd)
+
+	operationVirtualNetworkAssignmentCmd, err := makeOperationGroupVirtualNetworkAssignmentCmd()
+	if err != nil {
+		return nil, err
+	}
+	operationGroupVirtualNetworksCmd.AddCommand(operationVirtualNetworkAssignmentCmd)
 
 	return operationGroupVirtualNetworksCmd, nil
 }

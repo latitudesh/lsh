@@ -19,7 +19,7 @@ import (
 // makeOperationPlansGetBandwidthPlansCmd returns a cmd to handle operation getBandwidthPlans
 func makeOperationPlansGetBandwidthPlansCmd() (*cobra.Command, error) {
 	cmd := &cobra.Command{
-		Use:   "get-bandwidth-plans",
+		Use:   "list-bandwidth",
 		Short: `Lists all bandwidth plans.`,
 		RunE:  runOperationPlansGetBandwidthPlans,
 	}
