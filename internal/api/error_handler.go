@@ -12,6 +12,8 @@ func RenderErrorOutput(respErr error) error {
 	switch e := respErr.(type) {
 	case *BadRequest:
 		parseBadRequestError(e)
+	case *Unauthorized:
+		parseUnauthorizedError(e)
 	case *Forbidden:
 		parseForbiddenError(e)
 	case *NotFound:
@@ -91,6 +93,18 @@ func parseNotAcceptableError(respErr *NotAcceptable) error {
 	}
 
 	renderGenericError(&respErr.Payload.Errors[0])
+
+	return nil
+}
+
+func parseUnauthorizedError(respErr *Unauthorized) error {
+	if swag.IsZero(respErr) || swag.IsZero(respErr.Payload) {
+		return nil
+	}
+
+	fmt.Printf("\nUnauthorized request.\n")
+	fmt.Printf("\nMake sure your API Key is set up by running:\n ")
+	fmt.Printf("     • lsh login YOUR_API_KEY\n\n")
 
 	return nil
 }

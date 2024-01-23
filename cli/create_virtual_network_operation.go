@@ -53,12 +53,18 @@ func runOperationVirtualNetworksCreateVirtualNetwork(cmd *cobra.Command, args []
 		return nil
 	}
 	// make request and then print result
-	msgStr, err := parseOperationVirtualNetworksCreateVirtualNetworkResult(appCli.VirtualNetworks.CreateVirtualNetwork(params, nil))
+	result, err := appCli.VirtualNetworks.CreateVirtualNetwork(params, nil)
+
+	if err != nil {
+		api.RenderErrorOutput(err)
+		return nil
+	}
+
+	msgStr, err := parseOperationVirtualNetworksCreateVirtualNetworkResult(result)
 	if err != nil {
 		return err
 	}
 	if !debug {
-
 		utils.PrintOutput(msgStr)
 	}
 	return nil
@@ -171,36 +177,7 @@ func retrieveOperationVirtualNetworksCreateVirtualNetworkBodyFlag(m *virtual_net
 }
 
 // parseOperationVirtualNetworksCreateVirtualNetworkResult parses request result and return the string content
-func parseOperationVirtualNetworksCreateVirtualNetworkResult(resp0 *virtual_networks.CreateVirtualNetworkCreated, respErr error) (string, error) {
-	if respErr != nil {
-
-		var iResp0 interface{} = respErr
-		resp0, ok := iResp0.(*virtual_networks.CreateVirtualNetworkCreated)
-		if ok {
-			if !swag.IsZero(resp0) && !swag.IsZero(resp0.Payload) {
-				msgStr, err := json.Marshal(resp0.Payload)
-				if err != nil {
-					return "", err
-				}
-				return string(msgStr), nil
-			}
-		}
-
-		var iResp1 interface{} = respErr
-		resp1, ok := iResp1.(*virtual_networks.CreateVirtualNetworkUnprocessableEntity)
-		if ok {
-			if !swag.IsZero(resp1) && !swag.IsZero(resp1.Payload) {
-				msgStr, err := json.Marshal(resp1.Payload)
-				if err != nil {
-					return "", err
-				}
-				return string(msgStr), nil
-			}
-		}
-
-		return api.RenderErrorOutput(respErr)
-	}
-
+func parseOperationVirtualNetworksCreateVirtualNetworkResult(resp0 *virtual_networks.CreateVirtualNetworkCreated) (string, error) {
 	if !swag.IsZero(resp0) && !swag.IsZero(resp0.Payload) {
 		msgStr, err := json.Marshal(resp0.Payload)
 		if err != nil {
