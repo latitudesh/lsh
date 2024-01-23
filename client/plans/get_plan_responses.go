@@ -12,7 +12,7 @@ import (
 	"github.com/go-openapi/runtime"
 	"github.com/go-openapi/strfmt"
 
-	"github.com/latitudesh/cli/models"
+	"github.com/latitudesh/lsh/models"
 )
 
 // GetPlanReader is a Reader for the GetPlan structure.

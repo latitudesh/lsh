@@ -17,8 +17,8 @@ import (
 	"github.com/go-openapi/swag"
 	"github.com/go-openapi/validate"
 
-	"github.com/latitudesh/cli/internal"
-	"github.com/latitudesh/cli/models"
+	"github.com/latitudesh/lsh/internal"
+	"github.com/latitudesh/lsh/models"
 )
 
 // PutProjectSSHKeyReader is a Reader for the PutProjectSSHKey structure.

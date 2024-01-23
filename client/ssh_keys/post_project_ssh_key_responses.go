@@ -17,8 +17,8 @@ import (
 	"github.com/go-openapi/swag"
 	"github.com/go-openapi/validate"
 
-	"github.com/latitudesh/cli/internal/apierrors"
-	"github.com/latitudesh/cli/models"
+	"github.com/latitudesh/lsh/internal/apierrors"
+	"github.com/latitudesh/lsh/models"
 )
 
 // PostProjectSSHKeyReader is a Reader for the PostProjectSSHKey structure.

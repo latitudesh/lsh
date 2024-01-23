@@ -9,10 +9,10 @@ import (
 	"encoding/json"
 	"fmt"
 
-	"github.com/latitudesh/cli/client/virtual_networks"
-	"github.com/latitudesh/cli/internal"
-	"github.com/latitudesh/cli/internal/utils"
-	"github.com/latitudesh/cli/models"
+	"github.com/latitudesh/lsh/client/virtual_networks"
+	"github.com/latitudesh/lsh/internal"
+	"github.com/latitudesh/lsh/internal/utils"
+	"github.com/latitudesh/lsh/models"
 
 	"github.com/go-openapi/swag"
 	"github.com/spf13/cobra"

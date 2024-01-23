@@ -11,7 +11,7 @@ import (
 	"strconv"
 
 	"github.com/go-openapi/swag"
-	"github.com/latitudesh/cli/models"
+	"github.com/latitudesh/lsh/models"
 
 	"github.com/spf13/cobra"
 )

@@ -4,7 +4,7 @@ import (
 	"encoding/json"
 
 	"github.com/go-openapi/swag"
-	"github.com/latitudesh/cli/internal/apierrors"
+	"github.com/latitudesh/lsh/internal/apierrors"
 )
 
 func ParseNotFoundError(respErr error) (string, error) {

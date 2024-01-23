@@ -10,15 +10,15 @@ import (
 	httptransport "github.com/go-openapi/runtime/client"
 	"github.com/go-openapi/strfmt"
 
-	"github.com/latitudesh/cli/client/api_keys"
-	"github.com/latitudesh/cli/client/plans"
-	"github.com/latitudesh/cli/client/power_actions"
-	"github.com/latitudesh/cli/client/projects"
-	"github.com/latitudesh/cli/client/server_reinstall"
-	"github.com/latitudesh/cli/client/servers"
-	"github.com/latitudesh/cli/client/ssh_keys"
-	"github.com/latitudesh/cli/client/virtual_network_assignments"
-	"github.com/latitudesh/cli/client/virtual_networks"
+	"github.com/latitudesh/lsh/client/api_keys"
+	"github.com/latitudesh/lsh/client/plans"
+	"github.com/latitudesh/lsh/client/power_actions"
+	"github.com/latitudesh/lsh/client/projects"
+	"github.com/latitudesh/lsh/client/server_reinstall"
+	"github.com/latitudesh/lsh/client/servers"
+	"github.com/latitudesh/lsh/client/ssh_keys"
+	"github.com/latitudesh/lsh/client/virtual_network_assignments"
+	"github.com/latitudesh/lsh/client/virtual_networks"
 )
 
 // Default latitude sh API HTTP client.
