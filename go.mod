@@ -1,6 +1,6 @@
 module github.com/latitudesh/cli
 
-go 1.21.6
+go 1.21
 
 require (
 	github.com/go-openapi/errors v0.21.0
