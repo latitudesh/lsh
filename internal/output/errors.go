@@ -1,35 +1,13 @@
-package api
+package output
 
 import (
-	"errors"
 	"fmt"
 
 	"github.com/go-openapi/swag"
 	apierrors "github.com/latitudesh/lsh/internal/api/errors"
 )
 
-func RenderErrorOutput(respErr error) error {
-	switch e := respErr.(type) {
-	case *BadRequest:
-		parseBadRequestError(e)
-	case *Unauthorized:
-		parseUnauthorizedError(e)
-	case *Forbidden:
-		parseForbiddenError(e)
-	case *NotFound:
-		parseNotFoundError(e)
-	case *NotAcceptable:
-		parseNotAcceptableError(e)
-	case *UnprocessableEntity:
-		parseUnprocessableEntityError(e)
-	default:
-		return errors.New("An unknown error occurred.")
-	}
-
-	return nil
-}
-
-func parseUnprocessableEntityError(respErr *UnprocessableEntity) error {
+func PrintUnprocessableEntityError(respErr *apierrors.UnprocessableEntity) error {
 	if swag.IsZero(respErr) || swag.IsZero(respErr.Payload) {
 		return nil
 	}
@@ -38,7 +16,7 @@ func parseUnprocessableEntityError(respErr *UnprocessableEntity) error {
 
 	for _, err := range respErr.GetPayload().Errors {
 		if err.Meta.Attribute == "" {
-			renderGenericError(&err)
+			printGenericError(&err)
 		} else {
 			fmt.Printf("     • '%s' %s\n", err.Meta.Attribute, err.Meta.Message)
 		}
@@ -49,7 +27,7 @@ func parseUnprocessableEntityError(respErr *UnprocessableEntity) error {
 	return nil
 }
 
-func parseNotFoundError(respErr *NotFound) error {
+func PrintNotFoundError(respErr *apierrors.NotFound) error {
 	if swag.IsZero(respErr) || swag.IsZero(respErr.Payload) {
 		return nil
 	}
@@ -63,7 +41,7 @@ func parseNotFoundError(respErr *NotFound) error {
 	return nil
 }
 
-func parseForbiddenError(respErr *Forbidden) error {
+func PrintForbiddenError(respErr *apierrors.Forbidden) error {
 	if swag.IsZero(respErr) || swag.IsZero(respErr.Payload) {
 		return nil
 	}
@@ -77,27 +55,27 @@ func parseForbiddenError(respErr *Forbidden) error {
 	return nil
 }
 
-func parseBadRequestError(respErr *BadRequest) error {
+func PrintBadRequestError(respErr *apierrors.BadRequest) error {
 	if swag.IsZero(respErr) || swag.IsZero(respErr.Payload) {
 		return nil
 	}
 
-	renderGenericError(&respErr.Payload.Errors[0])
+	printGenericError(&respErr.Payload.Errors[0])
 
 	return nil
 }
 
-func parseNotAcceptableError(respErr *NotAcceptable) error {
+func PrintNotAcceptableError(respErr *apierrors.NotAcceptable) error {
 	if swag.IsZero(respErr) || swag.IsZero(respErr.Payload) {
 		return nil
 	}
 
-	renderGenericError(&respErr.Payload.Errors[0])
+	printGenericError(&respErr.Payload.Errors[0])
 
 	return nil
 }
 
-func parseUnauthorizedError(respErr *Unauthorized) error {
+func PrintUnauthorizedError(respErr *apierrors.Unauthorized) error {
 	if swag.IsZero(respErr) || swag.IsZero(respErr.Payload) {
 		return nil
 	}
@@ -109,7 +87,7 @@ func parseUnauthorizedError(respErr *Unauthorized) error {
 	return nil
 }
 
-func renderGenericError(respErr *apierrors.ErrorDetail) {
+func printGenericError(respErr *apierrors.ErrorDetail) {
 	fmt.Printf("\n %s: \n", respErr.Title)
 	fmt.Printf("     • %s\n", respErr.Detail)
 	fmt.Printf("\n")

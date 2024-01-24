@@ -10,7 +10,6 @@ import (
 	"fmt"
 
 	"github.com/latitudesh/lsh/client/ssh_keys"
-	"github.com/latitudesh/lsh/internal/api"
 	"github.com/latitudesh/lsh/internal/utils"
 
 	"github.com/go-openapi/swag"
@@ -54,7 +53,7 @@ func runOperationSSHKeysGetProjectSSHKeys(cmd *cobra.Command, args []string) err
 
 	result, err := appCli.SSHKeys.GetProjectSSHKeys(params, nil)
 	if err != nil {
-		api.RenderErrorOutput(err)
+		utils.PrintError(err)
 		return nil
 	}
 
@@ -64,7 +63,7 @@ func runOperationSSHKeysGetProjectSSHKeys(cmd *cobra.Command, args []string) err
 	}
 	if !debug {
 
-		utils.PrintOutput(msgStr)
+		utils.PrintResult(msgStr)
 	}
 	return nil
 }

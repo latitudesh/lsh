@@ -10,7 +10,6 @@ import (
 	"fmt"
 
 	"github.com/latitudesh/lsh/client/projects"
-	"github.com/latitudesh/lsh/internal/api"
 	"github.com/latitudesh/lsh/internal/utils"
 	"github.com/latitudesh/lsh/models"
 
@@ -55,7 +54,7 @@ func runOperationProjectsCreateProject(cmd *cobra.Command, args []string) error 
 
 	result, err := appCli.Projects.CreateProject(params, nil)
 	if err != nil {
-		api.RenderErrorOutput(err)
+		utils.PrintError(err)
 		return nil
 	}
 
@@ -64,7 +63,7 @@ func runOperationProjectsCreateProject(cmd *cobra.Command, args []string) error 
 		return err
 	}
 	if !debug {
-		utils.PrintOutput(msgStr)
+		utils.PrintResult(msgStr)
 	}
 	return nil
 }

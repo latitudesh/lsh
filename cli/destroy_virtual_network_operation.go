@@ -9,7 +9,6 @@ import (
 	"fmt"
 
 	"github.com/latitudesh/lsh/client/virtual_networks"
-	"github.com/latitudesh/lsh/internal/api"
 	"github.com/latitudesh/lsh/internal/utils"
 
 	"github.com/spf13/cobra"
@@ -52,7 +51,7 @@ func runOperationVirtualNetworksDestroyVirtualNetwork(cmd *cobra.Command, args [
 
 	result, err := appCli.VirtualNetworks.DestroyVirtualNetwork(params, nil)
 	if err != nil {
-		api.RenderErrorOutput(err)
+		utils.PrintError(err)
 		return nil
 	}
 
@@ -62,7 +61,7 @@ func runOperationVirtualNetworksDestroyVirtualNetwork(cmd *cobra.Command, args [
 	}
 	if !debug {
 
-		utils.PrintOutput(msgStr)
+		utils.PrintResult(msgStr)
 	}
 	return nil
 }

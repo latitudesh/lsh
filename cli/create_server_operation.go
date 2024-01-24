@@ -10,7 +10,6 @@ import (
 	"fmt"
 
 	"github.com/latitudesh/lsh/client/servers"
-	"github.com/latitudesh/lsh/internal/api"
 	"github.com/latitudesh/lsh/internal/utils"
 
 	"github.com/go-openapi/swag"
@@ -54,7 +53,7 @@ func runOperationServersCreateServer(cmd *cobra.Command, args []string) error {
 
 	result, err := appCli.Servers.CreateServer(params, nil)
 	if err != nil {
-		api.RenderErrorOutput(err)
+		utils.PrintError(err)
 		return nil
 	}
 
@@ -64,7 +63,7 @@ func runOperationServersCreateServer(cmd *cobra.Command, args []string) error {
 	}
 	if !debug {
 
-		utils.PrintOutput(msgStr)
+		utils.PrintResult(msgStr)
 	}
 	return nil
 }

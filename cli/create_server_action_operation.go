@@ -10,7 +10,6 @@ import (
 	"fmt"
 
 	"github.com/latitudesh/lsh/client/power_actions"
-	"github.com/latitudesh/lsh/internal/api"
 	"github.com/latitudesh/lsh/internal/utils"
 
 	"github.com/go-openapi/swag"
@@ -61,7 +60,7 @@ func runOperationPowerActionsCreateServerAction(cmd *cobra.Command, args []strin
 
 	result, err := appCli.PowerActions.CreateServerAction(params, nil)
 	if err != nil {
-		api.RenderErrorOutput(err)
+		utils.PrintError(err)
 		return nil
 	}
 
@@ -71,7 +70,7 @@ func runOperationPowerActionsCreateServerAction(cmd *cobra.Command, args []strin
 	}
 	if !debug {
 
-		utils.PrintOutput(msgStr)
+		utils.PrintResult(msgStr)
 	}
 	return nil
 }

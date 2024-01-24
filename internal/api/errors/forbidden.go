@@ -1,4 +1,4 @@
-package api
+package apierrors
 
 import (
 	"fmt"
@@ -6,7 +6,6 @@ import (
 
 	"github.com/go-openapi/runtime"
 	"github.com/go-openapi/strfmt"
-	apierrors "github.com/latitudesh/lsh/internal/api/errors"
 )
 
 func NewForbidden() *Forbidden {
@@ -14,7 +13,7 @@ func NewForbidden() *Forbidden {
 }
 
 type Forbidden struct {
-	Payload *apierrors.ErrorResponse
+	Payload *ErrorResponse
 }
 
 func (o *Forbidden) IsSuccess() bool {
@@ -49,13 +48,13 @@ func (o *Forbidden) String() string {
 	return fmt.Sprintf("[%d] Forbidden  %+v", 403, o.Payload)
 }
 
-func (o *Forbidden) GetPayload() *apierrors.ErrorResponse {
+func (o *Forbidden) GetPayload() *ErrorResponse {
 	return o.Payload
 }
 
 func (o *Forbidden) ReadResponse(response runtime.ClientResponse, consumer runtime.Consumer, formats strfmt.Registry) error {
 
-	o.Payload = new(apierrors.ErrorResponse)
+	o.Payload = new(ErrorResponse)
 
 	// response payload
 	if err := consumer.Consume(response.Body(), o.Payload); err != nil && err != io.EOF {

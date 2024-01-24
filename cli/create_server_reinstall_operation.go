@@ -10,7 +10,6 @@ import (
 	"fmt"
 
 	"github.com/latitudesh/lsh/client/server_reinstall"
-	"github.com/latitudesh/lsh/internal/api"
 	"github.com/latitudesh/lsh/internal/utils"
 
 	"github.com/go-openapi/swag"
@@ -57,7 +56,7 @@ func runOperationServerReinstallCreateServerReinstall(cmd *cobra.Command, args [
 
 	result, err := appCli.ServerReinstall.CreateServerReinstall(params, nil)
 	if err != nil {
-		api.RenderErrorOutput(err)
+		utils.PrintError(err)
 		return nil
 	}
 
@@ -67,7 +66,7 @@ func runOperationServerReinstallCreateServerReinstall(cmd *cobra.Command, args [
 	}
 	if !debug {
 
-		utils.PrintOutput(msgStr)
+		utils.PrintResult(msgStr)
 	}
 	return nil
 }

@@ -10,7 +10,6 @@ import (
 	"fmt"
 
 	"github.com/latitudesh/lsh/client/plans"
-	"github.com/latitudesh/lsh/internal/api"
 	"github.com/latitudesh/lsh/internal/utils"
 
 	"github.com/go-openapi/swag"
@@ -75,7 +74,7 @@ func runOperationPlansGetPlans(cmd *cobra.Command, args []string) error {
 
 	result, err := appCli.Plans.GetPlans(params, nil)
 	if err != nil {
-		api.RenderErrorOutput(err)
+		utils.PrintError(err)
 		return nil
 	}
 
@@ -84,7 +83,7 @@ func runOperationPlansGetPlans(cmd *cobra.Command, args []string) error {
 		return err
 	}
 	if !debug {
-		utils.PrintOutput(msgStr)
+		utils.PrintResult(msgStr)
 	}
 	return nil
 }

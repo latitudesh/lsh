@@ -1,4 +1,4 @@
-package api
+package apierrors
 
 import (
 	"fmt"
@@ -6,7 +6,6 @@ import (
 
 	"github.com/go-openapi/runtime"
 	"github.com/go-openapi/strfmt"
-	apierrors "github.com/latitudesh/lsh/internal/api/errors"
 )
 
 func NewUnprocessableEntity() *UnprocessableEntity {
@@ -14,7 +13,7 @@ func NewUnprocessableEntity() *UnprocessableEntity {
 }
 
 type UnprocessableEntity struct {
-	Payload *apierrors.ErrorResponse
+	Payload *ErrorResponse
 }
 
 func (o *UnprocessableEntity) IsSuccess() bool {
@@ -49,13 +48,13 @@ func (o *UnprocessableEntity) String() string {
 	return fmt.Sprintf("[%d] UnprocessableEntity  %+v", 422, o.Payload)
 }
 
-func (o *UnprocessableEntity) GetPayload() *apierrors.ErrorResponse {
+func (o *UnprocessableEntity) GetPayload() *ErrorResponse {
 	return o.Payload
 }
 
 func (o *UnprocessableEntity) ReadResponse(response runtime.ClientResponse, consumer runtime.Consumer, formats strfmt.Registry) error {
 
-	o.Payload = new(apierrors.ErrorResponse)
+	o.Payload = new(ErrorResponse)
 
 	// response payload
 	if err := consumer.Consume(response.Body(), o.Payload); err != nil && err != io.EOF {

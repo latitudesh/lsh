@@ -9,7 +9,6 @@ import (
 	"fmt"
 
 	"github.com/latitudesh/lsh/client/api_keys"
-	"github.com/latitudesh/lsh/internal/api"
 	"github.com/latitudesh/lsh/internal/utils"
 
 	"github.com/spf13/cobra"
@@ -52,7 +51,7 @@ func runOperationAPIKeysDeleteAPIKey(cmd *cobra.Command, args []string) error {
 
 	result, err := appCli.APIKeys.DeleteAPIKey(params, nil)
 	if err != nil {
-		api.RenderErrorOutput(err)
+		utils.PrintError(err)
 		return nil
 	}
 
@@ -62,7 +61,7 @@ func runOperationAPIKeysDeleteAPIKey(cmd *cobra.Command, args []string) error {
 	}
 
 	if !debug {
-		utils.PrintOutput(msgStr)
+		utils.PrintResult(msgStr)
 	}
 	return nil
 }

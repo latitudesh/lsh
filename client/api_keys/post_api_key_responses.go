@@ -15,7 +15,7 @@ import (
 	"github.com/go-openapi/strfmt"
 	"github.com/go-openapi/swag"
 
-	"github.com/latitudesh/lsh/internal/api"
+	apierrors "github.com/latitudesh/lsh/internal/api/errors"
 	"github.com/latitudesh/lsh/models"
 )
 
@@ -34,19 +34,19 @@ func (o *PostAPIKeyReader) ReadResponse(response runtime.ClientResponse, consume
 		}
 		return result, nil
 	case 400:
-		result := api.NewBadRequest()
+		result := apierrors.NewBadRequest()
 		if err := result.ReadResponse(response, consumer, o.formats); err != nil {
 			return nil, err
 		}
 		return nil, result
 	case 401:
-		result := api.NewUnauthorized()
+		result := apierrors.NewUnauthorized()
 		if err := result.ReadResponse(response, consumer, o.formats); err != nil {
 			return nil, err
 		}
 		return nil, result
 	case 422:
-		result := api.NewUnprocessableEntity()
+		result := apierrors.NewUnprocessableEntity()
 		if err := result.ReadResponse(response, consumer, o.formats); err != nil {
 			return nil, err
 		}
