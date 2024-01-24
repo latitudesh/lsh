@@ -57,7 +57,14 @@ func PrintOutput(jsonData string) {
 		// Format and display the errors
 		printError(errorResponse.Errors)
 	} else {
-		fmt.Println(PrettifyJson(jsonData))
+		prettyJSON, err := PrettifyJson(jsonData)
+
+		if err != nil {
+			fmt.Println("Error when parsing the response data")
+			return
+		}
+
+		fmt.Println(prettyJSON)
 	}
 }
 
