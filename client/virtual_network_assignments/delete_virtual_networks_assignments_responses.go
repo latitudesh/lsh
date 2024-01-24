@@ -11,7 +11,7 @@ import (
 	"github.com/go-openapi/runtime"
 	"github.com/go-openapi/strfmt"
 
-	"github.com/latitudesh/cli/internal/api"
+	"github.com/latitudesh/lsh/internal/api"
 )
 
 // DeleteVirtualNetworksAssignmentsReader is a Reader for the DeleteVirtualNetworksAssignments structure.

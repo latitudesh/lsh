@@ -5,7 +5,7 @@ import (
 	"fmt"
 
 	"github.com/go-openapi/swag"
-	apierrors "github.com/latitudesh/cli/internal/api/errors"
+	apierrors "github.com/latitudesh/lsh/internal/api/errors"
 )
 
 func RenderErrorOutput(respErr error) error {

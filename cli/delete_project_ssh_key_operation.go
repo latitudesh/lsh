@@ -8,9 +8,9 @@ package cli
 import (
 	"fmt"
 
-	"github.com/latitudesh/cli/client/ssh_keys"
-	"github.com/latitudesh/cli/internal/api"
-	"github.com/latitudesh/cli/internal/utils"
+	"github.com/latitudesh/lsh/client/ssh_keys"
+	"github.com/latitudesh/lsh/internal/api"
+	"github.com/latitudesh/lsh/internal/utils"
 
 	"github.com/spf13/cobra"
 )
