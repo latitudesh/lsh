@@ -25,6 +25,11 @@ import (
 func NewCreateProjectParams() *CreateProjectParams {
 	return &CreateProjectParams{
 		timeout: cr.DefaultTimeout,
+		Body: CreateProjectBody{
+			Data: &CreateProjectParamsBodyData{
+				Type: &projectType,
+			},
+		},
 	}
 }
 
@@ -64,7 +69,6 @@ type CreateProjectParams struct {
 	// APIVersion.
 	//
 	// Default: "2023-06-01"
-	APIVersion *string
 
 	// Body.
 	Body CreateProjectBody
@@ -86,13 +90,8 @@ func (o *CreateProjectParams) WithDefaults() *CreateProjectParams {
 //
 // All values with no default are reset to their zero value.
 func (o *CreateProjectParams) SetDefaults() {
-	var (
-		aPIVersionDefault = string("2023-06-01")
-	)
 
-	val := CreateProjectParams{
-		APIVersion: &aPIVersionDefault,
-	}
+	val := CreateProjectParams{}
 
 	val.timeout = o.timeout
 	val.Context = o.Context
@@ -133,17 +132,6 @@ func (o *CreateProjectParams) SetHTTPClient(client *http.Client) {
 	o.HTTPClient = client
 }
 
-// WithAPIVersion adds the aPIVersion to the create project params
-func (o *CreateProjectParams) WithAPIVersion(aPIVersion *string) *CreateProjectParams {
-	o.SetAPIVersion(aPIVersion)
-	return o
-}
-
-// SetAPIVersion adds the apiVersion to the create project params
-func (o *CreateProjectParams) SetAPIVersion(aPIVersion *string) {
-	o.APIVersion = aPIVersion
-}
-
 // WithBody adds the body to the create project params
 func (o *CreateProjectParams) WithBody(body CreateProjectBody) *CreateProjectParams {
 	o.SetBody(body)
@@ -163,13 +151,6 @@ func (o *CreateProjectParams) WriteToRequest(r runtime.ClientRequest, reg strfmt
 	}
 	var res []error
 
-	if o.APIVersion != nil {
-
-		// header param API-Version
-		if err := r.SetHeaderParam("API-Version", *o.APIVersion); err != nil {
-			return err
-		}
-	}
 	if err := r.SetBodyParam(o.Body); err != nil {
 		return err
 	}
