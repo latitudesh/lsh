@@ -66,10 +66,6 @@ CreateProjectParams contains all the parameters to send to the API endpoint
 */
 type CreateProjectParams struct {
 
-	// APIVersion.
-	//
-	// Default: "2023-06-01"
-
 	// Body.
 	Body CreateProjectBody
 
