@@ -61,11 +61,6 @@ GetPlanParams contains all the parameters to send to the API endpoint
 */
 type GetPlanParams struct {
 
-	// APIVersion.
-	//
-	// Default: "2023-06-01"
-	APIVersion *string
-
 	// PlanID.
 	PlanID string
 
@@ -86,13 +81,7 @@ func (o *GetPlanParams) WithDefaults() *GetPlanParams {
 //
 // All values with no default are reset to their zero value.
 func (o *GetPlanParams) SetDefaults() {
-	var (
-		aPIVersionDefault = string("2023-06-01")
-	)
-
-	val := GetPlanParams{
-		APIVersion: &aPIVersionDefault,
-	}
+	val := GetPlanParams{}
 
 	val.timeout = o.timeout
 	val.Context = o.Context
@@ -133,17 +122,6 @@ func (o *GetPlanParams) SetHTTPClient(client *http.Client) {
 	o.HTTPClient = client
 }
 
-// WithAPIVersion adds the aPIVersion to the get plan params
-func (o *GetPlanParams) WithAPIVersion(aPIVersion *string) *GetPlanParams {
-	o.SetAPIVersion(aPIVersion)
-	return o
-}
-
-// SetAPIVersion adds the apiVersion to the get plan params
-func (o *GetPlanParams) SetAPIVersion(aPIVersion *string) {
-	o.APIVersion = aPIVersion
-}
-
 // WithPlanID adds the planID to the get plan params
 func (o *GetPlanParams) WithPlanID(planID string) *GetPlanParams {
 	o.SetPlanID(planID)
@@ -162,14 +140,6 @@ func (o *GetPlanParams) WriteToRequest(r runtime.ClientRequest, reg strfmt.Regis
 		return err
 	}
 	var res []error
-
-	if o.APIVersion != nil {
-
-		// header param API-Version
-		if err := r.SetHeaderParam("API-Version", *o.APIVersion); err != nil {
-			return err
-		}
-	}
 
 	// path param plan_id
 	if err := r.SetPathParam("plan_id", o.PlanID); err != nil {

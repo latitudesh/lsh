@@ -61,11 +61,6 @@ GetBandwidthPlansParams contains all the parameters to send to the API endpoint
 */
 type GetBandwidthPlansParams struct {
 
-	// APIVersion.
-	//
-	// Default: "2023-06-01"
-	APIVersion *string
-
 	/* FilterID.
 
 	   The plan ID to filter by
@@ -89,13 +84,7 @@ func (o *GetBandwidthPlansParams) WithDefaults() *GetBandwidthPlansParams {
 //
 // All values with no default are reset to their zero value.
 func (o *GetBandwidthPlansParams) SetDefaults() {
-	var (
-		aPIVersionDefault = string("2023-06-01")
-	)
-
-	val := GetBandwidthPlansParams{
-		APIVersion: &aPIVersionDefault,
-	}
+	val := GetBandwidthPlansParams{}
 
 	val.timeout = o.timeout
 	val.Context = o.Context
@@ -136,17 +125,6 @@ func (o *GetBandwidthPlansParams) SetHTTPClient(client *http.Client) {
 	o.HTTPClient = client
 }
 
-// WithAPIVersion adds the aPIVersion to the get bandwidth plans params
-func (o *GetBandwidthPlansParams) WithAPIVersion(aPIVersion *string) *GetBandwidthPlansParams {
-	o.SetAPIVersion(aPIVersion)
-	return o
-}
-
-// SetAPIVersion adds the apiVersion to the get bandwidth plans params
-func (o *GetBandwidthPlansParams) SetAPIVersion(aPIVersion *string) {
-	o.APIVersion = aPIVersion
-}
-
 // WithFilterID adds the filterID to the get bandwidth plans params
 func (o *GetBandwidthPlansParams) WithFilterID(filterID *string) *GetBandwidthPlansParams {
 	o.SetFilterID(filterID)
@@ -165,14 +143,6 @@ func (o *GetBandwidthPlansParams) WriteToRequest(r runtime.ClientRequest, reg st
 		return err
 	}
 	var res []error
-
-	if o.APIVersion != nil {
-
-		// header param API-Version
-		if err := r.SetHeaderParam("API-Version", *o.APIVersion); err != nil {
-			return err
-		}
-	}
 
 	if o.FilterID != nil {
 
