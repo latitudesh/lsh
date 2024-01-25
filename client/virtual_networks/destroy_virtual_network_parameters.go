@@ -61,12 +61,6 @@ DestroyVirtualNetworkParams contains all the parameters to send to the API endpo
 	Typically these are written to a http.Request.
 */
 type DestroyVirtualNetworkParams struct {
-
-	// APIVersion.
-	//
-	// Default: "2023-06-01"
-	APIVersion *string
-
 	/* ID.
 
 	   The virtual network ID
@@ -90,13 +84,7 @@ func (o *DestroyVirtualNetworkParams) WithDefaults() *DestroyVirtualNetworkParam
 //
 // All values with no default are reset to their zero value.
 func (o *DestroyVirtualNetworkParams) SetDefaults() {
-	var (
-		aPIVersionDefault = string("2023-06-01")
-	)
-
-	val := DestroyVirtualNetworkParams{
-		APIVersion: &aPIVersionDefault,
-	}
+	val := DestroyVirtualNetworkParams{}
 
 	val.timeout = o.timeout
 	val.Context = o.Context
@@ -137,17 +125,6 @@ func (o *DestroyVirtualNetworkParams) SetHTTPClient(client *http.Client) {
 	o.HTTPClient = client
 }
 
-// WithAPIVersion adds the aPIVersion to the destroy virtual network params
-func (o *DestroyVirtualNetworkParams) WithAPIVersion(aPIVersion *string) *DestroyVirtualNetworkParams {
-	o.SetAPIVersion(aPIVersion)
-	return o
-}
-
-// SetAPIVersion adds the apiVersion to the destroy virtual network params
-func (o *DestroyVirtualNetworkParams) SetAPIVersion(aPIVersion *string) {
-	o.APIVersion = aPIVersion
-}
-
 // WithID adds the id to the destroy virtual network params
 func (o *DestroyVirtualNetworkParams) WithID(id int64) *DestroyVirtualNetworkParams {
 	o.SetID(id)
@@ -166,14 +143,6 @@ func (o *DestroyVirtualNetworkParams) WriteToRequest(r runtime.ClientRequest, re
 		return err
 	}
 	var res []error
-
-	if o.APIVersion != nil {
-
-		// header param API-Version
-		if err := r.SetHeaderParam("API-Version", *o.APIVersion); err != nil {
-			return err
-		}
-	}
 
 	// path param id
 	if err := r.SetPathParam("id", swag.FormatInt64(o.ID)); err != nil {

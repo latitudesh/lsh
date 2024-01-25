@@ -60,12 +60,6 @@ GetVirtualNetworkParams contains all the parameters to send to the API endpoint
 	Typically these are written to a http.Request.
 */
 type GetVirtualNetworkParams struct {
-
-	// APIVersion.
-	//
-	// Default: "2023-06-01"
-	APIVersion *string
-
 	// ID.
 	ID string
 
@@ -86,13 +80,7 @@ func (o *GetVirtualNetworkParams) WithDefaults() *GetVirtualNetworkParams {
 //
 // All values with no default are reset to their zero value.
 func (o *GetVirtualNetworkParams) SetDefaults() {
-	var (
-		aPIVersionDefault = string("2023-06-01")
-	)
-
-	val := GetVirtualNetworkParams{
-		APIVersion: &aPIVersionDefault,
-	}
+	val := GetVirtualNetworkParams{}
 
 	val.timeout = o.timeout
 	val.Context = o.Context
@@ -133,17 +121,6 @@ func (o *GetVirtualNetworkParams) SetHTTPClient(client *http.Client) {
 	o.HTTPClient = client
 }
 
-// WithAPIVersion adds the aPIVersion to the get virtual network params
-func (o *GetVirtualNetworkParams) WithAPIVersion(aPIVersion *string) *GetVirtualNetworkParams {
-	o.SetAPIVersion(aPIVersion)
-	return o
-}
-
-// SetAPIVersion adds the apiVersion to the get virtual network params
-func (o *GetVirtualNetworkParams) SetAPIVersion(aPIVersion *string) {
-	o.APIVersion = aPIVersion
-}
-
 // WithID adds the id to the get virtual network params
 func (o *GetVirtualNetworkParams) WithID(id string) *GetVirtualNetworkParams {
 	o.SetID(id)
@@ -162,14 +139,6 @@ func (o *GetVirtualNetworkParams) WriteToRequest(r runtime.ClientRequest, reg st
 		return err
 	}
 	var res []error
-
-	if o.APIVersion != nil {
-
-		// header param API-Version
-		if err := r.SetHeaderParam("API-Version", *o.APIVersion); err != nil {
-			return err
-		}
-	}
 
 	// path param id
 	if err := r.SetPathParam("id", o.ID); err != nil {

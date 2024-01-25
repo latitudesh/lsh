@@ -25,6 +25,11 @@ import (
 func NewCreateVirtualNetworkParams() *CreateVirtualNetworkParams {
 	return &CreateVirtualNetworkParams{
 		timeout: cr.DefaultTimeout,
+		Body: CreateVirtualNetworkBody{
+			Data: &CreateVirtualNetworkParamsBodyData{
+				Type: &virtualNetworkType,
+			},
+		},
 	}
 }
 
@@ -61,11 +66,6 @@ CreateVirtualNetworkParams contains all the parameters to send to the API endpoi
 */
 type CreateVirtualNetworkParams struct {
 
-	// APIVersion.
-	//
-	// Default: "2023-06-01"
-	APIVersion *string
-
 	// Body.
 	Body CreateVirtualNetworkBody
 
@@ -86,13 +86,7 @@ func (o *CreateVirtualNetworkParams) WithDefaults() *CreateVirtualNetworkParams 
 //
 // All values with no default are reset to their zero value.
 func (o *CreateVirtualNetworkParams) SetDefaults() {
-	var (
-		aPIVersionDefault = string("2023-06-01")
-	)
-
-	val := CreateVirtualNetworkParams{
-		APIVersion: &aPIVersionDefault,
-	}
+	val := CreateVirtualNetworkParams{}
 
 	val.timeout = o.timeout
 	val.Context = o.Context
@@ -133,17 +127,6 @@ func (o *CreateVirtualNetworkParams) SetHTTPClient(client *http.Client) {
 	o.HTTPClient = client
 }
 
-// WithAPIVersion adds the aPIVersion to the create virtual network params
-func (o *CreateVirtualNetworkParams) WithAPIVersion(aPIVersion *string) *CreateVirtualNetworkParams {
-	o.SetAPIVersion(aPIVersion)
-	return o
-}
-
-// SetAPIVersion adds the apiVersion to the create virtual network params
-func (o *CreateVirtualNetworkParams) SetAPIVersion(aPIVersion *string) {
-	o.APIVersion = aPIVersion
-}
-
 // WithBody adds the body to the create virtual network params
 func (o *CreateVirtualNetworkParams) WithBody(body CreateVirtualNetworkBody) *CreateVirtualNetworkParams {
 	o.SetBody(body)
@@ -163,13 +146,6 @@ func (o *CreateVirtualNetworkParams) WriteToRequest(r runtime.ClientRequest, reg
 	}
 	var res []error
 
-	if o.APIVersion != nil {
-
-		// header param API-Version
-		if err := r.SetHeaderParam("API-Version", *o.APIVersion); err != nil {
-			return err
-		}
-	}
 	if err := r.SetBodyParam(o.Body); err != nil {
 		return err
 	}
