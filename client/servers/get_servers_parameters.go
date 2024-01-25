@@ -62,11 +62,6 @@ GetServersParams contains all the parameters to send to the API endpoint
 */
 type GetServersParams struct {
 
-	// APIVersion.
-	//
-	// Default: "2023-06-01"
-	APIVersion *string
-
 	/* ExtraFieldsServers.
 
 	   The `credentials` are provided as extra attributes that is lazy loaded. To request it, just set `extra_fields[servers]=credentials` in the query string.
@@ -177,13 +172,7 @@ func (o *GetServersParams) WithDefaults() *GetServersParams {
 //
 // All values with no default are reset to their zero value.
 func (o *GetServersParams) SetDefaults() {
-	var (
-		aPIVersionDefault = string("2023-06-01")
-	)
-
-	val := GetServersParams{
-		APIVersion: &aPIVersionDefault,
-	}
+	val := GetServersParams{}
 
 	val.timeout = o.timeout
 	val.Context = o.Context
@@ -222,17 +211,6 @@ func (o *GetServersParams) WithHTTPClient(client *http.Client) *GetServersParams
 // SetHTTPClient adds the HTTPClient to the get servers params
 func (o *GetServersParams) SetHTTPClient(client *http.Client) {
 	o.HTTPClient = client
-}
-
-// WithAPIVersion adds the aPIVersion to the get servers params
-func (o *GetServersParams) WithAPIVersion(aPIVersion *string) *GetServersParams {
-	o.SetAPIVersion(aPIVersion)
-	return o
-}
-
-// SetAPIVersion adds the apiVersion to the get servers params
-func (o *GetServersParams) SetAPIVersion(aPIVersion *string) {
-	o.APIVersion = aPIVersion
 }
 
 // WithExtraFieldsServers adds the extraFieldsServers to the get servers params
@@ -407,14 +385,6 @@ func (o *GetServersParams) WriteToRequest(r runtime.ClientRequest, reg strfmt.Re
 		return err
 	}
 	var res []error
-
-	if o.APIVersion != nil {
-
-		// header param API-Version
-		if err := r.SetHeaderParam("API-Version", *o.APIVersion); err != nil {
-			return err
-		}
-	}
 
 	if o.ExtraFieldsServers != nil {
 
