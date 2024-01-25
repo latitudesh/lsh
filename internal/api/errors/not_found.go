@@ -13,7 +13,7 @@ func NewNotFound() *NotFound {
 }
 
 type NotFound struct {
-	Payload *ErrorResponse
+	Payload *ErrorPayload
 }
 
 func (o *NotFound) IsSuccess() bool {
@@ -48,13 +48,13 @@ func (o *NotFound) String() string {
 	return fmt.Sprintf("[%d] NotFound  %+v", 404, o.Payload)
 }
 
-func (o *NotFound) GetPayload() *ErrorResponse {
+func (o *NotFound) GetPayload() *ErrorPayload {
 	return o.Payload
 }
 
 func (o *NotFound) ReadResponse(response runtime.ClientResponse, consumer runtime.Consumer, formats strfmt.Registry) error {
 
-	o.Payload = new(ErrorResponse)
+	o.Payload = new(ErrorPayload)
 
 	// response payload
 	if err := consumer.Consume(response.Body(), o.Payload); err != nil && err != io.EOF {

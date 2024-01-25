@@ -13,7 +13,7 @@ func NewForbidden() *Forbidden {
 }
 
 type Forbidden struct {
-	Payload *ErrorResponse
+	Payload *ErrorPayload
 }
 
 func (o *Forbidden) IsSuccess() bool {
@@ -48,13 +48,13 @@ func (o *Forbidden) String() string {
 	return fmt.Sprintf("[%d] Forbidden  %+v", 403, o.Payload)
 }
 
-func (o *Forbidden) GetPayload() *ErrorResponse {
+func (o *Forbidden) GetPayload() *ErrorPayload {
 	return o.Payload
 }
 
 func (o *Forbidden) ReadResponse(response runtime.ClientResponse, consumer runtime.Consumer, formats strfmt.Registry) error {
 
-	o.Payload = new(ErrorResponse)
+	o.Payload = new(ErrorPayload)
 
 	// response payload
 	if err := consumer.Consume(response.Body(), o.Payload); err != nil && err != io.EOF {

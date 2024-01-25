@@ -13,7 +13,7 @@ func NewUnauthorized() *Unauthorized {
 }
 
 type Unauthorized struct {
-	Payload *ErrorResponse
+	Payload *ErrorPayload
 }
 
 func (o *Unauthorized) IsSuccess() bool {
@@ -48,13 +48,13 @@ func (o *Unauthorized) String() string {
 	return fmt.Sprintf("[%d] Unauthorized  %+v", 401, o.Payload)
 }
 
-func (o *Unauthorized) GetPayload() *ErrorResponse {
+func (o *Unauthorized) GetPayload() *ErrorPayload {
 	return o.Payload
 }
 
 func (o *Unauthorized) ReadResponse(response runtime.ClientResponse, consumer runtime.Consumer, formats strfmt.Registry) error {
 
-	o.Payload = new(ErrorResponse)
+	o.Payload = new(ErrorPayload)
 
 	// response payload
 	if err := consumer.Consume(response.Body(), o.Payload); err != nil && err != io.EOF {

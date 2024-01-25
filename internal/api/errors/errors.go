@@ -1,6 +1,6 @@
 package apierrors
 
-type ErrorResponse struct {
+type ErrorPayload struct {
 	Errors []ErrorDetail `json:"errors"`
 }
 

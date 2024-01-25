@@ -13,7 +13,7 @@ func NewNotAcceptable() *NotAcceptable {
 }
 
 type NotAcceptable struct {
-	Payload *ErrorResponse
+	Payload *ErrorPayload
 }
 
 func (o *NotAcceptable) IsSuccess() bool {
@@ -48,13 +48,13 @@ func (o *NotAcceptable) String() string {
 	return fmt.Sprintf("[%d] NotAcceptable  %+v", 406, o.Payload)
 }
 
-func (o *NotAcceptable) GetPayload() *ErrorResponse {
+func (o *NotAcceptable) GetPayload() *ErrorPayload {
 	return o.Payload
 }
 
 func (o *NotAcceptable) ReadResponse(response runtime.ClientResponse, consumer runtime.Consumer, formats strfmt.Registry) error {
 
-	o.Payload = new(ErrorResponse)
+	o.Payload = new(ErrorPayload)
 
 	// response payload
 	if err := consumer.Consume(response.Body(), o.Payload); err != nil && err != io.EOF {

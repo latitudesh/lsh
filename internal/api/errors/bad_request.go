@@ -13,7 +13,7 @@ func NewBadRequest() *BadRequest {
 }
 
 type BadRequest struct {
-	Payload *ErrorResponse
+	Payload *ErrorPayload
 }
 
 func (o *BadRequest) IsSuccess() bool {
@@ -48,13 +48,13 @@ func (o *BadRequest) String() string {
 	return fmt.Sprintf("[%d] BadRequest  %+v", 400, o.Payload)
 }
 
-func (o *BadRequest) GetPayload() *ErrorResponse {
+func (o *BadRequest) GetPayload() *ErrorPayload {
 	return o.Payload
 }
 
 func (o *BadRequest) ReadResponse(response runtime.ClientResponse, consumer runtime.Consumer, formats strfmt.Registry) error {
 
-	o.Payload = new(ErrorResponse)
+	o.Payload = new(ErrorPayload)
 
 	// response payload
 	if err := consumer.Consume(response.Body(), o.Payload); err != nil && err != io.EOF {

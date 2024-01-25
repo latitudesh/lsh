@@ -13,7 +13,7 @@ func NewUnprocessableEntity() *UnprocessableEntity {
 }
 
 type UnprocessableEntity struct {
-	Payload *ErrorResponse
+	Payload *ErrorPayload
 }
 
 func (o *UnprocessableEntity) IsSuccess() bool {
@@ -48,13 +48,13 @@ func (o *UnprocessableEntity) String() string {
 	return fmt.Sprintf("[%d] UnprocessableEntity  %+v", 422, o.Payload)
 }
 
-func (o *UnprocessableEntity) GetPayload() *ErrorResponse {
+func (o *UnprocessableEntity) GetPayload() *ErrorPayload {
 	return o.Payload
 }
 
 func (o *UnprocessableEntity) ReadResponse(response runtime.ClientResponse, consumer runtime.Consumer, formats strfmt.Registry) error {
 
-	o.Payload = new(ErrorResponse)
+	o.Payload = new(ErrorPayload)
 
 	// response payload
 	if err := consumer.Consume(response.Body(), o.Payload); err != nil && err != io.EOF {
