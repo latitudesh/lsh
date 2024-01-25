@@ -12,6 +12,8 @@ import (
 	"github.com/go-openapi/strfmt"
 )
 
+var virtualNetworkAssignmentType = "virtual_network_assignment"
+
 // New creates a new virtual network assignments API client.
 func New(transport runtime.ClientTransport, formats strfmt.Registry) ClientService {
 	return &Client{transport: transport, formats: formats}

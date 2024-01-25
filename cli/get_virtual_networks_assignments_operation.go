@@ -39,9 +39,6 @@ func runOperationVirtualNetworkAssignmentsGetVirtualNetworksAssignments(cmd *cob
 	}
 	// retrieve flag values from cmd and fill params
 	params := virtual_network_assignments.NewGetVirtualNetworksAssignmentsParams()
-	if err, _ := retrieveOperationVirtualNetworkAssignmentsGetVirtualNetworksAssignmentsAPIVersionFlag(params, "", cmd); err != nil {
-		return err
-	}
 	if err, _ := retrieveOperationVirtualNetworkAssignmentsGetVirtualNetworksAssignmentsFilterServerFlag(params, "", cmd); err != nil {
 		return err
 	}
@@ -70,9 +67,6 @@ func runOperationVirtualNetworkAssignmentsGetVirtualNetworksAssignments(cmd *cob
 
 // registerOperationVirtualNetworkAssignmentsGetVirtualNetworksAssignmentsParamFlags registers all flags needed to fill params
 func registerOperationVirtualNetworkAssignmentsGetVirtualNetworksAssignmentsParamFlags(cmd *cobra.Command) error {
-	if err := registerOperationVirtualNetworkAssignmentsGetVirtualNetworksAssignmentsAPIVersionParamFlags("", cmd); err != nil {
-		return err
-	}
 	if err := registerOperationVirtualNetworkAssignmentsGetVirtualNetworksAssignmentsFilterServerParamFlags("", cmd); err != nil {
 		return err
 	}
@@ -85,23 +79,6 @@ func registerOperationVirtualNetworkAssignmentsGetVirtualNetworksAssignmentsPara
 	return nil
 }
 
-func registerOperationVirtualNetworkAssignmentsGetVirtualNetworksAssignmentsAPIVersionParamFlags(cmdPrefix string, cmd *cobra.Command) error {
-
-	apiVersionDescription := ``
-
-	var apiVersionFlagName string
-	if cmdPrefix == "" {
-		apiVersionFlagName = "API-Version"
-	} else {
-		apiVersionFlagName = fmt.Sprintf("%v.API-Version", cmdPrefix)
-	}
-
-	var apiVersionFlagDefault string = "2023-06-01"
-
-	_ = cmd.PersistentFlags().String(apiVersionFlagName, apiVersionFlagDefault, apiVersionDescription)
-
-	return nil
-}
 func registerOperationVirtualNetworkAssignmentsGetVirtualNetworksAssignmentsFilterServerParamFlags(cmdPrefix string, cmd *cobra.Command) error {
 
 	filterServerDescription := `The server ID to filter by`
@@ -154,26 +131,6 @@ func registerOperationVirtualNetworkAssignmentsGetVirtualNetworksAssignmentsFilt
 	return nil
 }
 
-func retrieveOperationVirtualNetworkAssignmentsGetVirtualNetworksAssignmentsAPIVersionFlag(m *virtual_network_assignments.GetVirtualNetworksAssignmentsParams, cmdPrefix string, cmd *cobra.Command) (error, bool) {
-	retAdded := false
-	if cmd.Flags().Changed("API-Version") {
-
-		var apiVersionFlagName string
-		if cmdPrefix == "" {
-			apiVersionFlagName = "API-Version"
-		} else {
-			apiVersionFlagName = fmt.Sprintf("%v.API-Version", cmdPrefix)
-		}
-
-		apiVersionFlagValue, err := cmd.Flags().GetString(apiVersionFlagName)
-		if err != nil {
-			return err, false
-		}
-		m.APIVersion = &apiVersionFlagValue
-
-	}
-	return nil, retAdded
-}
 func retrieveOperationVirtualNetworkAssignmentsGetVirtualNetworksAssignmentsFilterServerFlag(m *virtual_network_assignments.GetVirtualNetworksAssignmentsParams, cmdPrefix string, cmd *cobra.Command) (error, bool) {
 	retAdded := false
 	if cmd.Flags().Changed("filter[server]") {

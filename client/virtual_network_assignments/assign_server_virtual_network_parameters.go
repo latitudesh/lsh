@@ -25,6 +25,11 @@ import (
 func NewAssignServerVirtualNetworkParams() *AssignServerVirtualNetworkParams {
 	return &AssignServerVirtualNetworkParams{
 		timeout: cr.DefaultTimeout,
+		Body: AssignServerVirtualNetworkBody{
+			Data: &AssignServerVirtualNetworkParamsBodyData{
+				Type: &virtualNetworkAssignmentType,
+			},
+		},
 	}
 }
 
@@ -61,11 +66,6 @@ AssignServerVirtualNetworkParams contains all the parameters to send to the API 
 */
 type AssignServerVirtualNetworkParams struct {
 
-	// APIVersion.
-	//
-	// Default: "2023-06-01"
-	APIVersion *string
-
 	// Body.
 	Body AssignServerVirtualNetworkBody
 
@@ -86,13 +86,7 @@ func (o *AssignServerVirtualNetworkParams) WithDefaults() *AssignServerVirtualNe
 //
 // All values with no default are reset to their zero value.
 func (o *AssignServerVirtualNetworkParams) SetDefaults() {
-	var (
-		aPIVersionDefault = string("2023-06-01")
-	)
-
-	val := AssignServerVirtualNetworkParams{
-		APIVersion: &aPIVersionDefault,
-	}
+	val := AssignServerVirtualNetworkParams{}
 
 	val.timeout = o.timeout
 	val.Context = o.Context
@@ -133,17 +127,6 @@ func (o *AssignServerVirtualNetworkParams) SetHTTPClient(client *http.Client) {
 	o.HTTPClient = client
 }
 
-// WithAPIVersion adds the aPIVersion to the assign server virtual network params
-func (o *AssignServerVirtualNetworkParams) WithAPIVersion(aPIVersion *string) *AssignServerVirtualNetworkParams {
-	o.SetAPIVersion(aPIVersion)
-	return o
-}
-
-// SetAPIVersion adds the apiVersion to the assign server virtual network params
-func (o *AssignServerVirtualNetworkParams) SetAPIVersion(aPIVersion *string) {
-	o.APIVersion = aPIVersion
-}
-
 // WithBody adds the body to the assign server virtual network params
 func (o *AssignServerVirtualNetworkParams) WithBody(body AssignServerVirtualNetworkBody) *AssignServerVirtualNetworkParams {
 	o.SetBody(body)
@@ -163,13 +146,6 @@ func (o *AssignServerVirtualNetworkParams) WriteToRequest(r runtime.ClientReques
 	}
 	var res []error
 
-	if o.APIVersion != nil {
-
-		// header param API-Version
-		if err := r.SetHeaderParam("API-Version", *o.APIVersion); err != nil {
-			return err
-		}
-	}
 	if err := r.SetBodyParam(o.Body); err != nil {
 		return err
 	}
