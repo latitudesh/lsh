@@ -42,7 +42,13 @@ func runOperationPlansGetPlans(cmd *cobra.Command, args []string) error {
 	if err, _ := retrieveOperationPlansGetPlansAPIVersionFlag(params, "", cmd); err != nil {
 		return err
 	}
-	if err, _ := retrieveOperationPlansGetPlansFilterDiskFlag(params, "", cmd); err != nil {
+	if err, _ := retrieveOperationPlansGetPlansFilterDiskEqlFlag(params, "", cmd); err != nil {
+		return err
+	}
+	if err, _ := retrieveOperationPlansGetPlansFilterDiskLteFlag(params, "", cmd); err != nil {
+		return err
+	}
+	if err, _ := retrieveOperationPlansGetPlansFilterDiskGteFlag(params, "", cmd); err != nil {
 		return err
 	}
 	if err, _ := retrieveOperationPlansGetPlansFilterGpuFlag(params, "", cmd); err != nil {
@@ -87,7 +93,13 @@ func registerOperationPlansGetPlansParamFlags(cmd *cobra.Command) error {
 	if err := registerOperationPlansGetPlansAPIVersionParamFlags("", cmd); err != nil {
 		return err
 	}
-	if err := registerOperationPlansGetPlansFilterDiskParamFlags("", cmd); err != nil {
+	if err := registerOperationPlansGetPlansFilterDiskEqlParamFlags("", cmd); err != nil {
+		return err
+	}
+	if err := registerOperationPlansGetPlansFilterDiskLteParamFlags("", cmd); err != nil {
+		return err
+	}
+	if err := registerOperationPlansGetPlansFilterDiskGteParamFlags("", cmd); err != nil {
 		return err
 	}
 	if err := registerOperationPlansGetPlansFilterGpuParamFlags("", cmd); err != nil {
@@ -131,18 +143,49 @@ func registerOperationPlansGetPlansAPIVersionParamFlags(cmdPrefix string, cmd *c
 
 	return nil
 }
-func registerOperationPlansGetPlansFilterDiskParamFlags(cmdPrefix string, cmd *cobra.Command) error {
+func registerOperationPlansGetPlansFilterDiskEqlParamFlags(cmdPrefix string, cmd *cobra.Command) error {
 
-	filterDiskDescription := `The disk size in Gigabytes to filter by, should be used with the following options:
-                              [eql] to filter for values equal to the provided value.
-                              [gte] to filter for values greater or equal to the provided value.
-                              [lte] to filter by values lower or equal to the provided value.`
+	filterDiskDescription := "Filter plans with disk size in Gigabytes equals the provided value."
 
 	var filterDiskFlagName string
 	if cmdPrefix == "" {
-		filterDiskFlagName = "disk"
+		filterDiskFlagName = "disk_eql"
 	} else {
-		filterDiskFlagName = fmt.Sprintf("%v.disk", cmdPrefix)
+		filterDiskFlagName = fmt.Sprintf("%v.disk_eql", cmdPrefix)
+	}
+
+	var filterDiskFlagDefault int64
+
+	_ = cmd.PersistentFlags().Int64(filterDiskFlagName, filterDiskFlagDefault, filterDiskDescription)
+
+	return nil
+}
+func registerOperationPlansGetPlansFilterDiskLteParamFlags(cmdPrefix string, cmd *cobra.Command) error {
+
+	filterDiskDescription := "Filter plans with disk size in Gigabytes less than or equal the provided value."
+
+	var filterDiskFlagName string
+	if cmdPrefix == "" {
+		filterDiskFlagName = "disk_lte"
+	} else {
+		filterDiskFlagName = fmt.Sprintf("%v.disk_lte", cmdPrefix)
+	}
+
+	var filterDiskFlagDefault int64
+
+	_ = cmd.PersistentFlags().Int64(filterDiskFlagName, filterDiskFlagDefault, filterDiskDescription)
+
+	return nil
+}
+func registerOperationPlansGetPlansFilterDiskGteParamFlags(cmdPrefix string, cmd *cobra.Command) error {
+
+	filterDiskDescription := "Filter plans with disk size in Gigabytes greater than or equal the provided value."
+
+	var filterDiskFlagName string
+	if cmdPrefix == "" {
+		filterDiskFlagName = "disk_gte"
+	} else {
+		filterDiskFlagName = fmt.Sprintf("%v.disk_gte", cmdPrefix)
 	}
 
 	var filterDiskFlagDefault int64
@@ -305,22 +348,62 @@ func retrieveOperationPlansGetPlansAPIVersionFlag(m *plans.GetPlansParams, cmdPr
 	}
 	return nil, retAdded
 }
-func retrieveOperationPlansGetPlansFilterDiskFlag(m *plans.GetPlansParams, cmdPrefix string, cmd *cobra.Command) (error, bool) {
+func retrieveOperationPlansGetPlansFilterDiskEqlFlag(m *plans.GetPlansParams, cmdPrefix string, cmd *cobra.Command) (error, bool) {
 	retAdded := false
-	if cmd.Flags().Changed("disk") {
+	if cmd.Flags().Changed("disk_eql") {
 
 		var filterDiskFlagName string
 		if cmdPrefix == "" {
-			filterDiskFlagName = "disk"
+			filterDiskFlagName = "disk_eql"
 		} else {
-			filterDiskFlagName = fmt.Sprintf("%v.disk", cmdPrefix)
+			filterDiskFlagName = fmt.Sprintf("%v.disk_eql", cmdPrefix)
 		}
 
 		filterDiskFlagValue, err := cmd.Flags().GetInt64(filterDiskFlagName)
 		if err != nil {
 			return err, false
 		}
-		m.FilterDisk = &filterDiskFlagValue
+		m.FilterDiskEql = &filterDiskFlagValue
+
+	}
+	return nil, retAdded
+}
+func retrieveOperationPlansGetPlansFilterDiskLteFlag(m *plans.GetPlansParams, cmdPrefix string, cmd *cobra.Command) (error, bool) {
+	retAdded := false
+	if cmd.Flags().Changed("disk_lte") {
+
+		var filterDiskFlagName string
+		if cmdPrefix == "" {
+			filterDiskFlagName = "disk_lte"
+		} else {
+			filterDiskFlagName = fmt.Sprintf("%v.disk_lte", cmdPrefix)
+		}
+
+		filterDiskFlagValue, err := cmd.Flags().GetInt64(filterDiskFlagName)
+		if err != nil {
+			return err, false
+		}
+		m.FilterDiskLte = &filterDiskFlagValue
+
+	}
+	return nil, retAdded
+}
+func retrieveOperationPlansGetPlansFilterDiskGteFlag(m *plans.GetPlansParams, cmdPrefix string, cmd *cobra.Command) (error, bool) {
+	retAdded := false
+	if cmd.Flags().Changed("disk_gte") {
+
+		var filterDiskFlagName string
+		if cmdPrefix == "" {
+			filterDiskFlagName = "disk_gte"
+		} else {
+			filterDiskFlagName = fmt.Sprintf("%v.disk_gte", cmdPrefix)
+		}
+
+		filterDiskFlagValue, err := cmd.Flags().GetInt64(filterDiskFlagName)
+		if err != nil {
+			return err, false
+		}
+		m.FilterDiskGte = &filterDiskFlagValue
 
 	}
 	return nil, retAdded

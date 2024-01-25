@@ -74,7 +74,9 @@ type GetPlansParams struct {
 	                            [gte] to filter for values greater or equal to the provided value.
 	                            [lte] to filter by values lower or equal to the provided value.
 	*/
-	FilterDisk *int64
+	FilterDiskEql *int64
+	FilterDiskLte *int64
+	FilterDiskGte *int64
 
 	/* FilterGpu.
 
@@ -196,15 +198,15 @@ func (o *GetPlansParams) SetAPIVersion(aPIVersion *string) {
 	o.APIVersion = aPIVersion
 }
 
-// WithFilterDisk adds the filterDisk to the get plans params
-func (o *GetPlansParams) WithFilterDisk(filterDisk *int64) *GetPlansParams {
-	o.SetFilterDisk(filterDisk)
+// WithFilterDiskEql adds the filterDiskEql to the get plans params
+func (o *GetPlansParams) WithFilterDiskEql(filterDiskEql *int64) *GetPlansParams {
+	o.SetFilterDiskEql(filterDiskEql)
 	return o
 }
 
-// SetFilterDisk adds the filterDisk to the get plans params
-func (o *GetPlansParams) SetFilterDisk(filterDisk *int64) {
-	o.FilterDisk = filterDisk
+// SetFilterDiskEql adds the filterDiskEql to the get plans params
+func (o *GetPlansParams) SetFilterDiskEql(filterDiskEql *int64) {
+	o.FilterDiskEql = filterDiskEql
 }
 
 // WithFilterGpu adds the filterGpu to the get plans params
@@ -300,18 +302,52 @@ func (o *GetPlansParams) WriteToRequest(r runtime.ClientRequest, reg strfmt.Regi
 		}
 	}
 
-	if o.FilterDisk != nil {
+	if o.FilterDiskEql != nil {
 
-		// query param filter[disk]
-		var qrFilterDisk int64
+		// query param filter[disk][eql]
+		var qrFilterDiskEql int64
 
-		if o.FilterDisk != nil {
-			qrFilterDisk = *o.FilterDisk
+		if o.FilterDiskEql != nil {
+			qrFilterDiskEql = *o.FilterDiskEql
 		}
-		qFilterDisk := swag.FormatInt64(qrFilterDisk)
-		if qFilterDisk != "" {
+		qFilterDiskEql := swag.FormatInt64(qrFilterDiskEql)
+		if qFilterDiskEql != "" {
 
-			if err := r.SetQueryParam("filter[disk]", qFilterDisk); err != nil {
+			if err := r.SetQueryParam("filter[disk][eql]", qFilterDiskEql); err != nil {
+				return err
+			}
+		}
+	}
+
+	if o.FilterDiskLte != nil {
+
+		// query param filter[disk][lte]
+		var qrFilterDiskLte int64
+
+		if o.FilterDiskLte != nil {
+			qrFilterDiskLte = *o.FilterDiskLte
+		}
+		qFilterDiskLte := swag.FormatInt64(qrFilterDiskLte)
+		if qFilterDiskLte != "" {
+
+			if err := r.SetQueryParam("filter[disk][lte]", qFilterDiskLte); err != nil {
+				return err
+			}
+		}
+	}
+
+	if o.FilterDiskGte != nil {
+
+		// query param filter[disk][gte]
+		var qrFilterDiskGte int64
+
+		if o.FilterDiskGte != nil {
+			qrFilterDiskGte = *o.FilterDiskGte
+		}
+		qFilterDiskGte := swag.FormatInt64(qrFilterDiskGte)
+		if qFilterDiskGte != "" {
+
+			if err := r.SetQueryParam("filter[disk][gte]", qFilterDiskGte); err != nil {
 				return err
 			}
 		}
