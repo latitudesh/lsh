@@ -41,9 +41,6 @@ func runOperationSSHKeysPutProjectSSHKey(cmd *cobra.Command, args []string) erro
 	}
 	// retrieve flag values from cmd and fill params
 	params := ssh_keys.NewPutProjectSSHKeyParams()
-	if err, _ := retrieveOperationSSHKeysPutProjectSSHKeyAPIVersionFlag(params, "", cmd); err != nil {
-		return err
-	}
 	if err, _ := retrieveOperationSSHKeysPutProjectSSHKeyBodyFlag(params, "", cmd); err != nil {
 		return err
 	}
@@ -72,9 +69,6 @@ func runOperationSSHKeysPutProjectSSHKey(cmd *cobra.Command, args []string) erro
 
 // registerOperationSSHKeysPutProjectSSHKeyParamFlags registers all flags needed to fill params
 func registerOperationSSHKeysPutProjectSSHKeyParamFlags(cmd *cobra.Command) error {
-	if err := registerOperationSSHKeysPutProjectSSHKeyAPIVersionParamFlags("", cmd); err != nil {
-		return err
-	}
 	if err := registerOperationSSHKeysPutProjectSSHKeyBodyParamFlags("", cmd); err != nil {
 		return err
 	}
@@ -87,23 +81,6 @@ func registerOperationSSHKeysPutProjectSSHKeyParamFlags(cmd *cobra.Command) erro
 	return nil
 }
 
-func registerOperationSSHKeysPutProjectSSHKeyAPIVersionParamFlags(cmdPrefix string, cmd *cobra.Command) error {
-
-	apiVersionDescription := ``
-
-	var apiVersionFlagName string
-	if cmdPrefix == "" {
-		apiVersionFlagName = "API-Version"
-	} else {
-		apiVersionFlagName = fmt.Sprintf("%v.API-Version", cmdPrefix)
-	}
-
-	var apiVersionFlagDefault string = "2023-06-01"
-
-	_ = cmd.PersistentFlags().String(apiVersionFlagName, apiVersionFlagDefault, apiVersionDescription)
-
-	return nil
-}
 func registerOperationSSHKeysPutProjectSSHKeyBodyParamFlags(cmdPrefix string, cmd *cobra.Command) error {
 
 	var bodyFlagName string
@@ -124,13 +101,13 @@ func registerOperationSSHKeysPutProjectSSHKeyBodyParamFlags(cmdPrefix string, cm
 }
 func registerOperationSSHKeysPutProjectSSHKeyProjectIDOrSlugParamFlags(cmdPrefix string, cmd *cobra.Command) error {
 
-	projectIdOrSlugDescription := `Required. `
+	projectIdOrSlugDescription := `Project Id or Slug (Required).`
 
 	var projectIdOrSlugFlagName string
 	if cmdPrefix == "" {
-		projectIdOrSlugFlagName = "project_id_or_slug"
+		projectIdOrSlugFlagName = "project"
 	} else {
-		projectIdOrSlugFlagName = fmt.Sprintf("%v.project_id_or_slug", cmdPrefix)
+		projectIdOrSlugFlagName = fmt.Sprintf("%v.project", cmdPrefix)
 	}
 
 	var projectIdOrSlugFlagDefault string
@@ -146,9 +123,9 @@ func registerOperationSSHKeysPutProjectSSHKeySSHKeyIDParamFlags(cmdPrefix string
 
 	var sshKeyIdFlagName string
 	if cmdPrefix == "" {
-		sshKeyIdFlagName = "ssh_key_id"
+		sshKeyIdFlagName = "id"
 	} else {
-		sshKeyIdFlagName = fmt.Sprintf("%v.ssh_key_id", cmdPrefix)
+		sshKeyIdFlagName = fmt.Sprintf("%v.id", cmdPrefix)
 	}
 
 	var sshKeyIdFlagDefault string
@@ -159,26 +136,6 @@ func registerOperationSSHKeysPutProjectSSHKeySSHKeyIDParamFlags(cmdPrefix string
 	return nil
 }
 
-func retrieveOperationSSHKeysPutProjectSSHKeyAPIVersionFlag(m *ssh_keys.PutProjectSSHKeyParams, cmdPrefix string, cmd *cobra.Command) (error, bool) {
-	retAdded := false
-	if cmd.Flags().Changed("API-Version") {
-
-		var apiVersionFlagName string
-		if cmdPrefix == "" {
-			apiVersionFlagName = "API-Version"
-		} else {
-			apiVersionFlagName = fmt.Sprintf("%v.API-Version", cmdPrefix)
-		}
-
-		apiVersionFlagValue, err := cmd.Flags().GetString(apiVersionFlagName)
-		if err != nil {
-			return err, false
-		}
-		m.APIVersion = &apiVersionFlagValue
-
-	}
-	return nil, retAdded
-}
 func retrieveOperationSSHKeysPutProjectSSHKeyBodyFlag(m *ssh_keys.PutProjectSSHKeyParams, cmdPrefix string, cmd *cobra.Command) (error, bool) {
 	retAdded := false
 	if cmd.Flags().Changed("body") {
@@ -239,13 +196,13 @@ func retrieveOperationSSHKeysPutProjectSSHKeyProjectIDOrSlugFlag(m *ssh_keys.Put
 }
 func retrieveOperationSSHKeysPutProjectSSHKeySSHKeyIDFlag(m *ssh_keys.PutProjectSSHKeyParams, cmdPrefix string, cmd *cobra.Command) (error, bool) {
 	retAdded := false
-	if cmd.Flags().Changed("ssh_key_id") {
+	if cmd.Flags().Changed("id") {
 
 		var sshKeyIdFlagName string
 		if cmdPrefix == "" {
-			sshKeyIdFlagName = "ssh_key_id"
+			sshKeyIdFlagName = "id"
 		} else {
-			sshKeyIdFlagName = fmt.Sprintf("%v.ssh_key_id", cmdPrefix)
+			sshKeyIdFlagName = fmt.Sprintf("%v.id", cmdPrefix)
 		}
 
 		sshKeyIdFlagValue, err := cmd.Flags().GetString(sshKeyIdFlagName)
@@ -253,6 +210,7 @@ func retrieveOperationSSHKeysPutProjectSSHKeySSHKeyIDFlag(m *ssh_keys.PutProject
 			return err, false
 		}
 		m.SSHKeyID = sshKeyIdFlagValue
+		m.Body.Data.ID = &m.SSHKeyID
 
 	}
 	return nil, retAdded
@@ -439,14 +397,6 @@ func registerModelPutProjectSSHKeyParamsBodyDataFlags(depth int, cmdPrefix strin
 		return err
 	}
 
-	if err := registerPutProjectSSHKeyParamsBodyDataID(depth, cmdPrefix, cmd); err != nil {
-		return err
-	}
-
-	if err := registerPutProjectSSHKeyParamsBodyDataType(depth, cmdPrefix, cmd); err != nil {
-		return err
-	}
-
 	return nil
 }
 
@@ -464,50 +414,6 @@ func registerPutProjectSSHKeyParamsBodyDataAttributes(depth int, cmdPrefix strin
 	return nil
 }
 
-func registerPutProjectSSHKeyParamsBodyDataID(depth int, cmdPrefix string, cmd *cobra.Command) error {
-	if depth > maxDepth {
-		return nil
-	}
-
-	idDescription := `Required. `
-
-	var idFlagName = "id"
-
-	var idFlagDefault string
-
-	_ = cmd.PersistentFlags().String(idFlagName, idFlagDefault, idDescription)
-	cmd.MarkPersistentFlagRequired(idFlagName)
-
-	return nil
-}
-
-func registerPutProjectSSHKeyParamsBodyDataType(depth int, cmdPrefix string, cmd *cobra.Command) error {
-	if depth > maxDepth {
-		return nil
-	}
-
-	typeDescription := `Enum: ["ssh_keys"]. Required. `
-
-	var typeFlagName = "type"
-
-	var typeFlagDefault string
-
-	_ = cmd.PersistentFlags().String(typeFlagName, typeFlagDefault, typeDescription)
-
-	if err := cmd.RegisterFlagCompletionFunc(typeFlagName,
-		func(cmd *cobra.Command, args []string, toComplete string) ([]string, cobra.ShellCompDirective) {
-			var res []string
-			if err := json.Unmarshal([]byte(`["ssh_keys"]`), &res); err != nil {
-				panic(err)
-			}
-			return res, cobra.ShellCompDirectiveDefault
-		}); err != nil {
-		return err
-	}
-
-	return nil
-}
-
 // retrieve flags from commands, and set value in model. Return true if any flag is passed by user to fill model field.
 func retrieveModelPutProjectSSHKeyParamsBodyDataFlags(depth int, m *ssh_keys.PutProjectSSHKeyParamsBodyData, cmdPrefix string, cmd *cobra.Command) (error, bool) {
 	retAdded := false
@@ -517,18 +423,6 @@ func retrieveModelPutProjectSSHKeyParamsBodyDataFlags(depth int, m *ssh_keys.Put
 		return err, false
 	}
 	retAdded = retAdded || attributesAdded
-
-	err, idAdded := retrievePutProjectSSHKeyParamsBodyDataIDFlags(depth, m, cmdPrefix, cmd)
-	if err != nil {
-		return err, false
-	}
-	retAdded = retAdded || idAdded
-
-	err, typeAdded := retrievePutProjectSSHKeyParamsBodyDataTypeFlags(depth, m, cmdPrefix, cmd)
-	if err != nil {
-		return err, false
-	}
-	retAdded = retAdded || typeAdded
 
 	return nil, retAdded
 }
@@ -556,48 +450,6 @@ func retrievePutProjectSSHKeyParamsBodyDataAttributesFlags(depth int, m *ssh_key
 	retAdded = retAdded || attributesAdded
 	if attributesAdded {
 		m.Attributes = attributesFlagValue
-	}
-
-	return nil, retAdded
-}
-
-func retrievePutProjectSSHKeyParamsBodyDataIDFlags(depth int, m *ssh_keys.PutProjectSSHKeyParamsBodyData, cmdPrefix string, cmd *cobra.Command) (error, bool) {
-	if depth > maxDepth {
-		return nil, false
-	}
-	retAdded := false
-
-	var idFlagName = "id"
-	if cmd.Flags().Changed(idFlagName) {
-
-		idFlagValue, err := cmd.Flags().GetString(idFlagName)
-		if err != nil {
-			return err, false
-		}
-		m.ID = &idFlagValue
-
-		retAdded = true
-	}
-
-	return nil, retAdded
-}
-
-func retrievePutProjectSSHKeyParamsBodyDataTypeFlags(depth int, m *ssh_keys.PutProjectSSHKeyParamsBodyData, cmdPrefix string, cmd *cobra.Command) (error, bool) {
-	if depth > maxDepth {
-		return nil, false
-	}
-	retAdded := false
-
-	var typeFlagName = "type"
-	if cmd.Flags().Changed(typeFlagName) {
-
-		typeFlagValue, err := cmd.Flags().GetString(typeFlagName)
-		if err != nil {
-			return err, false
-		}
-		m.Type = &typeFlagValue
-
-		retAdded = true
 	}
 
 	return nil, retAdded
