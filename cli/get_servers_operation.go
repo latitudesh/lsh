@@ -124,7 +124,13 @@ func registerOperationServersGetServersParamFlags(cmd *cobra.Command) error {
 	if err := registerOperationServersGetServersFilterCreatedAtLteParamFlags("", cmd); err != nil {
 		return err
 	}
-	if err := registerOperationServersGetServersFilterDiskParamFlags("", cmd); err != nil {
+	if err := registerOperationServersGetServersFilterDiskEqlParamFlags("", cmd); err != nil {
+		return err
+	}
+	if err := registerOperationServersGetServersFilterDiskLteParamFlags("", cmd); err != nil {
+		return err
+	}
+	if err := registerOperationServersGetServersFilterDiskGteParamFlags("", cmd); err != nil {
 		return err
 	}
 	if err := registerOperationServersGetServersFilterGpuParamFlags("", cmd); err != nil {
@@ -231,18 +237,49 @@ func registerOperationServersGetServersFilterCreatedAtLteParamFlags(cmdPrefix st
 
 	return nil
 }
-func registerOperationServersGetServersFilterDiskParamFlags(cmdPrefix string, cmd *cobra.Command) error {
+func registerOperationServersGetServersFilterDiskEqlParamFlags(cmdPrefix string, cmd *cobra.Command) error {
 
-	filterDiskDescription := `The disk size in Gigabytes to filter by, should be used with the following options:
-                              [eql] to filter for values equal to the provided value.
-                              [gte] to filter for values greater or equal to the provided value.
-                              [lte] to filter by values lower or equal to the provided value.`
+	filterDiskDescription := "Filter servers with disk size in Gigabytes equal the provided value."
 
 	var filterDiskFlagName string
 	if cmdPrefix == "" {
-		filterDiskFlagName = "disk"
+		filterDiskFlagName = "disk_eql"
 	} else {
-		filterDiskFlagName = fmt.Sprintf("%v.disk", cmdPrefix)
+		filterDiskFlagName = fmt.Sprintf("%v.disk_eql", cmdPrefix)
+	}
+
+	var filterDiskFlagDefault int64
+
+	_ = cmd.PersistentFlags().Int64(filterDiskFlagName, filterDiskFlagDefault, filterDiskDescription)
+
+	return nil
+}
+func registerOperationServersGetServersFilterDiskLteParamFlags(cmdPrefix string, cmd *cobra.Command) error {
+
+	filterDiskDescription := "Filter servers with disk size in Gigabytes less than or equal the provided value."
+
+	var filterDiskFlagName string
+	if cmdPrefix == "" {
+		filterDiskFlagName = "disk_lte"
+	} else {
+		filterDiskFlagName = fmt.Sprintf("%v.disk_lte", cmdPrefix)
+	}
+
+	var filterDiskFlagDefault int64
+
+	_ = cmd.PersistentFlags().Int64(filterDiskFlagName, filterDiskFlagDefault, filterDiskDescription)
+
+	return nil
+}
+func registerOperationServersGetServersFilterDiskGteParamFlags(cmdPrefix string, cmd *cobra.Command) error {
+
+	filterDiskDescription := "Filter servers with disk size in Gigabytes greater than or equal the provided value."
+
+	var filterDiskFlagName string
+	if cmdPrefix == "" {
+		filterDiskFlagName = "disk_gte"
+	} else {
+		filterDiskFlagName = fmt.Sprintf("%v.disk_gte", cmdPrefix)
 	}
 
 	var filterDiskFlagDefault int64
@@ -359,9 +396,9 @@ func registerOperationServersGetServersFilterRAMEqlParamFlags(cmdPrefix string, 
 
 	var filterRamEqlFlagName string
 	if cmdPrefix == "" {
-		filterRamEqlFlagName = "ram[eql]"
+		filterRamEqlFlagName = "ram_eql"
 	} else {
-		filterRamEqlFlagName = fmt.Sprintf("%v.ram[eql]", cmdPrefix)
+		filterRamEqlFlagName = fmt.Sprintf("%v.ram_eql", cmdPrefix)
 	}
 
 	var filterRamEqlFlagDefault int64
@@ -376,9 +413,9 @@ func registerOperationServersGetServersFilterRAMGteParamFlags(cmdPrefix string, 
 
 	var filterRamGteFlagName string
 	if cmdPrefix == "" {
-		filterRamGteFlagName = "ram[gte]"
+		filterRamGteFlagName = "ram_gte"
 	} else {
-		filterRamGteFlagName = fmt.Sprintf("%v.ram[gte]", cmdPrefix)
+		filterRamGteFlagName = fmt.Sprintf("%v.ram_gte", cmdPrefix)
 	}
 
 	var filterRamGteFlagDefault int64
@@ -393,9 +430,9 @@ func registerOperationServersGetServersFilterRAMLteParamFlags(cmdPrefix string, 
 
 	var filterRamLteFlagName string
 	if cmdPrefix == "" {
-		filterRamLteFlagName = "ram[lte]"
+		filterRamLteFlagName = "ram_lte"
 	} else {
-		filterRamLteFlagName = fmt.Sprintf("%v.ram[lte]", cmdPrefix)
+		filterRamLteFlagName = fmt.Sprintf("%v.ram_lte", cmdPrefix)
 	}
 
 	var filterRamLteFlagDefault int64
@@ -701,13 +738,13 @@ func retrieveOperationServersGetServersFilterProjectFlag(m *servers.GetServersPa
 }
 func retrieveOperationServersGetServersFilterRAMEqlFlag(m *servers.GetServersParams, cmdPrefix string, cmd *cobra.Command) (error, bool) {
 	retAdded := false
-	if cmd.Flags().Changed("ram[eql]") {
+	if cmd.Flags().Changed("ram_eql") {
 
 		var filterRamEqlFlagName string
 		if cmdPrefix == "" {
-			filterRamEqlFlagName = "ram[eql]"
+			filterRamEqlFlagName = "ram_eql"
 		} else {
-			filterRamEqlFlagName = fmt.Sprintf("%v.ram[eql]", cmdPrefix)
+			filterRamEqlFlagName = fmt.Sprintf("%v.ram_eql", cmdPrefix)
 		}
 
 		filterRamEqlFlagValue, err := cmd.Flags().GetInt64(filterRamEqlFlagName)
@@ -721,13 +758,13 @@ func retrieveOperationServersGetServersFilterRAMEqlFlag(m *servers.GetServersPar
 }
 func retrieveOperationServersGetServersFilterRAMGteFlag(m *servers.GetServersParams, cmdPrefix string, cmd *cobra.Command) (error, bool) {
 	retAdded := false
-	if cmd.Flags().Changed("ram[gte]") {
+	if cmd.Flags().Changed("ram_gte") {
 
 		var filterRamGteFlagName string
 		if cmdPrefix == "" {
-			filterRamGteFlagName = "ram[gte]"
+			filterRamGteFlagName = "ram_gte"
 		} else {
-			filterRamGteFlagName = fmt.Sprintf("%v.ram[gte]", cmdPrefix)
+			filterRamGteFlagName = fmt.Sprintf("%v.ram_gte", cmdPrefix)
 		}
 
 		filterRamGteFlagValue, err := cmd.Flags().GetInt64(filterRamGteFlagName)
@@ -741,13 +778,13 @@ func retrieveOperationServersGetServersFilterRAMGteFlag(m *servers.GetServersPar
 }
 func retrieveOperationServersGetServersFilterRAMLteFlag(m *servers.GetServersParams, cmdPrefix string, cmd *cobra.Command) (error, bool) {
 	retAdded := false
-	if cmd.Flags().Changed("ram[lte]") {
+	if cmd.Flags().Changed("ram_lte") {
 
 		var filterRamLteFlagName string
 		if cmdPrefix == "" {
-			filterRamLteFlagName = "ram[lte]"
+			filterRamLteFlagName = "ram_lte"
 		} else {
-			filterRamLteFlagName = fmt.Sprintf("%v.ram[lte]", cmdPrefix)
+			filterRamLteFlagName = fmt.Sprintf("%v.ram_lte", cmdPrefix)
 		}
 
 		filterRamLteFlagValue, err := cmd.Flags().GetInt64(filterRamLteFlagName)
