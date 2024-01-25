@@ -135,6 +135,7 @@ func registerOperationProjectsUpdateProjectIDOrSlugParamFlags(cmdPrefix string, 
 	var idOrSlugFlagDefault string
 
 	_ = cmd.PersistentFlags().String(idOrSlugFlagName, idOrSlugFlagDefault, idOrSlugDescription)
+	cmd.MarkPersistentFlagRequired(idOrSlugFlagName)
 
 	return nil
 }
@@ -414,6 +415,7 @@ func registerUpdateProjectParamsBodyDataID(depth int, cmdPrefix string, cmd *cob
 	var idFlagDefault string
 
 	_ = cmd.PersistentFlags().String(idFlagName, idFlagDefault, idDescription)
+	cmd.MarkPersistentFlagRequired(idFlagName)
 
 	return nil
 }
@@ -435,6 +437,7 @@ func registerUpdateProjectParamsBodyDataType(depth int, cmdPrefix string, cmd *c
 	var typeFlagDefault string
 
 	_ = cmd.PersistentFlags().String(typeFlagName, typeFlagDefault, typeDescription)
+	cmd.MarkPersistentFlagRequired(typeFlagName)
 
 	if err := cmd.RegisterFlagCompletionFunc(typeFlagName,
 		func(cmd *cobra.Command, args []string, toComplete string) ([]string, cobra.ShellCompDirective) {
