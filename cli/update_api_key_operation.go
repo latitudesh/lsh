@@ -85,7 +85,7 @@ func registerOperationAPIKeysUpdateAPIKeyBodyParamFlags(cmdPrefix string, cmd *c
 	_ = cmd.PersistentFlags().String(bodyFlagName, "", "Optional json string for [body]. ")
 
 	// add flags for body
-	if err := registerModelUpdateAPIKeyFlags(0, "updateApiKey", cmd); err != nil {
+	if err := registerModelUpdateAPIKeyFlags(0, "", cmd); err != nil {
 		return err
 	}
 
@@ -129,7 +129,7 @@ func retrieveOperationAPIKeysUpdateAPIKeyBodyFlag(m *api_keys.UpdateAPIKeyParams
 	if swag.IsZero(bodyValueModel) {
 		bodyValueModel = &models.UpdateAPIKey{}
 	}
-	err, added := retrieveModelUpdateAPIKeyFlags(0, bodyValueModel, "updateApiKey", cmd)
+	err, added := retrieveModelUpdateAPIKeyFlags(0, bodyValueModel, "", cmd)
 	if err != nil {
 		return err, false
 	}
@@ -239,12 +239,7 @@ func registerUpdateAPIKeyOKBodyData(depth int, cmdPrefix string, cmd *cobra.Comm
 		return nil
 	}
 
-	var dataFlagName string
-	if cmdPrefix == "" {
-		dataFlagName = "data"
-	} else {
-		dataFlagName = fmt.Sprintf("%v.data", cmdPrefix)
-	}
+	var dataFlagName = ""
 
 	if err := registerModelAPIKeyFlags(depth+1, dataFlagName, cmd); err != nil {
 		return err
@@ -272,7 +267,7 @@ func retrieveUpdateAPIKeyOKBodyDataFlags(depth int, m *api_keys.UpdateAPIKeyOKBo
 	}
 	retAdded := false
 
-	dataFlagName := fmt.Sprintf("%v.data", cmdPrefix)
+	dataFlagName := fmt.Sprintf("%vdata", cmdPrefix)
 	if cmd.Flags().Changed(dataFlagName) {
 		// info: complex object data models.APIKey is retrieved outside this Changed() block
 	}
@@ -281,6 +276,7 @@ func retrieveUpdateAPIKeyOKBodyDataFlags(depth int, m *api_keys.UpdateAPIKeyOKBo
 		dataFlagValue = &models.APIKey{}
 	}
 
+	dataFlagName = ""
 	err, dataAdded := retrieveModelAPIKeyFlags(depth+1, dataFlagValue, dataFlagName, cmd)
 	if err != nil {
 		return err, false
