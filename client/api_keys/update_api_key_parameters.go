@@ -63,11 +63,6 @@ UpdateAPIKeyParams contains all the parameters to send to the API endpoint
 */
 type UpdateAPIKeyParams struct {
 
-	// APIVersion.
-	//
-	// Default: "2023-06-01"
-	APIVersion *string
-
 	// Body.
 	Body *models.UpdateAPIKey
 
@@ -91,13 +86,7 @@ func (o *UpdateAPIKeyParams) WithDefaults() *UpdateAPIKeyParams {
 //
 // All values with no default are reset to their zero value.
 func (o *UpdateAPIKeyParams) SetDefaults() {
-	var (
-		aPIVersionDefault = string("2023-06-01")
-	)
-
-	val := UpdateAPIKeyParams{
-		APIVersion: &aPIVersionDefault,
-	}
+	val := UpdateAPIKeyParams{}
 
 	val.timeout = o.timeout
 	val.Context = o.Context
@@ -138,17 +127,6 @@ func (o *UpdateAPIKeyParams) SetHTTPClient(client *http.Client) {
 	o.HTTPClient = client
 }
 
-// WithAPIVersion adds the aPIVersion to the update api key params
-func (o *UpdateAPIKeyParams) WithAPIVersion(aPIVersion *string) *UpdateAPIKeyParams {
-	o.SetAPIVersion(aPIVersion)
-	return o
-}
-
-// SetAPIVersion adds the apiVersion to the update api key params
-func (o *UpdateAPIKeyParams) SetAPIVersion(aPIVersion *string) {
-	o.APIVersion = aPIVersion
-}
-
 // WithBody adds the body to the update api key params
 func (o *UpdateAPIKeyParams) WithBody(body *models.UpdateAPIKey) *UpdateAPIKeyParams {
 	o.SetBody(body)
@@ -179,13 +157,6 @@ func (o *UpdateAPIKeyParams) WriteToRequest(r runtime.ClientRequest, reg strfmt.
 	}
 	var res []error
 
-	if o.APIVersion != nil {
-
-		// header param API-Version
-		if err := r.SetHeaderParam("API-Version", *o.APIVersion); err != nil {
-			return err
-		}
-	}
 	if o.Body != nil {
 		if err := r.SetBodyParam(o.Body); err != nil {
 			return err
