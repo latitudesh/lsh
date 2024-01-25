@@ -444,9 +444,9 @@ func registerAssignServerVirtualNetworkParamsBodyDataAttributesServerID(depth in
 
 	var serverIdFlagName = "server_id"
 
-	var serverIdFlagDefault int64
+	var serverIdFlagDefault string
 
-	_ = cmd.PersistentFlags().Int64(serverIdFlagName, serverIdFlagDefault, serverIdDescription)
+	_ = cmd.PersistentFlags().String(serverIdFlagName, serverIdFlagDefault, serverIdDescription)
 	cmd.MarkPersistentFlagRequired(serverIdFlagName)
 
 	return nil
@@ -461,9 +461,9 @@ func registerAssignServerVirtualNetworkParamsBodyDataAttributesVirtualNetworkID(
 
 	var virtualNetworkIdFlagName = "virtual_network_id"
 
-	var virtualNetworkIdFlagDefault int64
+	var virtualNetworkIdFlagDefault string
 
-	_ = cmd.PersistentFlags().Int64(virtualNetworkIdFlagName, virtualNetworkIdFlagDefault, virtualNetworkIdDescription)
+	_ = cmd.PersistentFlags().String(virtualNetworkIdFlagName, virtualNetworkIdFlagDefault, virtualNetworkIdDescription)
 	cmd.MarkPersistentFlagRequired(virtualNetworkIdFlagName)
 
 	return nil
@@ -497,11 +497,11 @@ func retrieveAssignServerVirtualNetworkParamsBodyDataAttributesServerIDFlags(dep
 	var serverIdFlagName = "server_id"
 	if cmd.Flags().Changed(serverIdFlagName) {
 
-		serverIdFlagValue, err := cmd.Flags().GetInt64(serverIdFlagName)
+		serverIdFlagValue, err := cmd.Flags().GetString(serverIdFlagName)
 		if err != nil {
 			return err, false
 		}
-		m.ServerID = &serverIdFlagValue
+		m.ServerID = serverIdFlagValue
 
 		retAdded = true
 	}
@@ -518,11 +518,11 @@ func retrieveAssignServerVirtualNetworkParamsBodyDataAttributesVirtualNetworkIDF
 	var virtualNetworkIdFlagName = "virtual_network_id"
 	if cmd.Flags().Changed(virtualNetworkIdFlagName) {
 
-		virtualNetworkIdFlagValue, err := cmd.Flags().GetInt64(virtualNetworkIdFlagName)
+		virtualNetworkIdFlagValue, err := cmd.Flags().GetString(virtualNetworkIdFlagName)
 		if err != nil {
 			return err, false
 		}
-		m.VirtualNetworkID = &virtualNetworkIdFlagValue
+		m.VirtualNetworkID = virtualNetworkIdFlagValue
 
 		retAdded = true
 	}
