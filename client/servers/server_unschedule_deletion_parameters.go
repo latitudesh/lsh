@@ -61,11 +61,6 @@ ServerUnscheduleDeletionParams contains all the parameters to send to the API en
 */
 type ServerUnscheduleDeletionParams struct {
 
-	// APIVersion.
-	//
-	// Default: "2023-06-01"
-	APIVersion *string
-
 	// ServerID.
 	ServerID string
 
@@ -86,13 +81,7 @@ func (o *ServerUnscheduleDeletionParams) WithDefaults() *ServerUnscheduleDeletio
 //
 // All values with no default are reset to their zero value.
 func (o *ServerUnscheduleDeletionParams) SetDefaults() {
-	var (
-		aPIVersionDefault = string("2023-06-01")
-	)
-
-	val := ServerUnscheduleDeletionParams{
-		APIVersion: &aPIVersionDefault,
-	}
+	val := ServerUnscheduleDeletionParams{}
 
 	val.timeout = o.timeout
 	val.Context = o.Context
@@ -133,17 +122,6 @@ func (o *ServerUnscheduleDeletionParams) SetHTTPClient(client *http.Client) {
 	o.HTTPClient = client
 }
 
-// WithAPIVersion adds the aPIVersion to the server unschedule deletion params
-func (o *ServerUnscheduleDeletionParams) WithAPIVersion(aPIVersion *string) *ServerUnscheduleDeletionParams {
-	o.SetAPIVersion(aPIVersion)
-	return o
-}
-
-// SetAPIVersion adds the apiVersion to the server unschedule deletion params
-func (o *ServerUnscheduleDeletionParams) SetAPIVersion(aPIVersion *string) {
-	o.APIVersion = aPIVersion
-}
-
 // WithServerID adds the serverID to the server unschedule deletion params
 func (o *ServerUnscheduleDeletionParams) WithServerID(serverID string) *ServerUnscheduleDeletionParams {
 	o.SetServerID(serverID)
@@ -162,14 +140,6 @@ func (o *ServerUnscheduleDeletionParams) WriteToRequest(r runtime.ClientRequest,
 		return err
 	}
 	var res []error
-
-	if o.APIVersion != nil {
-
-		// header param API-Version
-		if err := r.SetHeaderParam("API-Version", *o.APIVersion); err != nil {
-			return err
-		}
-	}
 
 	// path param server_id
 	if err := r.SetPathParam("server_id", o.ServerID); err != nil {

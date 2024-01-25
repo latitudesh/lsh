@@ -61,11 +61,6 @@ ServerScheduleDeletionParams contains all the parameters to send to the API endp
 */
 type ServerScheduleDeletionParams struct {
 
-	// APIVersion.
-	//
-	// Default: "2023-06-01"
-	APIVersion *string
-
 	// ServerID.
 	ServerID string
 
@@ -86,13 +81,7 @@ func (o *ServerScheduleDeletionParams) WithDefaults() *ServerScheduleDeletionPar
 //
 // All values with no default are reset to their zero value.
 func (o *ServerScheduleDeletionParams) SetDefaults() {
-	var (
-		aPIVersionDefault = string("2023-06-01")
-	)
-
-	val := ServerScheduleDeletionParams{
-		APIVersion: &aPIVersionDefault,
-	}
+	val := ServerScheduleDeletionParams{}
 
 	val.timeout = o.timeout
 	val.Context = o.Context
@@ -133,17 +122,6 @@ func (o *ServerScheduleDeletionParams) SetHTTPClient(client *http.Client) {
 	o.HTTPClient = client
 }
 
-// WithAPIVersion adds the aPIVersion to the server schedule deletion params
-func (o *ServerScheduleDeletionParams) WithAPIVersion(aPIVersion *string) *ServerScheduleDeletionParams {
-	o.SetAPIVersion(aPIVersion)
-	return o
-}
-
-// SetAPIVersion adds the apiVersion to the server schedule deletion params
-func (o *ServerScheduleDeletionParams) SetAPIVersion(aPIVersion *string) {
-	o.APIVersion = aPIVersion
-}
-
 // WithServerID adds the serverID to the server schedule deletion params
 func (o *ServerScheduleDeletionParams) WithServerID(serverID string) *ServerScheduleDeletionParams {
 	o.SetServerID(serverID)
@@ -162,14 +140,6 @@ func (o *ServerScheduleDeletionParams) WriteToRequest(r runtime.ClientRequest, r
 		return err
 	}
 	var res []error
-
-	if o.APIVersion != nil {
-
-		// header param API-Version
-		if err := r.SetHeaderParam("API-Version", *o.APIVersion); err != nil {
-			return err
-		}
-	}
 
 	// path param server_id
 	if err := r.SetPathParam("server_id", o.ServerID); err != nil {
