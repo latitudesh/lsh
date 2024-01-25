@@ -6,7 +6,6 @@ package cli
 // Editing this file might prove futile when you re-run the swagger generate command
 
 import (
-	"encoding/json"
 	"fmt"
 
 	"github.com/go-openapi/swag"
@@ -95,14 +94,6 @@ func registerModelUpdateAPIKeyDataFlags(depth int, cmdPrefix string, cmd *cobra.
 		return err
 	}
 
-	if err := registerUpdateAPIKeyDataID(depth, cmdPrefix, cmd); err != nil {
-		return err
-	}
-
-	if err := registerUpdateAPIKeyDataType(depth, cmdPrefix, cmd); err != nil {
-		return err
-	}
-
 	return nil
 }
 
@@ -125,61 +116,6 @@ func registerUpdateAPIKeyDataAttributes(depth int, cmdPrefix string, cmd *cobra.
 	return nil
 }
 
-func registerUpdateAPIKeyDataID(depth int, cmdPrefix string, cmd *cobra.Command) error {
-	if depth > maxDepth {
-		return nil
-	}
-
-	idDescription := ``
-
-	var idFlagName string
-	if cmdPrefix == "" {
-		idFlagName = "id"
-	} else {
-		idFlagName = fmt.Sprintf("%v.id", cmdPrefix)
-	}
-
-	var idFlagDefault string
-
-	_ = cmd.PersistentFlags().String(idFlagName, idFlagDefault, idDescription)
-	cmd.MarkPersistentFlagRequired(idFlagName)
-
-	return nil
-}
-
-func registerUpdateAPIKeyDataType(depth int, cmdPrefix string, cmd *cobra.Command) error {
-	if depth > maxDepth {
-		return nil
-	}
-
-	typeDescription := `Enum: ["api_keys"]. Required. `
-
-	var typeFlagName string
-	if cmdPrefix == "" {
-		typeFlagName = "type"
-	} else {
-		typeFlagName = fmt.Sprintf("%v.type", cmdPrefix)
-	}
-
-	var typeFlagDefault string
-
-	_ = cmd.PersistentFlags().String(typeFlagName, typeFlagDefault, typeDescription)
-	cmd.MarkPersistentFlagRequired(typeFlagName)
-
-	if err := cmd.RegisterFlagCompletionFunc(typeFlagName,
-		func(cmd *cobra.Command, args []string, toComplete string) ([]string, cobra.ShellCompDirective) {
-			var res []string
-			if err := json.Unmarshal([]byte(`["api_keys"]`), &res); err != nil {
-				panic(err)
-			}
-			return res, cobra.ShellCompDirectiveDefault
-		}); err != nil {
-		return err
-	}
-
-	return nil
-}
-
 // retrieve flags from commands, and set value in model. Return true if any flag is passed by user to fill model field.
 func retrieveModelUpdateAPIKeyDataFlags(depth int, m *models.UpdateAPIKeyData, cmdPrefix string, cmd *cobra.Command) (error, bool) {
 	retAdded := false
@@ -189,18 +125,6 @@ func retrieveModelUpdateAPIKeyDataFlags(depth int, m *models.UpdateAPIKeyData, c
 		return err, false
 	}
 	retAdded = retAdded || attributesAdded
-
-	err, idAdded := retrieveUpdateAPIKeyDataIDFlags(depth, m, cmdPrefix, cmd)
-	if err != nil {
-		return err, false
-	}
-	retAdded = retAdded || idAdded
-
-	err, typeAdded := retrieveUpdateAPIKeyDataTypeFlags(depth, m, cmdPrefix, cmd)
-	if err != nil {
-		return err, false
-	}
-	retAdded = retAdded || typeAdded
 
 	return nil, retAdded
 }
@@ -227,62 +151,6 @@ func retrieveUpdateAPIKeyDataAttributesFlags(depth int, m *models.UpdateAPIKeyDa
 	retAdded = retAdded || attributesAdded
 	if attributesAdded {
 		m.Attributes = attributesFlagValue
-	}
-
-	return nil, retAdded
-}
-
-func retrieveUpdateAPIKeyDataIDFlags(depth int, m *models.UpdateAPIKeyData, cmdPrefix string, cmd *cobra.Command) (error, bool) {
-	if depth > maxDepth {
-		return nil, false
-	}
-	retAdded := false
-
-	idFlagName := fmt.Sprintf("%v.id", cmdPrefix)
-	if cmd.Flags().Changed(idFlagName) {
-
-		var idFlagName string
-		if cmdPrefix == "" {
-			idFlagName = "id"
-		} else {
-			idFlagName = fmt.Sprintf("%v.id", cmdPrefix)
-		}
-
-		idFlagValue, err := cmd.Flags().GetString(idFlagName)
-		if err != nil {
-			return err, false
-		}
-		m.ID = idFlagValue
-
-		retAdded = true
-	}
-
-	return nil, retAdded
-}
-
-func retrieveUpdateAPIKeyDataTypeFlags(depth int, m *models.UpdateAPIKeyData, cmdPrefix string, cmd *cobra.Command) (error, bool) {
-	if depth > maxDepth {
-		return nil, false
-	}
-	retAdded := false
-
-	typeFlagName := fmt.Sprintf("%v.type", cmdPrefix)
-	if cmd.Flags().Changed(typeFlagName) {
-
-		var typeFlagName string
-		if cmdPrefix == "" {
-			typeFlagName = "type"
-		} else {
-			typeFlagName = fmt.Sprintf("%v.type", cmdPrefix)
-		}
-
-		typeFlagValue, err := cmd.Flags().GetString(typeFlagName)
-		if err != nil {
-			return err, false
-		}
-		m.Type = &typeFlagValue
-
-		retAdded = true
 	}
 
 	return nil, retAdded

@@ -27,6 +27,11 @@ import (
 func NewUpdateAPIKeyParams() *UpdateAPIKeyParams {
 	return &UpdateAPIKeyParams{
 		timeout: cr.DefaultTimeout,
+		Body: &models.UpdateAPIKey{
+			Data: &models.UpdateAPIKeyData{
+				Type: &apiKeysType,
+			},
+		},
 	}
 }
 

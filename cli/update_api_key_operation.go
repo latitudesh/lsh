@@ -164,6 +164,7 @@ func retrieveOperationAPIKeysUpdateAPIKeyIDFlag(m *api_keys.UpdateAPIKeyParams, 
 			return err, false
 		}
 		m.ID = idFlagValue
+		m.Body.Data.ID = m.ID
 
 	}
 	return nil, retAdded
