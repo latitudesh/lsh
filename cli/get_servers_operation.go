@@ -51,7 +51,13 @@ func runOperationServersGetServers(cmd *cobra.Command, args []string) error {
 	if err, _ := retrieveOperationServersGetServersFilterCreatedAtLteFlag(params, "", cmd); err != nil {
 		return err
 	}
-	if err, _ := retrieveOperationServersGetServersFilterDiskFlag(params, "", cmd); err != nil {
+	if err, _ := retrieveOperationServersGetServersFilterDiskEqlFlag(params, "", cmd); err != nil {
+		return err
+	}
+	if err, _ := retrieveOperationServersGetServersFilterDiskLteFlag(params, "", cmd); err != nil {
+		return err
+	}
+	if err, _ := retrieveOperationServersGetServersFilterDiskGteFlag(params, "", cmd); err != nil {
 		return err
 	}
 	if err, _ := retrieveOperationServersGetServersFilterGpuFlag(params, "", cmd); err != nil {
@@ -513,22 +519,62 @@ func retrieveOperationServersGetServersFilterCreatedAtLteFlag(m *servers.GetServ
 	}
 	return nil, retAdded
 }
-func retrieveOperationServersGetServersFilterDiskFlag(m *servers.GetServersParams, cmdPrefix string, cmd *cobra.Command) (error, bool) {
+func retrieveOperationServersGetServersFilterDiskEqlFlag(m *servers.GetServersParams, cmdPrefix string, cmd *cobra.Command) (error, bool) {
 	retAdded := false
-	if cmd.Flags().Changed("disk") {
+	if cmd.Flags().Changed("disk_eql") {
 
 		var filterDiskFlagName string
 		if cmdPrefix == "" {
-			filterDiskFlagName = "disk"
+			filterDiskFlagName = "disk_eql"
 		} else {
-			filterDiskFlagName = fmt.Sprintf("%v.disk", cmdPrefix)
+			filterDiskFlagName = fmt.Sprintf("%v.disk_eql", cmdPrefix)
 		}
 
 		filterDiskFlagValue, err := cmd.Flags().GetInt64(filterDiskFlagName)
 		if err != nil {
 			return err, false
 		}
-		m.FilterDisk = &filterDiskFlagValue
+		m.FilterDiskEql = &filterDiskFlagValue
+
+	}
+	return nil, retAdded
+}
+func retrieveOperationServersGetServersFilterDiskLteFlag(m *servers.GetServersParams, cmdPrefix string, cmd *cobra.Command) (error, bool) {
+	retAdded := false
+	if cmd.Flags().Changed("disk_lte") {
+
+		var filterDiskFlagName string
+		if cmdPrefix == "" {
+			filterDiskFlagName = "disk_lte"
+		} else {
+			filterDiskFlagName = fmt.Sprintf("%v.disk_lte", cmdPrefix)
+		}
+
+		filterDiskFlagValue, err := cmd.Flags().GetInt64(filterDiskFlagName)
+		if err != nil {
+			return err, false
+		}
+		m.FilterDiskLte = &filterDiskFlagValue
+
+	}
+	return nil, retAdded
+}
+func retrieveOperationServersGetServersFilterDiskGteFlag(m *servers.GetServersParams, cmdPrefix string, cmd *cobra.Command) (error, bool) {
+	retAdded := false
+	if cmd.Flags().Changed("disk_gte") {
+
+		var filterDiskFlagName string
+		if cmdPrefix == "" {
+			filterDiskFlagName = "disk_gte"
+		} else {
+			filterDiskFlagName = fmt.Sprintf("%v.disk_gte", cmdPrefix)
+		}
+
+		filterDiskFlagValue, err := cmd.Flags().GetInt64(filterDiskFlagName)
+		if err != nil {
+			return err, false
+		}
+		m.FilterDiskGte = &filterDiskFlagValue
 
 	}
 	return nil, retAdded
