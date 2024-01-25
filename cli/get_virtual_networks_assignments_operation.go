@@ -108,9 +108,9 @@ func registerOperationVirtualNetworkAssignmentsGetVirtualNetworksAssignmentsFilt
 
 	var filterServerFlagName string
 	if cmdPrefix == "" {
-		filterServerFlagName = "filter[server]"
+		filterServerFlagName = "server"
 	} else {
-		filterServerFlagName = fmt.Sprintf("%v.filter[server]", cmdPrefix)
+		filterServerFlagName = fmt.Sprintf("%v.server", cmdPrefix)
 	}
 
 	var filterServerFlagDefault string
@@ -125,9 +125,9 @@ func registerOperationVirtualNetworkAssignmentsGetVirtualNetworksAssignmentsFilt
 
 	var filterVidFlagName string
 	if cmdPrefix == "" {
-		filterVidFlagName = "filter[vid]"
+		filterVidFlagName = "vid"
 	} else {
-		filterVidFlagName = fmt.Sprintf("%v.filter[vid]", cmdPrefix)
+		filterVidFlagName = fmt.Sprintf("%v.vid", cmdPrefix)
 	}
 
 	var filterVidFlagDefault string
@@ -142,9 +142,9 @@ func registerOperationVirtualNetworkAssignmentsGetVirtualNetworksAssignmentsFilt
 
 	var filterVirtualNetworkIdFlagName string
 	if cmdPrefix == "" {
-		filterVirtualNetworkIdFlagName = "filter[virtual_network_id]"
+		filterVirtualNetworkIdFlagName = "virtual_network_id"
 	} else {
-		filterVirtualNetworkIdFlagName = fmt.Sprintf("%v.filter[virtual_network_id]", cmdPrefix)
+		filterVirtualNetworkIdFlagName = fmt.Sprintf("%v.virtual_network_id", cmdPrefix)
 	}
 
 	var filterVirtualNetworkIdFlagDefault string
@@ -176,13 +176,13 @@ func retrieveOperationVirtualNetworkAssignmentsGetVirtualNetworksAssignmentsAPIV
 }
 func retrieveOperationVirtualNetworkAssignmentsGetVirtualNetworksAssignmentsFilterServerFlag(m *virtual_network_assignments.GetVirtualNetworksAssignmentsParams, cmdPrefix string, cmd *cobra.Command) (error, bool) {
 	retAdded := false
-	if cmd.Flags().Changed("filter[server]") {
+	if cmd.Flags().Changed("server") {
 
 		var filterServerFlagName string
 		if cmdPrefix == "" {
-			filterServerFlagName = "filter[server]"
+			filterServerFlagName = "server"
 		} else {
-			filterServerFlagName = fmt.Sprintf("%v.filter[server]", cmdPrefix)
+			filterServerFlagName = fmt.Sprintf("%v.server", cmdPrefix)
 		}
 
 		filterServerFlagValue, err := cmd.Flags().GetString(filterServerFlagName)
@@ -196,13 +196,13 @@ func retrieveOperationVirtualNetworkAssignmentsGetVirtualNetworksAssignmentsFilt
 }
 func retrieveOperationVirtualNetworkAssignmentsGetVirtualNetworksAssignmentsFilterVidFlag(m *virtual_network_assignments.GetVirtualNetworksAssignmentsParams, cmdPrefix string, cmd *cobra.Command) (error, bool) {
 	retAdded := false
-	if cmd.Flags().Changed("filter[vid]") {
+	if cmd.Flags().Changed("vid") {
 
 		var filterVidFlagName string
 		if cmdPrefix == "" {
-			filterVidFlagName = "filter[vid]"
+			filterVidFlagName = "vid"
 		} else {
-			filterVidFlagName = fmt.Sprintf("%v.filter[vid]", cmdPrefix)
+			filterVidFlagName = fmt.Sprintf("%v.vid", cmdPrefix)
 		}
 
 		filterVidFlagValue, err := cmd.Flags().GetString(filterVidFlagName)
@@ -216,13 +216,13 @@ func retrieveOperationVirtualNetworkAssignmentsGetVirtualNetworksAssignmentsFilt
 }
 func retrieveOperationVirtualNetworkAssignmentsGetVirtualNetworksAssignmentsFilterVirtualNetworkIDFlag(m *virtual_network_assignments.GetVirtualNetworksAssignmentsParams, cmdPrefix string, cmd *cobra.Command) (error, bool) {
 	retAdded := false
-	if cmd.Flags().Changed("filter[virtual_network_id]") {
+	if cmd.Flags().Changed("virtual_network_id") {
 
 		var filterVirtualNetworkIdFlagName string
 		if cmdPrefix == "" {
-			filterVirtualNetworkIdFlagName = "filter[virtual_network_id]"
+			filterVirtualNetworkIdFlagName = "virtual_network_id"
 		} else {
-			filterVirtualNetworkIdFlagName = fmt.Sprintf("%v.filter[virtual_network_id]", cmdPrefix)
+			filterVirtualNetworkIdFlagName = fmt.Sprintf("%v.virtual_network_id", cmdPrefix)
 		}
 
 		filterVirtualNetworkIdFlagValue, err := cmd.Flags().GetString(filterVirtualNetworkIdFlagName)

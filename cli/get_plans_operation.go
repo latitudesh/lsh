@@ -140,9 +140,9 @@ func registerOperationPlansGetPlansFilterDiskParamFlags(cmdPrefix string, cmd *c
 
 	var filterDiskFlagName string
 	if cmdPrefix == "" {
-		filterDiskFlagName = "filter[disk]"
+		filterDiskFlagName = "disk"
 	} else {
-		filterDiskFlagName = fmt.Sprintf("%v.filter[disk]", cmdPrefix)
+		filterDiskFlagName = fmt.Sprintf("%v.disk", cmdPrefix)
 	}
 
 	var filterDiskFlagDefault int64
@@ -157,9 +157,9 @@ func registerOperationPlansGetPlansFilterGpuParamFlags(cmdPrefix string, cmd *co
 
 	var filterGpuFlagName string
 	if cmdPrefix == "" {
-		filterGpuFlagName = "filter[gpu]"
+		filterGpuFlagName = "gpu"
 	} else {
-		filterGpuFlagName = fmt.Sprintf("%v.filter[gpu]", cmdPrefix)
+		filterGpuFlagName = fmt.Sprintf("%v.gpu", cmdPrefix)
 	}
 
 	var filterGpuFlagDefault bool
@@ -174,9 +174,9 @@ func registerOperationPlansGetPlansFilterInStockParamFlags(cmdPrefix string, cmd
 
 	var filterInStockFlagName string
 	if cmdPrefix == "" {
-		filterInStockFlagName = "filter[in_stock]"
+		filterInStockFlagName = "in_stock"
 	} else {
-		filterInStockFlagName = fmt.Sprintf("%v.filter[in_stock]", cmdPrefix)
+		filterInStockFlagName = fmt.Sprintf("%v.in_stock", cmdPrefix)
 	}
 
 	var filterInStockFlagDefault bool
@@ -191,9 +191,9 @@ func registerOperationPlansGetPlansFilterLocationParamFlags(cmdPrefix string, cm
 
 	var filterLocationFlagName string
 	if cmdPrefix == "" {
-		filterLocationFlagName = "filter[location]"
+		filterLocationFlagName = "location"
 	} else {
-		filterLocationFlagName = fmt.Sprintf("%v.filter[location]", cmdPrefix)
+		filterLocationFlagName = fmt.Sprintf("%v.location", cmdPrefix)
 	}
 
 	var filterLocationFlagDefault string
@@ -208,9 +208,9 @@ func registerOperationPlansGetPlansFilterNameParamFlags(cmdPrefix string, cmd *c
 
 	var filterNameFlagName string
 	if cmdPrefix == "" {
-		filterNameFlagName = "filter[name]"
+		filterNameFlagName = "name"
 	} else {
-		filterNameFlagName = fmt.Sprintf("%v.filter[name]", cmdPrefix)
+		filterNameFlagName = fmt.Sprintf("%v.name", cmdPrefix)
 	}
 
 	var filterNameFlagDefault string
@@ -228,9 +228,9 @@ func registerOperationPlansGetPlansFilterRAMParamFlags(cmdPrefix string, cmd *co
 
 	var filterRamFlagName string
 	if cmdPrefix == "" {
-		filterRamFlagName = "filter[ram]"
+		filterRamFlagName = "ram"
 	} else {
-		filterRamFlagName = fmt.Sprintf("%v.filter[ram]", cmdPrefix)
+		filterRamFlagName = fmt.Sprintf("%v.ram", cmdPrefix)
 	}
 
 	var filterRamFlagDefault int64
@@ -245,9 +245,9 @@ func registerOperationPlansGetPlansFilterSlugParamFlags(cmdPrefix string, cmd *c
 
 	var filterSlugFlagName string
 	if cmdPrefix == "" {
-		filterSlugFlagName = "filter[slug]"
+		filterSlugFlagName = "slug"
 	} else {
-		filterSlugFlagName = fmt.Sprintf("%v.filter[slug]", cmdPrefix)
+		filterSlugFlagName = fmt.Sprintf("%v.slug", cmdPrefix)
 	}
 
 	var filterSlugFlagDefault string
@@ -262,9 +262,9 @@ func registerOperationPlansGetPlansFilterStockLevelParamFlags(cmdPrefix string, 
 
 	var filterStockLevelFlagName string
 	if cmdPrefix == "" {
-		filterStockLevelFlagName = "filter[stock_level]"
+		filterStockLevelFlagName = "stock_level"
 	} else {
-		filterStockLevelFlagName = fmt.Sprintf("%v.filter[stock_level]", cmdPrefix)
+		filterStockLevelFlagName = fmt.Sprintf("%v.stock_level", cmdPrefix)
 	}
 
 	var filterStockLevelFlagDefault string
@@ -307,13 +307,13 @@ func retrieveOperationPlansGetPlansAPIVersionFlag(m *plans.GetPlansParams, cmdPr
 }
 func retrieveOperationPlansGetPlansFilterDiskFlag(m *plans.GetPlansParams, cmdPrefix string, cmd *cobra.Command) (error, bool) {
 	retAdded := false
-	if cmd.Flags().Changed("filter[disk]") {
+	if cmd.Flags().Changed("disk") {
 
 		var filterDiskFlagName string
 		if cmdPrefix == "" {
-			filterDiskFlagName = "filter[disk]"
+			filterDiskFlagName = "disk"
 		} else {
-			filterDiskFlagName = fmt.Sprintf("%v.filter[disk]", cmdPrefix)
+			filterDiskFlagName = fmt.Sprintf("%v.disk", cmdPrefix)
 		}
 
 		filterDiskFlagValue, err := cmd.Flags().GetInt64(filterDiskFlagName)
@@ -327,13 +327,13 @@ func retrieveOperationPlansGetPlansFilterDiskFlag(m *plans.GetPlansParams, cmdPr
 }
 func retrieveOperationPlansGetPlansFilterGpuFlag(m *plans.GetPlansParams, cmdPrefix string, cmd *cobra.Command) (error, bool) {
 	retAdded := false
-	if cmd.Flags().Changed("filter[gpu]") {
+	if cmd.Flags().Changed("gpu") {
 
 		var filterGpuFlagName string
 		if cmdPrefix == "" {
-			filterGpuFlagName = "filter[gpu]"
+			filterGpuFlagName = "gpu"
 		} else {
-			filterGpuFlagName = fmt.Sprintf("%v.filter[gpu]", cmdPrefix)
+			filterGpuFlagName = fmt.Sprintf("%v.gpu", cmdPrefix)
 		}
 
 		filterGpuFlagValue, err := cmd.Flags().GetBool(filterGpuFlagName)
@@ -347,13 +347,13 @@ func retrieveOperationPlansGetPlansFilterGpuFlag(m *plans.GetPlansParams, cmdPre
 }
 func retrieveOperationPlansGetPlansFilterInStockFlag(m *plans.GetPlansParams, cmdPrefix string, cmd *cobra.Command) (error, bool) {
 	retAdded := false
-	if cmd.Flags().Changed("filter[in_stock]") {
+	if cmd.Flags().Changed("in_stock") {
 
 		var filterInStockFlagName string
 		if cmdPrefix == "" {
-			filterInStockFlagName = "filter[in_stock]"
+			filterInStockFlagName = "in_stock"
 		} else {
-			filterInStockFlagName = fmt.Sprintf("%v.filter[in_stock]", cmdPrefix)
+			filterInStockFlagName = fmt.Sprintf("%v.in_stock", cmdPrefix)
 		}
 
 		filterInStockFlagValue, err := cmd.Flags().GetBool(filterInStockFlagName)
@@ -367,13 +367,13 @@ func retrieveOperationPlansGetPlansFilterInStockFlag(m *plans.GetPlansParams, cm
 }
 func retrieveOperationPlansGetPlansFilterLocationFlag(m *plans.GetPlansParams, cmdPrefix string, cmd *cobra.Command) (error, bool) {
 	retAdded := false
-	if cmd.Flags().Changed("filter[location]") {
+	if cmd.Flags().Changed("location") {
 
 		var filterLocationFlagName string
 		if cmdPrefix == "" {
-			filterLocationFlagName = "filter[location]"
+			filterLocationFlagName = "location"
 		} else {
-			filterLocationFlagName = fmt.Sprintf("%v.filter[location]", cmdPrefix)
+			filterLocationFlagName = fmt.Sprintf("%v.location", cmdPrefix)
 		}
 
 		filterLocationFlagValue, err := cmd.Flags().GetString(filterLocationFlagName)
@@ -387,13 +387,13 @@ func retrieveOperationPlansGetPlansFilterLocationFlag(m *plans.GetPlansParams, c
 }
 func retrieveOperationPlansGetPlansFilterNameFlag(m *plans.GetPlansParams, cmdPrefix string, cmd *cobra.Command) (error, bool) {
 	retAdded := false
-	if cmd.Flags().Changed("filter[name]") {
+	if cmd.Flags().Changed("name") {
 
 		var filterNameFlagName string
 		if cmdPrefix == "" {
-			filterNameFlagName = "filter[name]"
+			filterNameFlagName = "name"
 		} else {
-			filterNameFlagName = fmt.Sprintf("%v.filter[name]", cmdPrefix)
+			filterNameFlagName = fmt.Sprintf("%v.name", cmdPrefix)
 		}
 
 		filterNameFlagValue, err := cmd.Flags().GetString(filterNameFlagName)
@@ -407,13 +407,13 @@ func retrieveOperationPlansGetPlansFilterNameFlag(m *plans.GetPlansParams, cmdPr
 }
 func retrieveOperationPlansGetPlansFilterRAMFlag(m *plans.GetPlansParams, cmdPrefix string, cmd *cobra.Command) (error, bool) {
 	retAdded := false
-	if cmd.Flags().Changed("filter[ram]") {
+	if cmd.Flags().Changed("ram") {
 
 		var filterRamFlagName string
 		if cmdPrefix == "" {
-			filterRamFlagName = "filter[ram]"
+			filterRamFlagName = "ram"
 		} else {
-			filterRamFlagName = fmt.Sprintf("%v.filter[ram]", cmdPrefix)
+			filterRamFlagName = fmt.Sprintf("%v.ram", cmdPrefix)
 		}
 
 		filterRamFlagValue, err := cmd.Flags().GetInt64(filterRamFlagName)
@@ -427,13 +427,13 @@ func retrieveOperationPlansGetPlansFilterRAMFlag(m *plans.GetPlansParams, cmdPre
 }
 func retrieveOperationPlansGetPlansFilterSlugFlag(m *plans.GetPlansParams, cmdPrefix string, cmd *cobra.Command) (error, bool) {
 	retAdded := false
-	if cmd.Flags().Changed("filter[slug]") {
+	if cmd.Flags().Changed("slug") {
 
 		var filterSlugFlagName string
 		if cmdPrefix == "" {
-			filterSlugFlagName = "filter[slug]"
+			filterSlugFlagName = "slug"
 		} else {
-			filterSlugFlagName = fmt.Sprintf("%v.filter[slug]", cmdPrefix)
+			filterSlugFlagName = fmt.Sprintf("%v.slug", cmdPrefix)
 		}
 
 		filterSlugFlagValue, err := cmd.Flags().GetString(filterSlugFlagName)
@@ -447,13 +447,13 @@ func retrieveOperationPlansGetPlansFilterSlugFlag(m *plans.GetPlansParams, cmdPr
 }
 func retrieveOperationPlansGetPlansFilterStockLevelFlag(m *plans.GetPlansParams, cmdPrefix string, cmd *cobra.Command) (error, bool) {
 	retAdded := false
-	if cmd.Flags().Changed("filter[stock_level]") {
+	if cmd.Flags().Changed("stock_level") {
 
 		var filterStockLevelFlagName string
 		if cmdPrefix == "" {
-			filterStockLevelFlagName = "filter[stock_level]"
+			filterStockLevelFlagName = "stock_level"
 		} else {
-			filterStockLevelFlagName = fmt.Sprintf("%v.filter[stock_level]", cmdPrefix)
+			filterStockLevelFlagName = fmt.Sprintf("%v.stock_level", cmdPrefix)
 		}
 
 		filterStockLevelFlagValue, err := cmd.Flags().GetString(filterStockLevelFlagName)

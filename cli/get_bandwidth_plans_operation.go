@@ -96,9 +96,9 @@ func registerOperationPlansGetBandwidthPlansFilterIDParamFlags(cmdPrefix string,
 
 	var filterIdFlagName string
 	if cmdPrefix == "" {
-		filterIdFlagName = "filter[id]"
+		filterIdFlagName = "id"
 	} else {
-		filterIdFlagName = fmt.Sprintf("%v.filter[id]", cmdPrefix)
+		filterIdFlagName = fmt.Sprintf("%v.id", cmdPrefix)
 	}
 
 	var filterIdFlagDefault string
@@ -130,13 +130,13 @@ func retrieveOperationPlansGetBandwidthPlansAPIVersionFlag(m *plans.GetBandwidth
 }
 func retrieveOperationPlansGetBandwidthPlansFilterIDFlag(m *plans.GetBandwidthPlansParams, cmdPrefix string, cmd *cobra.Command) (error, bool) {
 	retAdded := false
-	if cmd.Flags().Changed("filter[id]") {
+	if cmd.Flags().Changed("id") {
 
 		var filterIdFlagName string
 		if cmdPrefix == "" {
-			filterIdFlagName = "filter[id]"
+			filterIdFlagName = "id"
 		} else {
-			filterIdFlagName = fmt.Sprintf("%v.filter[id]", cmdPrefix)
+			filterIdFlagName = fmt.Sprintf("%v.id", cmdPrefix)
 		}
 
 		filterIdFlagValue, err := cmd.Flags().GetString(filterIdFlagName)
