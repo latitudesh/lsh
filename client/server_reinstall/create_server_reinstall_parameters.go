@@ -25,6 +25,11 @@ import (
 func NewCreateServerReinstallParams() *CreateServerReinstallParams {
 	return &CreateServerReinstallParams{
 		timeout: cr.DefaultTimeout,
+		Body: CreateServerReinstallBody{
+			Data: &CreateServerReinstallParamsBodyData{
+				Type: &serverReinstallType,
+			},
+		},
 	}
 }
 
@@ -61,11 +66,6 @@ CreateServerReinstallParams contains all the parameters to send to the API endpo
 */
 type CreateServerReinstallParams struct {
 
-	// APIVersion.
-	//
-	// Default: "2023-06-01"
-	APIVersion *string
-
 	// Body.
 	Body CreateServerReinstallBody
 
@@ -89,13 +89,7 @@ func (o *CreateServerReinstallParams) WithDefaults() *CreateServerReinstallParam
 //
 // All values with no default are reset to their zero value.
 func (o *CreateServerReinstallParams) SetDefaults() {
-	var (
-		aPIVersionDefault = string("2023-06-01")
-	)
-
-	val := CreateServerReinstallParams{
-		APIVersion: &aPIVersionDefault,
-	}
+	val := CreateServerReinstallParams{}
 
 	val.timeout = o.timeout
 	val.Context = o.Context
@@ -136,17 +130,6 @@ func (o *CreateServerReinstallParams) SetHTTPClient(client *http.Client) {
 	o.HTTPClient = client
 }
 
-// WithAPIVersion adds the aPIVersion to the create server reinstall params
-func (o *CreateServerReinstallParams) WithAPIVersion(aPIVersion *string) *CreateServerReinstallParams {
-	o.SetAPIVersion(aPIVersion)
-	return o
-}
-
-// SetAPIVersion adds the apiVersion to the create server reinstall params
-func (o *CreateServerReinstallParams) SetAPIVersion(aPIVersion *string) {
-	o.APIVersion = aPIVersion
-}
-
 // WithBody adds the body to the create server reinstall params
 func (o *CreateServerReinstallParams) WithBody(body CreateServerReinstallBody) *CreateServerReinstallParams {
 	o.SetBody(body)
@@ -177,13 +160,6 @@ func (o *CreateServerReinstallParams) WriteToRequest(r runtime.ClientRequest, re
 	}
 	var res []error
 
-	if o.APIVersion != nil {
-
-		// header param API-Version
-		if err := r.SetHeaderParam("API-Version", *o.APIVersion); err != nil {
-			return err
-		}
-	}
 	if err := r.SetBodyParam(o.Body); err != nil {
 		return err
 	}
