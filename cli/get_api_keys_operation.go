@@ -7,7 +7,6 @@ package cli
 
 import (
 	"encoding/json"
-	"fmt"
 
 	"github.com/latitudesh/lsh/client/api_keys"
 	"github.com/latitudesh/lsh/internal/utils"
@@ -24,10 +23,6 @@ func makeOperationAPIKeysGetAPIKeysCmd() (*cobra.Command, error) {
 		RunE: runOperationAPIKeysGetAPIKeys,
 	}
 
-	if err := registerOperationAPIKeysGetAPIKeysParamFlags(cmd); err != nil {
-		return nil, err
-	}
-
 	return cmd, nil
 }
 
@@ -39,9 +34,6 @@ func runOperationAPIKeysGetAPIKeys(cmd *cobra.Command, args []string) error {
 	}
 	// retrieve flag values from cmd and fill params
 	params := api_keys.NewGetAPIKeysParams()
-	if err, _ := retrieveOperationAPIKeysGetAPIKeysAPIVersionFlag(params, "", cmd); err != nil {
-		return err
-	}
 	if dryRun {
 
 		logDebugf("dry-run flag specified. Skip sending request.")
@@ -56,53 +48,6 @@ func runOperationAPIKeysGetAPIKeys(cmd *cobra.Command, args []string) error {
 		utils.PrintOutput(msgStr)
 	}
 	return nil
-}
-
-// registerOperationAPIKeysGetAPIKeysParamFlags registers all flags needed to fill params
-func registerOperationAPIKeysGetAPIKeysParamFlags(cmd *cobra.Command) error {
-	if err := registerOperationAPIKeysGetAPIKeysAPIVersionParamFlags("", cmd); err != nil {
-		return err
-	}
-	return nil
-}
-
-func registerOperationAPIKeysGetAPIKeysAPIVersionParamFlags(cmdPrefix string, cmd *cobra.Command) error {
-
-	apiVersionDescription := ``
-
-	var apiVersionFlagName string
-	if cmdPrefix == "" {
-		apiVersionFlagName = "API-Version"
-	} else {
-		apiVersionFlagName = fmt.Sprintf("%v.API-Version", cmdPrefix)
-	}
-
-	var apiVersionFlagDefault string = "2023-06-01"
-
-	_ = cmd.PersistentFlags().String(apiVersionFlagName, apiVersionFlagDefault, apiVersionDescription)
-
-	return nil
-}
-
-func retrieveOperationAPIKeysGetAPIKeysAPIVersionFlag(m *api_keys.GetAPIKeysParams, cmdPrefix string, cmd *cobra.Command) (error, bool) {
-	retAdded := false
-	if cmd.Flags().Changed("API-Version") {
-
-		var apiVersionFlagName string
-		if cmdPrefix == "" {
-			apiVersionFlagName = "API-Version"
-		} else {
-			apiVersionFlagName = fmt.Sprintf("%v.API-Version", cmdPrefix)
-		}
-
-		apiVersionFlagValue, err := cmd.Flags().GetString(apiVersionFlagName)
-		if err != nil {
-			return err, false
-		}
-		m.APIVersion = &apiVersionFlagValue
-
-	}
-	return nil, retAdded
 }
 
 // parseOperationAPIKeysGetAPIKeysResult parses request result and return the string content

@@ -39,9 +39,6 @@ func runOperationAPIKeysDeleteAPIKey(cmd *cobra.Command, args []string) error {
 	}
 	// retrieve flag values from cmd and fill params
 	params := api_keys.NewDeleteAPIKeyParams()
-	if err, _ := retrieveOperationAPIKeysDeleteAPIKeyAPIVersionFlag(params, "", cmd); err != nil {
-		return err
-	}
 	if err, _ := retrieveOperationAPIKeysDeleteAPIKeyIDFlag(params, "", cmd); err != nil {
 		return err
 	}
@@ -63,35 +60,15 @@ func runOperationAPIKeysDeleteAPIKey(cmd *cobra.Command, args []string) error {
 
 // registerOperationAPIKeysDeleteAPIKeyParamFlags registers all flags needed to fill params
 func registerOperationAPIKeysDeleteAPIKeyParamFlags(cmd *cobra.Command) error {
-	if err := registerOperationAPIKeysDeleteAPIKeyAPIVersionParamFlags("", cmd); err != nil {
-		return err
-	}
 	if err := registerOperationAPIKeysDeleteAPIKeyIDParamFlags("", cmd); err != nil {
 		return err
 	}
 	return nil
 }
 
-func registerOperationAPIKeysDeleteAPIKeyAPIVersionParamFlags(cmdPrefix string, cmd *cobra.Command) error {
-
-	apiVersionDescription := ``
-
-	var apiVersionFlagName string
-	if cmdPrefix == "" {
-		apiVersionFlagName = "API-Version"
-	} else {
-		apiVersionFlagName = fmt.Sprintf("%v.API-Version", cmdPrefix)
-	}
-
-	var apiVersionFlagDefault string = "2023-06-01"
-
-	_ = cmd.PersistentFlags().String(apiVersionFlagName, apiVersionFlagDefault, apiVersionDescription)
-
-	return nil
-}
 func registerOperationAPIKeysDeleteAPIKeyIDParamFlags(cmdPrefix string, cmd *cobra.Command) error {
 
-	idDescription := `Required. `
+	idDescription := `The Api Key Id (Required).`
 
 	var idFlagName string
 	if cmdPrefix == "" {
@@ -108,26 +85,6 @@ func registerOperationAPIKeysDeleteAPIKeyIDParamFlags(cmdPrefix string, cmd *cob
 	return nil
 }
 
-func retrieveOperationAPIKeysDeleteAPIKeyAPIVersionFlag(m *api_keys.DeleteAPIKeyParams, cmdPrefix string, cmd *cobra.Command) (error, bool) {
-	retAdded := false
-	if cmd.Flags().Changed("API-Version") {
-
-		var apiVersionFlagName string
-		if cmdPrefix == "" {
-			apiVersionFlagName = "API-Version"
-		} else {
-			apiVersionFlagName = fmt.Sprintf("%v.API-Version", cmdPrefix)
-		}
-
-		apiVersionFlagValue, err := cmd.Flags().GetString(apiVersionFlagName)
-		if err != nil {
-			return err, false
-		}
-		m.APIVersion = &apiVersionFlagValue
-
-	}
-	return nil, retAdded
-}
 func retrieveOperationAPIKeysDeleteAPIKeyIDFlag(m *api_keys.DeleteAPIKeyParams, cmdPrefix string, cmd *cobra.Command) (error, bool) {
 	retAdded := false
 

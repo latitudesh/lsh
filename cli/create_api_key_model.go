@@ -6,7 +6,6 @@ package cli
 // Editing this file might prove futile when you re-run the swagger generate command
 
 import (
-	"encoding/json"
 	"fmt"
 
 	"github.com/go-openapi/swag"
@@ -91,10 +90,6 @@ func registerModelCreateAPIKeyDataFlags(depth int, cmdPrefix string, cmd *cobra.
 		return err
 	}
 
-	if err := registerCreateAPIKeyDataType(depth, cmdPrefix, cmd); err != nil {
-		return err
-	}
-
 	return nil
 }
 
@@ -112,33 +107,6 @@ func registerCreateAPIKeyDataAttributes(depth int, cmdPrefix string, cmd *cobra.
 	return nil
 }
 
-func registerCreateAPIKeyDataType(depth int, cmdPrefix string, cmd *cobra.Command) error {
-	if depth > maxDepth {
-		return nil
-	}
-
-	typeDescription := `Enum: ["api_keys"]. Required. `
-
-	var typeFlagName = "type"
-
-	var typeFlagDefault string
-
-	_ = cmd.PersistentFlags().String(typeFlagName, typeFlagDefault, typeDescription)
-
-	if err := cmd.RegisterFlagCompletionFunc(typeFlagName,
-		func(cmd *cobra.Command, args []string, toComplete string) ([]string, cobra.ShellCompDirective) {
-			var res []string
-			if err := json.Unmarshal([]byte(`["api_keys"]`), &res); err != nil {
-				panic(err)
-			}
-			return res, cobra.ShellCompDirectiveDefault
-		}); err != nil {
-		return err
-	}
-
-	return nil
-}
-
 // retrieve flags from commands, and set value in model. Return true if any flag is passed by user to fill model field.
 func retrieveModelCreateAPIKeyDataFlags(depth int, m *models.CreateAPIKeyData, cmdPrefix string, cmd *cobra.Command) (error, bool) {
 	retAdded := false
@@ -148,12 +116,6 @@ func retrieveModelCreateAPIKeyDataFlags(depth int, m *models.CreateAPIKeyData, c
 		return err, false
 	}
 	retAdded = retAdded || attributesAdded
-
-	err, typeAdded := retrieveCreateAPIKeyDataTypeFlags(depth, m, cmdPrefix, cmd)
-	if err != nil {
-		return err, false
-	}
-	retAdded = retAdded || typeAdded
 
 	return nil, retAdded
 }
@@ -181,27 +143,6 @@ func retrieveCreateAPIKeyDataAttributesFlags(depth int, m *models.CreateAPIKeyDa
 	retAdded = retAdded || attributesAdded
 	if attributesAdded {
 		m.Attributes = attributesFlagValue
-	}
-
-	return nil, retAdded
-}
-
-func retrieveCreateAPIKeyDataTypeFlags(depth int, m *models.CreateAPIKeyData, cmdPrefix string, cmd *cobra.Command) (error, bool) {
-	if depth > maxDepth {
-		return nil, false
-	}
-	retAdded := false
-
-	var typeFlagName = "type"
-	if cmd.Flags().Changed(typeFlagName) {
-
-		typeFlagValue, err := cmd.Flags().GetString(typeFlagName)
-		if err != nil {
-			return err, false
-		}
-		m.Type = &typeFlagValue
-
-		retAdded = true
 	}
 
 	return nil, retAdded
