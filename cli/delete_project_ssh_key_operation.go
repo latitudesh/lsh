@@ -9,7 +9,6 @@ import (
 	"fmt"
 
 	"github.com/latitudesh/lsh/client/ssh_keys"
-	"github.com/latitudesh/lsh/internal"
 	"github.com/latitudesh/lsh/internal/utils"
 
 	"github.com/spf13/cobra"
@@ -18,9 +17,9 @@ import (
 // makeOperationSSHKeysDeleteProjectSSHKeyCmd returns a cmd to handle operation deleteProjectSshKey
 func makeOperationSSHKeysDeleteProjectSSHKeyCmd() (*cobra.Command, error) {
 	cmd := &cobra.Command{
-		Use: "destroy",
+		Use:   "destroy",
 		Short: `Allow you remove SSH Keys in a project. Remove a SSH Key from the project won't revoke the SSH Keys access for previously deploy and reinstall actions.`,
-		RunE: runOperationSSHKeysDeleteProjectSSHKey,
+		RunE:  runOperationSSHKeysDeleteProjectSSHKey,
 	}
 
 	if err := registerOperationSSHKeysDeleteProjectSSHKeyParamFlags(cmd); err != nil {
@@ -50,13 +49,19 @@ func runOperationSSHKeysDeleteProjectSSHKey(cmd *cobra.Command, args []string) e
 		return nil
 	}
 	// make request and then print result
-	msgStr, err := parseOperationSSHKeysDeleteProjectSSHKeyResult(appCli.SSHKeys.DeleteProjectSSHKey(params, nil))
+	result, err := appCli.SSHKeys.DeleteProjectSSHKey(params, nil)
+	if err != nil {
+		utils.PrintError(err)
+		return nil
+	}
+
+	msgStr, err := parseOperationSSHKeysDeleteProjectSSHKeyResult(result)
 	if err != nil {
 		return err
 	}
 	if !debug {
 
-		utils.PrintOutput(msgStr)
+		utils.PrintResult(msgStr)
 	}
 	return nil
 }
@@ -151,26 +156,7 @@ func retrieveOperationSSHKeysDeleteProjectSSHKeySSHKeyIDFlag(m *ssh_keys.DeleteP
 }
 
 // parseOperationSSHKeysDeleteProjectSSHKeyResult parses request result and return the string content
-func parseOperationSSHKeysDeleteProjectSSHKeyResult(resp0 *ssh_keys.DeleteProjectSSHKeyOK, respErr error) (string, error) {
-	if respErr != nil {
-
-		// Non schema case: warning deleteProjectSshKeyOK is not supported
-
-		// Non schema case: warning deleteProjectSshKeyNotFound is not supported
-
-		notFoundErrorMessage, err := internal.ParseNotFoundError(respErr)
-
-		if err != nil {
-			return "", err
-		}
-
-		if len(notFoundErrorMessage) > 0 {
-			return notFoundErrorMessage, nil
-		}
-
-		return "", respErr
-	}
-
+func parseOperationSSHKeysDeleteProjectSSHKeyResult(resp0 *ssh_keys.DeleteProjectSSHKeyOK) (string, error) {
 	// warning: non schema response deleteProjectSshKeyOK is not supported by go-swagger cli yet.
 
 	return "", nil

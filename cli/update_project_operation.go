@@ -51,14 +51,20 @@ func runOperationProjectsUpdateProject(cmd *cobra.Command, args []string) error 
 		logDebugf("dry-run flag specified. Skip sending request.")
 		return nil
 	}
-	// make request and then print result
-	msgStr, err := parseOperationProjectsUpdateProjectResult(appCli.Projects.UpdateProject(params, nil))
+
+	result, err := appCli.Projects.UpdateProject(params, nil)
+	if err != nil {
+		utils.PrintError(err)
+		return nil
+	}
+
+	msgStr, err := parseOperationProjectsUpdateProjectResult(result)
 	if err != nil {
 		return err
 	}
 	if !debug {
 
-		utils.PrintOutput(msgStr)
+		utils.PrintResult(msgStr)
 	}
 	return nil
 }
@@ -85,7 +91,7 @@ func registerOperationProjectsUpdateProjectBodyParamFlags(cmdPrefix string, cmd 
 
 	_ = cmd.PersistentFlags().String(bodyFlagName, "", "Optional json string for [body]. ")
 
-	// add flags for body 
+	// add flags for body
 	if err := registerModelUpdateProjectBodyFlags(0, "", cmd); err != nil {
 		return err
 	}
@@ -106,6 +112,7 @@ func registerOperationProjectsUpdateProjectIDOrSlugParamFlags(cmdPrefix string, 
 	var idOrSlugFlagDefault string
 
 	_ = cmd.PersistentFlags().String(idOrSlugFlagName, idOrSlugFlagDefault, idOrSlugDescription)
+	cmd.MarkPersistentFlagRequired(idOrSlugFlagName)
 
 	return nil
 }
@@ -171,60 +178,7 @@ func retrieveOperationProjectsUpdateProjectIDOrSlugFlag(m *projects.UpdateProjec
 }
 
 // parseOperationProjectsUpdateProjectResult parses request result and return the string content
-func parseOperationProjectsUpdateProjectResult(resp0 *projects.UpdateProjectOK, respErr error) (string, error) {
-	if respErr != nil {
-
-		var iResp0 interface{} = respErr
-		resp0, ok := iResp0.(*projects.UpdateProjectOK)
-		if ok {
-			if !swag.IsZero(resp0) && !swag.IsZero(resp0.Payload) {
-				msgStr, err := json.Marshal(resp0.Payload)
-				if err != nil {
-					return "", err
-				}
-				return string(msgStr), nil
-			}
-		}
-
-		var iResp1 interface{} = respErr
-		resp1, ok := iResp1.(*projects.UpdateProjectForbidden)
-		if ok {
-			if !swag.IsZero(resp1) && !swag.IsZero(resp1.Payload) {
-				msgStr, err := json.Marshal(resp1.Payload)
-				if err != nil {
-					return "", err
-				}
-				return string(msgStr), nil
-			}
-		}
-
-		var iResp2 interface{} = respErr
-		resp2, ok := iResp2.(*projects.UpdateProjectNotFound)
-		if ok {
-			if !swag.IsZero(resp2) && !swag.IsZero(resp2.Payload) {
-				msgStr, err := json.Marshal(resp2.Payload)
-				if err != nil {
-					return "", err
-				}
-				return string(msgStr), nil
-			}
-		}
-
-		var iResp3 interface{} = respErr
-		resp3, ok := iResp3.(*projects.UpdateProjectUnprocessableEntity)
-		if ok {
-			if !swag.IsZero(resp3) && !swag.IsZero(resp3.Payload) {
-				msgStr, err := json.Marshal(resp3.Payload)
-				if err != nil {
-					return "", err
-				}
-				return string(msgStr), nil
-			}
-		}
-
-		return "", respErr
-	}
-
+func parseOperationProjectsUpdateProjectResult(resp0 *projects.UpdateProjectOK) (string, error) {
 	if !swag.IsZero(resp0) && !swag.IsZero(resp0.Payload) {
 		msgStr, err := json.Marshal(resp0.Payload)
 		if err != nil {

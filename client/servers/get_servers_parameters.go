@@ -87,7 +87,9 @@ type GetServersParams struct {
 	                            [gte] to filter for values greater or equal to the provided value.
 	                            [lte] to filter by values lower or equal to the provided value.
 	*/
-	FilterDisk *int64
+	FilterDiskEql *int64
+	FilterDiskLte *int64
+	FilterDiskGte *int64
 
 	/* FilterGpu.
 
@@ -246,15 +248,37 @@ func (o *GetServersParams) SetFilterCreatedAtLte(filterCreatedAtLte *string) {
 	o.FilterCreatedAtLte = filterCreatedAtLte
 }
 
-// WithFilterDisk adds the filterDisk to the get servers params
-func (o *GetServersParams) WithFilterDisk(filterDisk *int64) *GetServersParams {
-	o.SetFilterDisk(filterDisk)
+// WithFilterDiskEql adds the filterDiskEql to the get servers params
+func (o *GetServersParams) WithFilterDiskEql(filterDiskEql *int64) *GetServersParams {
+	o.SetFilterDiskEql(filterDiskEql)
 	return o
 }
 
-// SetFilterDisk adds the filterDisk to the get servers params
-func (o *GetServersParams) SetFilterDisk(filterDisk *int64) {
-	o.FilterDisk = filterDisk
+// WithFilterDiskLte adds the filterDiskLte to the get servers params
+func (o *GetServersParams) WithFilterDiskLte(filterDiskLte *int64) *GetServersParams {
+	o.SetFilterDiskLte(filterDiskLte)
+	return o
+}
+
+// WithFilterDiskGte adds the filterDiskGte to the get servers params
+func (o *GetServersParams) WithFilterDiskGte(filterDiskGte *int64) *GetServersParams {
+	o.SetFilterDiskGte(filterDiskGte)
+	return o
+}
+
+// SetFilterDiskEql adds the filterDiskEql to the get servers params
+func (o *GetServersParams) SetFilterDiskEql(filterDiskEql *int64) {
+	o.FilterDiskEql = filterDiskEql
+}
+
+// SetFilterDiskLte adds the filterDiskLte to the get servers params
+func (o *GetServersParams) SetFilterDiskLte(filterDiskLte *int64) {
+	o.FilterDiskLte = filterDiskLte
+}
+
+// SetFilterDiskGte adds the filterDiskGte to the get servers params
+func (o *GetServersParams) SetFilterDiskGte(filterDiskGte *int64) {
+	o.FilterDiskGte = filterDiskGte
 }
 
 // WithFilterGpu adds the filterGpu to the get servers params
@@ -437,18 +461,52 @@ func (o *GetServersParams) WriteToRequest(r runtime.ClientRequest, reg strfmt.Re
 		}
 	}
 
-	if o.FilterDisk != nil {
+	if o.FilterDiskEql != nil {
 
 		// query param filter[disk]
-		var qrFilterDisk int64
+		var qrFilterDiskEql int64
 
-		if o.FilterDisk != nil {
-			qrFilterDisk = *o.FilterDisk
+		if o.FilterDiskEql != nil {
+			qrFilterDiskEql = *o.FilterDiskEql
 		}
-		qFilterDisk := swag.FormatInt64(qrFilterDisk)
-		if qFilterDisk != "" {
+		qFilterDiskEql := swag.FormatInt64(qrFilterDiskEql)
+		if qFilterDiskEql != "" {
 
-			if err := r.SetQueryParam("filter[disk]", qFilterDisk); err != nil {
+			if err := r.SetQueryParam("filter[disk][eql]", qFilterDiskEql); err != nil {
+				return err
+			}
+		}
+	}
+
+	if o.FilterDiskLte != nil {
+
+		// query param filter[disk]
+		var qrFilterDiskLte int64
+
+		if o.FilterDiskLte != nil {
+			qrFilterDiskLte = *o.FilterDiskLte
+		}
+		qFilterDiskLte := swag.FormatInt64(qrFilterDiskLte)
+		if qFilterDiskLte != "" {
+
+			if err := r.SetQueryParam("filter[disk][lte]", qFilterDiskLte); err != nil {
+				return err
+			}
+		}
+	}
+
+	if o.FilterDiskGte != nil {
+
+		// query param filter[disk]
+		var qrFilterDiskGte int64
+
+		if o.FilterDiskGte != nil {
+			qrFilterDiskGte = *o.FilterDiskGte
+		}
+		qFilterDiskGte := swag.FormatInt64(qrFilterDiskGte)
+		if qFilterDiskGte != "" {
+
+			if err := r.SetQueryParam("filter[disk][gte]", qFilterDiskGte); err != nil {
 				return err
 			}
 		}

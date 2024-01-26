@@ -17,6 +17,7 @@ import (
 	"github.com/go-openapi/swag"
 	"github.com/go-openapi/validate"
 
+	apierrors "github.com/latitudesh/lsh/internal/api/errors"
 	"github.com/latitudesh/lsh/models"
 )
 
@@ -35,14 +36,20 @@ func (o *CreateServerReader) ReadResponse(response runtime.ClientResponse, consu
 		}
 		return result, nil
 	case 400:
-		result := NewCreateServerBadRequest()
-		if err := result.readResponse(response, consumer, o.formats); err != nil {
+		result := apierrors.NewBadRequest()
+		if err := result.ReadResponse(response, consumer, o.formats); err != nil {
+			return nil, err
+		}
+		return nil, result
+	case 401:
+		result := apierrors.NewUnauthorized()
+		if err := result.ReadResponse(response, consumer, o.formats); err != nil {
 			return nil, err
 		}
 		return nil, result
 	case 422:
-		result := NewCreateServerUnprocessableEntity()
-		if err := result.readResponse(response, consumer, o.formats); err != nil {
+		result := apierrors.NewUnprocessableEntity()
+		if err := result.ReadResponse(response, consumer, o.formats); err != nil {
 			return nil, err
 		}
 		return nil, result

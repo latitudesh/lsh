@@ -6,14 +6,11 @@ package cli
 // Editing this file might prove futile when you re-run the swagger generate command
 
 import (
-	"encoding/json"
 	"fmt"
 
 	"github.com/latitudesh/lsh/client/servers"
-	"github.com/latitudesh/lsh/internal"
 	"github.com/latitudesh/lsh/internal/utils"
 
-	"github.com/go-openapi/swag"
 	"github.com/spf13/cobra"
 )
 
@@ -48,14 +45,20 @@ func runOperationServersDestroyServer(cmd *cobra.Command, args []string) error {
 		logDebugf("dry-run flag specified. Skip sending request.")
 		return nil
 	}
-	// make request and then print result
-	msgStr, err := parseOperationServersDestroyServerResult(appCli.Servers.DestroyServer(params, nil))
+
+	result, err := appCli.Servers.DestroyServer(params, nil)
+	if err != nil {
+		utils.PrintError(err)
+		return nil
+	}
+
+	msgStr, err := parseOperationServersDestroyServerResult(result)
 	if err != nil {
 		return err
 	}
 
 	if !debug {
-		utils.PrintOutput(msgStr)
+		utils.PrintResult(msgStr)
 	}
 	return nil
 }
@@ -109,62 +112,7 @@ func retrieveOperationServersDestroyServerServerIDFlag(m *servers.DestroyServerP
 }
 
 // parseOperationServersDestroyServerResult parses request result and return the string content
-func parseOperationServersDestroyServerResult(resp0 *servers.DestroyServerNoContent, respErr error) (string, error) {
-	if respErr != nil {
-
-		// Non schema case: warning destroyServerNoContent is not supported
-
-		var iResp1 interface{} = respErr
-		resp1, ok := iResp1.(*servers.DestroyServerForbidden)
-		if ok {
-			if !swag.IsZero(resp1) && !swag.IsZero(resp1.Payload) {
-				msgStr, err := json.Marshal(resp1.Payload)
-				if err != nil {
-					return "", err
-				}
-				return string(msgStr), nil
-			}
-		}
-
-		var iResp2 interface{} = respErr
-		resp2, ok := iResp2.(*servers.DestroyServerNotAcceptable)
-		if ok {
-			if !swag.IsZero(resp2) && !swag.IsZero(resp2.Payload) {
-				msgStr, err := json.Marshal(resp2.Payload)
-				if err != nil {
-					return "", err
-				}
-				return string(msgStr), nil
-			}
-		}
-
-		var iResp3 interface{} = respErr
-		resp3, ok := iResp3.(*servers.DestroyServerUnprocessableEntity)
-		if ok {
-			if !swag.IsZero(resp3) && !swag.IsZero(resp3.Payload) {
-				msgStr, err := json.Marshal(resp3.Payload)
-				if err != nil {
-					return "", err
-				}
-				return string(msgStr), nil
-			}
-		}
-
-		var iResp4 interface{} = respErr
-		resp4, ok := iResp4.(*internal.NotFoundError)
-		if ok {
-			if !swag.IsZero(resp4) && !swag.IsZero(resp4.Payload) {
-				msgStr, err := json.Marshal(resp4.Payload)
-				if err != nil {
-					return "", err
-				}
-				return string(msgStr), nil
-			}
-		}
-
-		return "", respErr
-	}
-
+func parseOperationServersDestroyServerResult(resp0 *servers.DestroyServerNoContent) (string, error) {
 	// warning: non schema response destroyServerNoContent is not supported by go-swagger cli yet.
 
 	return "", nil

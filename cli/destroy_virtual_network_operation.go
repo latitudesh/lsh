@@ -6,23 +6,20 @@ package cli
 // Editing this file might prove futile when you re-run the swagger generate command
 
 import (
-	"encoding/json"
 	"fmt"
 
 	"github.com/latitudesh/lsh/client/virtual_networks"
-	"github.com/latitudesh/lsh/internal"
 	"github.com/latitudesh/lsh/internal/utils"
 
-	"github.com/go-openapi/swag"
 	"github.com/spf13/cobra"
 )
 
 // makeOperationVirtualNetworksDestroyVirtualNetworkCmd returns a cmd to handle operation destroyVirtualNetwork
 func makeOperationVirtualNetworksDestroyVirtualNetworkCmd() (*cobra.Command, error) {
 	cmd := &cobra.Command{
-		Use: "destroy",
+		Use:   "destroy",
 		Short: `Delete virtual network.`,
-		RunE: runOperationVirtualNetworksDestroyVirtualNetwork,
+		RunE:  runOperationVirtualNetworksDestroyVirtualNetwork,
 	}
 
 	if err := registerOperationVirtualNetworksDestroyVirtualNetworkParamFlags(cmd); err != nil {
@@ -48,14 +45,20 @@ func runOperationVirtualNetworksDestroyVirtualNetwork(cmd *cobra.Command, args [
 		logDebugf("dry-run flag specified. Skip sending request.")
 		return nil
 	}
-	// make request and then print result
-	msgStr, err := parseOperationVirtualNetworksDestroyVirtualNetworkResult(appCli.VirtualNetworks.DestroyVirtualNetwork(params, nil))
+
+	result, err := appCli.VirtualNetworks.DestroyVirtualNetwork(params, nil)
+	if err != nil {
+		utils.PrintError(err)
+		return nil
+	}
+
+	msgStr, err := parseOperationVirtualNetworksDestroyVirtualNetworkResult(result)
 	if err != nil {
 		return err
 	}
 	if !debug {
 
-		utils.PrintOutput(msgStr)
+		utils.PrintResult(msgStr)
 	}
 	return nil
 }
@@ -109,36 +112,7 @@ func retrieveOperationVirtualNetworksDestroyVirtualNetworkIDFlag(m *virtual_netw
 }
 
 // parseOperationVirtualNetworksDestroyVirtualNetworkResult parses request result and return the string content
-func parseOperationVirtualNetworksDestroyVirtualNetworkResult(resp0 *virtual_networks.DestroyVirtualNetworkNoContent, respErr error) (string, error) {
-	if respErr != nil {
-
-		// Non schema case: warning destroyVirtualNetworkNoContent is not supported
-
-		var iResp1 interface{} = respErr
-		resp1, ok := iResp1.(*virtual_networks.DestroyVirtualNetworkNotAcceptable)
-		if ok {
-			if !swag.IsZero(resp1) && !swag.IsZero(resp1.Payload) {
-				msgStr, err := json.Marshal(resp1.Payload)
-				if err != nil {
-					return "", err
-				}
-				return string(msgStr), nil
-			}
-		}
-
-		notFoundErrorMessage, err := internal.ParseNotFoundError(respErr)
-
-		if err != nil {
-			return "", err
-		}
-
-		if len(notFoundErrorMessage) > 0 {
-			return notFoundErrorMessage, nil
-		}
-
-		return "", respErr
-	}
-
+func parseOperationVirtualNetworksDestroyVirtualNetworkResult(resp0 *virtual_networks.DestroyVirtualNetworkNoContent) (string, error) {
 	// warning: non schema response destroyVirtualNetworkNoContent is not supported by go-swagger cli yet.
 
 	return "", nil

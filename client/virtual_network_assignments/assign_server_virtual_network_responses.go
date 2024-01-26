@@ -17,7 +17,7 @@ import (
 	"github.com/go-openapi/swag"
 	"github.com/go-openapi/validate"
 
-	"github.com/latitudesh/lsh/internal"
+	apierrors "github.com/latitudesh/lsh/internal/api/errors"
 	"github.com/latitudesh/lsh/models"
 )
 
@@ -35,21 +35,27 @@ func (o *AssignServerVirtualNetworkReader) ReadResponse(response runtime.ClientR
 			return nil, err
 		}
 		return result, nil
+	case 401:
+		result := apierrors.NewUnauthorized()
+		if err := result.ReadResponse(response, consumer, o.formats); err != nil {
+			return nil, err
+		}
+		return nil, result
 	case 403:
-		result := NewAssignServerVirtualNetworkForbidden()
-		if err := result.readResponse(response, consumer, o.formats); err != nil {
+		result := apierrors.NewForbidden()
+		if err := result.ReadResponse(response, consumer, o.formats); err != nil {
 			return nil, err
 		}
 		return nil, result
 	case 404:
-		result := internal.NewNotFoundError()
+		result := apierrors.NewNotFound()
 		if err := result.ReadResponse(response, consumer, o.formats); err != nil {
 			return nil, err
 		}
 		return nil, result
 	case 422:
-		result := NewAssignServerVirtualNetworkUnprocessableEntity()
-		if err := result.readResponse(response, consumer, o.formats); err != nil {
+		result := apierrors.NewUnprocessableEntity()
+		if err := result.ReadResponse(response, consumer, o.formats); err != nil {
 			return nil, err
 		}
 		return nil, result
@@ -117,142 +123,6 @@ func (o *AssignServerVirtualNetworkCreated) GetPayload() *models.VirtualNetworkA
 func (o *AssignServerVirtualNetworkCreated) readResponse(response runtime.ClientResponse, consumer runtime.Consumer, formats strfmt.Registry) error {
 
 	o.Payload = new(models.VirtualNetworkAssignment)
-
-	// response payload
-	if err := consumer.Consume(response.Body(), o.Payload); err != nil && err != io.EOF {
-		return err
-	}
-
-	return nil
-}
-
-// NewAssignServerVirtualNetworkForbidden creates a AssignServerVirtualNetworkForbidden with default headers values
-func NewAssignServerVirtualNetworkForbidden() *AssignServerVirtualNetworkForbidden {
-	return &AssignServerVirtualNetworkForbidden{}
-}
-
-/*
-AssignServerVirtualNetworkForbidden describes a response with status code 403, with default header values.
-
-Forbidden
-*/
-type AssignServerVirtualNetworkForbidden struct {
-	Payload *models.ErrorObject
-}
-
-// IsSuccess returns true when this assign server virtual network forbidden response has a 2xx status code
-func (o *AssignServerVirtualNetworkForbidden) IsSuccess() bool {
-	return false
-}
-
-// IsRedirect returns true when this assign server virtual network forbidden response has a 3xx status code
-func (o *AssignServerVirtualNetworkForbidden) IsRedirect() bool {
-	return false
-}
-
-// IsClientError returns true when this assign server virtual network forbidden response has a 4xx status code
-func (o *AssignServerVirtualNetworkForbidden) IsClientError() bool {
-	return true
-}
-
-// IsServerError returns true when this assign server virtual network forbidden response has a 5xx status code
-func (o *AssignServerVirtualNetworkForbidden) IsServerError() bool {
-	return false
-}
-
-// IsCode returns true when this assign server virtual network forbidden response a status code equal to that given
-func (o *AssignServerVirtualNetworkForbidden) IsCode(code int) bool {
-	return code == 403
-}
-
-// Code gets the status code for the assign server virtual network forbidden response
-func (o *AssignServerVirtualNetworkForbidden) Code() int {
-	return 403
-}
-
-func (o *AssignServerVirtualNetworkForbidden) Error() string {
-	return fmt.Sprintf("[POST /virtual_networks/assignments][%d] assignServerVirtualNetworkForbidden  %+v", 403, o.Payload)
-}
-
-func (o *AssignServerVirtualNetworkForbidden) String() string {
-	return fmt.Sprintf("[POST /virtual_networks/assignments][%d] assignServerVirtualNetworkForbidden  %+v", 403, o.Payload)
-}
-
-func (o *AssignServerVirtualNetworkForbidden) GetPayload() *models.ErrorObject {
-	return o.Payload
-}
-
-func (o *AssignServerVirtualNetworkForbidden) readResponse(response runtime.ClientResponse, consumer runtime.Consumer, formats strfmt.Registry) error {
-
-	o.Payload = new(models.ErrorObject)
-
-	// response payload
-	if err := consumer.Consume(response.Body(), o.Payload); err != nil && err != io.EOF {
-		return err
-	}
-
-	return nil
-}
-
-// NewAssignServerVirtualNetworkUnprocessableEntity creates a AssignServerVirtualNetworkUnprocessableEntity with default headers values
-func NewAssignServerVirtualNetworkUnprocessableEntity() *AssignServerVirtualNetworkUnprocessableEntity {
-	return &AssignServerVirtualNetworkUnprocessableEntity{}
-}
-
-/*
-AssignServerVirtualNetworkUnprocessableEntity describes a response with status code 422, with default header values.
-
-Unprocessable Entity
-*/
-type AssignServerVirtualNetworkUnprocessableEntity struct {
-	Payload *models.ErrorObject
-}
-
-// IsSuccess returns true when this assign server virtual network unprocessable entity response has a 2xx status code
-func (o *AssignServerVirtualNetworkUnprocessableEntity) IsSuccess() bool {
-	return false
-}
-
-// IsRedirect returns true when this assign server virtual network unprocessable entity response has a 3xx status code
-func (o *AssignServerVirtualNetworkUnprocessableEntity) IsRedirect() bool {
-	return false
-}
-
-// IsClientError returns true when this assign server virtual network unprocessable entity response has a 4xx status code
-func (o *AssignServerVirtualNetworkUnprocessableEntity) IsClientError() bool {
-	return true
-}
-
-// IsServerError returns true when this assign server virtual network unprocessable entity response has a 5xx status code
-func (o *AssignServerVirtualNetworkUnprocessableEntity) IsServerError() bool {
-	return false
-}
-
-// IsCode returns true when this assign server virtual network unprocessable entity response a status code equal to that given
-func (o *AssignServerVirtualNetworkUnprocessableEntity) IsCode(code int) bool {
-	return code == 422
-}
-
-// Code gets the status code for the assign server virtual network unprocessable entity response
-func (o *AssignServerVirtualNetworkUnprocessableEntity) Code() int {
-	return 422
-}
-
-func (o *AssignServerVirtualNetworkUnprocessableEntity) Error() string {
-	return fmt.Sprintf("[POST /virtual_networks/assignments][%d] assignServerVirtualNetworkUnprocessableEntity  %+v", 422, o.Payload)
-}
-
-func (o *AssignServerVirtualNetworkUnprocessableEntity) String() string {
-	return fmt.Sprintf("[POST /virtual_networks/assignments][%d] assignServerVirtualNetworkUnprocessableEntity  %+v", 422, o.Payload)
-}
-
-func (o *AssignServerVirtualNetworkUnprocessableEntity) GetPayload() *models.ErrorObject {
-	return o.Payload
-}
-
-func (o *AssignServerVirtualNetworkUnprocessableEntity) readResponse(response runtime.ClientResponse, consumer runtime.Consumer, formats strfmt.Registry) error {
-
-	o.Payload = new(models.ErrorObject)
 
 	// response payload
 	if err := consumer.Consume(response.Body(), o.Payload); err != nil && err != io.EOF {
@@ -511,11 +381,11 @@ type AssignServerVirtualNetworkParamsBodyDataAttributes struct {
 
 	// server id
 	// Required: true
-	ServerID *int64 `json:"server_id"`
+	ServerID string `json:"server_id"`
 
 	// virtual network id
 	// Required: true
-	VirtualNetworkID *int64 `json:"virtual_network_id"`
+	VirtualNetworkID string `json:"virtual_network_id"`
 }
 
 // Validate validates this assign server virtual network params body data attributes

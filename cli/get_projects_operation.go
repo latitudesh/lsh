@@ -19,9 +19,9 @@ import (
 // makeOperationProjectsGetProjectsCmd returns a cmd to handle operation getProjects
 func makeOperationProjectsGetProjectsCmd() (*cobra.Command, error) {
 	cmd := &cobra.Command{
-		Use: "list",
+		Use:   "list",
 		Short: `Returns a list of all projects for the current team`,
-		RunE: runOperationProjectsGetProjects,
+		RunE:  runOperationProjectsGetProjects,
 	}
 
 	if err := registerOperationProjectsGetProjectsParamFlags(cmd); err != nil {
@@ -62,14 +62,20 @@ func runOperationProjectsGetProjects(cmd *cobra.Command, args []string) error {
 		logDebugf("dry-run flag specified. Skip sending request.")
 		return nil
 	}
-	// make request and then print result
-	msgStr, err := parseOperationProjectsGetProjectsResult(appCli.Projects.GetProjects(params, nil))
+
+	result, err := appCli.Projects.GetProjects(params, nil)
+	if err != nil {
+		utils.PrintError(err)
+		return nil
+	}
+
+	msgStr, err := parseOperationProjectsGetProjectsResult(result)
 	if err != nil {
 		return err
 	}
 	if !debug {
 
-		utils.PrintOutput(msgStr)
+		utils.PrintResult(msgStr)
 	}
 	return nil
 }
@@ -120,9 +126,9 @@ func registerOperationProjectsGetProjectsFilterBillingTypeParamFlags(cmdPrefix s
 
 	var filterBillingTypeFlagName string
 	if cmdPrefix == "" {
-		filterBillingTypeFlagName = "filter[billing_type]"
+		filterBillingTypeFlagName = "billing_type"
 	} else {
-		filterBillingTypeFlagName = fmt.Sprintf("%v.filter[billing_type]", cmdPrefix)
+		filterBillingTypeFlagName = fmt.Sprintf("%v.billing_type", cmdPrefix)
 	}
 
 	var filterBillingTypeFlagDefault string
@@ -137,9 +143,9 @@ func registerOperationProjectsGetProjectsFilterDescriptionParamFlags(cmdPrefix s
 
 	var filterDescriptionFlagName string
 	if cmdPrefix == "" {
-		filterDescriptionFlagName = "filter[description]"
+		filterDescriptionFlagName = "description"
 	} else {
-		filterDescriptionFlagName = fmt.Sprintf("%v.filter[description]", cmdPrefix)
+		filterDescriptionFlagName = fmt.Sprintf("%v.description", cmdPrefix)
 	}
 
 	var filterDescriptionFlagDefault string
@@ -154,9 +160,9 @@ func registerOperationProjectsGetProjectsFilterEnvironmentParamFlags(cmdPrefix s
 
 	var filterEnvironmentFlagName string
 	if cmdPrefix == "" {
-		filterEnvironmentFlagName = "filter[environment]"
+		filterEnvironmentFlagName = "environment"
 	} else {
-		filterEnvironmentFlagName = fmt.Sprintf("%v.filter[environment]", cmdPrefix)
+		filterEnvironmentFlagName = fmt.Sprintf("%v.environment", cmdPrefix)
 	}
 
 	var filterEnvironmentFlagDefault string
@@ -170,10 +176,11 @@ func registerOperationProjectsGetProjectsFilterNameParamFlags(cmdPrefix string, 
 	filterNameDescription := `The project name to filter by`
 
 	var filterNameFlagName string
+
 	if cmdPrefix == "" {
-		filterNameFlagName = "filter[name]"
+		filterNameFlagName = "name"
 	} else {
-		filterNameFlagName = fmt.Sprintf("%v.filter[name]", cmdPrefix)
+		filterNameFlagName = fmt.Sprintf("%v.name", cmdPrefix)
 	}
 
 	var filterNameFlagDefault string
@@ -182,15 +189,16 @@ func registerOperationProjectsGetProjectsFilterNameParamFlags(cmdPrefix string, 
 
 	return nil
 }
+
 func registerOperationProjectsGetProjectsFilterSlugParamFlags(cmdPrefix string, cmd *cobra.Command) error {
 
 	filterSlugDescription := `The project slug to filter by`
 
 	var filterSlugFlagName string
 	if cmdPrefix == "" {
-		filterSlugFlagName = "filter[slug]"
+		filterSlugFlagName = "slug"
 	} else {
-		filterSlugFlagName = fmt.Sprintf("%v.filter[slug]", cmdPrefix)
+		filterSlugFlagName = fmt.Sprintf("%v.slug", cmdPrefix)
 	}
 
 	var filterSlugFlagDefault string
@@ -222,13 +230,13 @@ func retrieveOperationProjectsGetProjectsExtraFieldsProjectsFlag(m *projects.Get
 }
 func retrieveOperationProjectsGetProjectsFilterBillingTypeFlag(m *projects.GetProjectsParams, cmdPrefix string, cmd *cobra.Command) (error, bool) {
 	retAdded := false
-	if cmd.Flags().Changed("filter[billing_type]") {
+	if cmd.Flags().Changed("billing_type") {
 
 		var filterBillingTypeFlagName string
 		if cmdPrefix == "" {
-			filterBillingTypeFlagName = "filter[billing_type]"
+			filterBillingTypeFlagName = "billing_type"
 		} else {
-			filterBillingTypeFlagName = fmt.Sprintf("%v.filter[billing_type]", cmdPrefix)
+			filterBillingTypeFlagName = fmt.Sprintf("%v.billing_type", cmdPrefix)
 		}
 
 		filterBillingTypeFlagValue, err := cmd.Flags().GetString(filterBillingTypeFlagName)
@@ -242,13 +250,13 @@ func retrieveOperationProjectsGetProjectsFilterBillingTypeFlag(m *projects.GetPr
 }
 func retrieveOperationProjectsGetProjectsFilterDescriptionFlag(m *projects.GetProjectsParams, cmdPrefix string, cmd *cobra.Command) (error, bool) {
 	retAdded := false
-	if cmd.Flags().Changed("filter[description]") {
+	if cmd.Flags().Changed("description") {
 
 		var filterDescriptionFlagName string
 		if cmdPrefix == "" {
-			filterDescriptionFlagName = "filter[description]"
+			filterDescriptionFlagName = "description"
 		} else {
-			filterDescriptionFlagName = fmt.Sprintf("%v.filter[description]", cmdPrefix)
+			filterDescriptionFlagName = fmt.Sprintf("%v.description", cmdPrefix)
 		}
 
 		filterDescriptionFlagValue, err := cmd.Flags().GetString(filterDescriptionFlagName)
@@ -262,13 +270,13 @@ func retrieveOperationProjectsGetProjectsFilterDescriptionFlag(m *projects.GetPr
 }
 func retrieveOperationProjectsGetProjectsFilterEnvironmentFlag(m *projects.GetProjectsParams, cmdPrefix string, cmd *cobra.Command) (error, bool) {
 	retAdded := false
-	if cmd.Flags().Changed("filter[environment]") {
+	if cmd.Flags().Changed("environment") {
 
 		var filterEnvironmentFlagName string
 		if cmdPrefix == "" {
-			filterEnvironmentFlagName = "filter[environment]"
+			filterEnvironmentFlagName = "environment"
 		} else {
-			filterEnvironmentFlagName = fmt.Sprintf("%v.filter[environment]", cmdPrefix)
+			filterEnvironmentFlagName = fmt.Sprintf("%v.environment", cmdPrefix)
 		}
 
 		filterEnvironmentFlagValue, err := cmd.Flags().GetString(filterEnvironmentFlagName)
@@ -282,13 +290,13 @@ func retrieveOperationProjectsGetProjectsFilterEnvironmentFlag(m *projects.GetPr
 }
 func retrieveOperationProjectsGetProjectsFilterNameFlag(m *projects.GetProjectsParams, cmdPrefix string, cmd *cobra.Command) (error, bool) {
 	retAdded := false
-	if cmd.Flags().Changed("filter[name]") {
+	if cmd.Flags().Changed("name") {
 
 		var filterNameFlagName string
 		if cmdPrefix == "" {
-			filterNameFlagName = "filter[name]"
+			filterNameFlagName = "name"
 		} else {
-			filterNameFlagName = fmt.Sprintf("%v.filter[name]", cmdPrefix)
+			filterNameFlagName = fmt.Sprintf("%v.name", cmdPrefix)
 		}
 
 		filterNameFlagValue, err := cmd.Flags().GetString(filterNameFlagName)
@@ -302,13 +310,13 @@ func retrieveOperationProjectsGetProjectsFilterNameFlag(m *projects.GetProjectsP
 }
 func retrieveOperationProjectsGetProjectsFilterSlugFlag(m *projects.GetProjectsParams, cmdPrefix string, cmd *cobra.Command) (error, bool) {
 	retAdded := false
-	if cmd.Flags().Changed("filter[slug]") {
+	if cmd.Flags().Changed("slug") {
 
 		var filterSlugFlagName string
 		if cmdPrefix == "" {
-			filterSlugFlagName = "filter[slug]"
+			filterSlugFlagName = "slug"
 		} else {
-			filterSlugFlagName = fmt.Sprintf("%v.filter[slug]", cmdPrefix)
+			filterSlugFlagName = fmt.Sprintf("%v.slug", cmdPrefix)
 		}
 
 		filterSlugFlagValue, err := cmd.Flags().GetString(filterSlugFlagName)
@@ -322,24 +330,7 @@ func retrieveOperationProjectsGetProjectsFilterSlugFlag(m *projects.GetProjectsP
 }
 
 // parseOperationProjectsGetProjectsResult parses request result and return the string content
-func parseOperationProjectsGetProjectsResult(resp0 *projects.GetProjectsOK, respErr error) (string, error) {
-	if respErr != nil {
-
-		var iResp0 interface{} = respErr
-		resp0, ok := iResp0.(*projects.GetProjectsOK)
-		if ok {
-			if !swag.IsZero(resp0) && !swag.IsZero(resp0.Payload) {
-				msgStr, err := json.Marshal(resp0.Payload)
-				if err != nil {
-					return "", err
-				}
-				return string(msgStr), nil
-			}
-		}
-
-		return "", respErr
-	}
-
+func parseOperationProjectsGetProjectsResult(resp0 *projects.GetProjectsOK) (string, error) {
 	if !swag.IsZero(resp0) && !swag.IsZero(resp0.Payload) {
 		msgStr, err := json.Marshal(resp0.Payload)
 		if err != nil {

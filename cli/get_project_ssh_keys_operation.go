@@ -19,9 +19,9 @@ import (
 // makeOperationSSHKeysGetProjectSSHKeysCmd returns a cmd to handle operation getProjectSshKeys
 func makeOperationSSHKeysGetProjectSSHKeysCmd() (*cobra.Command, error) {
 	cmd := &cobra.Command{
-		Use: "list",
+		Use:   "list",
 		Short: `List all SSH Keys in the project. These keys can be used to access servers after deploy and reinstall actions.`,
-		RunE: runOperationSSHKeysGetProjectSSHKeys,
+		RunE:  runOperationSSHKeysGetProjectSSHKeys,
 	}
 
 	if err := registerOperationSSHKeysGetProjectSSHKeysParamFlags(cmd); err != nil {
@@ -47,14 +47,20 @@ func runOperationSSHKeysGetProjectSSHKeys(cmd *cobra.Command, args []string) err
 		logDebugf("dry-run flag specified. Skip sending request.")
 		return nil
 	}
-	// make request and then print result
-	msgStr, err := parseOperationSSHKeysGetProjectSSHKeysResult(appCli.SSHKeys.GetProjectSSHKeys(params, nil))
+
+	result, err := appCli.SSHKeys.GetProjectSSHKeys(params, nil)
+	if err != nil {
+		utils.PrintError(err)
+		return nil
+	}
+
+	msgStr, err := parseOperationSSHKeysGetProjectSSHKeysResult(result)
 	if err != nil {
 		return err
 	}
 	if !debug {
 
-		utils.PrintOutput(msgStr)
+		utils.PrintResult(msgStr)
 	}
 	return nil
 }
@@ -81,6 +87,7 @@ func registerOperationSSHKeysGetProjectSSHKeysProjectIDOrSlugParamFlags(cmdPrefi
 	var projectIdOrSlugFlagDefault string
 
 	_ = cmd.PersistentFlags().String(projectIdOrSlugFlagName, projectIdOrSlugFlagDefault, projectIdOrSlugDescription)
+	cmd.MarkPersistentFlagRequired(projectIdOrSlugFlagName)
 
 	return nil
 }
@@ -107,24 +114,7 @@ func retrieveOperationSSHKeysGetProjectSSHKeysProjectIDOrSlugFlag(m *ssh_keys.Ge
 }
 
 // parseOperationSSHKeysGetProjectSSHKeysResult parses request result and return the string content
-func parseOperationSSHKeysGetProjectSSHKeysResult(resp0 *ssh_keys.GetProjectSSHKeysOK, respErr error) (string, error) {
-	if respErr != nil {
-
-		var iResp0 interface{} = respErr
-		resp0, ok := iResp0.(*ssh_keys.GetProjectSSHKeysOK)
-		if ok {
-			if !swag.IsZero(resp0) && !swag.IsZero(resp0.Payload) {
-				msgStr, err := json.Marshal(resp0.Payload)
-				if err != nil {
-					return "", err
-				}
-				return string(msgStr), nil
-			}
-		}
-
-		return "", respErr
-	}
-
+func parseOperationSSHKeysGetProjectSSHKeysResult(resp0 *ssh_keys.GetProjectSSHKeysOK) (string, error) {
 	if !swag.IsZero(resp0) && !swag.IsZero(resp0.Payload) {
 		msgStr, err := json.Marshal(resp0.Payload)
 		if err != nil {

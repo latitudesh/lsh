@@ -7,13 +7,10 @@ package virtual_network_assignments
 
 import (
 	"fmt"
-	"io"
 
 	"github.com/go-openapi/runtime"
 	"github.com/go-openapi/strfmt"
-
-	"github.com/latitudesh/lsh/internal"
-	"github.com/latitudesh/lsh/models"
+	apierrors "github.com/latitudesh/lsh/internal/api/errors"
 )
 
 // DeleteVirtualNetworksAssignmentsReader is a Reader for the DeleteVirtualNetworksAssignments structure.
@@ -30,14 +27,20 @@ func (o *DeleteVirtualNetworksAssignmentsReader) ReadResponse(response runtime.C
 			return nil, err
 		}
 		return result, nil
+	case 401:
+		result := apierrors.NewUnauthorized()
+		if err := result.ReadResponse(response, consumer, o.formats); err != nil {
+			return nil, err
+		}
+		return nil, result
 	case 403:
-		result := NewDeleteVirtualNetworksAssignmentsForbidden()
-		if err := result.readResponse(response, consumer, o.formats); err != nil {
+		result := apierrors.NewForbidden()
+		if err := result.ReadResponse(response, consumer, o.formats); err != nil {
 			return nil, err
 		}
 		return nil, result
 	case 404:
-		result := internal.NewNotFoundError()
+		result := apierrors.NewNotFound()
 		if err := result.ReadResponse(response, consumer, o.formats); err != nil {
 			return nil, err
 		}
@@ -99,74 +102,6 @@ func (o *DeleteVirtualNetworksAssignmentsNoContent) String() string {
 }
 
 func (o *DeleteVirtualNetworksAssignmentsNoContent) readResponse(response runtime.ClientResponse, consumer runtime.Consumer, formats strfmt.Registry) error {
-
-	return nil
-}
-
-// NewDeleteVirtualNetworksAssignmentsForbidden creates a DeleteVirtualNetworksAssignmentsForbidden with default headers values
-func NewDeleteVirtualNetworksAssignmentsForbidden() *DeleteVirtualNetworksAssignmentsForbidden {
-	return &DeleteVirtualNetworksAssignmentsForbidden{}
-}
-
-/*
-DeleteVirtualNetworksAssignmentsForbidden describes a response with status code 403, with default header values.
-
-Forbidden
-*/
-type DeleteVirtualNetworksAssignmentsForbidden struct {
-	Payload *models.ErrorObject
-}
-
-// IsSuccess returns true when this delete virtual networks assignments forbidden response has a 2xx status code
-func (o *DeleteVirtualNetworksAssignmentsForbidden) IsSuccess() bool {
-	return false
-}
-
-// IsRedirect returns true when this delete virtual networks assignments forbidden response has a 3xx status code
-func (o *DeleteVirtualNetworksAssignmentsForbidden) IsRedirect() bool {
-	return false
-}
-
-// IsClientError returns true when this delete virtual networks assignments forbidden response has a 4xx status code
-func (o *DeleteVirtualNetworksAssignmentsForbidden) IsClientError() bool {
-	return true
-}
-
-// IsServerError returns true when this delete virtual networks assignments forbidden response has a 5xx status code
-func (o *DeleteVirtualNetworksAssignmentsForbidden) IsServerError() bool {
-	return false
-}
-
-// IsCode returns true when this delete virtual networks assignments forbidden response a status code equal to that given
-func (o *DeleteVirtualNetworksAssignmentsForbidden) IsCode(code int) bool {
-	return code == 403
-}
-
-// Code gets the status code for the delete virtual networks assignments forbidden response
-func (o *DeleteVirtualNetworksAssignmentsForbidden) Code() int {
-	return 403
-}
-
-func (o *DeleteVirtualNetworksAssignmentsForbidden) Error() string {
-	return fmt.Sprintf("[DELETE /virtual_networks/assignments/{assignment_id}][%d] deleteVirtualNetworksAssignmentsForbidden  %+v", 403, o.Payload)
-}
-
-func (o *DeleteVirtualNetworksAssignmentsForbidden) String() string {
-	return fmt.Sprintf("[DELETE /virtual_networks/assignments/{assignment_id}][%d] deleteVirtualNetworksAssignmentsForbidden  %+v", 403, o.Payload)
-}
-
-func (o *DeleteVirtualNetworksAssignmentsForbidden) GetPayload() *models.ErrorObject {
-	return o.Payload
-}
-
-func (o *DeleteVirtualNetworksAssignmentsForbidden) readResponse(response runtime.ClientResponse, consumer runtime.Consumer, formats strfmt.Registry) error {
-
-	o.Payload = new(models.ErrorObject)
-
-	// response payload
-	if err := consumer.Consume(response.Body(), o.Payload); err != nil && err != io.EOF {
-		return err
-	}
 
 	return nil
 }

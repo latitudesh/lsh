@@ -19,9 +19,9 @@ import (
 // makeOperationVirtualNetworksGetVirtualNetworksCmd returns a cmd to handle operation getVirtualNetworks
 func makeOperationVirtualNetworksGetVirtualNetworksCmd() (*cobra.Command, error) {
 	cmd := &cobra.Command{
-		Use: "list",
+		Use:   "list",
 		Short: `Lists virtual networks assigned to a project.`,
-		RunE: runOperationVirtualNetworksGetVirtualNetworks,
+		RunE:  runOperationVirtualNetworksGetVirtualNetworks,
 	}
 
 	if err := registerOperationVirtualNetworksGetVirtualNetworksParamFlags(cmd); err != nil {
@@ -50,14 +50,20 @@ func runOperationVirtualNetworksGetVirtualNetworks(cmd *cobra.Command, args []st
 		logDebugf("dry-run flag specified. Skip sending request.")
 		return nil
 	}
-	// make request and then print result
-	msgStr, err := parseOperationVirtualNetworksGetVirtualNetworksResult(appCli.VirtualNetworks.GetVirtualNetworks(params, nil))
+
+	result, err := appCli.VirtualNetworks.GetVirtualNetworks(params, nil)
+	if err != nil {
+		utils.PrintError(err)
+		return nil
+	}
+
+	msgStr, err := parseOperationVirtualNetworksGetVirtualNetworksResult(result)
 	if err != nil {
 		return err
 	}
 	if !debug {
 
-		utils.PrintOutput(msgStr)
+		utils.PrintResult(msgStr)
 	}
 	return nil
 }
@@ -79,9 +85,9 @@ func registerOperationVirtualNetworksGetVirtualNetworksFilterLocationParamFlags(
 
 	var filterLocationFlagName string
 	if cmdPrefix == "" {
-		filterLocationFlagName = "filter[location]"
+		filterLocationFlagName = "location"
 	} else {
-		filterLocationFlagName = fmt.Sprintf("%v.filter[location]", cmdPrefix)
+		filterLocationFlagName = fmt.Sprintf("%v.location", cmdPrefix)
 	}
 
 	var filterLocationFlagDefault string
@@ -96,9 +102,9 @@ func registerOperationVirtualNetworksGetVirtualNetworksFilterProjectParamFlags(c
 
 	var filterProjectFlagName string
 	if cmdPrefix == "" {
-		filterProjectFlagName = "filter[project]"
+		filterProjectFlagName = "project"
 	} else {
-		filterProjectFlagName = fmt.Sprintf("%v.filter[project]", cmdPrefix)
+		filterProjectFlagName = fmt.Sprintf("%v.project", cmdPrefix)
 	}
 
 	var filterProjectFlagDefault string
@@ -110,13 +116,13 @@ func registerOperationVirtualNetworksGetVirtualNetworksFilterProjectParamFlags(c
 
 func retrieveOperationVirtualNetworksGetVirtualNetworksFilterLocationFlag(m *virtual_networks.GetVirtualNetworksParams, cmdPrefix string, cmd *cobra.Command) (error, bool) {
 	retAdded := false
-	if cmd.Flags().Changed("filter[location]") {
+	if cmd.Flags().Changed("location") {
 
 		var filterLocationFlagName string
 		if cmdPrefix == "" {
-			filterLocationFlagName = "filter[location]"
+			filterLocationFlagName = "location"
 		} else {
-			filterLocationFlagName = fmt.Sprintf("%v.filter[location]", cmdPrefix)
+			filterLocationFlagName = fmt.Sprintf("%v.location", cmdPrefix)
 		}
 
 		filterLocationFlagValue, err := cmd.Flags().GetString(filterLocationFlagName)
@@ -130,13 +136,13 @@ func retrieveOperationVirtualNetworksGetVirtualNetworksFilterLocationFlag(m *vir
 }
 func retrieveOperationVirtualNetworksGetVirtualNetworksFilterProjectFlag(m *virtual_networks.GetVirtualNetworksParams, cmdPrefix string, cmd *cobra.Command) (error, bool) {
 	retAdded := false
-	if cmd.Flags().Changed("filter[project]") {
+	if cmd.Flags().Changed("project") {
 
 		var filterProjectFlagName string
 		if cmdPrefix == "" {
-			filterProjectFlagName = "filter[project]"
+			filterProjectFlagName = "project"
 		} else {
-			filterProjectFlagName = fmt.Sprintf("%v.filter[project]", cmdPrefix)
+			filterProjectFlagName = fmt.Sprintf("%v.project", cmdPrefix)
 		}
 
 		filterProjectFlagValue, err := cmd.Flags().GetString(filterProjectFlagName)
@@ -150,24 +156,7 @@ func retrieveOperationVirtualNetworksGetVirtualNetworksFilterProjectFlag(m *virt
 }
 
 // parseOperationVirtualNetworksGetVirtualNetworksResult parses request result and return the string content
-func parseOperationVirtualNetworksGetVirtualNetworksResult(resp0 *virtual_networks.GetVirtualNetworksOK, respErr error) (string, error) {
-	if respErr != nil {
-
-		var iResp0 interface{} = respErr
-		resp0, ok := iResp0.(*virtual_networks.GetVirtualNetworksOK)
-		if ok {
-			if !swag.IsZero(resp0) && !swag.IsZero(resp0.Payload) {
-				msgStr, err := json.Marshal(resp0.Payload)
-				if err != nil {
-					return "", err
-				}
-				return string(msgStr), nil
-			}
-		}
-
-		return "", respErr
-	}
-
+func parseOperationVirtualNetworksGetVirtualNetworksResult(resp0 *virtual_networks.GetVirtualNetworksOK) (string, error) {
 	if !swag.IsZero(resp0) && !swag.IsZero(resp0.Payload) {
 		msgStr, err := json.Marshal(resp0.Payload)
 		if err != nil {

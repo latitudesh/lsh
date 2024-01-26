@@ -116,7 +116,6 @@ func (cfg *TransportConfig) WithSchemes(schemes []string) *TransportConfig {
 
 // LatitudeShAPI is a client for latitude sh API
 type LatitudeShAPI struct {
-
 	APIKeys api_keys.ClientService
 
 	Plans plans.ClientService

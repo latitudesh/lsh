@@ -10,7 +10,6 @@ import (
 	"fmt"
 
 	"github.com/latitudesh/lsh/client/servers"
-	"github.com/latitudesh/lsh/internal"
 	"github.com/latitudesh/lsh/internal/utils"
 
 	"github.com/go-openapi/swag"
@@ -20,9 +19,9 @@ import (
 // makeOperationServersGetServerCmd returns a cmd to handle operation getServer
 func makeOperationServersGetServerCmd() (*cobra.Command, error) {
 	cmd := &cobra.Command{
-		Use: "get",
+		Use:   "get",
 		Short: `Returns a server that belongs to the team.`,
-		RunE: runOperationServersGetServer,
+		RunE:  runOperationServersGetServer,
 	}
 
 	if err := registerOperationServersGetServerParamFlags(cmd); err != nil {
@@ -51,14 +50,20 @@ func runOperationServersGetServer(cmd *cobra.Command, args []string) error {
 		logDebugf("dry-run flag specified. Skip sending request.")
 		return nil
 	}
-	// make request and then print result
-	msgStr, err := parseOperationServersGetServerResult(appCli.Servers.GetServer(params, nil))
+
+	result, err := appCli.Servers.GetServer(params, nil)
+	if err != nil {
+		utils.PrintError(err)
+		return nil
+	}
+
+	msgStr, err := parseOperationServersGetServerResult(result)
 	if err != nil {
 		return err
 	}
 	if !debug {
 
-		utils.PrintOutput(msgStr)
+		utils.PrintResult(msgStr)
 	}
 	return nil
 }
@@ -152,36 +157,7 @@ func retrieveOperationServersGetServerServerIDFlag(m *servers.GetServerParams, c
 }
 
 // parseOperationServersGetServerResult parses request result and return the string content
-func parseOperationServersGetServerResult(resp0 *servers.GetServerOK, respErr error) (string, error) {
-	if respErr != nil {
-
-		var iResp0 interface{} = respErr
-		resp0, ok := iResp0.(*servers.GetServerOK)
-		if ok {
-			if !swag.IsZero(resp0) && !swag.IsZero(resp0.Payload) {
-				msgStr, err := json.Marshal(resp0.Payload)
-				if err != nil {
-					return "", err
-				}
-				return string(msgStr), nil
-			}
-		}
-
-		var iResp1 interface{} = respErr
-		resp1, ok := iResp1.(*internal.NotFoundError)
-		if ok {
-			if !swag.IsZero(resp1) && !swag.IsZero(resp1.Payload) {
-				msgStr, err := json.Marshal(resp1.Payload)
-				if err != nil {
-					return "", err
-				}
-				return string(msgStr), nil
-			}
-		}
-
-		return "", respErr
-	}
-
+func parseOperationServersGetServerResult(resp0 *servers.GetServerOK) (string, error) {
 	if !swag.IsZero(resp0) && !swag.IsZero(resp0.Payload) {
 		msgStr, err := json.Marshal(resp0.Payload)
 		if err != nil {

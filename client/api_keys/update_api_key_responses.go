@@ -15,6 +15,7 @@ import (
 	"github.com/go-openapi/strfmt"
 	"github.com/go-openapi/swag"
 
+	apierrors "github.com/latitudesh/lsh/internal/api/errors"
 	"github.com/latitudesh/lsh/models"
 )
 
@@ -33,14 +34,20 @@ func (o *UpdateAPIKeyReader) ReadResponse(response runtime.ClientResponse, consu
 		}
 		return result, nil
 	case 400:
-		result := NewUpdateAPIKeyBadRequest()
-		if err := result.readResponse(response, consumer, o.formats); err != nil {
+		result := apierrors.NewBadRequest()
+		if err := result.ReadResponse(response, consumer, o.formats); err != nil {
+			return nil, err
+		}
+		return nil, result
+	case 401:
+		result := apierrors.NewUnauthorized()
+		if err := result.ReadResponse(response, consumer, o.formats); err != nil {
 			return nil, err
 		}
 		return nil, result
 	case 404:
-		result := NewUpdateAPIKeyNotFound()
-		if err := result.readResponse(response, consumer, o.formats); err != nil {
+		result := apierrors.NewNotFound()
+		if err := result.ReadResponse(response, consumer, o.formats); err != nil {
 			return nil, err
 		}
 		return nil, result
