@@ -19,9 +19,9 @@ import (
 // makeOperationVirtualNetworkAssignmentsGetVirtualNetworksAssignmentsCmd returns a cmd to handle operation getVirtualNetworksAssignments
 func makeOperationVirtualNetworkAssignmentsGetVirtualNetworksAssignmentsCmd() (*cobra.Command, error) {
 	cmd := &cobra.Command{
-		Use: "list",
+		Use:   "list",
 		Short: `Returns a list of all servers assigned to virtual networks.`,
-		RunE: runOperationVirtualNetworkAssignmentsGetVirtualNetworksAssignments,
+		RunE:  runOperationVirtualNetworkAssignmentsGetVirtualNetworksAssignments,
 	}
 
 	if err := registerOperationVirtualNetworkAssignmentsGetVirtualNetworksAssignmentsParamFlags(cmd); err != nil {
@@ -56,14 +56,20 @@ func runOperationVirtualNetworkAssignmentsGetVirtualNetworksAssignments(cmd *cob
 		logDebugf("dry-run flag specified. Skip sending request.")
 		return nil
 	}
-	// make request and then print result
-	msgStr, err := parseOperationVirtualNetworkAssignmentsGetVirtualNetworksAssignmentsResult(appCli.VirtualNetworkAssignments.GetVirtualNetworksAssignments(params, nil))
+
+	result, err := appCli.VirtualNetworkAssignments.GetVirtualNetworksAssignments(params, nil)
+	if err != nil {
+		utils.PrintError(err)
+		return nil
+	}
+
+	msgStr, err := parseOperationVirtualNetworkAssignmentsGetVirtualNetworksAssignmentsResult(result)
 	if err != nil {
 		return err
 	}
 	if !debug {
 
-		utils.PrintOutput(msgStr)
+		utils.PrintResult(msgStr)
 	}
 	return nil
 }
@@ -236,24 +242,7 @@ func retrieveOperationVirtualNetworkAssignmentsGetVirtualNetworksAssignmentsFilt
 }
 
 // parseOperationVirtualNetworkAssignmentsGetVirtualNetworksAssignmentsResult parses request result and return the string content
-func parseOperationVirtualNetworkAssignmentsGetVirtualNetworksAssignmentsResult(resp0 *virtual_network_assignments.GetVirtualNetworksAssignmentsOK, respErr error) (string, error) {
-	if respErr != nil {
-
-		var iResp0 interface{} = respErr
-		resp0, ok := iResp0.(*virtual_network_assignments.GetVirtualNetworksAssignmentsOK)
-		if ok {
-			if !swag.IsZero(resp0) && !swag.IsZero(resp0.Payload) {
-				msgStr, err := json.Marshal(resp0.Payload)
-				if err != nil {
-					return "", err
-				}
-				return string(msgStr), nil
-			}
-		}
-
-		return "", respErr
-	}
-
+func parseOperationVirtualNetworkAssignmentsGetVirtualNetworksAssignmentsResult(resp0 *virtual_network_assignments.GetVirtualNetworksAssignmentsOK) (string, error) {
 	if !swag.IsZero(resp0) && !swag.IsZero(resp0.Payload) {
 		msgStr, err := json.Marshal(resp0.Payload)
 		if err != nil {

@@ -19,9 +19,9 @@ import (
 // makeOperationPlansGetPlansCmd returns a cmd to handle operation getPlans
 func makeOperationPlansGetPlansCmd() (*cobra.Command, error) {
 	cmd := &cobra.Command{
-		Use: "list",
+		Use:   "list",
 		Short: `Lists all plans. Availability by region is included in ` + "`" + `attributes.regions.locations.available[*]` + "`" + ` node for a given plan.`,
-		RunE: runOperationPlansGetPlans,
+		RunE:  runOperationPlansGetPlans,
 	}
 
 	if err := registerOperationPlansGetPlansParamFlags(cmd); err != nil {
@@ -71,13 +71,19 @@ func runOperationPlansGetPlans(cmd *cobra.Command, args []string) error {
 		logDebugf("dry-run flag specified. Skip sending request.")
 		return nil
 	}
-	// make request and then print result
-	msgStr, err := parseOperationPlansGetPlansResult(appCli.Plans.GetPlans(params, nil))
+
+	result, err := appCli.Plans.GetPlans(params, nil)
+	if err != nil {
+		utils.PrintError(err)
+		return nil
+	}
+
+	msgStr, err := parseOperationPlansGetPlansResult(result)
 	if err != nil {
 		return err
 	}
 	if !debug {
-		utils.PrintOutput(msgStr)
+		utils.PrintResult(msgStr)
 	}
 	return nil
 }
@@ -467,24 +473,7 @@ func retrieveOperationPlansGetPlansFilterStockLevelFlag(m *plans.GetPlansParams,
 }
 
 // parseOperationPlansGetPlansResult parses request result and return the string content
-func parseOperationPlansGetPlansResult(resp0 *plans.GetPlansOK, respErr error) (string, error) {
-	if respErr != nil {
-
-		var iResp0 interface{} = respErr
-		resp0, ok := iResp0.(*plans.GetPlansOK)
-		if ok {
-			if !swag.IsZero(resp0) && !swag.IsZero(resp0.Payload) {
-				msgStr, err := json.Marshal(resp0.Payload)
-				if err != nil {
-					return "", err
-				}
-				return string(msgStr), nil
-			}
-		}
-
-		return "", respErr
-	}
-
+func parseOperationPlansGetPlansResult(resp0 *plans.GetPlansOK) (string, error) {
 	if !swag.IsZero(resp0) && !swag.IsZero(resp0.Payload) {
 		msgStr, err := json.Marshal(resp0.Payload)
 		if err != nil {

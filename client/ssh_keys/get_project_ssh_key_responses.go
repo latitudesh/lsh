@@ -15,7 +15,7 @@ import (
 	"github.com/go-openapi/strfmt"
 	"github.com/go-openapi/swag"
 
-	"github.com/latitudesh/lsh/internal"
+	apierrors "github.com/latitudesh/lsh/internal/api/errors"
 	"github.com/latitudesh/lsh/models"
 )
 
@@ -33,8 +33,14 @@ func (o *GetProjectSSHKeyReader) ReadResponse(response runtime.ClientResponse, c
 			return nil, err
 		}
 		return result, nil
+	case 401:
+		result := apierrors.NewUnauthorized()
+		if err := result.ReadResponse(response, consumer, o.formats); err != nil {
+			return nil, err
+		}
+		return nil, result
 	case 404:
-		result := internal.NewNotFoundError()
+		result := apierrors.NewNotFound()
 		if err := result.ReadResponse(response, consumer, o.formats); err != nil {
 			return nil, err
 		}

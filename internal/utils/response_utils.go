@@ -4,23 +4,12 @@ package utils
 import (
 	"bytes"
 	"encoding/json"
+	"errors"
 	"fmt"
+
+	apierrors "github.com/latitudesh/lsh/internal/api/errors"
+	"github.com/latitudesh/lsh/internal/output"
 )
-
-type ErrorResponse struct {
-	Errors []ErrorDetail `json:"errors"`
-}
-
-type ErrorDetail struct {
-	Code   string `json:"code"`
-	Detail string `json:"detail"`
-	Meta   struct {
-		Attribute string `json:"attribute"`
-		Message   string `json:"message"`
-	} `json:"meta"`
-	Status string `json:"status"`
-	Title  string `json:"title"`
-}
 
 // PrettifyJson formats a JSON response, enhancing its readability on the terminal.
 func PrettifyJson(str string) (string, error) {
@@ -32,7 +21,28 @@ func PrettifyJson(str string) (string, error) {
 	return prettyJSON.String(), nil
 }
 
-func PrintOutput(jsonData string) {
+func PrintError(respErr error) error {
+	switch e := respErr.(type) {
+	case *apierrors.BadRequest:
+		output.PrintBadRequestError(e)
+	case *apierrors.Unauthorized:
+		output.PrintUnauthorizedError(e)
+	case *apierrors.Forbidden:
+		output.PrintForbiddenError(e)
+	case *apierrors.NotFound:
+		output.PrintNotFoundError(e)
+	case *apierrors.NotAcceptable:
+		output.PrintNotAcceptableError(e)
+	case *apierrors.UnprocessableEntity:
+		output.PrintUnprocessableEntityError(e)
+	default:
+		return errors.New("An unknown error occurred.")
+	}
+
+	return nil
+}
+
+func PrintResult(jsonData string) {
 	// TODO: create a better feedback for empty responses, to let the users
 	// know which action was executed and whether it failed or not.
 	if jsonData == "" {
@@ -40,67 +50,5 @@ func PrintOutput(jsonData string) {
 		return
 	}
 
-	isError, err := isErrorResponse(jsonData)
-	if err != nil {
-		fmt.Println("Error when parsing the response data", err)
-		return
-	}
-
-	if isError {
-		// Unmarshal the JSON into the ErrorResponse structure
-		var errorResponse ErrorResponse
-		if err := json.Unmarshal([]byte(jsonData), &errorResponse); err != nil {
-			fmt.Println("Error decoding JSON:", err)
-			return
-		}
-
-		// Format and display the errors
-		printError(errorResponse.Errors)
-	} else {
-		prettyJSON, err := PrettifyJson(jsonData)
-
-		if err != nil {
-			fmt.Println("Error when parsing the response data")
-			return
-		}
-
-		fmt.Println(prettyJSON)
-	}
-}
-
-func printError(errors []ErrorDetail) {
-	refError := errors[0]
-
-	fmt.Printf("\n")
-
-	if refError.Code == "not_found" {
-		fmt.Printf("%s\n", refError.Detail)
-	} else if refError.Code == "VALIDATION_ERROR" {
-		fmt.Println("The following errors have been found:")
-
-		for _, err := range errors {
-			fmt.Printf("     • '%s' %s\n", err.Meta.Attribute, err.Meta.Message)
-		}
-	} else if refError.Code == "bad_request" {
-		fmt.Println("The following errors have been found:")
-
-		for _, err := range errors {
-			fmt.Printf("     • '%s' %s\n", err.Meta.Attribute, err.Meta.Message)
-		}
-	} else {
-		fmt.Println(errors)
-	}
-
-	fmt.Printf("\n")
-}
-
-func isErrorResponse(jsonString string) (bool, error) {
-	// Check if the JSON string contains the "errors" key at the root level
-	var check map[string]interface{}
-	if err := json.Unmarshal([]byte(jsonString), &check); err != nil {
-		return false, err
-	}
-
-	_, isError := check["errors"]
-	return isError, nil
+	fmt.Println(PrettifyJson(jsonData))
 }

@@ -10,7 +10,6 @@ import (
 	"fmt"
 
 	"github.com/latitudesh/lsh/client/virtual_networks"
-	"github.com/latitudesh/lsh/internal"
 	"github.com/latitudesh/lsh/internal/utils"
 	"github.com/latitudesh/lsh/models"
 
@@ -21,9 +20,9 @@ import (
 // makeOperationVirtualNetworksGetVirtualNetworkCmd returns a cmd to handle operation getVirtualNetwork
 func makeOperationVirtualNetworksGetVirtualNetworkCmd() (*cobra.Command, error) {
 	cmd := &cobra.Command{
-		Use: "get",
+		Use:   "get",
 		Short: `Retrieve a Virtual Network.`,
-		RunE: runOperationVirtualNetworksGetVirtualNetwork,
+		RunE:  runOperationVirtualNetworksGetVirtualNetwork,
 	}
 
 	if err := registerOperationVirtualNetworksGetVirtualNetworkParamFlags(cmd); err != nil {
@@ -52,14 +51,20 @@ func runOperationVirtualNetworksGetVirtualNetwork(cmd *cobra.Command, args []str
 		logDebugf("dry-run flag specified. Skip sending request.")
 		return nil
 	}
-	// make request and then print result
-	msgStr, err := parseOperationVirtualNetworksGetVirtualNetworkResult(appCli.VirtualNetworks.GetVirtualNetwork(params, nil))
+
+	result, err := appCli.VirtualNetworks.GetVirtualNetwork(params, nil)
+	if err != nil {
+		utils.PrintError(err)
+		return nil
+	}
+
+	msgStr, err := parseOperationVirtualNetworksGetVirtualNetworkResult(result)
 	if err != nil {
 		return err
 	}
 	if !debug {
 
-		utils.PrintOutput(msgStr)
+		utils.PrintResult(msgStr)
 	}
 	return nil
 }
@@ -153,34 +158,7 @@ func retrieveOperationVirtualNetworksGetVirtualNetworkIDFlag(m *virtual_networks
 }
 
 // parseOperationVirtualNetworksGetVirtualNetworkResult parses request result and return the string content
-func parseOperationVirtualNetworksGetVirtualNetworkResult(resp0 *virtual_networks.GetVirtualNetworkOK, respErr error) (string, error) {
-	if respErr != nil {
-
-		var iResp0 interface{} = respErr
-		resp0, ok := iResp0.(*virtual_networks.GetVirtualNetworkOK)
-		if ok {
-			if !swag.IsZero(resp0) && !swag.IsZero(resp0.Payload) {
-				msgStr, err := json.Marshal(resp0.Payload)
-				if err != nil {
-					return "", err
-				}
-				return string(msgStr), nil
-			}
-		}
-
-		notFoundErrorMessage, err := internal.ParseNotFoundError(respErr)
-
-		if err != nil {
-			return "", err
-		}
-
-		if len(notFoundErrorMessage) > 0 {
-			return notFoundErrorMessage, nil
-		}
-
-		return "", respErr
-	}
-
+func parseOperationVirtualNetworksGetVirtualNetworkResult(resp0 *virtual_networks.GetVirtualNetworkOK) (string, error) {
 	if !swag.IsZero(resp0) && !swag.IsZero(resp0.Payload) {
 		msgStr, err := json.Marshal(resp0.Payload)
 		if err != nil {

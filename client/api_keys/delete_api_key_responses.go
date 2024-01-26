@@ -7,12 +7,11 @@ package api_keys
 
 import (
 	"fmt"
-	"io"
 
 	"github.com/go-openapi/runtime"
 	"github.com/go-openapi/strfmt"
 
-	"github.com/latitudesh/lsh/models"
+	apierrors "github.com/latitudesh/lsh/internal/api/errors"
 )
 
 // DeleteAPIKeyReader is a Reader for the DeleteAPIKey structure.
@@ -29,9 +28,15 @@ func (o *DeleteAPIKeyReader) ReadResponse(response runtime.ClientResponse, consu
 			return nil, err
 		}
 		return result, nil
+	case 401:
+		result := apierrors.NewUnauthorized()
+		if err := result.ReadResponse(response, consumer, o.formats); err != nil {
+			return nil, err
+		}
+		return nil, result
 	case 404:
-		result := NewDeleteAPIKeyNotFound()
-		if err := result.readResponse(response, consumer, o.formats); err != nil {
+		result := apierrors.NewNotFound()
+		if err := result.ReadResponse(response, consumer, o.formats); err != nil {
 			return nil, err
 		}
 		return nil, result
@@ -92,74 +97,6 @@ func (o *DeleteAPIKeyOK) String() string {
 }
 
 func (o *DeleteAPIKeyOK) readResponse(response runtime.ClientResponse, consumer runtime.Consumer, formats strfmt.Registry) error {
-
-	return nil
-}
-
-// NewDeleteAPIKeyNotFound creates a DeleteAPIKeyNotFound with default headers values
-func NewDeleteAPIKeyNotFound() *DeleteAPIKeyNotFound {
-	return &DeleteAPIKeyNotFound{}
-}
-
-/*
-DeleteAPIKeyNotFound describes a response with status code 404, with default header values.
-
-API Key Not Found
-*/
-type DeleteAPIKeyNotFound struct {
-	Payload *models.ErrorObject
-}
-
-// IsSuccess returns true when this delete Api key not found response has a 2xx status code
-func (o *DeleteAPIKeyNotFound) IsSuccess() bool {
-	return false
-}
-
-// IsRedirect returns true when this delete Api key not found response has a 3xx status code
-func (o *DeleteAPIKeyNotFound) IsRedirect() bool {
-	return false
-}
-
-// IsClientError returns true when this delete Api key not found response has a 4xx status code
-func (o *DeleteAPIKeyNotFound) IsClientError() bool {
-	return true
-}
-
-// IsServerError returns true when this delete Api key not found response has a 5xx status code
-func (o *DeleteAPIKeyNotFound) IsServerError() bool {
-	return false
-}
-
-// IsCode returns true when this delete Api key not found response a status code equal to that given
-func (o *DeleteAPIKeyNotFound) IsCode(code int) bool {
-	return code == 404
-}
-
-// Code gets the status code for the delete Api key not found response
-func (o *DeleteAPIKeyNotFound) Code() int {
-	return 404
-}
-
-func (o *DeleteAPIKeyNotFound) Error() string {
-	return fmt.Sprintf("[DELETE /auth/api_keys/{id}][%d] deleteApiKeyNotFound  %+v", 404, o.Payload)
-}
-
-func (o *DeleteAPIKeyNotFound) String() string {
-	return fmt.Sprintf("[DELETE /auth/api_keys/{id}][%d] deleteApiKeyNotFound  %+v", 404, o.Payload)
-}
-
-func (o *DeleteAPIKeyNotFound) GetPayload() *models.ErrorObject {
-	return o.Payload
-}
-
-func (o *DeleteAPIKeyNotFound) readResponse(response runtime.ClientResponse, consumer runtime.Consumer, formats strfmt.Registry) error {
-
-	o.Payload = new(models.ErrorObject)
-
-	// response payload
-	if err := consumer.Consume(response.Body(), o.Payload); err != nil && err != io.EOF {
-		return err
-	}
 
 	return nil
 }

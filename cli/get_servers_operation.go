@@ -19,9 +19,9 @@ import (
 // makeOperationServersGetServersCmd returns a cmd to handle operation getServers
 func makeOperationServersGetServersCmd() (*cobra.Command, error) {
 	cmd := &cobra.Command{
-		Use: "list",
+		Use:   "list",
 		Short: `Returns a list of all servers belonging to the team.`,
-		RunE: runOperationServersGetServers,
+		RunE:  runOperationServersGetServers,
 	}
 
 	if err := registerOperationServersGetServersParamFlags(cmd); err != nil {
@@ -92,14 +92,20 @@ func runOperationServersGetServers(cmd *cobra.Command, args []string) error {
 		logDebugf("dry-run flag specified. Skip sending request.")
 		return nil
 	}
-	// make request and then print result
-	msgStr, err := parseOperationServersGetServersResult(appCli.Servers.GetServers(params, nil))
+
+	result, err := appCli.Servers.GetServers(params, nil)
+	if err != nil {
+		utils.PrintError(err)
+		return nil
+	}
+
+	msgStr, err := parseOperationServersGetServersResult(result)
 	if err != nil {
 		return err
 	}
 	if !debug {
 
-		utils.PrintOutput(msgStr)
+		utils.PrintResult(msgStr)
 	}
 	return nil
 }
@@ -755,24 +761,7 @@ func retrieveOperationServersGetServersFilterStatusFlag(m *servers.GetServersPar
 }
 
 // parseOperationServersGetServersResult parses request result and return the string content
-func parseOperationServersGetServersResult(resp0 *servers.GetServersOK, respErr error) (string, error) {
-	if respErr != nil {
-
-		var iResp0 interface{} = respErr
-		resp0, ok := iResp0.(*servers.GetServersOK)
-		if ok {
-			if !swag.IsZero(resp0) && !swag.IsZero(resp0.Payload) {
-				msgStr, err := json.Marshal(resp0.Payload)
-				if err != nil {
-					return "", err
-				}
-				return string(msgStr), nil
-			}
-		}
-
-		return "", respErr
-	}
-
+func parseOperationServersGetServersResult(resp0 *servers.GetServersOK) (string, error) {
 	if !swag.IsZero(resp0) && !swag.IsZero(resp0.Payload) {
 		msgStr, err := json.Marshal(resp0.Payload)
 		if err != nil {

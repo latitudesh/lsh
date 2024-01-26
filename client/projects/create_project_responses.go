@@ -17,6 +17,7 @@ import (
 	"github.com/go-openapi/swag"
 	"github.com/go-openapi/validate"
 
+	apierrors "github.com/latitudesh/lsh/internal/api/errors"
 	"github.com/latitudesh/lsh/models"
 )
 
@@ -35,20 +36,26 @@ func (o *CreateProjectReader) ReadResponse(response runtime.ClientResponse, cons
 		}
 		return result, nil
 	case 400:
-		result := NewCreateProjectBadRequest()
-		if err := result.readResponse(response, consumer, o.formats); err != nil {
+		result := apierrors.NewBadRequest()
+		if err := result.ReadResponse(response, consumer, o.formats); err != nil {
+			return nil, err
+		}
+		return nil, result
+	case 401:
+		result := apierrors.NewUnauthorized()
+		if err := result.ReadResponse(response, consumer, o.formats); err != nil {
 			return nil, err
 		}
 		return nil, result
 	case 403:
-		result := NewCreateProjectForbidden()
-		if err := result.readResponse(response, consumer, o.formats); err != nil {
+		result := apierrors.NewForbidden()
+		if err := result.ReadResponse(response, consumer, o.formats); err != nil {
 			return nil, err
 		}
 		return nil, result
 	case 422:
-		result := NewCreateProjectUnprocessableEntity()
-		if err := result.readResponse(response, consumer, o.formats); err != nil {
+		result := apierrors.NewUnprocessableEntity()
+		if err := result.ReadResponse(response, consumer, o.formats); err != nil {
 			return nil, err
 		}
 		return nil, result
@@ -116,210 +123,6 @@ func (o *CreateProjectCreated) GetPayload() *CreateProjectCreatedBody {
 func (o *CreateProjectCreated) readResponse(response runtime.ClientResponse, consumer runtime.Consumer, formats strfmt.Registry) error {
 
 	o.Payload = new(CreateProjectCreatedBody)
-
-	// response payload
-	if err := consumer.Consume(response.Body(), o.Payload); err != nil && err != io.EOF {
-		return err
-	}
-
-	return nil
-}
-
-// NewCreateProjectBadRequest creates a CreateProjectBadRequest with default headers values
-func NewCreateProjectBadRequest() *CreateProjectBadRequest {
-	return &CreateProjectBadRequest{}
-}
-
-/*
-CreateProjectBadRequest describes a response with status code 400, with default header values.
-
-Bad Request
-*/
-type CreateProjectBadRequest struct {
-	Payload *models.ErrorObject
-}
-
-// IsSuccess returns true when this create project bad request response has a 2xx status code
-func (o *CreateProjectBadRequest) IsSuccess() bool {
-	return false
-}
-
-// IsRedirect returns true when this create project bad request response has a 3xx status code
-func (o *CreateProjectBadRequest) IsRedirect() bool {
-	return false
-}
-
-// IsClientError returns true when this create project bad request response has a 4xx status code
-func (o *CreateProjectBadRequest) IsClientError() bool {
-	return true
-}
-
-// IsServerError returns true when this create project bad request response has a 5xx status code
-func (o *CreateProjectBadRequest) IsServerError() bool {
-	return false
-}
-
-// IsCode returns true when this create project bad request response a status code equal to that given
-func (o *CreateProjectBadRequest) IsCode(code int) bool {
-	return code == 400
-}
-
-// Code gets the status code for the create project bad request response
-func (o *CreateProjectBadRequest) Code() int {
-	return 400
-}
-
-func (o *CreateProjectBadRequest) Error() string {
-	return fmt.Sprintf("[POST /projects][%d] createProjectBadRequest  %+v", 400, o.Payload)
-}
-
-func (o *CreateProjectBadRequest) String() string {
-	return fmt.Sprintf("[POST /projects][%d] createProjectBadRequest  %+v", 400, o.Payload)
-}
-
-func (o *CreateProjectBadRequest) GetPayload() *models.ErrorObject {
-	return o.Payload
-}
-
-func (o *CreateProjectBadRequest) readResponse(response runtime.ClientResponse, consumer runtime.Consumer, formats strfmt.Registry) error {
-
-	o.Payload = new(models.ErrorObject)
-
-	// response payload
-	if err := consumer.Consume(response.Body(), o.Payload); err != nil && err != io.EOF {
-		return err
-	}
-
-	return nil
-}
-
-// NewCreateProjectForbidden creates a CreateProjectForbidden with default headers values
-func NewCreateProjectForbidden() *CreateProjectForbidden {
-	return &CreateProjectForbidden{}
-}
-
-/*
-CreateProjectForbidden describes a response with status code 403, with default header values.
-
-Forbidden
-*/
-type CreateProjectForbidden struct {
-	Payload *models.ErrorObject
-}
-
-// IsSuccess returns true when this create project forbidden response has a 2xx status code
-func (o *CreateProjectForbidden) IsSuccess() bool {
-	return false
-}
-
-// IsRedirect returns true when this create project forbidden response has a 3xx status code
-func (o *CreateProjectForbidden) IsRedirect() bool {
-	return false
-}
-
-// IsClientError returns true when this create project forbidden response has a 4xx status code
-func (o *CreateProjectForbidden) IsClientError() bool {
-	return true
-}
-
-// IsServerError returns true when this create project forbidden response has a 5xx status code
-func (o *CreateProjectForbidden) IsServerError() bool {
-	return false
-}
-
-// IsCode returns true when this create project forbidden response a status code equal to that given
-func (o *CreateProjectForbidden) IsCode(code int) bool {
-	return code == 403
-}
-
-// Code gets the status code for the create project forbidden response
-func (o *CreateProjectForbidden) Code() int {
-	return 403
-}
-
-func (o *CreateProjectForbidden) Error() string {
-	return fmt.Sprintf("[POST /projects][%d] createProjectForbidden  %+v", 403, o.Payload)
-}
-
-func (o *CreateProjectForbidden) String() string {
-	return fmt.Sprintf("[POST /projects][%d] createProjectForbidden  %+v", 403, o.Payload)
-}
-
-func (o *CreateProjectForbidden) GetPayload() *models.ErrorObject {
-	return o.Payload
-}
-
-func (o *CreateProjectForbidden) readResponse(response runtime.ClientResponse, consumer runtime.Consumer, formats strfmt.Registry) error {
-
-	o.Payload = new(models.ErrorObject)
-
-	// response payload
-	if err := consumer.Consume(response.Body(), o.Payload); err != nil && err != io.EOF {
-		return err
-	}
-
-	return nil
-}
-
-// NewCreateProjectUnprocessableEntity creates a CreateProjectUnprocessableEntity with default headers values
-func NewCreateProjectUnprocessableEntity() *CreateProjectUnprocessableEntity {
-	return &CreateProjectUnprocessableEntity{}
-}
-
-/*
-CreateProjectUnprocessableEntity describes a response with status code 422, with default header values.
-
-Unprocessable Entity
-*/
-type CreateProjectUnprocessableEntity struct {
-	Payload *models.ErrorObject
-}
-
-// IsSuccess returns true when this create project unprocessable entity response has a 2xx status code
-func (o *CreateProjectUnprocessableEntity) IsSuccess() bool {
-	return false
-}
-
-// IsRedirect returns true when this create project unprocessable entity response has a 3xx status code
-func (o *CreateProjectUnprocessableEntity) IsRedirect() bool {
-	return false
-}
-
-// IsClientError returns true when this create project unprocessable entity response has a 4xx status code
-func (o *CreateProjectUnprocessableEntity) IsClientError() bool {
-	return true
-}
-
-// IsServerError returns true when this create project unprocessable entity response has a 5xx status code
-func (o *CreateProjectUnprocessableEntity) IsServerError() bool {
-	return false
-}
-
-// IsCode returns true when this create project unprocessable entity response a status code equal to that given
-func (o *CreateProjectUnprocessableEntity) IsCode(code int) bool {
-	return code == 422
-}
-
-// Code gets the status code for the create project unprocessable entity response
-func (o *CreateProjectUnprocessableEntity) Code() int {
-	return 422
-}
-
-func (o *CreateProjectUnprocessableEntity) Error() string {
-	return fmt.Sprintf("[POST /projects][%d] createProjectUnprocessableEntity  %+v", 422, o.Payload)
-}
-
-func (o *CreateProjectUnprocessableEntity) String() string {
-	return fmt.Sprintf("[POST /projects][%d] createProjectUnprocessableEntity  %+v", 422, o.Payload)
-}
-
-func (o *CreateProjectUnprocessableEntity) GetPayload() *models.ErrorObject {
-	return o.Payload
-}
-
-func (o *CreateProjectUnprocessableEntity) readResponse(response runtime.ClientResponse, consumer runtime.Consumer, formats strfmt.Registry) error {
-
-	o.Payload = new(models.ErrorObject)
 
 	// response payload
 	if err := consumer.Consume(response.Body(), o.Payload); err != nil && err != io.EOF {

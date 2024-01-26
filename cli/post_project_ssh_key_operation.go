@@ -10,7 +10,6 @@ import (
 	"fmt"
 
 	"github.com/latitudesh/lsh/client/ssh_keys"
-	"github.com/latitudesh/lsh/internal"
 	"github.com/latitudesh/lsh/internal/utils"
 	"github.com/latitudesh/lsh/models"
 
@@ -21,9 +20,9 @@ import (
 // makeOperationSSHKeysPostProjectSSHKeyCmd returns a cmd to handle operation postProjectSshKey
 func makeOperationSSHKeysPostProjectSSHKeyCmd() (*cobra.Command, error) {
 	cmd := &cobra.Command{
-		Use: "create",
+		Use:   "create",
 		Short: `Allow you create SSH Keys in a project. These keys can be used to access servers after deploy and reinstall actions.`,
-		RunE: runOperationSSHKeysPostProjectSSHKey,
+		RunE:  runOperationSSHKeysPostProjectSSHKey,
 	}
 
 	if err := registerOperationSSHKeysPostProjectSSHKeyParamFlags(cmd); err != nil {
@@ -55,14 +54,20 @@ func runOperationSSHKeysPostProjectSSHKey(cmd *cobra.Command, args []string) err
 		logDebugf("dry-run flag specified. Skip sending request.")
 		return nil
 	}
-	// make request and then print result
-	msgStr, err := parseOperationSSHKeysPostProjectSSHKeyResult(appCli.SSHKeys.PostProjectSSHKey(params, nil))
+
+	result, err := appCli.SSHKeys.PostProjectSSHKey(params, nil)
+	if err != nil {
+		utils.PrintError(err)
+		return nil
+	}
+
+	msgStr, err := parseOperationSSHKeysPostProjectSSHKeyResult(result)
 	if err != nil {
 		return err
 	}
 	if !debug {
 
-		utils.PrintOutput(msgStr)
+		utils.PrintResult(msgStr)
 	}
 	return nil
 }
@@ -215,38 +220,7 @@ func retrieveOperationSSHKeysPostProjectSSHKeyProjectIDOrSlugFlag(m *ssh_keys.Po
 }
 
 // parseOperationSSHKeysPostProjectSSHKeyResult parses request result and return the string content
-func parseOperationSSHKeysPostProjectSSHKeyResult(resp0 *ssh_keys.PostProjectSSHKeyCreated, respErr error) (string, error) {
-	if respErr != nil {
-
-		var iResp0 interface{} = respErr
-		resp0, ok := iResp0.(*ssh_keys.PostProjectSSHKeyCreated)
-		if ok {
-			if !swag.IsZero(resp0) && !swag.IsZero(resp0.Payload) {
-				msgStr, err := json.Marshal(resp0.Payload)
-				if err != nil {
-					return "", err
-				}
-				return string(msgStr), nil
-			}
-		}
-
-		unprocessableEntityErrorMessage, err := internal.ParseUnprocessableEntityError(respErr)
-
-		if err != nil {
-			return "", err
-		}
-
-		if len(unprocessableEntityErrorMessage) > 0 {
-			return unprocessableEntityErrorMessage, nil
-		}
-
-		// Non schema case: warning postProjectSshKeyBadRequest is not supported
-
-		// Non schema case: warning postProjectSshKeyUnprocessableEntity is not supported
-
-		return "", respErr
-	}
-
+func parseOperationSSHKeysPostProjectSSHKeyResult(resp0 *ssh_keys.PostProjectSSHKeyCreated) (string, error) {
 	if !swag.IsZero(resp0) && !swag.IsZero(resp0.Payload) {
 		msgStr, err := json.Marshal(resp0.Payload)
 		if err != nil {

@@ -6,22 +6,20 @@ package cli
 // Editing this file might prove futile when you re-run the swagger generate command
 
 import (
-	"encoding/json"
 	"fmt"
 
 	"github.com/latitudesh/lsh/client/api_keys"
 	"github.com/latitudesh/lsh/internal/utils"
 
-	"github.com/go-openapi/swag"
 	"github.com/spf13/cobra"
 )
 
 // makeOperationAPIKeysDeleteAPIKeyCmd returns a cmd to handle operation deleteApiKey
 func makeOperationAPIKeysDeleteAPIKeyCmd() (*cobra.Command, error) {
 	cmd := &cobra.Command{
-		Use: "destroy",
+		Use:   "destroy",
 		Short: `Delete an existing API Key. Once deleted, the API Key can no longer be used to access the API.`,
-		RunE: runOperationAPIKeysDeleteAPIKey,
+		RunE:  runOperationAPIKeysDeleteAPIKey,
 	}
 
 	if err := registerOperationAPIKeysDeleteAPIKeyParamFlags(cmd); err != nil {
@@ -50,13 +48,20 @@ func runOperationAPIKeysDeleteAPIKey(cmd *cobra.Command, args []string) error {
 		logDebugf("dry-run flag specified. Skip sending request.")
 		return nil
 	}
-	// make request and then print result
-	msgStr, err := parseOperationAPIKeysDeleteAPIKeyResult(appCli.APIKeys.DeleteAPIKey(params, nil))
+
+	result, err := appCli.APIKeys.DeleteAPIKey(params, nil)
+	if err != nil {
+		utils.PrintError(err)
+		return nil
+	}
+
+	msgStr, err := parseOperationAPIKeysDeleteAPIKeyResult(result)
 	if err != nil {
 		return err
 	}
+
 	if !debug {
-		utils.PrintOutput(msgStr)
+		utils.PrintResult(msgStr)
 	}
 	return nil
 }
@@ -151,26 +156,7 @@ func retrieveOperationAPIKeysDeleteAPIKeyIDFlag(m *api_keys.DeleteAPIKeyParams, 
 }
 
 // parseOperationAPIKeysDeleteAPIKeyResult parses request result and return the string content
-func parseOperationAPIKeysDeleteAPIKeyResult(resp0 *api_keys.DeleteAPIKeyOK, respErr error) (string, error) {
-	if respErr != nil {
-
-		// Non schema case: warning deleteApiKeyOK is not supported
-
-		var iResp1 interface{} = respErr
-		resp1, ok := iResp1.(*api_keys.DeleteAPIKeyNotFound)
-		if ok {
-			if !swag.IsZero(resp1) && !swag.IsZero(resp1.Payload) {
-				msgStr, err := json.Marshal(resp1.Payload)
-				if err != nil {
-					return "", err
-				}
-				return string(msgStr), nil
-			}
-		}
-
-		return "", respErr
-	}
-
+func parseOperationAPIKeysDeleteAPIKeyResult(resp0 *api_keys.DeleteAPIKeyOK) (string, error) {
 	// warning: non schema response deleteApiKeyOK is not supported by go-swagger cli yet.
 
 	return "", nil

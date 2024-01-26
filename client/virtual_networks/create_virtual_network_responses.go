@@ -17,7 +17,7 @@ import (
 	"github.com/go-openapi/swag"
 	"github.com/go-openapi/validate"
 
-	"github.com/latitudesh/lsh/internal"
+	apierrors "github.com/latitudesh/lsh/internal/api/errors"
 	"github.com/latitudesh/lsh/models"
 )
 
@@ -35,15 +35,21 @@ func (o *CreateVirtualNetworkReader) ReadResponse(response runtime.ClientRespons
 			return nil, err
 		}
 		return result, nil
+	case 401:
+		result := apierrors.NewUnauthorized()
+		if err := result.ReadResponse(response, consumer, o.formats); err != nil {
+			return nil, err
+		}
+		return nil, result
 	case 404:
-		result := internal.NewNotFoundError()
+		result := apierrors.NewNotFound()
 		if err := result.ReadResponse(response, consumer, o.formats); err != nil {
 			return nil, err
 		}
 		return nil, result
 	case 422:
-		result := NewCreateVirtualNetworkUnprocessableEntity()
-		if err := result.readResponse(response, consumer, o.formats); err != nil {
+		result := apierrors.NewUnprocessableEntity()
+		if err := result.ReadResponse(response, consumer, o.formats); err != nil {
 			return nil, err
 		}
 		return nil, result
@@ -111,74 +117,6 @@ func (o *CreateVirtualNetworkCreated) GetPayload() *models.VirtualNetwork {
 func (o *CreateVirtualNetworkCreated) readResponse(response runtime.ClientResponse, consumer runtime.Consumer, formats strfmt.Registry) error {
 
 	o.Payload = new(models.VirtualNetwork)
-
-	// response payload
-	if err := consumer.Consume(response.Body(), o.Payload); err != nil && err != io.EOF {
-		return err
-	}
-
-	return nil
-}
-
-// NewCreateVirtualNetworkUnprocessableEntity creates a CreateVirtualNetworkUnprocessableEntity with default headers values
-func NewCreateVirtualNetworkUnprocessableEntity() *CreateVirtualNetworkUnprocessableEntity {
-	return &CreateVirtualNetworkUnprocessableEntity{}
-}
-
-/*
-CreateVirtualNetworkUnprocessableEntity describes a response with status code 422, with default header values.
-
-Unprocessable Entity
-*/
-type CreateVirtualNetworkUnprocessableEntity struct {
-	Payload *models.ErrorObject
-}
-
-// IsSuccess returns true when this create virtual network unprocessable entity response has a 2xx status code
-func (o *CreateVirtualNetworkUnprocessableEntity) IsSuccess() bool {
-	return false
-}
-
-// IsRedirect returns true when this create virtual network unprocessable entity response has a 3xx status code
-func (o *CreateVirtualNetworkUnprocessableEntity) IsRedirect() bool {
-	return false
-}
-
-// IsClientError returns true when this create virtual network unprocessable entity response has a 4xx status code
-func (o *CreateVirtualNetworkUnprocessableEntity) IsClientError() bool {
-	return true
-}
-
-// IsServerError returns true when this create virtual network unprocessable entity response has a 5xx status code
-func (o *CreateVirtualNetworkUnprocessableEntity) IsServerError() bool {
-	return false
-}
-
-// IsCode returns true when this create virtual network unprocessable entity response a status code equal to that given
-func (o *CreateVirtualNetworkUnprocessableEntity) IsCode(code int) bool {
-	return code == 422
-}
-
-// Code gets the status code for the create virtual network unprocessable entity response
-func (o *CreateVirtualNetworkUnprocessableEntity) Code() int {
-	return 422
-}
-
-func (o *CreateVirtualNetworkUnprocessableEntity) Error() string {
-	return fmt.Sprintf("[POST /virtual_networks][%d] createVirtualNetworkUnprocessableEntity  %+v", 422, o.Payload)
-}
-
-func (o *CreateVirtualNetworkUnprocessableEntity) String() string {
-	return fmt.Sprintf("[POST /virtual_networks][%d] createVirtualNetworkUnprocessableEntity  %+v", 422, o.Payload)
-}
-
-func (o *CreateVirtualNetworkUnprocessableEntity) GetPayload() *models.ErrorObject {
-	return o.Payload
-}
-
-func (o *CreateVirtualNetworkUnprocessableEntity) readResponse(response runtime.ClientResponse, consumer runtime.Consumer, formats strfmt.Registry) error {
-
-	o.Payload = new(models.ErrorObject)
 
 	// response payload
 	if err := consumer.Consume(response.Body(), o.Payload); err != nil && err != io.EOF {

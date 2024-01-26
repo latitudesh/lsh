@@ -50,13 +50,19 @@ func runOperationPlansGetPlan(cmd *cobra.Command, args []string) error {
 		logDebugf("dry-run flag specified. Skip sending request.")
 		return nil
 	}
-	// make request and then print result
-	msgStr, err := parseOperationPlansGetPlanResult(appCli.Plans.GetPlan(params, nil))
+
+	result, err := appCli.Plans.GetPlan(params, nil)
+	if err != nil {
+		utils.PrintError(err)
+		return nil
+	}
+
+	msgStr, err := parseOperationPlansGetPlanResult(result)
 	if err != nil {
 		return err
 	}
 	if !debug {
-		utils.PrintOutput(msgStr)
+		utils.PrintResult(msgStr)
 	}
 	return nil
 }
@@ -150,36 +156,7 @@ func retrieveOperationPlansGetPlanPlanIDFlag(m *plans.GetPlanParams, cmdPrefix s
 }
 
 // parseOperationPlansGetPlanResult parses request result and return the string content
-func parseOperationPlansGetPlanResult(resp0 *plans.GetPlanOK, respErr error) (string, error) {
-	if respErr != nil {
-
-		var iResp0 interface{} = respErr
-		resp0, ok := iResp0.(*plans.GetPlanOK)
-		if ok {
-			if !swag.IsZero(resp0) && !swag.IsZero(resp0.Payload) {
-				msgStr, err := json.Marshal(resp0.Payload)
-				if err != nil {
-					return "", err
-				}
-				return string(msgStr), nil
-			}
-		}
-
-		var iResp1 interface{} = respErr
-		resp1, ok := iResp1.(*plans.GetPlanNotFound)
-		if ok {
-			if !swag.IsZero(resp1) && !swag.IsZero(resp1.Payload) {
-				msgStr, err := json.Marshal(resp1.Payload)
-				if err != nil {
-					return "", err
-				}
-				return string(msgStr), nil
-			}
-		}
-
-		return "", respErr
-	}
-
+func parseOperationPlansGetPlanResult(resp0 *plans.GetPlanOK) (string, error) {
 	if !swag.IsZero(resp0) && !swag.IsZero(resp0.Payload) {
 		msgStr, err := json.Marshal(resp0.Payload)
 		if err != nil {

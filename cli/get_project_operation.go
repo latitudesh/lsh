@@ -54,14 +54,20 @@ func runOperationProjectsGetProject(cmd *cobra.Command, args []string) error {
 		logDebugf("dry-run flag specified. Skip sending request.")
 		return nil
 	}
-	// make request and then print result
-	msgStr, err := parseOperationProjectsGetProjectResult(appCli.Projects.GetProject(params, nil))
+
+	result, err := appCli.Projects.GetProject(params, nil)
+	if err != nil {
+		utils.PrintError(err)
+		return nil
+	}
+
+	msgStr, err := parseOperationProjectsGetProjectResult(result)
 	if err != nil {
 		return err
 	}
 	if !debug {
 
-		utils.PrintOutput(msgStr)
+		utils.PrintResult(msgStr)
 	}
 	return nil
 }
@@ -195,36 +201,7 @@ func retrieveOperationProjectsGetProjectIDOrSlugFlag(m *projects.GetProjectParam
 }
 
 // parseOperationProjectsGetProjectResult parses request result and return the string content
-func parseOperationProjectsGetProjectResult(resp0 *projects.GetProjectOK, respErr error) (string, error) {
-	if respErr != nil {
-
-		var iResp0 interface{} = respErr
-		resp0, ok := iResp0.(*projects.GetProjectOK)
-		if ok {
-			if !swag.IsZero(resp0) && !swag.IsZero(resp0.Payload) {
-				msgStr, err := json.Marshal(resp0.Payload)
-				if err != nil {
-					return "", err
-				}
-				return string(msgStr), nil
-			}
-		}
-
-		var iResp1 interface{} = respErr
-		resp1, ok := iResp1.(*projects.GetProjectNotFound)
-		if ok {
-			if !swag.IsZero(resp1) && !swag.IsZero(resp1.Payload) {
-				msgStr, err := json.Marshal(resp1.Payload)
-				if err != nil {
-					return "", err
-				}
-				return string(msgStr), nil
-			}
-		}
-
-		return "", respErr
-	}
-
+func parseOperationProjectsGetProjectResult(resp0 *projects.GetProjectOK) (string, error) {
 	if !swag.IsZero(resp0) && !swag.IsZero(resp0.Payload) {
 		msgStr, err := json.Marshal(resp0.Payload)
 		if err != nil {

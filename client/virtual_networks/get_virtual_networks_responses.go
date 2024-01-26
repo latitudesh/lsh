@@ -12,6 +12,7 @@ import (
 	"github.com/go-openapi/runtime"
 	"github.com/go-openapi/strfmt"
 
+	apierrors "github.com/latitudesh/lsh/internal/api/errors"
 	"github.com/latitudesh/lsh/models"
 )
 
@@ -29,6 +30,12 @@ func (o *GetVirtualNetworksReader) ReadResponse(response runtime.ClientResponse,
 			return nil, err
 		}
 		return result, nil
+	case 401:
+		result := apierrors.NewUnauthorized()
+		if err := result.ReadResponse(response, consumer, o.formats); err != nil {
+			return nil, err
+		}
+		return nil, result
 	default:
 		return nil, runtime.NewAPIError("[GET /virtual_networks] get-virtual-networks", response, response.Code())
 	}

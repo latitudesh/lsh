@@ -53,14 +53,20 @@ func runOperationServerReinstallCreateServerReinstall(cmd *cobra.Command, args [
 		logDebugf("dry-run flag specified. Skip sending request.")
 		return nil
 	}
-	// make request and then print result
-	msgStr, err := parseOperationServerReinstallCreateServerReinstallResult(appCli.ServerReinstall.CreateServerReinstall(params, nil))
+
+	result, err := appCli.ServerReinstall.CreateServerReinstall(params, nil)
+	if err != nil {
+		utils.PrintError(err)
+		return nil
+	}
+
+	msgStr, err := parseOperationServerReinstallCreateServerReinstallResult(result)
 	if err != nil {
 		return err
 	}
 	if !debug {
 
-		utils.PrintOutput(msgStr)
+		utils.PrintResult(msgStr)
 	}
 	return nil
 }
@@ -213,50 +219,7 @@ func retrieveOperationServerReinstallCreateServerReinstallServerIDFlag(m *server
 }
 
 // parseOperationServerReinstallCreateServerReinstallResult parses request result and return the string content
-func parseOperationServerReinstallCreateServerReinstallResult(resp0 *server_reinstall.CreateServerReinstallCreated, respErr error) (string, error) {
-	if respErr != nil {
-
-		// Non schema case: warning createServerReinstallCreated is not supported
-
-		var iResp1 interface{} = respErr
-		resp1, ok := iResp1.(*server_reinstall.CreateServerReinstallForbidden)
-		if ok {
-			if !swag.IsZero(resp1) && !swag.IsZero(resp1.Payload) {
-				msgStr, err := json.Marshal(resp1.Payload)
-				if err != nil {
-					return "", err
-				}
-				return string(msgStr), nil
-			}
-		}
-
-		var iResp2 interface{} = respErr
-		resp2, ok := iResp2.(*server_reinstall.CreateServerReinstallNotFound)
-		if ok {
-			if !swag.IsZero(resp2) && !swag.IsZero(resp2.Payload) {
-				msgStr, err := json.Marshal(resp2.Payload)
-				if err != nil {
-					return "", err
-				}
-				return string(msgStr), nil
-			}
-		}
-
-		var iResp3 interface{} = respErr
-		resp3, ok := iResp3.(*server_reinstall.CreateServerReinstallUnprocessableEntity)
-		if ok {
-			if !swag.IsZero(resp3) && !swag.IsZero(resp3.Payload) {
-				msgStr, err := json.Marshal(resp3.Payload)
-				if err != nil {
-					return "", err
-				}
-				return string(msgStr), nil
-			}
-		}
-
-		return "", respErr
-	}
-
+func parseOperationServerReinstallCreateServerReinstallResult(resp0 *server_reinstall.CreateServerReinstallCreated) (string, error) {
 	// warning: non schema response createServerReinstallCreated is not supported by go-swagger cli yet.
 
 	return "", nil
@@ -692,7 +655,7 @@ func retrieveCreateServerReinstallParamsBodyDataAttributesOperatingSystemFlags(d
 	operatingSystemFlagName := fmt.Sprintf("%v.operating_system", cmdPrefix)
 	if cmd.Flags().Changed(operatingSystemFlagName) {
 
-		var operatingSystemFlagName  = "operating_system"
+		var operatingSystemFlagName = "operating_system"
 
 		operatingSystemFlagValue, err := cmd.Flags().GetString(operatingSystemFlagName)
 		if err != nil {

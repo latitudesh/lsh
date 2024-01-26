@@ -51,14 +51,19 @@ func runOperationProjectsCreateProject(cmd *cobra.Command, args []string) error 
 		logDebugf("dry-run flag specified. Skip sending request.")
 		return nil
 	}
-	// make request and then print result
-	msgStr, err := parseOperationProjectsCreateProjectResult(appCli.Projects.CreateProject(params, nil))
+
+	result, err := appCli.Projects.CreateProject(params, nil)
+	if err != nil {
+		utils.PrintError(err)
+		return nil
+	}
+
+	msgStr, err := parseOperationProjectsCreateProjectResult(result)
 	if err != nil {
 		return err
 	}
 	if !debug {
-
-		utils.PrintOutput(msgStr)
+		utils.PrintResult(msgStr)
 	}
 	return nil
 }
@@ -170,60 +175,7 @@ func retrieveOperationProjectsCreateProjectBodyFlag(m *projects.CreateProjectPar
 }
 
 // parseOperationProjectsCreateProjectResult parses request result and return the string content
-func parseOperationProjectsCreateProjectResult(resp0 *projects.CreateProjectCreated, respErr error) (string, error) {
-	if respErr != nil {
-
-		var iResp0 interface{} = respErr
-		resp0, ok := iResp0.(*projects.CreateProjectCreated)
-		if ok {
-			if !swag.IsZero(resp0) && !swag.IsZero(resp0.Payload) {
-				msgStr, err := json.Marshal(resp0.Payload)
-				if err != nil {
-					return "", err
-				}
-				return string(msgStr), nil
-			}
-		}
-
-		var iResp1 interface{} = respErr
-		resp1, ok := iResp1.(*projects.CreateProjectBadRequest)
-		if ok {
-			if !swag.IsZero(resp1) && !swag.IsZero(resp1.Payload) {
-				msgStr, err := json.Marshal(resp1.Payload)
-				if err != nil {
-					return "", err
-				}
-				return string(msgStr), nil
-			}
-		}
-
-		var iResp2 interface{} = respErr
-		resp2, ok := iResp2.(*projects.CreateProjectForbidden)
-		if ok {
-			if !swag.IsZero(resp2) && !swag.IsZero(resp2.Payload) {
-				msgStr, err := json.Marshal(resp2.Payload)
-				if err != nil {
-					return "", err
-				}
-				return string(msgStr), nil
-			}
-		}
-
-		var iResp3 interface{} = respErr
-		resp3, ok := iResp3.(*projects.CreateProjectUnprocessableEntity)
-		if ok {
-			if !swag.IsZero(resp3) && !swag.IsZero(resp3.Payload) {
-				msgStr, err := json.Marshal(resp3.Payload)
-				if err != nil {
-					return "", err
-				}
-				return string(msgStr), nil
-			}
-		}
-
-		return "", respErr
-	}
-
+func parseOperationProjectsCreateProjectResult(resp0 *projects.CreateProjectCreated) (string, error) {
 	if !swag.IsZero(resp0) && !swag.IsZero(resp0.Payload) {
 		msgStr, err := json.Marshal(resp0.Payload)
 		if err != nil {
@@ -316,7 +268,7 @@ func registerCreateProjectCreatedBodyData(depth int, cmdPrefix string, cmd *cobr
 	}
 
 	var dataFlagName = ""
-	
+
 	if err := registerModelProjectFlags(depth+1, dataFlagName, cmd); err != nil {
 		return err
 	}

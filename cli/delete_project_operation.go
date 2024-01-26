@@ -6,13 +6,11 @@ package cli
 // Editing this file might prove futile when you re-run the swagger generate command
 
 import (
-	"encoding/json"
 	"fmt"
 
 	"github.com/latitudesh/lsh/client/projects"
 	"github.com/latitudesh/lsh/internal/utils"
 
-	"github.com/go-openapi/swag"
 	"github.com/spf13/cobra"
 )
 
@@ -50,14 +48,20 @@ func runOperationProjectsDeleteProject(cmd *cobra.Command, args []string) error 
 		logDebugf("dry-run flag specified. Skip sending request.")
 		return nil
 	}
-	// make request and then print result
-	msgStr, err := parseOperationProjectsDeleteProjectResult(appCli.Projects.DeleteProject(params, nil))
+
+	result, err := appCli.Projects.DeleteProject(params, nil)
+	if err != nil {
+		utils.PrintError(err)
+		return nil
+	}
+
+	msgStr, err := parseOperationProjectsDeleteProjectResult(result)
 	if err != nil {
 		return err
 	}
 	if !debug {
 
-		utils.PrintOutput(msgStr)
+		utils.PrintResult(msgStr)
 	}
 	return nil
 }
@@ -151,50 +155,7 @@ func retrieveOperationProjectsDeleteProjectIDOrSlugFlag(m *projects.DeleteProjec
 }
 
 // parseOperationProjectsDeleteProjectResult parses request result and return the string content
-func parseOperationProjectsDeleteProjectResult(resp0 *projects.DeleteProjectNoContent, respErr error) (string, error) {
-	if respErr != nil {
-
-		// Non schema case: warning deleteProjectNoContent is not supported
-
-		var iResp1 interface{} = respErr
-		resp1, ok := iResp1.(*projects.DeleteProjectForbidden)
-		if ok {
-			if !swag.IsZero(resp1) && !swag.IsZero(resp1.Payload) {
-				msgStr, err := json.Marshal(resp1.Payload)
-				if err != nil {
-					return "", err
-				}
-				return string(msgStr), nil
-			}
-		}
-
-		var iResp2 interface{} = respErr
-		resp2, ok := iResp2.(*projects.DeleteProjectNotFound)
-		if ok {
-			if !swag.IsZero(resp2) && !swag.IsZero(resp2.Payload) {
-				msgStr, err := json.Marshal(resp2.Payload)
-				if err != nil {
-					return "", err
-				}
-				return string(msgStr), nil
-			}
-		}
-
-		var iResp3 interface{} = respErr
-		resp3, ok := iResp3.(*projects.DeleteProjectNotAcceptable)
-		if ok {
-			if !swag.IsZero(resp3) && !swag.IsZero(resp3.Payload) {
-				msgStr, err := json.Marshal(resp3.Payload)
-				if err != nil {
-					return "", err
-				}
-				return string(msgStr), nil
-			}
-		}
-
-		return "", respErr
-	}
-
+func parseOperationProjectsDeleteProjectResult(resp0 *projects.DeleteProjectNoContent) (string, error) {
 	// warning: non schema response deleteProjectNoContent is not supported by go-swagger cli yet.
 
 	return "", nil

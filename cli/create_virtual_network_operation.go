@@ -10,7 +10,6 @@ import (
 	"fmt"
 
 	"github.com/latitudesh/lsh/client/virtual_networks"
-	"github.com/latitudesh/lsh/internal"
 	"github.com/latitudesh/lsh/internal/utils"
 
 	"github.com/go-openapi/swag"
@@ -20,9 +19,9 @@ import (
 // makeOperationVirtualNetworksCreateVirtualNetworkCmd returns a cmd to handle operation createVirtualNetwork
 func makeOperationVirtualNetworksCreateVirtualNetworkCmd() (*cobra.Command, error) {
 	cmd := &cobra.Command{
-		Use: "create",
+		Use:   "create",
 		Short: `Creates a new Virtual Network.`,
-		RunE: runOperationVirtualNetworksCreateVirtualNetwork,
+		RunE:  runOperationVirtualNetworksCreateVirtualNetwork,
 	}
 
 	if err := registerOperationVirtualNetworksCreateVirtualNetworkParamFlags(cmd); err != nil {
@@ -52,13 +51,19 @@ func runOperationVirtualNetworksCreateVirtualNetwork(cmd *cobra.Command, args []
 		return nil
 	}
 	// make request and then print result
-	msgStr, err := parseOperationVirtualNetworksCreateVirtualNetworkResult(appCli.VirtualNetworks.CreateVirtualNetwork(params, nil))
+	result, err := appCli.VirtualNetworks.CreateVirtualNetwork(params, nil)
+
+	if err != nil {
+		utils.PrintError(err)
+		return nil
+	}
+
+	msgStr, err := parseOperationVirtualNetworksCreateVirtualNetworkResult(result)
 	if err != nil {
 		return err
 	}
 	if !debug {
-
-		utils.PrintOutput(msgStr)
+		utils.PrintResult(msgStr)
 	}
 	return nil
 }
@@ -170,46 +175,7 @@ func retrieveOperationVirtualNetworksCreateVirtualNetworkBodyFlag(m *virtual_net
 }
 
 // parseOperationVirtualNetworksCreateVirtualNetworkResult parses request result and return the string content
-func parseOperationVirtualNetworksCreateVirtualNetworkResult(resp0 *virtual_networks.CreateVirtualNetworkCreated, respErr error) (string, error) {
-	if respErr != nil {
-
-		var iResp0 interface{} = respErr
-		resp0, ok := iResp0.(*virtual_networks.CreateVirtualNetworkCreated)
-		if ok {
-			if !swag.IsZero(resp0) && !swag.IsZero(resp0.Payload) {
-				msgStr, err := json.Marshal(resp0.Payload)
-				if err != nil {
-					return "", err
-				}
-				return string(msgStr), nil
-			}
-		}
-
-		var iResp1 interface{} = respErr
-		resp1, ok := iResp1.(*virtual_networks.CreateVirtualNetworkUnprocessableEntity)
-		if ok {
-			if !swag.IsZero(resp1) && !swag.IsZero(resp1.Payload) {
-				msgStr, err := json.Marshal(resp1.Payload)
-				if err != nil {
-					return "", err
-				}
-				return string(msgStr), nil
-			}
-		}
-
-		notFoundErrorMessage, err := internal.ParseNotFoundError(respErr)
-
-		if err != nil {
-			return "", err
-		}
-
-		if len(notFoundErrorMessage) > 0 {
-			return notFoundErrorMessage, nil
-		}
-
-		return "", respErr
-	}
-
+func parseOperationVirtualNetworksCreateVirtualNetworkResult(resp0 *virtual_networks.CreateVirtualNetworkCreated) (string, error) {
 	if !swag.IsZero(resp0) && !swag.IsZero(resp0.Payload) {
 		msgStr, err := json.Marshal(resp0.Payload)
 		if err != nil {
@@ -469,7 +435,7 @@ func registerCreateVirtualNetworkParamsBodyDataAttributesSite(depth int, cmdPref
 	siteDescription := `Enum: ["ASH","BGT","BUE","CHI","DAL","FRA","LAX","LON","MEX","MEX2","MIA","MIA2","NYC","SAN","SAN2","SAO","SAO2","SYD","TYO","TYO2"]. Site ID or slug`
 
 	var siteFlagName = "site"
-	
+
 	var siteFlagDefault string
 
 	_ = cmd.PersistentFlags().String(siteFlagName, siteFlagDefault, siteDescription)

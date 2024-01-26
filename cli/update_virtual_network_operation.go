@@ -10,7 +10,6 @@ import (
 	"fmt"
 
 	"github.com/latitudesh/lsh/client/virtual_networks"
-	"github.com/latitudesh/lsh/internal"
 	"github.com/latitudesh/lsh/internal/utils"
 
 	"github.com/go-openapi/swag"
@@ -20,9 +19,9 @@ import (
 // makeOperationVirtualNetworksUpdateVirtualNetworkCmd returns a cmd to handle operation updateVirtualNetwork
 func makeOperationVirtualNetworksUpdateVirtualNetworkCmd() (*cobra.Command, error) {
 	cmd := &cobra.Command{
-		Use: "update",
+		Use:   "update",
 		Short: `Update a Virtual Network.`,
-		RunE: runOperationVirtualNetworksUpdateVirtualNetwork,
+		RunE:  runOperationVirtualNetworksUpdateVirtualNetwork,
 	}
 
 	if err := registerOperationVirtualNetworksUpdateVirtualNetworkParamFlags(cmd); err != nil {
@@ -54,14 +53,20 @@ func runOperationVirtualNetworksUpdateVirtualNetwork(cmd *cobra.Command, args []
 		logDebugf("dry-run flag specified. Skip sending request.")
 		return nil
 	}
-	// make request and then print result
-	msgStr, err := parseOperationVirtualNetworksUpdateVirtualNetworkResult(appCli.VirtualNetworks.UpdateVirtualNetwork(params, nil))
+
+	result, err := appCli.VirtualNetworks.UpdateVirtualNetwork(params, nil)
+	if err != nil {
+		utils.PrintError(err)
+		return nil
+	}
+
+	msgStr, err := parseOperationVirtualNetworksUpdateVirtualNetworkResult(result)
 	if err != nil {
 		return err
 	}
 	if !debug {
 
-		utils.PrintOutput(msgStr)
+		utils.PrintResult(msgStr)
 	}
 	return nil
 }
@@ -214,46 +219,7 @@ func retrieveOperationVirtualNetworksUpdateVirtualNetworkVirtualNetworkIDFlag(m 
 }
 
 // parseOperationVirtualNetworksUpdateVirtualNetworkResult parses request result and return the string content
-func parseOperationVirtualNetworksUpdateVirtualNetworkResult(resp0 *virtual_networks.UpdateVirtualNetworkOK, respErr error) (string, error) {
-	if respErr != nil {
-
-		var iResp0 interface{} = respErr
-		resp0, ok := iResp0.(*virtual_networks.UpdateVirtualNetworkOK)
-		if ok {
-			if !swag.IsZero(resp0) && !swag.IsZero(resp0.Payload) {
-				msgStr, err := json.Marshal(resp0.Payload)
-				if err != nil {
-					return "", err
-				}
-				return string(msgStr), nil
-			}
-		}
-
-		var iResp1 interface{} = respErr
-		resp1, ok := iResp1.(*virtual_networks.UpdateVirtualNetworkForbidden)
-		if ok {
-			if !swag.IsZero(resp1) && !swag.IsZero(resp1.Payload) {
-				msgStr, err := json.Marshal(resp1.Payload)
-				if err != nil {
-					return "", err
-				}
-				return string(msgStr), nil
-			}
-		}
-
-		notFoundErrorMessage, err := internal.ParseNotFoundError(respErr)
-
-		if err != nil {
-			return "", err
-		}
-
-		if len(notFoundErrorMessage) > 0 {
-			return notFoundErrorMessage, nil
-		}
-
-		return "", respErr
-	}
-
+func parseOperationVirtualNetworksUpdateVirtualNetworkResult(resp0 *virtual_networks.UpdateVirtualNetworkOK) (string, error) {
 	if !swag.IsZero(resp0) && !swag.IsZero(resp0.Payload) {
 		msgStr, err := json.Marshal(resp0.Payload)
 		if err != nil {
@@ -441,7 +407,6 @@ func retrieveUpdateVirtualNetworkParamsBodyDataTypeFlags(depth int, m *virtual_n
 
 	var typeFlagName = "type"
 	if cmd.Flags().Changed(typeFlagName) {
-
 
 		typeFlagValue, err := cmd.Flags().GetString(typeFlagName)
 		if err != nil {

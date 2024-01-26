@@ -50,14 +50,20 @@ func runOperationPlansGetBandwidthPlans(cmd *cobra.Command, args []string) error
 		logDebugf("dry-run flag specified. Skip sending request.")
 		return nil
 	}
-	// make request and then print result
-	msgStr, err := parseOperationPlansGetBandwidthPlansResult(appCli.Plans.GetBandwidthPlans(params, nil))
+
+	result, err := appCli.Plans.GetBandwidthPlans(params, nil)
+	if err != nil {
+		utils.PrintError(err)
+		return nil
+	}
+
+	msgStr, err := parseOperationPlansGetBandwidthPlansResult(result)
 	if err != nil {
 		return err
 	}
 	if !debug {
 
-		utils.PrintOutput(msgStr)
+		utils.PrintResult(msgStr)
 	}
 	return nil
 }
@@ -150,24 +156,7 @@ func retrieveOperationPlansGetBandwidthPlansFilterIDFlag(m *plans.GetBandwidthPl
 }
 
 // parseOperationPlansGetBandwidthPlansResult parses request result and return the string content
-func parseOperationPlansGetBandwidthPlansResult(resp0 *plans.GetBandwidthPlansOK, respErr error) (string, error) {
-	if respErr != nil {
-
-		var iResp0 interface{} = respErr
-		resp0, ok := iResp0.(*plans.GetBandwidthPlansOK)
-		if ok {
-			if !swag.IsZero(resp0) && !swag.IsZero(resp0.Payload) {
-				msgStr, err := json.Marshal(resp0.Payload)
-				if err != nil {
-					return "", err
-				}
-				return string(msgStr), nil
-			}
-		}
-
-		return "", respErr
-	}
-
+func parseOperationPlansGetBandwidthPlansResult(resp0 *plans.GetBandwidthPlansOK) (string, error) {
 	if !swag.IsZero(resp0) && !swag.IsZero(resp0.Payload) {
 		msgStr, err := json.Marshal(resp0.Payload)
 		if err != nil {

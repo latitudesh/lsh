@@ -12,7 +12,7 @@ import (
 	"github.com/go-openapi/runtime"
 	"github.com/go-openapi/strfmt"
 
-	"github.com/latitudesh/lsh/internal"
+	apierrors "github.com/latitudesh/lsh/internal/api/errors"
 	"github.com/latitudesh/lsh/models"
 )
 
@@ -30,27 +30,33 @@ func (o *DestroyServerReader) ReadResponse(response runtime.ClientResponse, cons
 			return nil, err
 		}
 		return result, nil
+	case 401:
+		result := apierrors.NewUnauthorized()
+		if err := result.ReadResponse(response, consumer, o.formats); err != nil {
+			return nil, err
+		}
+		return nil, result
 	case 403:
-		result := NewDestroyServerForbidden()
-		if err := result.readResponse(response, consumer, o.formats); err != nil {
+		result := apierrors.NewForbidden()
+		if err := result.ReadResponse(response, consumer, o.formats); err != nil {
 			return nil, err
 		}
 		return nil, result
 	case 404:
-		result := internal.NewNotFoundError()
+		result := apierrors.NewNotFound()
 		if err := result.ReadResponse(response, consumer, o.formats); err != nil {
 			return nil, err
 		}
 		return nil, result
 	case 406:
-		result := NewDestroyServerNotAcceptable()
-		if err := result.readResponse(response, consumer, o.formats); err != nil {
+		result := apierrors.NewNotAcceptable()
+		if err := result.ReadResponse(response, consumer, o.formats); err != nil {
 			return nil, err
 		}
 		return nil, result
 	case 422:
-		result := NewDestroyServerUnprocessableEntity()
-		if err := result.readResponse(response, consumer, o.formats); err != nil {
+		result := apierrors.NewUnprocessableEntity()
+		if err := result.ReadResponse(response, consumer, o.formats); err != nil {
 			return nil, err
 		}
 		return nil, result

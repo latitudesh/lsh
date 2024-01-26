@@ -19,9 +19,9 @@ import (
 // makeOperationVirtualNetworksGetVirtualNetworksCmd returns a cmd to handle operation getVirtualNetworks
 func makeOperationVirtualNetworksGetVirtualNetworksCmd() (*cobra.Command, error) {
 	cmd := &cobra.Command{
-		Use: "list",
+		Use:   "list",
 		Short: `Lists virtual networks assigned to a project.`,
-		RunE: runOperationVirtualNetworksGetVirtualNetworks,
+		RunE:  runOperationVirtualNetworksGetVirtualNetworks,
 	}
 
 	if err := registerOperationVirtualNetworksGetVirtualNetworksParamFlags(cmd); err != nil {
@@ -53,14 +53,20 @@ func runOperationVirtualNetworksGetVirtualNetworks(cmd *cobra.Command, args []st
 		logDebugf("dry-run flag specified. Skip sending request.")
 		return nil
 	}
-	// make request and then print result
-	msgStr, err := parseOperationVirtualNetworksGetVirtualNetworksResult(appCli.VirtualNetworks.GetVirtualNetworks(params, nil))
+
+	result, err := appCli.VirtualNetworks.GetVirtualNetworks(params, nil)
+	if err != nil {
+		utils.PrintError(err)
+		return nil
+	}
+
+	msgStr, err := parseOperationVirtualNetworksGetVirtualNetworksResult(result)
 	if err != nil {
 		return err
 	}
 	if !debug {
 
-		utils.PrintOutput(msgStr)
+		utils.PrintResult(msgStr)
 	}
 	return nil
 }
@@ -193,24 +199,7 @@ func retrieveOperationVirtualNetworksGetVirtualNetworksFilterProjectFlag(m *virt
 }
 
 // parseOperationVirtualNetworksGetVirtualNetworksResult parses request result and return the string content
-func parseOperationVirtualNetworksGetVirtualNetworksResult(resp0 *virtual_networks.GetVirtualNetworksOK, respErr error) (string, error) {
-	if respErr != nil {
-
-		var iResp0 interface{} = respErr
-		resp0, ok := iResp0.(*virtual_networks.GetVirtualNetworksOK)
-		if ok {
-			if !swag.IsZero(resp0) && !swag.IsZero(resp0.Payload) {
-				msgStr, err := json.Marshal(resp0.Payload)
-				if err != nil {
-					return "", err
-				}
-				return string(msgStr), nil
-			}
-		}
-
-		return "", respErr
-	}
-
+func parseOperationVirtualNetworksGetVirtualNetworksResult(resp0 *virtual_networks.GetVirtualNetworksOK) (string, error) {
 	if !swag.IsZero(resp0) && !swag.IsZero(resp0.Payload) {
 		msgStr, err := json.Marshal(resp0.Payload)
 		if err != nil {
