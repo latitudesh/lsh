@@ -67,7 +67,7 @@ func runOperationProjectsUpdateProject(cmd *cobra.Command, args []string) error 
 	}
 	if !debug {
 
-		utils.PrintResult(msgStr)
+		utils.PrintResult(msgStr, "table")
 	}
 	return nil
 }

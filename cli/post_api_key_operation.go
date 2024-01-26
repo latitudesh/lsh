@@ -63,7 +63,7 @@ func runOperationAPIKeysPostAPIKey(cmd *cobra.Command, args []string) error {
 		return err
 	}
 	if !debug {
-		utils.PrintResult(msgStr)
+		utils.PrintResult(msgStr, "table")
 	}
 	return nil
 }

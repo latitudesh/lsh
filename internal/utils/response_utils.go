@@ -8,21 +8,29 @@ import (
 	"fmt"
 	"os"
 	"reflect"
-	"time"
 
 	apierrors "github.com/latitudesh/lsh/internal/api/errors"
+	"github.com/latitudesh/lsh/internal/formatter"
 	"github.com/latitudesh/lsh/internal/output"
 	"github.com/olekukonko/tablewriter"
 )
 
+type OutputFormat string
+
+const (
+	JSONFormat  OutputFormat = "json"
+	TableFormat OutputFormat = "table"
+)
+
 // PrettifyJson formats a JSON response, enhancing its readability on the terminal.
-func PrettifyJson(str string) (string, error) {
+func PrettifyJson(str string) error {
 	var prettyJSON bytes.Buffer
 	if err := json.Indent(&prettyJSON, []byte(str), "", "    "); err != nil {
-		return str, err
+		return err
 	}
 
-	return prettyJSON.String(), nil
+	fmt.Println(prettyJSON.String())
+	return nil
 }
 
 func PrintError(respErr error) error {
@@ -46,21 +54,30 @@ func PrintError(respErr error) error {
 	return nil
 }
 
-func PrintResult(jsonData string) {
+func PrintResult(jsonData string, format OutputFormat) error {
 	// TODO: create a better feedback for empty responses, to let the users
 	// know which action was executed and whether it failed or not.
 	if jsonData == "" {
 		fmt.Println("\nAction has been executed successfully!")
-		return
+		return nil
 	}
 
 	var data map[string]interface{}
 	if err := json.Unmarshal([]byte(jsonData), &data); err != nil {
 		fmt.Println("Error unmarshalling JSON:", err)
-		return
+		return err
 	}
 
-	printTableResult(data)
+	switch format {
+	case JSONFormat:
+		PrettifyJson(jsonData)
+		return nil
+	case TableFormat:
+		printTableResult(data)
+		return nil
+	default:
+		return errors.New("unsupported format")
+	}
 }
 
 func printTableResult(data map[string]interface{}) {
@@ -136,34 +153,8 @@ func extractRow(headers []string, entry map[string]interface{}) []string {
 			continue
 		}
 
-		row[i+1] = formatValue(value)
+		row[i+1] = formatter.FormatValue(value)
 	}
 
 	return row
-}
-
-func formatValue(value interface{}) string {
-	switch data := value.(type) {
-	case string:
-		return formatString(data)
-	}
-
-	return fmt.Sprint(value)
-}
-
-func formatString(value string) string {
-	date, err := time.Parse(time.RFC3339, value)
-
-	if err == nil {
-		return date.Format("2006-01-02 15:04:05")
-	}
-
-	return truncate(value, 50)
-}
-
-func truncate(input string, maxLength int) string {
-	if len(input) > maxLength {
-		return input[:maxLength] + "..."
-	}
-	return input
 }

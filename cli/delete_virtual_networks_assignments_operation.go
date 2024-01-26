@@ -61,7 +61,7 @@ func runOperationVirtualNetworkAssignmentsDeleteVirtualNetworksAssignments(cmd *
 	}
 	if !debug {
 
-		utils.PrintResult(msgStr)
+		utils.PrintResult(msgStr, "table")
 	}
 	return nil
 }

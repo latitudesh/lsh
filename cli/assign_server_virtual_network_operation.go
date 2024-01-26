@@ -62,7 +62,7 @@ func runOperationVirtualNetworkAssignmentsAssignServerVirtualNetwork(cmd *cobra.
 		return err
 	}
 	if !debug {
-		utils.PrintResult(msgStr)
+		utils.PrintResult(msgStr, "table")
 	}
 
 	return nil
