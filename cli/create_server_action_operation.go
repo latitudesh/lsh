@@ -70,7 +70,7 @@ func runOperationPowerActionsCreateServerAction(cmd *cobra.Command, args []strin
 	}
 	if !debug {
 
-		utils.PrintResult(msgStr, "table")
+		utils.PrintResult(msgStr)
 	}
 	return nil
 }

@@ -64,7 +64,7 @@ func runOperationSSHKeysDeleteProjectSSHKey(cmd *cobra.Command, args []string) e
 	}
 	if !debug {
 
-		utils.PrintResult(msgStr, "table")
+		utils.PrintResult(msgStr)
 	}
 	return nil
 }

@@ -61,7 +61,7 @@ func runOperationServersServerUnscheduleDeletion(cmd *cobra.Command, args []stri
 	}
 	if !debug {
 
-		utils.PrintResult(msgStr, "table")
+		utils.PrintResult(msgStr)
 	}
 	return nil
 }

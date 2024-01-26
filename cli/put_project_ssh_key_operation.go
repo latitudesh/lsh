@@ -70,7 +70,7 @@ func runOperationSSHKeysPutProjectSSHKey(cmd *cobra.Command, args []string) erro
 	}
 	if !debug {
 
-		utils.PrintResult(msgStr, "table")
+		utils.PrintResult(msgStr)
 	}
 	return nil
 }

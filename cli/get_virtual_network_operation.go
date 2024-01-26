@@ -64,7 +64,7 @@ func runOperationVirtualNetworksGetVirtualNetwork(cmd *cobra.Command, args []str
 	}
 	if !debug {
 
-		utils.PrintResult(msgStr, "table")
+		utils.PrintResult(msgStr)
 	}
 	return nil
 }

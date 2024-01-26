@@ -7,13 +7,7 @@ import (
 
 	apierrors "github.com/latitudesh/lsh/internal/api/errors"
 	"github.com/latitudesh/lsh/internal/output"
-)
-
-type OutputFormat string
-
-const (
-	JSONFormat  OutputFormat = "json"
-	TableFormat OutputFormat = "table"
+	"github.com/spf13/viper"
 )
 
 func PrintError(respErr error) error {
@@ -37,22 +31,21 @@ func PrintError(respErr error) error {
 	return nil
 }
 
-func PrintResult(str string, format OutputFormat) error {
+func PrintResult(str string) {
 	// TODO: create a better feedback for empty responses, to let the users
 	// know which action was executed and whether it failed or not.
 	if str == "" {
 		fmt.Println("\nAction has been executed successfully!")
-		return nil
 	}
 
+	format := viper.GetString("format")
+
 	switch format {
-	case JSONFormat:
+	case "json":
 		output.RenderJSON(str)
-		return nil
-	case TableFormat:
+	case "table":
 		output.RenderTable(str)
-		return nil
 	default:
-		return errors.New("unsupported format")
+		fmt.Println("Unsupported output format")
 	}
 }

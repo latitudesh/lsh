@@ -63,7 +63,7 @@ func runOperationSSHKeysGetProjectSSHKeys(cmd *cobra.Command, args []string) err
 	}
 	if !debug {
 
-		utils.PrintResult(msgStr, "table")
+		utils.PrintResult(msgStr)
 	}
 	return nil
 }

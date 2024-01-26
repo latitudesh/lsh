@@ -78,7 +78,7 @@ func runOperationProjectsGetProjects(cmd *cobra.Command, args []string) error {
 	}
 	if !debug {
 
-		utils.PrintResult(msgStr, "table")
+		utils.PrintResult(msgStr)
 	}
 	return nil
 }
