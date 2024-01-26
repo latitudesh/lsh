@@ -78,7 +78,8 @@ func extractHeadersFromAttributes(entry interface{}) map[string]bool {
 }
 
 func containsNestedValues(value interface{}) bool {
-	return reflect.ValueOf(value).Kind() == reflect.Map
+	kind := reflect.ValueOf(value).Kind()
+	return kind == reflect.Map || kind == reflect.Slice
 }
 
 func extractRow(headers []string, entry map[string]interface{}) []string {
