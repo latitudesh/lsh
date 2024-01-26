@@ -67,24 +67,13 @@ func printTableResult(data map[string]interface{}) {
 	table := tablewriter.NewWriter(os.Stdout)
 	table.SetRowLine(true)
 
+	entries := extractEntries(data)
+
 	var headers []string
+	headers = extractHeaders(entries[0])
+	table.SetHeader(headers)
 
-	entries, ok := data["data"].([]interface{})
-	if ok {
-		headers = extractHeader(entries[0])
-		table.SetHeader(headers)
-
-		for _, entry := range entries {
-			row := extractRow(headers, entry.(map[string]interface{}))
-			table.Append(row)
-		}
-	}
-
-	entry, ok := data["data"].(interface{})
-	if ok {
-		headers = extractHeader(entry)
-		table.SetHeader(headers)
-
+	for _, entry := range entries {
 		row := extractRow(headers, entry.(map[string]interface{}))
 		table.Append(row)
 	}
@@ -92,7 +81,21 @@ func printTableResult(data map[string]interface{}) {
 	table.Render()
 }
 
-func extractHeader(entry interface{}) []string {
+func extractEntries(data map[string]interface{}) []interface{} {
+	var entries []interface{}
+
+	// Determine whether the data is a list of resources or a single resource
+	switch data := data["data"].(type) {
+	case []interface{}:
+		entries = data
+	case interface{}:
+		entries = append(entries, data)
+	}
+
+	return entries
+}
+
+func extractHeaders(entry interface{}) []string {
 	headersMap := extractHeadersFromAttributes(entry)
 
 	headers := make([]string, 0, len(headersMap))
@@ -125,40 +128,37 @@ func extractRow(headers []string, entry map[string]interface{}) []string {
 	for i, header := range headers[1:] {
 		attr, ok := entry["attributes"].(map[string]interface{})
 		if !ok {
-			// Ignore headers without attributes
 			continue
 		}
 
 		value, exists := attr[header]
 		if !exists {
-			// Ignore missing attribute values
 			continue
 		}
 
-		// Check if the value is a date and format it
-		if isDate(value) {
-			dateStr, ok := value.(string)
-			if ok {
-				// Attempt to parse the date
-				date, err := time.Parse(time.RFC3339, dateStr)
-				if err == nil {
-					// Use the parsed date if successful
-					row[i+1] = date.Format("2006-01-02 15:04:05")
-					continue
-				}
-			}
-		}
-
-		row[i+1] = truncate(fmt.Sprint(value), 50)
+		row[i+1] = formatValue(value)
 	}
 
 	return row
 }
 
-// isDate checks if a value is likely a date (assumes string for simplicity).
-func isDate(value interface{}) bool {
-	_, ok := value.(string)
-	return ok
+func formatValue(value interface{}) string {
+	switch data := value.(type) {
+	case string:
+		return formatString(data)
+	}
+
+	return fmt.Sprint(value)
+}
+
+func formatString(value string) string {
+	date, err := time.Parse(time.RFC3339, value)
+
+	if err == nil {
+		return date.Format("2006-01-02 15:04:05")
+	}
+
+	return truncate(value, 50)
 }
 
 func truncate(input string, maxLength int) string {
