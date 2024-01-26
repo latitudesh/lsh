@@ -51,7 +51,13 @@ func runOperationServersGetServers(cmd *cobra.Command, args []string) error {
 	if err, _ := retrieveOperationServersGetServersFilterCreatedAtLteFlag(params, "", cmd); err != nil {
 		return err
 	}
-	if err, _ := retrieveOperationServersGetServersFilterDiskFlag(params, "", cmd); err != nil {
+	if err, _ := retrieveOperationServersGetServersFilterDiskEqlFlag(params, "", cmd); err != nil {
+		return err
+	}
+	if err, _ := retrieveOperationServersGetServersFilterDiskLteFlag(params, "", cmd); err != nil {
+		return err
+	}
+	if err, _ := retrieveOperationServersGetServersFilterDiskGteFlag(params, "", cmd); err != nil {
 		return err
 	}
 	if err, _ := retrieveOperationServersGetServersFilterGpuFlag(params, "", cmd); err != nil {
@@ -124,7 +130,13 @@ func registerOperationServersGetServersParamFlags(cmd *cobra.Command) error {
 	if err := registerOperationServersGetServersFilterCreatedAtLteParamFlags("", cmd); err != nil {
 		return err
 	}
-	if err := registerOperationServersGetServersFilterDiskParamFlags("", cmd); err != nil {
+	if err := registerOperationServersGetServersFilterDiskEqlParamFlags("", cmd); err != nil {
+		return err
+	}
+	if err := registerOperationServersGetServersFilterDiskLteParamFlags("", cmd); err != nil {
+		return err
+	}
+	if err := registerOperationServersGetServersFilterDiskGteParamFlags("", cmd); err != nil {
 		return err
 	}
 	if err := registerOperationServersGetServersFilterGpuParamFlags("", cmd); err != nil {
@@ -203,9 +215,9 @@ func registerOperationServersGetServersFilterCreatedAtGteParamFlags(cmdPrefix st
 
 	var filterCreatedAtGteFlagName string
 	if cmdPrefix == "" {
-		filterCreatedAtGteFlagName = "filter[created_at_gte]"
+		filterCreatedAtGteFlagName = "created_at_gte"
 	} else {
-		filterCreatedAtGteFlagName = fmt.Sprintf("%v.filter[created_at_gte]", cmdPrefix)
+		filterCreatedAtGteFlagName = fmt.Sprintf("%v.created_at_gte", cmdPrefix)
 	}
 
 	var filterCreatedAtGteFlagDefault string
@@ -220,9 +232,9 @@ func registerOperationServersGetServersFilterCreatedAtLteParamFlags(cmdPrefix st
 
 	var filterCreatedAtLteFlagName string
 	if cmdPrefix == "" {
-		filterCreatedAtLteFlagName = "filter[created_at_lte]"
+		filterCreatedAtLteFlagName = "created_at_lte"
 	} else {
-		filterCreatedAtLteFlagName = fmt.Sprintf("%v.filter[created_at_lte]", cmdPrefix)
+		filterCreatedAtLteFlagName = fmt.Sprintf("%v.created_at_lte", cmdPrefix)
 	}
 
 	var filterCreatedAtLteFlagDefault string
@@ -231,18 +243,49 @@ func registerOperationServersGetServersFilterCreatedAtLteParamFlags(cmdPrefix st
 
 	return nil
 }
-func registerOperationServersGetServersFilterDiskParamFlags(cmdPrefix string, cmd *cobra.Command) error {
+func registerOperationServersGetServersFilterDiskEqlParamFlags(cmdPrefix string, cmd *cobra.Command) error {
 
-	filterDiskDescription := `The disk size in Gigabytes to filter by, should be used with the following options:
-                              [eql] to filter for values equal to the provided value.
-                              [gte] to filter for values greater or equal to the provided value.
-                              [lte] to filter by values lower or equal to the provided value.`
+	filterDiskDescription := "Filter servers with disk size in Gigabytes equal the provided value."
 
 	var filterDiskFlagName string
 	if cmdPrefix == "" {
-		filterDiskFlagName = "filter[disk]"
+		filterDiskFlagName = "disk_eql"
 	} else {
-		filterDiskFlagName = fmt.Sprintf("%v.filter[disk]", cmdPrefix)
+		filterDiskFlagName = fmt.Sprintf("%v.disk_eql", cmdPrefix)
+	}
+
+	var filterDiskFlagDefault int64
+
+	_ = cmd.PersistentFlags().Int64(filterDiskFlagName, filterDiskFlagDefault, filterDiskDescription)
+
+	return nil
+}
+func registerOperationServersGetServersFilterDiskLteParamFlags(cmdPrefix string, cmd *cobra.Command) error {
+
+	filterDiskDescription := "Filter servers with disk size in Gigabytes less than or equal the provided value."
+
+	var filterDiskFlagName string
+	if cmdPrefix == "" {
+		filterDiskFlagName = "disk_lte"
+	} else {
+		filterDiskFlagName = fmt.Sprintf("%v.disk_lte", cmdPrefix)
+	}
+
+	var filterDiskFlagDefault int64
+
+	_ = cmd.PersistentFlags().Int64(filterDiskFlagName, filterDiskFlagDefault, filterDiskDescription)
+
+	return nil
+}
+func registerOperationServersGetServersFilterDiskGteParamFlags(cmdPrefix string, cmd *cobra.Command) error {
+
+	filterDiskDescription := "Filter servers with disk size in Gigabytes greater than or equal the provided value."
+
+	var filterDiskFlagName string
+	if cmdPrefix == "" {
+		filterDiskFlagName = "disk_gte"
+	} else {
+		filterDiskFlagName = fmt.Sprintf("%v.disk_gte", cmdPrefix)
 	}
 
 	var filterDiskFlagDefault int64
@@ -257,9 +300,9 @@ func registerOperationServersGetServersFilterGpuParamFlags(cmdPrefix string, cmd
 
 	var filterGpuFlagName string
 	if cmdPrefix == "" {
-		filterGpuFlagName = "filter[gpu]"
+		filterGpuFlagName = "gpu"
 	} else {
-		filterGpuFlagName = fmt.Sprintf("%v.filter[gpu]", cmdPrefix)
+		filterGpuFlagName = fmt.Sprintf("%v.gpu", cmdPrefix)
 	}
 
 	var filterGpuFlagDefault bool
@@ -274,9 +317,9 @@ func registerOperationServersGetServersFilterHostnameParamFlags(cmdPrefix string
 
 	var filterHostnameFlagName string
 	if cmdPrefix == "" {
-		filterHostnameFlagName = "filter[hostname]"
+		filterHostnameFlagName = "hostname"
 	} else {
-		filterHostnameFlagName = fmt.Sprintf("%v.filter[hostname]", cmdPrefix)
+		filterHostnameFlagName = fmt.Sprintf("%v.hostname", cmdPrefix)
 	}
 
 	var filterHostnameFlagDefault string
@@ -291,9 +334,9 @@ func registerOperationServersGetServersFilterLabelParamFlags(cmdPrefix string, c
 
 	var filterLabelFlagName string
 	if cmdPrefix == "" {
-		filterLabelFlagName = "filter[label]"
+		filterLabelFlagName = "label"
 	} else {
-		filterLabelFlagName = fmt.Sprintf("%v.filter[label]", cmdPrefix)
+		filterLabelFlagName = fmt.Sprintf("%v.label", cmdPrefix)
 	}
 
 	var filterLabelFlagDefault string
@@ -308,9 +351,9 @@ func registerOperationServersGetServersFilterOperatingSystemParamFlags(cmdPrefix
 
 	var filterOperatingSystemFlagName string
 	if cmdPrefix == "" {
-		filterOperatingSystemFlagName = "filter[operating_system]"
+		filterOperatingSystemFlagName = "operating_system"
 	} else {
-		filterOperatingSystemFlagName = fmt.Sprintf("%v.filter[operating_system]", cmdPrefix)
+		filterOperatingSystemFlagName = fmt.Sprintf("%v.operating_system", cmdPrefix)
 	}
 
 	var filterOperatingSystemFlagDefault string
@@ -325,9 +368,9 @@ func registerOperationServersGetServersFilterPlanParamFlags(cmdPrefix string, cm
 
 	var filterPlanFlagName string
 	if cmdPrefix == "" {
-		filterPlanFlagName = "filter[plan]"
+		filterPlanFlagName = "plan"
 	} else {
-		filterPlanFlagName = fmt.Sprintf("%v.filter[plan]", cmdPrefix)
+		filterPlanFlagName = fmt.Sprintf("%v.plan", cmdPrefix)
 	}
 
 	var filterPlanFlagDefault string
@@ -342,9 +385,9 @@ func registerOperationServersGetServersFilterProjectParamFlags(cmdPrefix string,
 
 	var filterProjectFlagName string
 	if cmdPrefix == "" {
-		filterProjectFlagName = "filter[project]"
+		filterProjectFlagName = "project"
 	} else {
-		filterProjectFlagName = fmt.Sprintf("%v.filter[project]", cmdPrefix)
+		filterProjectFlagName = fmt.Sprintf("%v.project", cmdPrefix)
 	}
 
 	var filterProjectFlagDefault string
@@ -359,9 +402,9 @@ func registerOperationServersGetServersFilterRAMEqlParamFlags(cmdPrefix string, 
 
 	var filterRamEqlFlagName string
 	if cmdPrefix == "" {
-		filterRamEqlFlagName = "filter[ram][eql]"
+		filterRamEqlFlagName = "ram_eql"
 	} else {
-		filterRamEqlFlagName = fmt.Sprintf("%v.filter[ram][eql]", cmdPrefix)
+		filterRamEqlFlagName = fmt.Sprintf("%v.ram_eql", cmdPrefix)
 	}
 
 	var filterRamEqlFlagDefault int64
@@ -376,9 +419,9 @@ func registerOperationServersGetServersFilterRAMGteParamFlags(cmdPrefix string, 
 
 	var filterRamGteFlagName string
 	if cmdPrefix == "" {
-		filterRamGteFlagName = "filter[ram][gte]"
+		filterRamGteFlagName = "ram_gte"
 	} else {
-		filterRamGteFlagName = fmt.Sprintf("%v.filter[ram][gte]", cmdPrefix)
+		filterRamGteFlagName = fmt.Sprintf("%v.ram_gte", cmdPrefix)
 	}
 
 	var filterRamGteFlagDefault int64
@@ -393,9 +436,9 @@ func registerOperationServersGetServersFilterRAMLteParamFlags(cmdPrefix string, 
 
 	var filterRamLteFlagName string
 	if cmdPrefix == "" {
-		filterRamLteFlagName = "filter[ram][lte]"
+		filterRamLteFlagName = "ram_lte"
 	} else {
-		filterRamLteFlagName = fmt.Sprintf("%v.filter[ram][lte]", cmdPrefix)
+		filterRamLteFlagName = fmt.Sprintf("%v.ram_lte", cmdPrefix)
 	}
 
 	var filterRamLteFlagDefault int64
@@ -410,9 +453,9 @@ func registerOperationServersGetServersFilterRegionParamFlags(cmdPrefix string, 
 
 	var filterRegionFlagName string
 	if cmdPrefix == "" {
-		filterRegionFlagName = "filter[region]"
+		filterRegionFlagName = "region"
 	} else {
-		filterRegionFlagName = fmt.Sprintf("%v.filter[region]", cmdPrefix)
+		filterRegionFlagName = fmt.Sprintf("%v.region", cmdPrefix)
 	}
 
 	var filterRegionFlagDefault string
@@ -427,9 +470,9 @@ func registerOperationServersGetServersFilterStatusParamFlags(cmdPrefix string, 
 
 	var filterStatusFlagName string
 	if cmdPrefix == "" {
-		filterStatusFlagName = "filter[status]"
+		filterStatusFlagName = "status"
 	} else {
-		filterStatusFlagName = fmt.Sprintf("%v.filter[status]", cmdPrefix)
+		filterStatusFlagName = fmt.Sprintf("%v.status", cmdPrefix)
 	}
 
 	var filterStatusFlagDefault string
@@ -481,13 +524,13 @@ func retrieveOperationServersGetServersExtraFieldsServersFlag(m *servers.GetServ
 }
 func retrieveOperationServersGetServersFilterCreatedAtGteFlag(m *servers.GetServersParams, cmdPrefix string, cmd *cobra.Command) (error, bool) {
 	retAdded := false
-	if cmd.Flags().Changed("filter[created_at_gte]") {
+	if cmd.Flags().Changed("created_at_gte") {
 
 		var filterCreatedAtGteFlagName string
 		if cmdPrefix == "" {
-			filterCreatedAtGteFlagName = "filter[created_at_gte]"
+			filterCreatedAtGteFlagName = "created_at_gte"
 		} else {
-			filterCreatedAtGteFlagName = fmt.Sprintf("%v.filter[created_at_gte]", cmdPrefix)
+			filterCreatedAtGteFlagName = fmt.Sprintf("%v.created_at_gte", cmdPrefix)
 		}
 
 		filterCreatedAtGteFlagValue, err := cmd.Flags().GetString(filterCreatedAtGteFlagName)
@@ -501,13 +544,13 @@ func retrieveOperationServersGetServersFilterCreatedAtGteFlag(m *servers.GetServ
 }
 func retrieveOperationServersGetServersFilterCreatedAtLteFlag(m *servers.GetServersParams, cmdPrefix string, cmd *cobra.Command) (error, bool) {
 	retAdded := false
-	if cmd.Flags().Changed("filter[created_at_lte]") {
+	if cmd.Flags().Changed("created_at_lte") {
 
 		var filterCreatedAtLteFlagName string
 		if cmdPrefix == "" {
-			filterCreatedAtLteFlagName = "filter[created_at_lte]"
+			filterCreatedAtLteFlagName = "created_at_lte"
 		} else {
-			filterCreatedAtLteFlagName = fmt.Sprintf("%v.filter[created_at_lte]", cmdPrefix)
+			filterCreatedAtLteFlagName = fmt.Sprintf("%v.created_at_lte", cmdPrefix)
 		}
 
 		filterCreatedAtLteFlagValue, err := cmd.Flags().GetString(filterCreatedAtLteFlagName)
@@ -519,35 +562,75 @@ func retrieveOperationServersGetServersFilterCreatedAtLteFlag(m *servers.GetServ
 	}
 	return nil, retAdded
 }
-func retrieveOperationServersGetServersFilterDiskFlag(m *servers.GetServersParams, cmdPrefix string, cmd *cobra.Command) (error, bool) {
+func retrieveOperationServersGetServersFilterDiskEqlFlag(m *servers.GetServersParams, cmdPrefix string, cmd *cobra.Command) (error, bool) {
 	retAdded := false
-	if cmd.Flags().Changed("filter[disk]") {
+	if cmd.Flags().Changed("disk_eql") {
 
 		var filterDiskFlagName string
 		if cmdPrefix == "" {
-			filterDiskFlagName = "filter[disk]"
+			filterDiskFlagName = "disk_eql"
 		} else {
-			filterDiskFlagName = fmt.Sprintf("%v.filter[disk]", cmdPrefix)
+			filterDiskFlagName = fmt.Sprintf("%v.disk_eql", cmdPrefix)
 		}
 
 		filterDiskFlagValue, err := cmd.Flags().GetInt64(filterDiskFlagName)
 		if err != nil {
 			return err, false
 		}
-		m.FilterDisk = &filterDiskFlagValue
+		m.FilterDiskEql = &filterDiskFlagValue
+
+	}
+	return nil, retAdded
+}
+func retrieveOperationServersGetServersFilterDiskLteFlag(m *servers.GetServersParams, cmdPrefix string, cmd *cobra.Command) (error, bool) {
+	retAdded := false
+	if cmd.Flags().Changed("disk_lte") {
+
+		var filterDiskFlagName string
+		if cmdPrefix == "" {
+			filterDiskFlagName = "disk_lte"
+		} else {
+			filterDiskFlagName = fmt.Sprintf("%v.disk_lte", cmdPrefix)
+		}
+
+		filterDiskFlagValue, err := cmd.Flags().GetInt64(filterDiskFlagName)
+		if err != nil {
+			return err, false
+		}
+		m.FilterDiskLte = &filterDiskFlagValue
+
+	}
+	return nil, retAdded
+}
+func retrieveOperationServersGetServersFilterDiskGteFlag(m *servers.GetServersParams, cmdPrefix string, cmd *cobra.Command) (error, bool) {
+	retAdded := false
+	if cmd.Flags().Changed("disk_gte") {
+
+		var filterDiskFlagName string
+		if cmdPrefix == "" {
+			filterDiskFlagName = "disk_gte"
+		} else {
+			filterDiskFlagName = fmt.Sprintf("%v.disk_gte", cmdPrefix)
+		}
+
+		filterDiskFlagValue, err := cmd.Flags().GetInt64(filterDiskFlagName)
+		if err != nil {
+			return err, false
+		}
+		m.FilterDiskGte = &filterDiskFlagValue
 
 	}
 	return nil, retAdded
 }
 func retrieveOperationServersGetServersFilterGpuFlag(m *servers.GetServersParams, cmdPrefix string, cmd *cobra.Command) (error, bool) {
 	retAdded := false
-	if cmd.Flags().Changed("filter[gpu]") {
+	if cmd.Flags().Changed("gpu") {
 
 		var filterGpuFlagName string
 		if cmdPrefix == "" {
-			filterGpuFlagName = "filter[gpu]"
+			filterGpuFlagName = "gpu"
 		} else {
-			filterGpuFlagName = fmt.Sprintf("%v.filter[gpu]", cmdPrefix)
+			filterGpuFlagName = fmt.Sprintf("%v.gpu", cmdPrefix)
 		}
 
 		filterGpuFlagValue, err := cmd.Flags().GetBool(filterGpuFlagName)
@@ -561,13 +644,13 @@ func retrieveOperationServersGetServersFilterGpuFlag(m *servers.GetServersParams
 }
 func retrieveOperationServersGetServersFilterHostnameFlag(m *servers.GetServersParams, cmdPrefix string, cmd *cobra.Command) (error, bool) {
 	retAdded := false
-	if cmd.Flags().Changed("filter[hostname]") {
+	if cmd.Flags().Changed("hostname") {
 
 		var filterHostnameFlagName string
 		if cmdPrefix == "" {
-			filterHostnameFlagName = "filter[hostname]"
+			filterHostnameFlagName = "hostname"
 		} else {
-			filterHostnameFlagName = fmt.Sprintf("%v.filter[hostname]", cmdPrefix)
+			filterHostnameFlagName = fmt.Sprintf("%v.hostname", cmdPrefix)
 		}
 
 		filterHostnameFlagValue, err := cmd.Flags().GetString(filterHostnameFlagName)
@@ -581,13 +664,13 @@ func retrieveOperationServersGetServersFilterHostnameFlag(m *servers.GetServersP
 }
 func retrieveOperationServersGetServersFilterLabelFlag(m *servers.GetServersParams, cmdPrefix string, cmd *cobra.Command) (error, bool) {
 	retAdded := false
-	if cmd.Flags().Changed("filter[label]") {
+	if cmd.Flags().Changed("label") {
 
 		var filterLabelFlagName string
 		if cmdPrefix == "" {
-			filterLabelFlagName = "filter[label]"
+			filterLabelFlagName = "label"
 		} else {
-			filterLabelFlagName = fmt.Sprintf("%v.filter[label]", cmdPrefix)
+			filterLabelFlagName = fmt.Sprintf("%v.label", cmdPrefix)
 		}
 
 		filterLabelFlagValue, err := cmd.Flags().GetString(filterLabelFlagName)
@@ -601,13 +684,13 @@ func retrieveOperationServersGetServersFilterLabelFlag(m *servers.GetServersPara
 }
 func retrieveOperationServersGetServersFilterOperatingSystemFlag(m *servers.GetServersParams, cmdPrefix string, cmd *cobra.Command) (error, bool) {
 	retAdded := false
-	if cmd.Flags().Changed("filter[operating_system]") {
+	if cmd.Flags().Changed("operating_system") {
 
 		var filterOperatingSystemFlagName string
 		if cmdPrefix == "" {
-			filterOperatingSystemFlagName = "filter[operating_system]"
+			filterOperatingSystemFlagName = "operating_system"
 		} else {
-			filterOperatingSystemFlagName = fmt.Sprintf("%v.filter[operating_system]", cmdPrefix)
+			filterOperatingSystemFlagName = fmt.Sprintf("%v.operating_system", cmdPrefix)
 		}
 
 		filterOperatingSystemFlagValue, err := cmd.Flags().GetString(filterOperatingSystemFlagName)
@@ -621,13 +704,13 @@ func retrieveOperationServersGetServersFilterOperatingSystemFlag(m *servers.GetS
 }
 func retrieveOperationServersGetServersFilterPlanFlag(m *servers.GetServersParams, cmdPrefix string, cmd *cobra.Command) (error, bool) {
 	retAdded := false
-	if cmd.Flags().Changed("filter[plan]") {
+	if cmd.Flags().Changed("plan") {
 
 		var filterPlanFlagName string
 		if cmdPrefix == "" {
-			filterPlanFlagName = "filter[plan]"
+			filterPlanFlagName = "plan"
 		} else {
-			filterPlanFlagName = fmt.Sprintf("%v.filter[plan]", cmdPrefix)
+			filterPlanFlagName = fmt.Sprintf("%v.plan", cmdPrefix)
 		}
 
 		filterPlanFlagValue, err := cmd.Flags().GetString(filterPlanFlagName)
@@ -641,13 +724,13 @@ func retrieveOperationServersGetServersFilterPlanFlag(m *servers.GetServersParam
 }
 func retrieveOperationServersGetServersFilterProjectFlag(m *servers.GetServersParams, cmdPrefix string, cmd *cobra.Command) (error, bool) {
 	retAdded := false
-	if cmd.Flags().Changed("filter[project]") {
+	if cmd.Flags().Changed("project") {
 
 		var filterProjectFlagName string
 		if cmdPrefix == "" {
-			filterProjectFlagName = "filter[project]"
+			filterProjectFlagName = "project"
 		} else {
-			filterProjectFlagName = fmt.Sprintf("%v.filter[project]", cmdPrefix)
+			filterProjectFlagName = fmt.Sprintf("%v.project", cmdPrefix)
 		}
 
 		filterProjectFlagValue, err := cmd.Flags().GetString(filterProjectFlagName)
@@ -661,13 +744,13 @@ func retrieveOperationServersGetServersFilterProjectFlag(m *servers.GetServersPa
 }
 func retrieveOperationServersGetServersFilterRAMEqlFlag(m *servers.GetServersParams, cmdPrefix string, cmd *cobra.Command) (error, bool) {
 	retAdded := false
-	if cmd.Flags().Changed("filter[ram][eql]") {
+	if cmd.Flags().Changed("ram_eql") {
 
 		var filterRamEqlFlagName string
 		if cmdPrefix == "" {
-			filterRamEqlFlagName = "filter[ram][eql]"
+			filterRamEqlFlagName = "ram_eql"
 		} else {
-			filterRamEqlFlagName = fmt.Sprintf("%v.filter[ram][eql]", cmdPrefix)
+			filterRamEqlFlagName = fmt.Sprintf("%v.ram_eql", cmdPrefix)
 		}
 
 		filterRamEqlFlagValue, err := cmd.Flags().GetInt64(filterRamEqlFlagName)
@@ -681,13 +764,13 @@ func retrieveOperationServersGetServersFilterRAMEqlFlag(m *servers.GetServersPar
 }
 func retrieveOperationServersGetServersFilterRAMGteFlag(m *servers.GetServersParams, cmdPrefix string, cmd *cobra.Command) (error, bool) {
 	retAdded := false
-	if cmd.Flags().Changed("filter[ram][gte]") {
+	if cmd.Flags().Changed("ram_gte") {
 
 		var filterRamGteFlagName string
 		if cmdPrefix == "" {
-			filterRamGteFlagName = "filter[ram][gte]"
+			filterRamGteFlagName = "ram_gte"
 		} else {
-			filterRamGteFlagName = fmt.Sprintf("%v.filter[ram][gte]", cmdPrefix)
+			filterRamGteFlagName = fmt.Sprintf("%v.ram_gte", cmdPrefix)
 		}
 
 		filterRamGteFlagValue, err := cmd.Flags().GetInt64(filterRamGteFlagName)
@@ -701,13 +784,13 @@ func retrieveOperationServersGetServersFilterRAMGteFlag(m *servers.GetServersPar
 }
 func retrieveOperationServersGetServersFilterRAMLteFlag(m *servers.GetServersParams, cmdPrefix string, cmd *cobra.Command) (error, bool) {
 	retAdded := false
-	if cmd.Flags().Changed("filter[ram][lte]") {
+	if cmd.Flags().Changed("ram_lte") {
 
 		var filterRamLteFlagName string
 		if cmdPrefix == "" {
-			filterRamLteFlagName = "filter[ram][lte]"
+			filterRamLteFlagName = "ram_lte"
 		} else {
-			filterRamLteFlagName = fmt.Sprintf("%v.filter[ram][lte]", cmdPrefix)
+			filterRamLteFlagName = fmt.Sprintf("%v.ram_lte", cmdPrefix)
 		}
 
 		filterRamLteFlagValue, err := cmd.Flags().GetInt64(filterRamLteFlagName)
@@ -721,13 +804,13 @@ func retrieveOperationServersGetServersFilterRAMLteFlag(m *servers.GetServersPar
 }
 func retrieveOperationServersGetServersFilterRegionFlag(m *servers.GetServersParams, cmdPrefix string, cmd *cobra.Command) (error, bool) {
 	retAdded := false
-	if cmd.Flags().Changed("filter[region]") {
+	if cmd.Flags().Changed("region") {
 
 		var filterRegionFlagName string
 		if cmdPrefix == "" {
-			filterRegionFlagName = "filter[region]"
+			filterRegionFlagName = "region"
 		} else {
-			filterRegionFlagName = fmt.Sprintf("%v.filter[region]", cmdPrefix)
+			filterRegionFlagName = fmt.Sprintf("%v.region", cmdPrefix)
 		}
 
 		filterRegionFlagValue, err := cmd.Flags().GetString(filterRegionFlagName)
@@ -741,13 +824,13 @@ func retrieveOperationServersGetServersFilterRegionFlag(m *servers.GetServersPar
 }
 func retrieveOperationServersGetServersFilterStatusFlag(m *servers.GetServersParams, cmdPrefix string, cmd *cobra.Command) (error, bool) {
 	retAdded := false
-	if cmd.Flags().Changed("filter[status]") {
+	if cmd.Flags().Changed("status") {
 
 		var filterStatusFlagName string
 		if cmdPrefix == "" {
-			filterStatusFlagName = "filter[status]"
+			filterStatusFlagName = "status"
 		} else {
-			filterStatusFlagName = fmt.Sprintf("%v.filter[status]", cmdPrefix)
+			filterStatusFlagName = fmt.Sprintf("%v.status", cmdPrefix)
 		}
 
 		filterStatusFlagValue, err := cmd.Flags().GetString(filterStatusFlagName)

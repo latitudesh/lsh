@@ -74,7 +74,9 @@ type GetPlansParams struct {
 	                            [gte] to filter for values greater or equal to the provided value.
 	                            [lte] to filter by values lower or equal to the provided value.
 	*/
-	FilterDisk *int64
+	FilterDiskEql *int64
+	FilterDiskLte *int64
+	FilterDiskGte *int64
 
 	/* FilterGpu.
 
@@ -107,7 +109,9 @@ type GetPlansParams struct {
 	                            [gte] to filter for values greater or equal to the provided value.
 	                            [lte] to filter by values lower or equal to the provided value.
 	*/
-	FilterRAM *int64
+	FilterRAMEql *int64
+	FilterRAMLte *int64
+	FilterRAMGte *int64
 
 	/* FilterSlug.
 
@@ -196,15 +200,15 @@ func (o *GetPlansParams) SetAPIVersion(aPIVersion *string) {
 	o.APIVersion = aPIVersion
 }
 
-// WithFilterDisk adds the filterDisk to the get plans params
-func (o *GetPlansParams) WithFilterDisk(filterDisk *int64) *GetPlansParams {
-	o.SetFilterDisk(filterDisk)
+// WithFilterDiskEql adds the filterDiskEql to the get plans params
+func (o *GetPlansParams) WithFilterDiskEql(filterDiskEql *int64) *GetPlansParams {
+	o.SetFilterDiskEql(filterDiskEql)
 	return o
 }
 
-// SetFilterDisk adds the filterDisk to the get plans params
-func (o *GetPlansParams) SetFilterDisk(filterDisk *int64) {
-	o.FilterDisk = filterDisk
+// SetFilterDiskEql adds the filterDiskEql to the get plans params
+func (o *GetPlansParams) SetFilterDiskEql(filterDiskEql *int64) {
+	o.FilterDiskEql = filterDiskEql
 }
 
 // WithFilterGpu adds the filterGpu to the get plans params
@@ -251,15 +255,37 @@ func (o *GetPlansParams) SetFilterName(filterName *string) {
 	o.FilterName = filterName
 }
 
-// WithFilterRAM adds the filterRAM to the get plans params
-func (o *GetPlansParams) WithFilterRAM(filterRAM *int64) *GetPlansParams {
-	o.SetFilterRAM(filterRAM)
+// WithFilterRAMEql adds the filterRAMEql to the get plans params
+func (o *GetPlansParams) WithFilterRAMEql(filterRAMEql *int64) *GetPlansParams {
+	o.SetFilterRAMEql(filterRAMEql)
 	return o
 }
 
-// SetFilterRAM adds the filterRam to the get plans params
-func (o *GetPlansParams) SetFilterRAM(filterRAM *int64) {
-	o.FilterRAM = filterRAM
+// SetFilterRAMEql adds the filterRamEql to the get plans params
+func (o *GetPlansParams) SetFilterRAMEql(filterRAMEql *int64) {
+	o.FilterRAMEql = filterRAMEql
+}
+
+// WithFilterRAMLte adds the filterRAMLte to the get plans params
+func (o *GetPlansParams) WithFilterRAMLte(filterRAMLte *int64) *GetPlansParams {
+	o.SetFilterRAMLte(filterRAMLte)
+	return o
+}
+
+// SetFilterRAMLte adds the filterRamLte to the get plans params
+func (o *GetPlansParams) SetFilterRAMLte(filterRAMLte *int64) {
+	o.FilterRAMLte = filterRAMLte
+}
+
+// WithFilterRAMGte adds the filterRAMGte to the get plans params
+func (o *GetPlansParams) WithFilterRAMGte(filterRAMGte *int64) *GetPlansParams {
+	o.SetFilterRAMGte(filterRAMGte)
+	return o
+}
+
+// SetFilterRAMGte adds the filterRamGte to the get plans params
+func (o *GetPlansParams) SetFilterRAMGte(filterRAMGte *int64) {
+	o.FilterRAMGte = filterRAMGte
 }
 
 // WithFilterSlug adds the filterSlug to the get plans params
@@ -300,18 +326,52 @@ func (o *GetPlansParams) WriteToRequest(r runtime.ClientRequest, reg strfmt.Regi
 		}
 	}
 
-	if o.FilterDisk != nil {
+	if o.FilterDiskEql != nil {
 
-		// query param filter[disk]
-		var qrFilterDisk int64
+		// query param filter[disk][eql]
+		var qrFilterDiskEql int64
 
-		if o.FilterDisk != nil {
-			qrFilterDisk = *o.FilterDisk
+		if o.FilterDiskEql != nil {
+			qrFilterDiskEql = *o.FilterDiskEql
 		}
-		qFilterDisk := swag.FormatInt64(qrFilterDisk)
-		if qFilterDisk != "" {
+		qFilterDiskEql := swag.FormatInt64(qrFilterDiskEql)
+		if qFilterDiskEql != "" {
 
-			if err := r.SetQueryParam("filter[disk]", qFilterDisk); err != nil {
+			if err := r.SetQueryParam("filter[disk][eql]", qFilterDiskEql); err != nil {
+				return err
+			}
+		}
+	}
+
+	if o.FilterDiskLte != nil {
+
+		// query param filter[disk][lte]
+		var qrFilterDiskLte int64
+
+		if o.FilterDiskLte != nil {
+			qrFilterDiskLte = *o.FilterDiskLte
+		}
+		qFilterDiskLte := swag.FormatInt64(qrFilterDiskLte)
+		if qFilterDiskLte != "" {
+
+			if err := r.SetQueryParam("filter[disk][lte]", qFilterDiskLte); err != nil {
+				return err
+			}
+		}
+	}
+
+	if o.FilterDiskGte != nil {
+
+		// query param filter[disk][gte]
+		var qrFilterDiskGte int64
+
+		if o.FilterDiskGte != nil {
+			qrFilterDiskGte = *o.FilterDiskGte
+		}
+		qFilterDiskGte := swag.FormatInt64(qrFilterDiskGte)
+		if qFilterDiskGte != "" {
+
+			if err := r.SetQueryParam("filter[disk][gte]", qFilterDiskGte); err != nil {
 				return err
 			}
 		}
@@ -385,18 +445,50 @@ func (o *GetPlansParams) WriteToRequest(r runtime.ClientRequest, reg strfmt.Regi
 		}
 	}
 
-	if o.FilterRAM != nil {
+	if o.FilterRAMEql != nil {
 
-		// query param filter[ram]
-		var qrFilterRAM int64
+		// query param filter[ram][eql]
+		var qrFilterRAMEql int64
 
-		if o.FilterRAM != nil {
-			qrFilterRAM = *o.FilterRAM
+		if o.FilterRAMEql != nil {
+			qrFilterRAMEql = *o.FilterRAMEql
 		}
-		qFilterRAM := swag.FormatInt64(qrFilterRAM)
-		if qFilterRAM != "" {
+		qFilterRAMEql := swag.FormatInt64(qrFilterRAMEql)
+		if qFilterRAMEql != "" {
 
-			if err := r.SetQueryParam("filter[ram]", qFilterRAM); err != nil {
+			if err := r.SetQueryParam("filter[ram][eql]", qFilterRAMEql); err != nil {
+				return err
+			}
+		}
+	}
+	if o.FilterRAMLte != nil {
+
+		// query param filter[ram][lte]
+		var qrFilterRAMLte int64
+
+		if o.FilterRAMLte != nil {
+			qrFilterRAMLte = *o.FilterRAMLte
+		}
+		qFilterRAMLte := swag.FormatInt64(qrFilterRAMLte)
+		if qFilterRAMLte != "" {
+
+			if err := r.SetQueryParam("filter[ram][eql]", qFilterRAMLte); err != nil {
+				return err
+			}
+		}
+	}
+	if o.FilterRAMGte != nil {
+
+		// query param filter[ram][gte]
+		var qrFilterRAMGte int64
+
+		if o.FilterRAMGte != nil {
+			qrFilterRAMGte = *o.FilterRAMGte
+		}
+		qFilterRAMGte := swag.FormatInt64(qrFilterRAMGte)
+		if qFilterRAMGte != "" {
+
+			if err := r.SetQueryParam("filter[ram][gte]", qFilterRAMGte); err != nil {
 				return err
 			}
 		}

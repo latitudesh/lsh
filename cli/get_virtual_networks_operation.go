@@ -108,9 +108,9 @@ func registerOperationVirtualNetworksGetVirtualNetworksFilterLocationParamFlags(
 
 	var filterLocationFlagName string
 	if cmdPrefix == "" {
-		filterLocationFlagName = "filter[location]"
+		filterLocationFlagName = "location"
 	} else {
-		filterLocationFlagName = fmt.Sprintf("%v.filter[location]", cmdPrefix)
+		filterLocationFlagName = fmt.Sprintf("%v.location", cmdPrefix)
 	}
 
 	var filterLocationFlagDefault string
@@ -125,9 +125,9 @@ func registerOperationVirtualNetworksGetVirtualNetworksFilterProjectParamFlags(c
 
 	var filterProjectFlagName string
 	if cmdPrefix == "" {
-		filterProjectFlagName = "filter[project]"
+		filterProjectFlagName = "project"
 	} else {
-		filterProjectFlagName = fmt.Sprintf("%v.filter[project]", cmdPrefix)
+		filterProjectFlagName = fmt.Sprintf("%v.project", cmdPrefix)
 	}
 
 	var filterProjectFlagDefault string
@@ -159,13 +159,13 @@ func retrieveOperationVirtualNetworksGetVirtualNetworksAPIVersionFlag(m *virtual
 }
 func retrieveOperationVirtualNetworksGetVirtualNetworksFilterLocationFlag(m *virtual_networks.GetVirtualNetworksParams, cmdPrefix string, cmd *cobra.Command) (error, bool) {
 	retAdded := false
-	if cmd.Flags().Changed("filter[location]") {
+	if cmd.Flags().Changed("location") {
 
 		var filterLocationFlagName string
 		if cmdPrefix == "" {
-			filterLocationFlagName = "filter[location]"
+			filterLocationFlagName = "location"
 		} else {
-			filterLocationFlagName = fmt.Sprintf("%v.filter[location]", cmdPrefix)
+			filterLocationFlagName = fmt.Sprintf("%v.location", cmdPrefix)
 		}
 
 		filterLocationFlagValue, err := cmd.Flags().GetString(filterLocationFlagName)
@@ -179,13 +179,13 @@ func retrieveOperationVirtualNetworksGetVirtualNetworksFilterLocationFlag(m *vir
 }
 func retrieveOperationVirtualNetworksGetVirtualNetworksFilterProjectFlag(m *virtual_networks.GetVirtualNetworksParams, cmdPrefix string, cmd *cobra.Command) (error, bool) {
 	retAdded := false
-	if cmd.Flags().Changed("filter[project]") {
+	if cmd.Flags().Changed("project") {
 
 		var filterProjectFlagName string
 		if cmdPrefix == "" {
-			filterProjectFlagName = "filter[project]"
+			filterProjectFlagName = "project"
 		} else {
-			filterProjectFlagName = fmt.Sprintf("%v.filter[project]", cmdPrefix)
+			filterProjectFlagName = fmt.Sprintf("%v.project", cmdPrefix)
 		}
 
 		filterProjectFlagValue, err := cmd.Flags().GetString(filterProjectFlagName)
