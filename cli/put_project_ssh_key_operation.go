@@ -106,7 +106,7 @@ func registerOperationSSHKeysPutProjectSSHKeyBodyParamFlags(cmdPrefix string, cm
 }
 func registerOperationSSHKeysPutProjectSSHKeyProjectIDOrSlugParamFlags(cmdPrefix string, cmd *cobra.Command) error {
 
-	projectIdOrSlugDescription := `Project Id or Slug (Required).`
+	projectIdOrSlugDescription := `The Project Id or Slug (Required).`
 
 	var projectIdOrSlugFlagName string
 	if cmdPrefix == "" {
@@ -124,7 +124,7 @@ func registerOperationSSHKeysPutProjectSSHKeyProjectIDOrSlugParamFlags(cmdPrefix
 }
 func registerOperationSSHKeysPutProjectSSHKeySSHKeyIDParamFlags(cmdPrefix string, cmd *cobra.Command) error {
 
-	sshKeyIdDescription := `Required. `
+	sshKeyIdDescription := `The SSH Key Id (Required).`
 
 	var sshKeyIdFlagName string
 	if cmdPrefix == "" {
@@ -181,13 +181,13 @@ func retrieveOperationSSHKeysPutProjectSSHKeyBodyFlag(m *ssh_keys.PutProjectSSHK
 }
 func retrieveOperationSSHKeysPutProjectSSHKeyProjectIDOrSlugFlag(m *ssh_keys.PutProjectSSHKeyParams, cmdPrefix string, cmd *cobra.Command) (error, bool) {
 	retAdded := false
-	if cmd.Flags().Changed("project_id_or_slug") {
+	if cmd.Flags().Changed("project") {
 
 		var projectIdOrSlugFlagName string
 		if cmdPrefix == "" {
-			projectIdOrSlugFlagName = "project_id_or_slug"
+			projectIdOrSlugFlagName = "project"
 		} else {
-			projectIdOrSlugFlagName = fmt.Sprintf("%v.project_id_or_slug", cmdPrefix)
+			projectIdOrSlugFlagName = fmt.Sprintf("%v.project", cmdPrefix)
 		}
 
 		projectIdOrSlugFlagValue, err := cmd.Flags().GetString(projectIdOrSlugFlagName)
