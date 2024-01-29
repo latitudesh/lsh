@@ -27,7 +27,7 @@ func NewUpdateVirtualNetworkParams() *UpdateVirtualNetworkParams {
 		timeout: cr.DefaultTimeout,
 		Body: UpdateVirtualNetworkBody{
 			Data: &UpdateVirtualNetworkParamsBodyData{
-				Type: &virtualNetworkType,
+				Type: &updatevirtualNetworkType,
 			},
 		},
 	}

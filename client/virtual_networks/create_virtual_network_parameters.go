@@ -27,7 +27,7 @@ func NewCreateVirtualNetworkParams() *CreateVirtualNetworkParams {
 		timeout: cr.DefaultTimeout,
 		Body: CreateVirtualNetworkBody{
 			Data: &CreateVirtualNetworkParamsBodyData{
-				Type: &virtualNetworkType,
+				Type: &createvirtualNetworkType,
 			},
 		},
 	}

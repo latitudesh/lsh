@@ -170,6 +170,7 @@ func retrieveOperationVirtualNetworksUpdateVirtualNetworkVirtualNetworkIDFlag(m 
 			return err, false
 		}
 		m.VirtualNetworkID = virtualNetworkIdFlagValue
+		m.Body.Data.ID = &m.VirtualNetworkID
 
 	}
 	return nil, retAdded

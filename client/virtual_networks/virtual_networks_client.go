@@ -12,7 +12,10 @@ import (
 	"github.com/go-openapi/strfmt"
 )
 
-var virtualNetworkType = "virtual_network" 
+var (
+	createvirtualNetworkType = "virtual_network"
+	updatevirtualNetworkType = "virtual_networks" 
+)
 
 // New creates a new virtual networks API client.
 func New(transport runtime.ClientTransport, formats strfmt.Registry) ClientService {
