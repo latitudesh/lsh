@@ -68,12 +68,17 @@ func extractHeadersFromAttributes(entry interface{}) map[string]bool {
 
 	ignoredAttributes := map[string]bool{"created_at": true, "updated_at": true}
 
-	for key, value := range entry.(map[string]interface{})["attributes"].(map[string]interface{}) {
-		if !containsNestedValues(value) && !ignoredAttributes[key] {
+	for key, _ := range entry.(map[string]interface{})["attributes"].(map[string]interface{}) {
+		// headersMap[key] = true
+		// if !containsNestedValues(value) && !ignoredAttributes[key] {
+		// 	headersMap[key] = true
+		// }
+
+		if !ignoredAttributes[key] {
 			headersMap[key] = true
 		}
 	}
-
+	fmt.Println(headersMap)
 	return headersMap
 }
 
@@ -98,7 +103,7 @@ func extractRow(headers []string, entry map[string]interface{}) []string {
 			continue
 		}
 
-		row[i+1] = formatter.FormatValue(value)
+		row[i+1] = formatter.FormatValue(header, value)
 	}
 
 	return row
