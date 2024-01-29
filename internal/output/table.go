@@ -66,7 +66,7 @@ func extractHeaders(entry interface{}) []string {
 func extractHeadersFromAttributes(entry interface{}) map[string]bool {
 	headersMap := make(map[string]bool)
 
-	ignoredAttributes := map[string]bool{"created_at": true, "updated_at": true}
+	ignoredAttributes := map[string]bool{"created_at": true, "updated_at": true, "role": true}
 
 	for key, _ := range entry.(map[string]interface{})["attributes"].(map[string]interface{}) {
 		// headersMap[key] = true

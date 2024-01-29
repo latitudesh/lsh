@@ -83,13 +83,20 @@ func formatPlansRegions(regions []interface{}) string {
 			}
 		}
 	}
-	fmt.Println(formattedRegions.String())
+
 	return formattedRegions.String()
 }
 
 func formatPlansSpecs(specs map[string]interface{}) string {
 	var formattedSpecs strings.Builder
 	for spec, attributes := range specs {
+		str, isString := attributes.(string)
+
+		if isString {
+			formattedSpecs.WriteString(fmt.Sprintf("%v %v", ListSeparator, str))
+			continue
+		}
+
 		specsObject, isObject := attributes.(map[string]interface{})
 
 		if isObject {
