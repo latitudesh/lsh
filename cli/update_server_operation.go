@@ -170,7 +170,7 @@ func retrieveOperationServersUpdateServerServerIDFlag(m *servers.UpdateServerPar
 			return err, false
 		}
 		m.ServerID = serverIdFlagValue
-		m.Body.ID = m.ServerID
+		m.Body.Data.ID = m.ServerID
 
 	}
 	return nil, retAdded
@@ -236,7 +236,7 @@ func retrieveUpdateServerBodyAttributesFlags(depth int, m *servers.UpdateServerB
 	if cmd.Flags().Changed(attributesFlagName) {
 		// info: complex object attributes UpdateServerParamsBodyAttributes is retrieved outside this Changed() block
 	}
-	attributesFlagValue := m.Attributes
+	attributesFlagValue := m.Data.Attributes
 	if swag.IsZero(attributesFlagValue) {
 		attributesFlagValue = &servers.UpdateServerParamsBodyAttributes{}
 	}
@@ -248,7 +248,7 @@ func retrieveUpdateServerBodyAttributesFlags(depth int, m *servers.UpdateServerB
 	}
 	retAdded = retAdded || attributesAdded
 	if attributesAdded {
-		m.Attributes = attributesFlagValue
+		m.Data.Attributes = attributesFlagValue
 	}
 
 	return nil, retAdded

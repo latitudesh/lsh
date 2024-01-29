@@ -26,7 +26,9 @@ func NewUpdateServerParams() *UpdateServerParams {
 	return &UpdateServerParams{
 		timeout: cr.DefaultTimeout,
 		Body: UpdateServerBody{
-			Type: serverType,
+			Data: &UpdateServerParamsBodyData{
+				Type: serverType,
+			},
 		},
 	}
 }
