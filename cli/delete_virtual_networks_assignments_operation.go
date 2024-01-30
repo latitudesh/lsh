@@ -49,14 +49,14 @@ func runOperationVirtualNetworkAssignmentsDeleteVirtualNetworksAssignments(cmd *
 		return nil
 	}
 
-	result, err := appCli.VirtualNetworkAssignments.DeleteVirtualNetworksAssignments(params, nil)
+	response, err := appCli.VirtualNetworkAssignments.DeleteVirtualNetworksAssignments(params, nil)
 	if err != nil {
 		utils.PrintError(err)
 		return nil
 	}
 
 	if !debug {
-		result.RenderOutput()
+		response.Render()
 	}
 	return nil
 }

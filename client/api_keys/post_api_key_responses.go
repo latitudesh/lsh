@@ -116,7 +116,7 @@ func (o *PostAPIKeyCreated) GetPayload() *PostAPIKeyCreatedBody {
 	return o.Payload
 }
 
-func (o *PostAPIKeyCreated) RenderOutput() {
+func (o *PostAPIKeyCreated) Render() {
 	formatAsJSON := viper.GetBool("json")
 
 	if formatAsJSON {

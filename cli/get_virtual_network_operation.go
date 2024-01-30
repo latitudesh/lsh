@@ -51,14 +51,14 @@ func runOperationVirtualNetworksGetVirtualNetwork(cmd *cobra.Command, args []str
 		return nil
 	}
 
-	result, err := appCli.VirtualNetworks.GetVirtualNetwork(params, nil)
+	response, err := appCli.VirtualNetworks.GetVirtualNetwork(params, nil)
 	if err != nil {
 		utils.PrintError(err)
 		return nil
 	}
 
 	if !debug {
-		result.RenderOutput()
+		response.Render()
 	}
 	return nil
 }

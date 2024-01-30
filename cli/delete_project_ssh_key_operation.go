@@ -50,14 +50,14 @@ func runOperationSSHKeysDeleteProjectSSHKey(cmd *cobra.Command, args []string) e
 		return nil
 	}
 	// make request and then print result
-	result, err := appCli.SSHKeys.DeleteProjectSSHKey(params, nil)
+	response, err := appCli.SSHKeys.DeleteProjectSSHKey(params, nil)
 	if err != nil {
 		utils.PrintError(err)
 		return nil
 	}
 
 	if !debug {
-		result.RenderOutput()
+		response.Render()
 	}
 	return nil
 }

@@ -124,7 +124,7 @@ type GetProjectTableRow struct {
 	Vlans          string `json:"vlans,omitempty"`
 }
 
-func (o *GetProjectOK) RenderOutput() {
+func (o *GetProjectOK) Render() {
 	formatAsJSON := viper.GetBool("json")
 
 	if formatAsJSON {

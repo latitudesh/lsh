@@ -107,7 +107,7 @@ func (o *DeleteProjectNoContent) String() string {
 	return fmt.Sprintf("[DELETE /projects/{id_or_slug}][%d] deleteProjectNoContent ", 204)
 }
 
-func (o *DeleteProjectNoContent) RenderOutput() {
+func (o *DeleteProjectNoContent) Render() {
 	output.SuccessfulDeletion("Project")
 }
 

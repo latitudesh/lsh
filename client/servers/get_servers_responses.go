@@ -116,7 +116,7 @@ type ServerTableRow struct {
 	RAM             string `json:"ram,omitempty"`
 }
 
-func (o *GetServersOK) RenderOutput() {
+func (o *GetServersOK) Render() {
 	formatAsJSON := viper.GetBool("json")
 
 	if formatAsJSON {

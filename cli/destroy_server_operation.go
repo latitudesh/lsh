@@ -49,14 +49,14 @@ func runOperationServersDestroyServer(cmd *cobra.Command, args []string) error {
 		return nil
 	}
 
-	result, err := appCli.Servers.DestroyServer(params, nil)
+	response, err := appCli.Servers.DestroyServer(params, nil)
 	if err != nil {
 		utils.PrintError(err)
 		return nil
 	}
 
 	if !debug {
-		result.RenderOutput()
+		response.Render()
 	}
 	return nil
 }

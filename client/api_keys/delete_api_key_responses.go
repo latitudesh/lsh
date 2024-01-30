@@ -97,7 +97,7 @@ func (o *DeleteAPIKeyOK) String() string {
 	return fmt.Sprintf("[DELETE /auth/api_keys/{id}][%d] deleteApiKeyOK ", 200)
 }
 
-func (o *DeleteAPIKeyOK) RenderOutput() {
+func (o *DeleteAPIKeyOK) Render() {
 	output.SuccessfulDeletion("API Key")
 }
 

@@ -46,14 +46,14 @@ func runOperationAPIKeysGetAPIKeys(cmd *cobra.Command, args []string) error {
 		return nil
 	}
 
-	result, err := appCli.APIKeys.GetAPIKeys(params, nil)
+	response, err := appCli.APIKeys.GetAPIKeys(params, nil)
 	if err != nil {
 		utils.PrintError(err)
 		return nil
 	}
 
 	if !debug {
-		result.RenderOutput()
+		response.Render()
 	}
 	return nil
 }

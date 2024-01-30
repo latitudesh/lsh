@@ -132,7 +132,7 @@ type CreateVirtualNetworkAssignmentTableRow struct {
 	Server string `json:"server,omitempty"`
 }
 
-func (o *AssignServerVirtualNetworkCreated) RenderOutput() {
+func (o *AssignServerVirtualNetworkCreated) Render() {
 	formatAsJSON := viper.GetBool("json")
 
 	if formatAsJSON {

@@ -53,14 +53,14 @@ func runOperationSSHKeysPostProjectSSHKey(cmd *cobra.Command, args []string) err
 		return nil
 	}
 
-	result, err := appCli.SSHKeys.PostProjectSSHKey(params, nil)
+	response, err := appCli.SSHKeys.PostProjectSSHKey(params, nil)
 	if err != nil {
 		utils.PrintError(err)
 		return nil
 	}
 
 	if !debug {
-		result.RenderOutput()
+		response.Render()
 	}
 	return nil
 }

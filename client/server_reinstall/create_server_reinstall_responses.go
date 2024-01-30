@@ -117,7 +117,7 @@ func (o *CreateServerReinstallCreated) readResponse(response runtime.ClientRespo
 	return nil
 }
 
-func (o *CreateServerReinstallCreated) RenderOutput() {
+func (o *CreateServerReinstallCreated) Render() {
 	formatAsJSON := viper.GetBool("json")
 
 	if formatAsJSON {

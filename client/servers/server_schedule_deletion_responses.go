@@ -124,7 +124,7 @@ type CreateServerScheduleDeletionTableRow struct {
 	ScheduledAt string `json:"scheduled_at,omitempty"`
 }
 
-func (o *ServerScheduleDeletionCreated) RenderOutput() {
+func (o *ServerScheduleDeletionCreated) Render() {
 	formatAsJSON := viper.GetBool("json")
 
 	if formatAsJSON {

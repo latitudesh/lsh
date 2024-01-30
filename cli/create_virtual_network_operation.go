@@ -51,7 +51,7 @@ func runOperationVirtualNetworksCreateVirtualNetwork(cmd *cobra.Command, args []
 		return nil
 	}
 	// make request and then print result
-	result, err := appCli.VirtualNetworks.CreateVirtualNetwork(params, nil)
+	response, err := appCli.VirtualNetworks.CreateVirtualNetwork(params, nil)
 
 	if err != nil {
 		utils.PrintError(err)
@@ -59,7 +59,7 @@ func runOperationVirtualNetworksCreateVirtualNetwork(cmd *cobra.Command, args []
 	}
 
 	if !debug {
-		result.RenderOutput()
+		response.Render()
 	}
 	return nil
 }

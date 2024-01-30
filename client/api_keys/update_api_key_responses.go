@@ -116,7 +116,7 @@ func (o *UpdateAPIKeyOK) GetPayload() *UpdateAPIKeyOKBody {
 	return o.Payload
 }
 
-func (o *UpdateAPIKeyOK) RenderOutput() {
+func (o *UpdateAPIKeyOK) Render() {
 	formatAsJSON := viper.GetBool("json")
 
 	if formatAsJSON {

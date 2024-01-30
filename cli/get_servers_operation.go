@@ -95,14 +95,14 @@ func runOperationServersGetServers(cmd *cobra.Command, args []string) error {
 		return nil
 	}
 
-	result, err := appCli.Servers.GetServers(params, nil)
+	response, err := appCli.Servers.GetServers(params, nil)
 	if err != nil {
 		utils.PrintError(err)
 		return nil
 	}
 
 	if !debug {
-		result.RenderOutput()
+		response.Render()
 	}
 	return nil
 }

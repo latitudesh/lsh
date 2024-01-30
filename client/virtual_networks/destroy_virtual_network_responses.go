@@ -97,7 +97,7 @@ func (o *DestroyVirtualNetworkNoContent) String() string {
 	return fmt.Sprintf("[DELETE /virtual_networks/{id}][%d] destroyVirtualNetworkNoContent ", 204)
 }
 
-func (o *DestroyVirtualNetworkNoContent) RenderOutput() {
+func (o *DestroyVirtualNetworkNoContent) Render() {
 	output.SuccessfulDeletion("Virtual Network")
 }
 

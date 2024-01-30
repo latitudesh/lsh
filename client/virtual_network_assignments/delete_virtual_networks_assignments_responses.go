@@ -102,7 +102,7 @@ func (o *DeleteVirtualNetworksAssignmentsNoContent) String() string {
 	return fmt.Sprintf("[DELETE /virtual_networks/assignments/{assignment_id}][%d] deleteVirtualNetworksAssignmentsNoContent ", 204)
 }
 
-func (o *DeleteVirtualNetworksAssignmentsNoContent) RenderOutput() {
+func (o *DeleteVirtualNetworksAssignmentsNoContent) Render() {
 	output.SuccessfulDeletion("Virtual Network Assigment")
 }
 

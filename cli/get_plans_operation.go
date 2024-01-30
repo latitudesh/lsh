@@ -81,14 +81,14 @@ func runOperationPlansGetPlans(cmd *cobra.Command, args []string) error {
 		return nil
 	}
 
-	result, err := appCli.Plans.GetPlans(params, nil)
+	response, err := appCli.Plans.GetPlans(params, nil)
 	if err != nil {
 		utils.PrintError(err)
 		return nil
 	}
 
 	if !debug {
-		result.RenderOutput()
+		response.Render()
 	}
 	return nil
 }

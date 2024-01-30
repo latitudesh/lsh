@@ -51,14 +51,14 @@ func runOperationVirtualNetworkAssignmentsAssignServerVirtualNetwork(cmd *cobra.
 		return nil
 	}
 
-	result, err := appCli.VirtualNetworkAssignments.AssignServerVirtualNetwork(params, nil)
+	response, err := appCli.VirtualNetworkAssignments.AssignServerVirtualNetwork(params, nil)
 	if err != nil {
 		utils.PrintError(err)
 		return nil
 	}
 
 	if !debug {
-		result.RenderOutput()
+		response.Render()
 	}
 
 	return nil

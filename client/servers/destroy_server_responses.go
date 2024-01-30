@@ -113,7 +113,7 @@ func (o *DestroyServerNoContent) String() string {
 	return fmt.Sprintf("[DELETE /servers/{server_id}][%d] destroyServerNoContent ", 204)
 }
 
-func (o *DestroyServerNoContent) RenderOutput() {
+func (o *DestroyServerNoContent) Render() {
 	output.SuccessfulDeletion("Server")
 }
 

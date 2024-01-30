@@ -121,7 +121,7 @@ type GetVirtualNetworkTableRow struct {
 	Facility string `json:"facility,omitempty"`
 }
 
-func (o *GetVirtualNetworkOK) RenderOutput() {
+func (o *GetVirtualNetworkOK) Render() {
 	formatAsJSON := viper.GetBool("json")
 
 	if formatAsJSON {

@@ -111,7 +111,7 @@ type APIKeyTableRow struct {
 	Name string `json:"name,omitempty"`
 }
 
-func (o *GetAPIKeysOK) RenderOutput() {
+func (o *GetAPIKeysOK) Render() {
 	formatAsJSON := viper.GetBool("json")
 
 	if formatAsJSON {

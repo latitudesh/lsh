@@ -119,7 +119,7 @@ type GetPlanTableRow struct {
 	NIC         string `json:"nic,omitempty"`
 }
 
-func (o *GetPlanOK) RenderOutput() {
+func (o *GetPlanOK) Render() {
 	formatAsJSON := viper.GetBool("json")
 
 	if formatAsJSON {

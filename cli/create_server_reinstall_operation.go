@@ -52,14 +52,14 @@ func runOperationServerReinstallCreateServerReinstall(cmd *cobra.Command, args [
 		return nil
 	}
 
-	result, err := appCli.ServerReinstall.CreateServerReinstall(params, nil)
+	response, err := appCli.ServerReinstall.CreateServerReinstall(params, nil)
 	if err != nil {
 		utils.PrintError(err)
 		return nil
 	}
 
 	if !debug {
-		result.RenderOutput()
+		response.Render()
 	}
 	return nil
 }

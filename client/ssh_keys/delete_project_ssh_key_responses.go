@@ -94,7 +94,7 @@ func (o *DeleteProjectSSHKeyOK) String() string {
 	return fmt.Sprintf("[DELETE /projects/{project_id_or_slug}/ssh_keys/{ssh_key_id}][%d] deleteProjectSshKeyOK ", 200)
 }
 
-func (o *DeleteProjectSSHKeyOK) RenderOutput() {
+func (o *DeleteProjectSSHKeyOK) Render() {
 	output.SuccessfulDeletion("SSH Key")
 }
 

@@ -114,7 +114,7 @@ type SSHKeyTableRow struct {
 	Fingerprint string `json:"fingerprint,omitempty"`
 }
 
-func (o *GetProjectSSHKeysOK) RenderOutput() {
+func (o *GetProjectSSHKeysOK) Render() {
 	formatAsJSON := viper.GetBool("json")
 
 	if formatAsJSON {

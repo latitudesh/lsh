@@ -101,7 +101,7 @@ func (o *ServerUnscheduleDeletionNoContent) String() string {
 	return fmt.Sprintf("[DELETE /servers/{server_id}/schedule_deletion][%d] serverUnscheduleDeletionNoContent ", 204)
 }
 
-func (o *ServerUnscheduleDeletionNoContent) RenderOutput() {
+func (o *ServerUnscheduleDeletionNoContent) Render() {
 	output.SuccessfulDeletion("Scheduled Deletion")
 }
 

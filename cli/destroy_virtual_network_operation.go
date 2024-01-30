@@ -49,14 +49,14 @@ func runOperationVirtualNetworksDestroyVirtualNetwork(cmd *cobra.Command, args [
 		return nil
 	}
 
-	result, err := appCli.VirtualNetworks.DestroyVirtualNetwork(params, nil)
+	response, err := appCli.VirtualNetworks.DestroyVirtualNetwork(params, nil)
 	if err != nil {
 		utils.PrintError(err)
 		return nil
 	}
 
 	if !debug {
-		result.RenderOutput()
+		response.Render()
 	}
 	return nil
 }

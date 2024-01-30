@@ -52,14 +52,14 @@ func runOperationProjectsGetProject(cmd *cobra.Command, args []string) error {
 		return nil
 	}
 
-	result, err := appCli.Projects.GetProject(params, nil)
+	response, err := appCli.Projects.GetProject(params, nil)
 	if err != nil {
 		utils.PrintError(err)
 		return nil
 	}
 
 	if !debug {
-		result.RenderOutput()
+		response.Render()
 	}
 	return nil
 }

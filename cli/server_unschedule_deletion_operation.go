@@ -47,14 +47,14 @@ func runOperationServersServerUnscheduleDeletion(cmd *cobra.Command, args []stri
 		return nil
 	}
 
-	result, err := appCli.Servers.ServerUnscheduleDeletion(params, nil)
+	response, err := appCli.Servers.ServerUnscheduleDeletion(params, nil)
 	if err != nil {
 		utils.PrintError(err)
 		return nil
 	}
 
 	if !debug {
-		result.RenderOutput()
+		response.Render()
 	}
 	return nil
 }

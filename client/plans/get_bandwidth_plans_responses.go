@@ -110,7 +110,7 @@ type BandwidthPlanTableRow struct {
 	BRLPriceMonth string `json:"brl_price_month,omitempty"`
 }
 
-func (o *GetBandwidthPlansOK) RenderOutput() {
+func (o *GetBandwidthPlansOK) Render() {
 	formatAsJSON := viper.GetBool("json")
 
 	if formatAsJSON {
