@@ -9,7 +9,7 @@ FILENAME=$(printf "$BASE_FILENAME" "$OS" "$ARCH")
 LATEST=$(curl -L -s \
     -H "Accept: application/vnd.github+json" \
     -H "X-GitHub-Api-Version: 2022-11-28" \
-    https://api.github.com/repos/latitudesh/lsh/releases/latest | grep "tag_name" |cut -d "\"" -f 4)
+    https://api.github.com/repos/latitudesh/lsh/releases/latest | grep "tag_name" | cut -d "\"" -f 4)
 
 URL="https://github.com/latitudesh/lsh/releases/download/$LATEST/$FILENAME.tar.gz"
 

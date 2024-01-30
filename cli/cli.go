@@ -77,9 +77,14 @@ func MakeRootCmd() (*cobra.Command, error) {
 	cobra.OnInitialize(initViperConfigs)
 
 	// Use executable name as the command name
+	// FIXED Version, must be updated when pushing a new tag
 	rootCmd := &cobra.Command{
 		Use: exeName,
+		Version: "v0.0.1",
 	}
+
+	// Edit commands template
+	rootCmd.SetVersionTemplate(fmt.Sprintf("lsh %s\n", rootCmd.Version))
 
 	// register basic flags
 	rootCmd.PersistentFlags().String("hostname", client.DefaultHost, "hostname of the service")
