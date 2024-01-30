@@ -16,8 +16,11 @@ import (
 	"github.com/go-openapi/strfmt"
 	"github.com/go-openapi/swag"
 	"github.com/go-openapi/validate"
+	"github.com/spf13/viper"
 
 	apierrors "github.com/latitudesh/lsh/internal/api/errors"
+	"github.com/latitudesh/lsh/internal/output"
+	"github.com/latitudesh/lsh/internal/output/table"
 	"github.com/latitudesh/lsh/models"
 )
 
@@ -118,6 +121,87 @@ func (o *AssignServerVirtualNetworkCreated) String() string {
 
 func (o *AssignServerVirtualNetworkCreated) GetPayload() *models.VirtualNetworkAssignment {
 	return o.Payload
+}
+
+type CreateVirtualNetworkAssignmentTableRow struct {
+	ID string `json:"id,omitempty"`
+	Vid string `json:"vid,omitempty"`
+	VirtualNetworkID string `json:"virtual_network_id,omitempty"`
+	Description string `json:"description,omitempty"`
+	Status string `json:"status,omitempty"`
+	Server string `json:"server,omitempty"`
+}
+
+func (o *AssignServerVirtualNetworkCreated) RenderOutput() {
+	formatAsJSON := viper.GetBool("json")
+
+	if formatAsJSON {
+		o.RenderJSON()
+		return
+	}
+
+	formatOutputFlag := viper.GetString("output")
+
+	switch formatOutputFlag {
+	case "json":
+		o.RenderJSON()
+	case "table":
+		o.RenderTable()
+	default:
+		fmt.Println("Unsupported output format")
+	}
+}
+
+func (o *AssignServerVirtualNetworkCreated) RenderJSON() {
+	if !swag.IsZero(o) && !swag.IsZero(o.Payload) {
+		JSONString, err := json.Marshal(o.Payload)
+		if err != nil {
+			fmt.Println("Could not decode the result as JSON.")
+		}
+
+		output.RenderJSON(JSONString)
+	}
+}
+
+func (o *AssignServerVirtualNetworkCreated) RenderTable() {
+	resource := o.Payload
+
+	var rows []CreateVirtualNetworkAssignmentTableRow
+
+	attributes := resource.Attributes
+
+	row := CreateVirtualNetworkAssignmentTableRow{
+		ID:        	 				 	table.RenderString(resource.ID),
+		Vid:									table.RenderInt(attributes.Vid),
+		VirtualNetworkID:			table.RenderString(attributes.VirtualNetworkID),
+		Description:					table.RenderString(attributes.Description),
+		Status:								table.RenderString(attributes.Status),
+		Server:								table.RenderString(attributes.ServerID),
+	}
+
+	rows = append(rows, row)
+
+	headers := table.ExtractHeaders(rows[0])
+
+	var values [][]string
+
+	for _, row := range rows {
+		var tr []string
+
+		for _, key := range headers {
+			value, err := table.GetFieldValue(row, key)
+			if err != nil {
+				fmt.Printf("Error accessing field %s: %v\n", key, err)
+				continue
+			}
+
+			tr = append(tr, fmt.Sprintf("%v", value))
+		}
+
+		values = append(values, tr)
+	}
+
+	table.Render(table.Table{Headers: headers, Rows: values})
 }
 
 func (o *AssignServerVirtualNetworkCreated) readResponse(response runtime.ClientResponse, consumer runtime.Consumer, formats strfmt.Registry) error {

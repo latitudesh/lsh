@@ -57,12 +57,8 @@ func runOperationVirtualNetworkAssignmentsAssignServerVirtualNetwork(cmd *cobra.
 		return nil
 	}
 
-	msgStr, err := parseOperationVirtualNetworkAssignmentsAssignServerVirtualNetworkResult(result)
-	if err != nil {
-		return err
-	}
 	if !debug {
-		utils.PrintResult(msgStr)
+		result.RenderOutput()
 	}
 
 	return nil
@@ -172,19 +168,6 @@ func retrieveOperationVirtualNetworkAssignmentsAssignServerVirtualNetworkBodyFla
 	retAdded = retAdded || added
 
 	return nil, retAdded
-}
-
-// parseOperationVirtualNetworkAssignmentsAssignServerVirtualNetworkResult parses request result and return the string content
-func parseOperationVirtualNetworkAssignmentsAssignServerVirtualNetworkResult(resp0 *virtual_network_assignments.AssignServerVirtualNetworkCreated) (string, error) {
-	if !swag.IsZero(resp0) && !swag.IsZero(resp0.Payload) {
-		msgStr, err := json.Marshal(resp0.Payload)
-		if err != nil {
-			return "", err
-		}
-		return string(msgStr), nil
-	}
-
-	return "", nil
 }
 
 // register flags to command

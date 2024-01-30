@@ -6,13 +6,11 @@ package cli
 // Editing this file might prove futile when you re-run the swagger generate command
 
 import (
-	"encoding/json"
 	"fmt"
 
 	"github.com/latitudesh/lsh/client/virtual_network_assignments"
 	"github.com/latitudesh/lsh/internal/utils"
 
-	"github.com/go-openapi/swag"
 	"github.com/spf13/cobra"
 )
 
@@ -63,13 +61,8 @@ func runOperationVirtualNetworkAssignmentsGetVirtualNetworksAssignments(cmd *cob
 		return nil
 	}
 
-	msgStr, err := parseOperationVirtualNetworkAssignmentsGetVirtualNetworksAssignmentsResult(result)
-	if err != nil {
-		return err
-	}
 	if !debug {
-
-		utils.PrintResult(msgStr)
+		result.RenderOutput()
 	}
 	return nil
 }
@@ -239,17 +232,4 @@ func retrieveOperationVirtualNetworkAssignmentsGetVirtualNetworksAssignmentsFilt
 
 	}
 	return nil, retAdded
-}
-
-// parseOperationVirtualNetworkAssignmentsGetVirtualNetworksAssignmentsResult parses request result and return the string content
-func parseOperationVirtualNetworkAssignmentsGetVirtualNetworksAssignmentsResult(resp0 *virtual_network_assignments.GetVirtualNetworksAssignmentsOK) (string, error) {
-	if !swag.IsZero(resp0) && !swag.IsZero(resp0.Payload) {
-		msgStr, err := json.Marshal(resp0.Payload)
-		if err != nil {
-			return "", err
-		}
-		return string(msgStr), nil
-	}
-
-	return "", nil
 }
