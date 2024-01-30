@@ -15,6 +15,8 @@ builds:
   - main: ./cmd/lsh/main.go
     env:
       - CGO_ENABLED=0
+    ldflags:
+      - -X "github.com/latitudesh/lsh/internal/version.Version={{ .Tag }}"
     goos:
       - linux
       - windows

@@ -13,6 +13,7 @@ import (
 	"path/filepath"
 
 	"github.com/latitudesh/lsh/client"
+	"github.com/latitudesh/lsh/internal/version"
 
 	"github.com/go-openapi/runtime"
 	httptransport "github.com/go-openapi/runtime/client"
@@ -77,10 +78,9 @@ func MakeRootCmd() (*cobra.Command, error) {
 	cobra.OnInitialize(initViperConfigs)
 
 	// Use executable name as the command name
-	// FIXED Version, must be updated when pushing a new tag
 	rootCmd := &cobra.Command{
 		Use: exeName,
-		Version: "v0.0.1",
+		Version: version.Version,
 	}
 
 	// Edit commands template
