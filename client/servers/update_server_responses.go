@@ -19,6 +19,7 @@ import (
 	apierrors "github.com/latitudesh/lsh/internal/api/errors"
 	"github.com/latitudesh/lsh/internal/output"
 	"github.com/latitudesh/lsh/internal/output/table"
+	"github.com/latitudesh/lsh/internal/utils"
 	"github.com/latitudesh/lsh/models"
 )
 
@@ -29,6 +30,7 @@ type UpdateServerReader struct {
 
 // ReadResponse reads a server response into the received o.
 func (o *UpdateServerReader) ReadResponse(response runtime.ClientResponse, consumer runtime.Consumer) (interface{}, error) {
+	utils.BodyReader(response)
 	switch response.Code() {
 	case 200:
 		result := NewUpdateServerOK()
@@ -192,27 +194,13 @@ func (o *UpdateServerOK) RenderTable() {
 	}
 	rows = append(rows, row)
 
-	headers := table.ExtractHeaders(rows[0])
-
-	var values [][]string
+	var interfaceRows []interface{}
 
 	for _, row := range rows {
-		var tr []string
-
-		for _, key := range headers {
-			value, err := table.GetFieldValue(row, key)
-			if err != nil {
-				fmt.Printf("Error accessing field %s: %v\n", key, err)
-				continue
-			}
-
-			tr = append(tr, fmt.Sprintf("%v", value))
-		}
-
-		values = append(values, tr)
+		interfaceRows = append(interfaceRows, row)
 	}
 
-	table.Render(table.Table{Headers: headers, Rows: values})
+	table.Render(interfaceRows)
 }
 
 func (o *UpdateServerOK) readResponse(response runtime.ClientResponse, consumer runtime.Consumer, formats strfmt.Registry) error {

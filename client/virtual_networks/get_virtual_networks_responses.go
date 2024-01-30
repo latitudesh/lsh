@@ -166,27 +166,13 @@ func (o *GetVirtualNetworksOK) RenderTable() {
 		rows = append(rows, row)
 	}
 
-	headers := table.ExtractHeaders(rows[0])
-
-	var values [][]string
+	var interfaceRows []interface{}
 
 	for _, row := range rows {
-		var tr []string
-
-		for _, key := range headers {
-			value, err := table.GetFieldValue(row, key)
-			if err != nil {
-				fmt.Printf("Error accessing field %s: %v\n", key, err)
-				continue
-			}
-
-			tr = append(tr, fmt.Sprintf("%v", value))
-		}
-
-		values = append(values, tr)
+		interfaceRows = append(interfaceRows, row)
 	}
 
-	table.Render(table.Table{Headers: headers, Rows: values})
+	table.Render(interfaceRows)
 }
 
 func (o *GetVirtualNetworksOK) readResponse(response runtime.ClientResponse, consumer runtime.Consumer, formats strfmt.Registry) error {

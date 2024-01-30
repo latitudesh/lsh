@@ -107,7 +107,6 @@ type PlanTableRow struct {
 	ID          string `json:"id,omitempty"`
 	Slug        string `json:"slug,omitempty"`
 	Features    string `json:"features,omitempty"`
-	Specs       string `json:"specs,omitempty"`
 	InStock     string `json:"in_stock,omitempty"`
 	AvailableIn string `json:"available_in,omitempty"`
 	CPU         string `json:"cpu,omitempty"`
@@ -178,27 +177,13 @@ func (o *GetPlansOK) RenderTable() {
 		rows = append(rows, row)
 	}
 
-	headers := table.ExtractHeaders(rows[0])
-
-	var values [][]string
+	var interfaceRows []interface{}
 
 	for _, row := range rows {
-		var tr []string
-
-		for _, key := range headers {
-			value, err := table.GetFieldValue(row, key)
-			if err != nil {
-				fmt.Printf("Error accessing field %s: %v\n", key, err)
-				continue
-			}
-
-			tr = append(tr, fmt.Sprintf("%v", value))
-		}
-
-		values = append(values, tr)
+		interfaceRows = append(interfaceRows, row)
 	}
 
-	table.Render(table.Table{Headers: headers, Rows: values})
+	table.Render(interfaceRows)
 }
 
 func (o *GetPlansOK) readResponse(response runtime.ClientResponse, consumer runtime.Consumer, formats strfmt.Registry) error {
