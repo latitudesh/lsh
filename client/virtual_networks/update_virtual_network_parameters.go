@@ -25,6 +25,11 @@ import (
 func NewUpdateVirtualNetworkParams() *UpdateVirtualNetworkParams {
 	return &UpdateVirtualNetworkParams{
 		timeout: cr.DefaultTimeout,
+		Body: UpdateVirtualNetworkBody{
+			Data: &UpdateVirtualNetworkParamsBodyData{
+				Type: &updatevirtualNetworkType,
+			},
+		},
 	}
 }
 
@@ -61,11 +66,6 @@ UpdateVirtualNetworkParams contains all the parameters to send to the API endpoi
 */
 type UpdateVirtualNetworkParams struct {
 
-	// APIVersion.
-	//
-	// Default: "2023-06-01"
-	APIVersion *string
-
 	// Body.
 	Body UpdateVirtualNetworkBody
 
@@ -92,13 +92,7 @@ func (o *UpdateVirtualNetworkParams) WithDefaults() *UpdateVirtualNetworkParams 
 //
 // All values with no default are reset to their zero value.
 func (o *UpdateVirtualNetworkParams) SetDefaults() {
-	var (
-		aPIVersionDefault = string("2023-06-01")
-	)
-
-	val := UpdateVirtualNetworkParams{
-		APIVersion: &aPIVersionDefault,
-	}
+	val := UpdateVirtualNetworkParams{}
 
 	val.timeout = o.timeout
 	val.Context = o.Context
@@ -139,17 +133,6 @@ func (o *UpdateVirtualNetworkParams) SetHTTPClient(client *http.Client) {
 	o.HTTPClient = client
 }
 
-// WithAPIVersion adds the aPIVersion to the update virtual network params
-func (o *UpdateVirtualNetworkParams) WithAPIVersion(aPIVersion *string) *UpdateVirtualNetworkParams {
-	o.SetAPIVersion(aPIVersion)
-	return o
-}
-
-// SetAPIVersion adds the apiVersion to the update virtual network params
-func (o *UpdateVirtualNetworkParams) SetAPIVersion(aPIVersion *string) {
-	o.APIVersion = aPIVersion
-}
-
 // WithBody adds the body to the update virtual network params
 func (o *UpdateVirtualNetworkParams) WithBody(body UpdateVirtualNetworkBody) *UpdateVirtualNetworkParams {
 	o.SetBody(body)
@@ -180,13 +163,6 @@ func (o *UpdateVirtualNetworkParams) WriteToRequest(r runtime.ClientRequest, reg
 	}
 	var res []error
 
-	if o.APIVersion != nil {
-
-		// header param API-Version
-		if err := r.SetHeaderParam("API-Version", *o.APIVersion); err != nil {
-			return err
-		}
-	}
 	if err := r.SetBodyParam(o.Body); err != nil {
 		return err
 	}

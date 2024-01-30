@@ -40,9 +40,6 @@ func runOperationSSHKeysPostProjectSSHKey(cmd *cobra.Command, args []string) err
 	}
 	// retrieve flag values from cmd and fill params
 	params := ssh_keys.NewPostProjectSSHKeyParams()
-	if err, _ := retrieveOperationSSHKeysPostProjectSSHKeyAPIVersionFlag(params, "", cmd); err != nil {
-		return err
-	}
 	if err, _ := retrieveOperationSSHKeysPostProjectSSHKeyBodyFlag(params, "", cmd); err != nil {
 		return err
 	}
@@ -74,9 +71,6 @@ func runOperationSSHKeysPostProjectSSHKey(cmd *cobra.Command, args []string) err
 
 // registerOperationSSHKeysPostProjectSSHKeyParamFlags registers all flags needed to fill params
 func registerOperationSSHKeysPostProjectSSHKeyParamFlags(cmd *cobra.Command) error {
-	if err := registerOperationSSHKeysPostProjectSSHKeyAPIVersionParamFlags("", cmd); err != nil {
-		return err
-	}
 	if err := registerOperationSSHKeysPostProjectSSHKeyBodyParamFlags("", cmd); err != nil {
 		return err
 	}
@@ -86,23 +80,6 @@ func registerOperationSSHKeysPostProjectSSHKeyParamFlags(cmd *cobra.Command) err
 	return nil
 }
 
-func registerOperationSSHKeysPostProjectSSHKeyAPIVersionParamFlags(cmdPrefix string, cmd *cobra.Command) error {
-
-	apiVersionDescription := ``
-
-	var apiVersionFlagName string
-	if cmdPrefix == "" {
-		apiVersionFlagName = "API-Version"
-	} else {
-		apiVersionFlagName = fmt.Sprintf("%v.API-Version", cmdPrefix)
-	}
-
-	var apiVersionFlagDefault string = "2023-06-01"
-
-	_ = cmd.PersistentFlags().String(apiVersionFlagName, apiVersionFlagDefault, apiVersionDescription)
-
-	return nil
-}
 func registerOperationSSHKeysPostProjectSSHKeyBodyParamFlags(cmdPrefix string, cmd *cobra.Command) error {
 
 	var bodyFlagName string
@@ -123,13 +100,13 @@ func registerOperationSSHKeysPostProjectSSHKeyBodyParamFlags(cmdPrefix string, c
 }
 func registerOperationSSHKeysPostProjectSSHKeyProjectIDOrSlugParamFlags(cmdPrefix string, cmd *cobra.Command) error {
 
-	projectIdOrSlugDescription := `Required. `
+	projectIdOrSlugDescription := `Project Id or Slug (Required).`
 
 	var projectIdOrSlugFlagName string
 	if cmdPrefix == "" {
-		projectIdOrSlugFlagName = "project_id_or_slug"
+		projectIdOrSlugFlagName = "project"
 	} else {
-		projectIdOrSlugFlagName = fmt.Sprintf("%v.project_id_or_slug", cmdPrefix)
+		projectIdOrSlugFlagName = fmt.Sprintf("%v.project", cmdPrefix)
 	}
 
 	var projectIdOrSlugFlagDefault string
@@ -140,26 +117,6 @@ func registerOperationSSHKeysPostProjectSSHKeyProjectIDOrSlugParamFlags(cmdPrefi
 	return nil
 }
 
-func retrieveOperationSSHKeysPostProjectSSHKeyAPIVersionFlag(m *ssh_keys.PostProjectSSHKeyParams, cmdPrefix string, cmd *cobra.Command) (error, bool) {
-	retAdded := false
-	if cmd.Flags().Changed("API-Version") {
-
-		var apiVersionFlagName string
-		if cmdPrefix == "" {
-			apiVersionFlagName = "API-Version"
-		} else {
-			apiVersionFlagName = fmt.Sprintf("%v.API-Version", cmdPrefix)
-		}
-
-		apiVersionFlagValue, err := cmd.Flags().GetString(apiVersionFlagName)
-		if err != nil {
-			return err, false
-		}
-		m.APIVersion = &apiVersionFlagValue
-
-	}
-	return nil, retAdded
-}
 func retrieveOperationSSHKeysPostProjectSSHKeyBodyFlag(m *ssh_keys.PostProjectSSHKeyParams, cmdPrefix string, cmd *cobra.Command) (error, bool) {
 	retAdded := false
 	if cmd.Flags().Changed("body") {
@@ -200,13 +157,13 @@ func retrieveOperationSSHKeysPostProjectSSHKeyBodyFlag(m *ssh_keys.PostProjectSS
 }
 func retrieveOperationSSHKeysPostProjectSSHKeyProjectIDOrSlugFlag(m *ssh_keys.PostProjectSSHKeyParams, cmdPrefix string, cmd *cobra.Command) (error, bool) {
 	retAdded := false
-	if cmd.Flags().Changed("project_id_or_slug") {
+	if cmd.Flags().Changed("project") {
 
 		var projectIdOrSlugFlagName string
 		if cmdPrefix == "" {
-			projectIdOrSlugFlagName = "project_id_or_slug"
+			projectIdOrSlugFlagName = "project"
 		} else {
-			projectIdOrSlugFlagName = fmt.Sprintf("%v.project_id_or_slug", cmdPrefix)
+			projectIdOrSlugFlagName = fmt.Sprintf("%v.project", cmdPrefix)
 		}
 
 		projectIdOrSlugFlagValue, err := cmd.Flags().GetString(projectIdOrSlugFlagName)
@@ -369,10 +326,6 @@ func registerModelPostProjectSSHKeyParamsBodyDataFlags(depth int, cmdPrefix stri
 		return err
 	}
 
-	if err := registerPostProjectSSHKeyParamsBodyDataType(depth, cmdPrefix, cmd); err != nil {
-		return err
-	}
-
 	return nil
 }
 
@@ -390,33 +343,6 @@ func registerPostProjectSSHKeyParamsBodyDataAttributes(depth int, cmdPrefix stri
 	return nil
 }
 
-func registerPostProjectSSHKeyParamsBodyDataType(depth int, cmdPrefix string, cmd *cobra.Command) error {
-	if depth > maxDepth {
-		return nil
-	}
-
-	typeDescription := `Enum: ["ssh_keys"]. Required. `
-
-	var typeFlagName = "type"
-
-	var typeFlagDefault string
-
-	_ = cmd.PersistentFlags().String(typeFlagName, typeFlagDefault, typeDescription)
-
-	if err := cmd.RegisterFlagCompletionFunc(typeFlagName,
-		func(cmd *cobra.Command, args []string, toComplete string) ([]string, cobra.ShellCompDirective) {
-			var res []string
-			if err := json.Unmarshal([]byte(`["ssh_keys"]`), &res); err != nil {
-				panic(err)
-			}
-			return res, cobra.ShellCompDirectiveDefault
-		}); err != nil {
-		return err
-	}
-
-	return nil
-}
-
 // retrieve flags from commands, and set value in model. Return true if any flag is passed by user to fill model field.
 func retrieveModelPostProjectSSHKeyParamsBodyDataFlags(depth int, m *ssh_keys.PostProjectSSHKeyParamsBodyData, cmdPrefix string, cmd *cobra.Command) (error, bool) {
 	retAdded := false
@@ -426,12 +352,6 @@ func retrieveModelPostProjectSSHKeyParamsBodyDataFlags(depth int, m *ssh_keys.Po
 		return err, false
 	}
 	retAdded = retAdded || attributesAdded
-
-	err, typeAdded := retrievePostProjectSSHKeyParamsBodyDataTypeFlags(depth, m, cmdPrefix, cmd)
-	if err != nil {
-		return err, false
-	}
-	retAdded = retAdded || typeAdded
 
 	return nil, retAdded
 }
@@ -459,27 +379,6 @@ func retrievePostProjectSSHKeyParamsBodyDataAttributesFlags(depth int, m *ssh_ke
 	retAdded = retAdded || attributesAdded
 	if attributesAdded {
 		m.Attributes = attributesFlagValue
-	}
-
-	return nil, retAdded
-}
-
-func retrievePostProjectSSHKeyParamsBodyDataTypeFlags(depth int, m *ssh_keys.PostProjectSSHKeyParamsBodyData, cmdPrefix string, cmd *cobra.Command) (error, bool) {
-	if depth > maxDepth {
-		return nil, false
-	}
-	retAdded := false
-
-	var typeFlagName = "type"
-	if cmd.Flags().Changed(typeFlagName) {
-
-		typeFlagValue, err := cmd.Flags().GetString(typeFlagName)
-		if err != nil {
-			return err, false
-		}
-		m.Type = &typeFlagValue
-
-		retAdded = true
 	}
 
 	return nil, retAdded

@@ -61,11 +61,6 @@ DestroyServerParams contains all the parameters to send to the API endpoint
 */
 type DestroyServerParams struct {
 
-	// APIVersion.
-	//
-	// Default: "2023-06-01"
-	APIVersion *string
-
 	/* ServerID.
 
 	   The server ID
@@ -89,13 +84,7 @@ func (o *DestroyServerParams) WithDefaults() *DestroyServerParams {
 //
 // All values with no default are reset to their zero value.
 func (o *DestroyServerParams) SetDefaults() {
-	var (
-		aPIVersionDefault = string("2023-06-01")
-	)
-
-	val := DestroyServerParams{
-		APIVersion: &aPIVersionDefault,
-	}
+	val := DestroyServerParams{}
 
 	val.timeout = o.timeout
 	val.Context = o.Context
@@ -136,17 +125,6 @@ func (o *DestroyServerParams) SetHTTPClient(client *http.Client) {
 	o.HTTPClient = client
 }
 
-// WithAPIVersion adds the aPIVersion to the destroy server params
-func (o *DestroyServerParams) WithAPIVersion(aPIVersion *string) *DestroyServerParams {
-	o.SetAPIVersion(aPIVersion)
-	return o
-}
-
-// SetAPIVersion adds the apiVersion to the destroy server params
-func (o *DestroyServerParams) SetAPIVersion(aPIVersion *string) {
-	o.APIVersion = aPIVersion
-}
-
 // WithServerID adds the serverID to the destroy server params
 func (o *DestroyServerParams) WithServerID(serverID string) *DestroyServerParams {
 	o.SetServerID(serverID)
@@ -165,14 +143,6 @@ func (o *DestroyServerParams) WriteToRequest(r runtime.ClientRequest, reg strfmt
 		return err
 	}
 	var res []error
-
-	if o.APIVersion != nil {
-
-		// header param API-Version
-		if err := r.SetHeaderParam("API-Version", *o.APIVersion); err != nil {
-			return err
-		}
-	}
 
 	// path param server_id
 	if err := r.SetPathParam("server_id", o.ServerID); err != nil {

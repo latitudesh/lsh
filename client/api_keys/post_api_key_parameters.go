@@ -27,6 +27,11 @@ import (
 func NewPostAPIKeyParams() *PostAPIKeyParams {
 	return &PostAPIKeyParams{
 		timeout: cr.DefaultTimeout,
+		Body: &models.CreateAPIKey{
+			Data: &models.CreateAPIKeyData{
+				Type: &apiKeysType,
+			},
+		},
 	}
 }
 
@@ -63,11 +68,6 @@ PostAPIKeyParams contains all the parameters to send to the API endpoint
 */
 type PostAPIKeyParams struct {
 
-	// APIVersion.
-	//
-	// Default: "2023-06-01"
-	APIVersion *string
-
 	// Body.
 	Body *models.CreateAPIKey
 
@@ -88,13 +88,7 @@ func (o *PostAPIKeyParams) WithDefaults() *PostAPIKeyParams {
 //
 // All values with no default are reset to their zero value.
 func (o *PostAPIKeyParams) SetDefaults() {
-	var (
-		aPIVersionDefault = string("2023-06-01")
-	)
-
-	val := PostAPIKeyParams{
-		APIVersion: &aPIVersionDefault,
-	}
+	val := PostAPIKeyParams{}
 
 	val.timeout = o.timeout
 	val.Context = o.Context
@@ -135,17 +129,6 @@ func (o *PostAPIKeyParams) SetHTTPClient(client *http.Client) {
 	o.HTTPClient = client
 }
 
-// WithAPIVersion adds the aPIVersion to the post api key params
-func (o *PostAPIKeyParams) WithAPIVersion(aPIVersion *string) *PostAPIKeyParams {
-	o.SetAPIVersion(aPIVersion)
-	return o
-}
-
-// SetAPIVersion adds the apiVersion to the post api key params
-func (o *PostAPIKeyParams) SetAPIVersion(aPIVersion *string) {
-	o.APIVersion = aPIVersion
-}
-
 // WithBody adds the body to the post api key params
 func (o *PostAPIKeyParams) WithBody(body *models.CreateAPIKey) *PostAPIKeyParams {
 	o.SetBody(body)
@@ -165,13 +148,6 @@ func (o *PostAPIKeyParams) WriteToRequest(r runtime.ClientRequest, reg strfmt.Re
 	}
 	var res []error
 
-	if o.APIVersion != nil {
-
-		// header param API-Version
-		if err := r.SetHeaderParam("API-Version", *o.APIVersion); err != nil {
-			return err
-		}
-	}
 	if o.Body != nil {
 		if err := r.SetBodyParam(o.Body); err != nil {
 			return err

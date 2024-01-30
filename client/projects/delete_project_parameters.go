@@ -61,11 +61,6 @@ DeleteProjectParams contains all the parameters to send to the API endpoint
 */
 type DeleteProjectParams struct {
 
-	// APIVersion.
-	//
-	// Default: "2023-06-01"
-	APIVersion *string
-
 	/* IDOrSlug.
 
 	   The project ID or Slug
@@ -89,13 +84,7 @@ func (o *DeleteProjectParams) WithDefaults() *DeleteProjectParams {
 //
 // All values with no default are reset to their zero value.
 func (o *DeleteProjectParams) SetDefaults() {
-	var (
-		aPIVersionDefault = string("2023-06-01")
-	)
-
-	val := DeleteProjectParams{
-		APIVersion: &aPIVersionDefault,
-	}
+	val := DeleteProjectParams{}
 
 	val.timeout = o.timeout
 	val.Context = o.Context
@@ -136,17 +125,6 @@ func (o *DeleteProjectParams) SetHTTPClient(client *http.Client) {
 	o.HTTPClient = client
 }
 
-// WithAPIVersion adds the aPIVersion to the delete project params
-func (o *DeleteProjectParams) WithAPIVersion(aPIVersion *string) *DeleteProjectParams {
-	o.SetAPIVersion(aPIVersion)
-	return o
-}
-
-// SetAPIVersion adds the apiVersion to the delete project params
-func (o *DeleteProjectParams) SetAPIVersion(aPIVersion *string) {
-	o.APIVersion = aPIVersion
-}
-
 // WithIDOrSlug adds the iDOrSlug to the delete project params
 func (o *DeleteProjectParams) WithIDOrSlug(iDOrSlug string) *DeleteProjectParams {
 	o.SetIDOrSlug(iDOrSlug)
@@ -165,14 +143,6 @@ func (o *DeleteProjectParams) WriteToRequest(r runtime.ClientRequest, reg strfmt
 		return err
 	}
 	var res []error
-
-	if o.APIVersion != nil {
-
-		// header param API-Version
-		if err := r.SetHeaderParam("API-Version", *o.APIVersion); err != nil {
-			return err
-		}
-	}
 
 	// path param id_or_slug
 	if err := r.SetPathParam("id_or_slug", o.IDOrSlug); err != nil {

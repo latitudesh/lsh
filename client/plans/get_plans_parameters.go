@@ -62,11 +62,6 @@ GetPlansParams contains all the parameters to send to the API endpoint
 */
 type GetPlansParams struct {
 
-	// APIVersion.
-	//
-	// Default: "2023-06-01"
-	APIVersion *string
-
 	/* FilterDisk.
 
 	   The disk size in Gigabytes to filter by, should be used with the following options:
@@ -142,13 +137,7 @@ func (o *GetPlansParams) WithDefaults() *GetPlansParams {
 //
 // All values with no default are reset to their zero value.
 func (o *GetPlansParams) SetDefaults() {
-	var (
-		aPIVersionDefault = string("2023-06-01")
-	)
-
-	val := GetPlansParams{
-		APIVersion: &aPIVersionDefault,
-	}
+	val := GetPlansParams{}
 
 	val.timeout = o.timeout
 	val.Context = o.Context
@@ -187,17 +176,6 @@ func (o *GetPlansParams) WithHTTPClient(client *http.Client) *GetPlansParams {
 // SetHTTPClient adds the HTTPClient to the get plans params
 func (o *GetPlansParams) SetHTTPClient(client *http.Client) {
 	o.HTTPClient = client
-}
-
-// WithAPIVersion adds the aPIVersion to the get plans params
-func (o *GetPlansParams) WithAPIVersion(aPIVersion *string) *GetPlansParams {
-	o.SetAPIVersion(aPIVersion)
-	return o
-}
-
-// SetAPIVersion adds the apiVersion to the get plans params
-func (o *GetPlansParams) SetAPIVersion(aPIVersion *string) {
-	o.APIVersion = aPIVersion
 }
 
 // WithFilterDiskEql adds the filterDiskEql to the get plans params
@@ -317,14 +295,6 @@ func (o *GetPlansParams) WriteToRequest(r runtime.ClientRequest, reg strfmt.Regi
 		return err
 	}
 	var res []error
-
-	if o.APIVersion != nil {
-
-		// header param API-Version
-		if err := r.SetHeaderParam("API-Version", *o.APIVersion); err != nil {
-			return err
-		}
-	}
 
 	if o.FilterDiskEql != nil {
 

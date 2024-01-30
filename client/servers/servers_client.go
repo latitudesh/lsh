@@ -12,6 +12,8 @@ import (
 	"github.com/go-openapi/strfmt"
 )
 
+var serverType = "servers"
+
 // New creates a new servers API client.
 func New(transport runtime.ClientTransport, formats strfmt.Registry) ClientService {
 	return &Client{transport: transport, formats: formats}

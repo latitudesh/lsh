@@ -12,6 +12,8 @@ import (
 	"github.com/go-openapi/strfmt"
 )
 
+var apiKeysType = "api_keys"
+
 // New creates a new api keys API client.
 func New(transport runtime.ClientTransport, formats strfmt.Registry) ClientService {
 	return &Client{transport: transport, formats: formats}

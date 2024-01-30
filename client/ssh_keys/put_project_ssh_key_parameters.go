@@ -25,6 +25,11 @@ import (
 func NewPutProjectSSHKeyParams() *PutProjectSSHKeyParams {
 	return &PutProjectSSHKeyParams{
 		timeout: cr.DefaultTimeout,
+		Body: PutProjectSSHKeyBody{
+			Data: &PutProjectSSHKeyParamsBodyData{
+				Type: &sshKeysType,
+			},
+		},
 	}
 }
 
@@ -61,11 +66,6 @@ PutProjectSSHKeyParams contains all the parameters to send to the API endpoint
 */
 type PutProjectSSHKeyParams struct {
 
-	// APIVersion.
-	//
-	// Default: "2023-06-01"
-	APIVersion *string
-
 	// Body.
 	Body PutProjectSSHKeyBody
 
@@ -92,13 +92,7 @@ func (o *PutProjectSSHKeyParams) WithDefaults() *PutProjectSSHKeyParams {
 //
 // All values with no default are reset to their zero value.
 func (o *PutProjectSSHKeyParams) SetDefaults() {
-	var (
-		aPIVersionDefault = string("2023-06-01")
-	)
-
-	val := PutProjectSSHKeyParams{
-		APIVersion: &aPIVersionDefault,
-	}
+	val := PutProjectSSHKeyParams{}
 
 	val.timeout = o.timeout
 	val.Context = o.Context
@@ -137,17 +131,6 @@ func (o *PutProjectSSHKeyParams) WithHTTPClient(client *http.Client) *PutProject
 // SetHTTPClient adds the HTTPClient to the put project ssh key params
 func (o *PutProjectSSHKeyParams) SetHTTPClient(client *http.Client) {
 	o.HTTPClient = client
-}
-
-// WithAPIVersion adds the aPIVersion to the put project ssh key params
-func (o *PutProjectSSHKeyParams) WithAPIVersion(aPIVersion *string) *PutProjectSSHKeyParams {
-	o.SetAPIVersion(aPIVersion)
-	return o
-}
-
-// SetAPIVersion adds the apiVersion to the put project ssh key params
-func (o *PutProjectSSHKeyParams) SetAPIVersion(aPIVersion *string) {
-	o.APIVersion = aPIVersion
 }
 
 // WithBody adds the body to the put project ssh key params
@@ -191,13 +174,6 @@ func (o *PutProjectSSHKeyParams) WriteToRequest(r runtime.ClientRequest, reg str
 	}
 	var res []error
 
-	if o.APIVersion != nil {
-
-		// header param API-Version
-		if err := r.SetHeaderParam("API-Version", *o.APIVersion); err != nil {
-			return err
-		}
-	}
 	if err := r.SetBodyParam(o.Body); err != nil {
 		return err
 	}

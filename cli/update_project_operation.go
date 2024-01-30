@@ -40,9 +40,6 @@ func runOperationProjectsUpdateProject(cmd *cobra.Command, args []string) error 
 	}
 	// retrieve flag values from cmd and fill params
 	params := projects.NewUpdateProjectParams()
-	if err, _ := retrieveOperationProjectsUpdateProjectAPIVersionFlag(params, "", cmd); err != nil {
-		return err
-	}
 	if err, _ := retrieveOperationProjectsUpdateProjectBodyFlag(params, "", cmd); err != nil {
 		return err
 	}
@@ -74,9 +71,6 @@ func runOperationProjectsUpdateProject(cmd *cobra.Command, args []string) error 
 
 // registerOperationProjectsUpdateProjectParamFlags registers all flags needed to fill params
 func registerOperationProjectsUpdateProjectParamFlags(cmd *cobra.Command) error {
-	if err := registerOperationProjectsUpdateProjectAPIVersionParamFlags("", cmd); err != nil {
-		return err
-	}
 	if err := registerOperationProjectsUpdateProjectBodyParamFlags("", cmd); err != nil {
 		return err
 	}
@@ -86,23 +80,6 @@ func registerOperationProjectsUpdateProjectParamFlags(cmd *cobra.Command) error 
 	return nil
 }
 
-func registerOperationProjectsUpdateProjectAPIVersionParamFlags(cmdPrefix string, cmd *cobra.Command) error {
-
-	apiVersionDescription := ``
-
-	var apiVersionFlagName string
-	if cmdPrefix == "" {
-		apiVersionFlagName = "API-Version"
-	} else {
-		apiVersionFlagName = fmt.Sprintf("%v.API-Version", cmdPrefix)
-	}
-
-	var apiVersionFlagDefault string = "2023-06-01"
-
-	_ = cmd.PersistentFlags().String(apiVersionFlagName, apiVersionFlagDefault, apiVersionDescription)
-
-	return nil
-}
 func registerOperationProjectsUpdateProjectBodyParamFlags(cmdPrefix string, cmd *cobra.Command) error {
 
 	var bodyFlagName string
@@ -140,26 +117,6 @@ func registerOperationProjectsUpdateProjectIDOrSlugParamFlags(cmdPrefix string, 
 	return nil
 }
 
-func retrieveOperationProjectsUpdateProjectAPIVersionFlag(m *projects.UpdateProjectParams, cmdPrefix string, cmd *cobra.Command) (error, bool) {
-	retAdded := false
-	if cmd.Flags().Changed("API-Version") {
-
-		var apiVersionFlagName string
-		if cmdPrefix == "" {
-			apiVersionFlagName = "API-Version"
-		} else {
-			apiVersionFlagName = fmt.Sprintf("%v.API-Version", cmdPrefix)
-		}
-
-		apiVersionFlagValue, err := cmd.Flags().GetString(apiVersionFlagName)
-		if err != nil {
-			return err, false
-		}
-		m.APIVersion = &apiVersionFlagValue
-
-	}
-	return nil, retAdded
-}
 func retrieveOperationProjectsUpdateProjectBodyFlag(m *projects.UpdateProjectParams, cmdPrefix string, cmd *cobra.Command) (error, bool) {
 	retAdded := false
 	if cmd.Flags().Changed("body") {
@@ -214,6 +171,7 @@ func retrieveOperationProjectsUpdateProjectIDOrSlugFlag(m *projects.UpdateProjec
 			return err, false
 		}
 		m.IDOrSlug = idOrSlugFlagValue
+		m.Body.Data.ID = &m.IDOrSlug
 
 	}
 	return nil, retAdded
@@ -373,14 +331,6 @@ func registerModelUpdateProjectParamsBodyDataFlags(depth int, cmdPrefix string, 
 		return err
 	}
 
-	if err := registerUpdateProjectParamsBodyDataID(depth, cmdPrefix, cmd); err != nil {
-		return err
-	}
-
-	if err := registerUpdateProjectParamsBodyDataType(depth, cmdPrefix, cmd); err != nil {
-		return err
-	}
-
 	return nil
 }
 
@@ -398,61 +348,6 @@ func registerUpdateProjectParamsBodyDataAttributes(depth int, cmdPrefix string, 
 	return nil
 }
 
-func registerUpdateProjectParamsBodyDataID(depth int, cmdPrefix string, cmd *cobra.Command) error {
-	if depth > maxDepth {
-		return nil
-	}
-
-	idDescription := `Required. `
-
-	var idFlagName string
-	if cmdPrefix == "" {
-		idFlagName = "id"
-	} else {
-		idFlagName = fmt.Sprintf("%v.id", cmdPrefix)
-	}
-
-	var idFlagDefault string
-
-	_ = cmd.PersistentFlags().String(idFlagName, idFlagDefault, idDescription)
-	cmd.MarkPersistentFlagRequired(idFlagName)
-
-	return nil
-}
-
-func registerUpdateProjectParamsBodyDataType(depth int, cmdPrefix string, cmd *cobra.Command) error {
-	if depth > maxDepth {
-		return nil
-	}
-
-	typeDescription := `Enum: ["projects"]. Required. `
-
-	var typeFlagName string
-	if cmdPrefix == "" {
-		typeFlagName = "type"
-	} else {
-		typeFlagName = fmt.Sprintf("%v.type", cmdPrefix)
-	}
-
-	var typeFlagDefault string
-
-	_ = cmd.PersistentFlags().String(typeFlagName, typeFlagDefault, typeDescription)
-	cmd.MarkPersistentFlagRequired(typeFlagName)
-
-	if err := cmd.RegisterFlagCompletionFunc(typeFlagName,
-		func(cmd *cobra.Command, args []string, toComplete string) ([]string, cobra.ShellCompDirective) {
-			var res []string
-			if err := json.Unmarshal([]byte(`["projects"]`), &res); err != nil {
-				panic(err)
-			}
-			return res, cobra.ShellCompDirectiveDefault
-		}); err != nil {
-		return err
-	}
-
-	return nil
-}
-
 // retrieve flags from commands, and set value in model. Return true if any flag is passed by user to fill model field.
 func retrieveModelUpdateProjectParamsBodyDataFlags(depth int, m *projects.UpdateProjectParamsBodyData, cmdPrefix string, cmd *cobra.Command) (error, bool) {
 	retAdded := false
@@ -462,18 +357,6 @@ func retrieveModelUpdateProjectParamsBodyDataFlags(depth int, m *projects.Update
 		return err, false
 	}
 	retAdded = retAdded || attributesAdded
-
-	err, idAdded := retrieveUpdateProjectParamsBodyDataIDFlags(depth, m, cmdPrefix, cmd)
-	if err != nil {
-		return err, false
-	}
-	retAdded = retAdded || idAdded
-
-	err, typeAdded := retrieveUpdateProjectParamsBodyDataTypeFlags(depth, m, cmdPrefix, cmd)
-	if err != nil {
-		return err, false
-	}
-	retAdded = retAdded || typeAdded
 
 	return nil, retAdded
 }
@@ -501,48 +384,6 @@ func retrieveUpdateProjectParamsBodyDataAttributesFlags(depth int, m *projects.U
 	retAdded = retAdded || attributesAdded
 	if attributesAdded {
 		m.Attributes = attributesFlagValue
-	}
-
-	return nil, retAdded
-}
-
-func retrieveUpdateProjectParamsBodyDataIDFlags(depth int, m *projects.UpdateProjectParamsBodyData, cmdPrefix string, cmd *cobra.Command) (error, bool) {
-	if depth > maxDepth {
-		return nil, false
-	}
-	retAdded := false
-
-	var idFlagName = "id"
-	if cmd.Flags().Changed(idFlagName) {
-
-		idFlagValue, err := cmd.Flags().GetString(idFlagName)
-		if err != nil {
-			return err, false
-		}
-		m.ID = &idFlagValue
-
-		retAdded = true
-	}
-
-	return nil, retAdded
-}
-
-func retrieveUpdateProjectParamsBodyDataTypeFlags(depth int, m *projects.UpdateProjectParamsBodyData, cmdPrefix string, cmd *cobra.Command) (error, bool) {
-	if depth > maxDepth {
-		return nil, false
-	}
-	retAdded := false
-
-	var typeFlagName = "type"
-	if cmd.Flags().Changed(typeFlagName) {
-
-		typeFlagValue, err := cmd.Flags().GetString(typeFlagName)
-		if err != nil {
-			return err, false
-		}
-		m.Type = &typeFlagValue
-
-		retAdded = true
 	}
 
 	return nil, retAdded

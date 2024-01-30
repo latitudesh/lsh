@@ -39,9 +39,6 @@ func runOperationPlansGetBandwidthPlans(cmd *cobra.Command, args []string) error
 	}
 	// retrieve flag values from cmd and fill params
 	params := plans.NewGetBandwidthPlansParams()
-	if err, _ := retrieveOperationPlansGetBandwidthPlansAPIVersionFlag(params, "", cmd); err != nil {
-		return err
-	}
 	if err, _ := retrieveOperationPlansGetBandwidthPlansFilterIDFlag(params, "", cmd); err != nil {
 		return err
 	}
@@ -70,32 +67,12 @@ func runOperationPlansGetBandwidthPlans(cmd *cobra.Command, args []string) error
 
 // registerOperationPlansGetBandwidthPlansParamFlags registers all flags needed to fill params
 func registerOperationPlansGetBandwidthPlansParamFlags(cmd *cobra.Command) error {
-	if err := registerOperationPlansGetBandwidthPlansAPIVersionParamFlags("", cmd); err != nil {
-		return err
-	}
 	if err := registerOperationPlansGetBandwidthPlansFilterIDParamFlags("", cmd); err != nil {
 		return err
 	}
 	return nil
 }
 
-func registerOperationPlansGetBandwidthPlansAPIVersionParamFlags(cmdPrefix string, cmd *cobra.Command) error {
-
-	apiVersionDescription := ``
-
-	var apiVersionFlagName string
-	if cmdPrefix == "" {
-		apiVersionFlagName = "API-Version"
-	} else {
-		apiVersionFlagName = fmt.Sprintf("%v.API-Version", cmdPrefix)
-	}
-
-	var apiVersionFlagDefault string = "2023-06-01"
-
-	_ = cmd.PersistentFlags().String(apiVersionFlagName, apiVersionFlagDefault, apiVersionDescription)
-
-	return nil
-}
 func registerOperationPlansGetBandwidthPlansFilterIDParamFlags(cmdPrefix string, cmd *cobra.Command) error {
 
 	filterIdDescription := `The plan ID to filter by`
@@ -114,26 +91,6 @@ func registerOperationPlansGetBandwidthPlansFilterIDParamFlags(cmdPrefix string,
 	return nil
 }
 
-func retrieveOperationPlansGetBandwidthPlansAPIVersionFlag(m *plans.GetBandwidthPlansParams, cmdPrefix string, cmd *cobra.Command) (error, bool) {
-	retAdded := false
-	if cmd.Flags().Changed("API-Version") {
-
-		var apiVersionFlagName string
-		if cmdPrefix == "" {
-			apiVersionFlagName = "API-Version"
-		} else {
-			apiVersionFlagName = fmt.Sprintf("%v.API-Version", cmdPrefix)
-		}
-
-		apiVersionFlagValue, err := cmd.Flags().GetString(apiVersionFlagName)
-		if err != nil {
-			return err, false
-		}
-		m.APIVersion = &apiVersionFlagValue
-
-	}
-	return nil, retAdded
-}
 func retrieveOperationPlansGetBandwidthPlansFilterIDFlag(m *plans.GetBandwidthPlansParams, cmdPrefix string, cmd *cobra.Command) (error, bool) {
 	retAdded := false
 	if cmd.Flags().Changed("id") {

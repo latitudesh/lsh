@@ -61,11 +61,6 @@ DeleteAPIKeyParams contains all the parameters to send to the API endpoint
 */
 type DeleteAPIKeyParams struct {
 
-	// APIVersion.
-	//
-	// Default: "2023-06-01"
-	APIVersion *string
-
 	// ID.
 	ID string
 
@@ -86,13 +81,7 @@ func (o *DeleteAPIKeyParams) WithDefaults() *DeleteAPIKeyParams {
 //
 // All values with no default are reset to their zero value.
 func (o *DeleteAPIKeyParams) SetDefaults() {
-	var (
-		aPIVersionDefault = string("2023-06-01")
-	)
-
-	val := DeleteAPIKeyParams{
-		APIVersion: &aPIVersionDefault,
-	}
+	val := DeleteAPIKeyParams{}
 
 	val.timeout = o.timeout
 	val.Context = o.Context
@@ -133,17 +122,6 @@ func (o *DeleteAPIKeyParams) SetHTTPClient(client *http.Client) {
 	o.HTTPClient = client
 }
 
-// WithAPIVersion adds the aPIVersion to the delete api key params
-func (o *DeleteAPIKeyParams) WithAPIVersion(aPIVersion *string) *DeleteAPIKeyParams {
-	o.SetAPIVersion(aPIVersion)
-	return o
-}
-
-// SetAPIVersion adds the apiVersion to the delete api key params
-func (o *DeleteAPIKeyParams) SetAPIVersion(aPIVersion *string) {
-	o.APIVersion = aPIVersion
-}
-
 // WithID adds the id to the delete api key params
 func (o *DeleteAPIKeyParams) WithID(id string) *DeleteAPIKeyParams {
 	o.SetID(id)
@@ -162,14 +140,6 @@ func (o *DeleteAPIKeyParams) WriteToRequest(r runtime.ClientRequest, reg strfmt.
 		return err
 	}
 	var res []error
-
-	if o.APIVersion != nil {
-
-		// header param API-Version
-		if err := r.SetHeaderParam("API-Version", *o.APIVersion); err != nil {
-			return err
-		}
-	}
 
 	// path param id
 	if err := r.SetPathParam("id", o.ID); err != nil {

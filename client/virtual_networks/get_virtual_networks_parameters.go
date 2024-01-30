@@ -60,12 +60,6 @@ GetVirtualNetworksParams contains all the parameters to send to the API endpoint
 	Typically these are written to a http.Request.
 */
 type GetVirtualNetworksParams struct {
-
-	// APIVersion.
-	//
-	// Default: "2023-06-01"
-	APIVersion *string
-
 	/* FilterLocation.
 
 	   The location slug to filter by
@@ -95,13 +89,7 @@ func (o *GetVirtualNetworksParams) WithDefaults() *GetVirtualNetworksParams {
 //
 // All values with no default are reset to their zero value.
 func (o *GetVirtualNetworksParams) SetDefaults() {
-	var (
-		aPIVersionDefault = string("2023-06-01")
-	)
-
-	val := GetVirtualNetworksParams{
-		APIVersion: &aPIVersionDefault,
-	}
+	val := GetVirtualNetworksParams{}
 
 	val.timeout = o.timeout
 	val.Context = o.Context
@@ -142,17 +130,6 @@ func (o *GetVirtualNetworksParams) SetHTTPClient(client *http.Client) {
 	o.HTTPClient = client
 }
 
-// WithAPIVersion adds the aPIVersion to the get virtual networks params
-func (o *GetVirtualNetworksParams) WithAPIVersion(aPIVersion *string) *GetVirtualNetworksParams {
-	o.SetAPIVersion(aPIVersion)
-	return o
-}
-
-// SetAPIVersion adds the apiVersion to the get virtual networks params
-func (o *GetVirtualNetworksParams) SetAPIVersion(aPIVersion *string) {
-	o.APIVersion = aPIVersion
-}
-
 // WithFilterLocation adds the filterLocation to the get virtual networks params
 func (o *GetVirtualNetworksParams) WithFilterLocation(filterLocation *string) *GetVirtualNetworksParams {
 	o.SetFilterLocation(filterLocation)
@@ -182,14 +159,6 @@ func (o *GetVirtualNetworksParams) WriteToRequest(r runtime.ClientRequest, reg s
 		return err
 	}
 	var res []error
-
-	if o.APIVersion != nil {
-
-		// header param API-Version
-		if err := r.SetHeaderParam("API-Version", *o.APIVersion); err != nil {
-			return err
-		}
-	}
 
 	if o.FilterLocation != nil {
 

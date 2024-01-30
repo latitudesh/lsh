@@ -61,11 +61,6 @@ DeleteProjectSSHKeyParams contains all the parameters to send to the API endpoin
 */
 type DeleteProjectSSHKeyParams struct {
 
-	// APIVersion.
-	//
-	// Default: "2023-06-01"
-	APIVersion *string
-
 	// ProjectIDOrSlug.
 	ProjectIDOrSlug string
 
@@ -89,13 +84,7 @@ func (o *DeleteProjectSSHKeyParams) WithDefaults() *DeleteProjectSSHKeyParams {
 //
 // All values with no default are reset to their zero value.
 func (o *DeleteProjectSSHKeyParams) SetDefaults() {
-	var (
-		aPIVersionDefault = string("2023-06-01")
-	)
-
-	val := DeleteProjectSSHKeyParams{
-		APIVersion: &aPIVersionDefault,
-	}
+	val := DeleteProjectSSHKeyParams{}
 
 	val.timeout = o.timeout
 	val.Context = o.Context
@@ -136,17 +125,6 @@ func (o *DeleteProjectSSHKeyParams) SetHTTPClient(client *http.Client) {
 	o.HTTPClient = client
 }
 
-// WithAPIVersion adds the aPIVersion to the delete project ssh key params
-func (o *DeleteProjectSSHKeyParams) WithAPIVersion(aPIVersion *string) *DeleteProjectSSHKeyParams {
-	o.SetAPIVersion(aPIVersion)
-	return o
-}
-
-// SetAPIVersion adds the apiVersion to the delete project ssh key params
-func (o *DeleteProjectSSHKeyParams) SetAPIVersion(aPIVersion *string) {
-	o.APIVersion = aPIVersion
-}
-
 // WithProjectIDOrSlug adds the projectIDOrSlug to the delete project ssh key params
 func (o *DeleteProjectSSHKeyParams) WithProjectIDOrSlug(projectIDOrSlug string) *DeleteProjectSSHKeyParams {
 	o.SetProjectIDOrSlug(projectIDOrSlug)
@@ -176,14 +154,6 @@ func (o *DeleteProjectSSHKeyParams) WriteToRequest(r runtime.ClientRequest, reg 
 		return err
 	}
 	var res []error
-
-	if o.APIVersion != nil {
-
-		// header param API-Version
-		if err := r.SetHeaderParam("API-Version", *o.APIVersion); err != nil {
-			return err
-		}
-	}
 
 	// path param project_id_or_slug
 	if err := r.SetPathParam("project_id_or_slug", o.ProjectIDOrSlug); err != nil {

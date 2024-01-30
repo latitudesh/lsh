@@ -25,6 +25,11 @@ import (
 func NewPostProjectSSHKeyParams() *PostProjectSSHKeyParams {
 	return &PostProjectSSHKeyParams{
 		timeout: cr.DefaultTimeout,
+		Body: PostProjectSSHKeyBody{
+			Data: &PostProjectSSHKeyParamsBodyData{
+				Type: &sshKeysType,
+			},
+		},
 	}
 }
 
@@ -61,11 +66,6 @@ PostProjectSSHKeyParams contains all the parameters to send to the API endpoint
 */
 type PostProjectSSHKeyParams struct {
 
-	// APIVersion.
-	//
-	// Default: "2023-06-01"
-	APIVersion *string
-
 	// Body.
 	Body PostProjectSSHKeyBody
 
@@ -89,13 +89,7 @@ func (o *PostProjectSSHKeyParams) WithDefaults() *PostProjectSSHKeyParams {
 //
 // All values with no default are reset to their zero value.
 func (o *PostProjectSSHKeyParams) SetDefaults() {
-	var (
-		aPIVersionDefault = string("2023-06-01")
-	)
-
-	val := PostProjectSSHKeyParams{
-		APIVersion: &aPIVersionDefault,
-	}
+	val := PostProjectSSHKeyParams{}
 
 	val.timeout = o.timeout
 	val.Context = o.Context
@@ -136,17 +130,6 @@ func (o *PostProjectSSHKeyParams) SetHTTPClient(client *http.Client) {
 	o.HTTPClient = client
 }
 
-// WithAPIVersion adds the aPIVersion to the post project ssh key params
-func (o *PostProjectSSHKeyParams) WithAPIVersion(aPIVersion *string) *PostProjectSSHKeyParams {
-	o.SetAPIVersion(aPIVersion)
-	return o
-}
-
-// SetAPIVersion adds the apiVersion to the post project ssh key params
-func (o *PostProjectSSHKeyParams) SetAPIVersion(aPIVersion *string) {
-	o.APIVersion = aPIVersion
-}
-
 // WithBody adds the body to the post project ssh key params
 func (o *PostProjectSSHKeyParams) WithBody(body PostProjectSSHKeyBody) *PostProjectSSHKeyParams {
 	o.SetBody(body)
@@ -177,13 +160,6 @@ func (o *PostProjectSSHKeyParams) WriteToRequest(r runtime.ClientRequest, reg st
 	}
 	var res []error
 
-	if o.APIVersion != nil {
-
-		// header param API-Version
-		if err := r.SetHeaderParam("API-Version", *o.APIVersion); err != nil {
-			return err
-		}
-	}
 	if err := r.SetBodyParam(o.Body); err != nil {
 		return err
 	}

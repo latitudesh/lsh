@@ -39,9 +39,6 @@ func runOperationVirtualNetworksUpdateVirtualNetwork(cmd *cobra.Command, args []
 	}
 	// retrieve flag values from cmd and fill params
 	params := virtual_networks.NewUpdateVirtualNetworkParams()
-	if err, _ := retrieveOperationVirtualNetworksUpdateVirtualNetworkAPIVersionFlag(params, "", cmd); err != nil {
-		return err
-	}
 	if err, _ := retrieveOperationVirtualNetworksUpdateVirtualNetworkBodyFlag(params, "", cmd); err != nil {
 		return err
 	}
@@ -73,9 +70,6 @@ func runOperationVirtualNetworksUpdateVirtualNetwork(cmd *cobra.Command, args []
 
 // registerOperationVirtualNetworksUpdateVirtualNetworkParamFlags registers all flags needed to fill params
 func registerOperationVirtualNetworksUpdateVirtualNetworkParamFlags(cmd *cobra.Command) error {
-	if err := registerOperationVirtualNetworksUpdateVirtualNetworkAPIVersionParamFlags("", cmd); err != nil {
-		return err
-	}
 	if err := registerOperationVirtualNetworksUpdateVirtualNetworkBodyParamFlags("", cmd); err != nil {
 		return err
 	}
@@ -85,23 +79,6 @@ func registerOperationVirtualNetworksUpdateVirtualNetworkParamFlags(cmd *cobra.C
 	return nil
 }
 
-func registerOperationVirtualNetworksUpdateVirtualNetworkAPIVersionParamFlags(cmdPrefix string, cmd *cobra.Command) error {
-
-	apiVersionDescription := ``
-
-	var apiVersionFlagName string
-	if cmdPrefix == "" {
-		apiVersionFlagName = "API-Version"
-	} else {
-		apiVersionFlagName = fmt.Sprintf("%v.API-Version", cmdPrefix)
-	}
-
-	var apiVersionFlagDefault string = "2023-06-01"
-
-	_ = cmd.PersistentFlags().String(apiVersionFlagName, apiVersionFlagDefault, apiVersionDescription)
-
-	return nil
-}
 func registerOperationVirtualNetworksUpdateVirtualNetworkBodyParamFlags(cmdPrefix string, cmd *cobra.Command) error {
 
 	var bodyFlagName string
@@ -126,9 +103,9 @@ func registerOperationVirtualNetworksUpdateVirtualNetworkVirtualNetworkIDParamFl
 
 	var virtualNetworkIdFlagName string
 	if cmdPrefix == "" {
-		virtualNetworkIdFlagName = "virtual_network_id"
+		virtualNetworkIdFlagName = "id"
 	} else {
-		virtualNetworkIdFlagName = fmt.Sprintf("%v.virtual_network_id", cmdPrefix)
+		virtualNetworkIdFlagName = fmt.Sprintf("%v.id", cmdPrefix)
 	}
 
 	var virtualNetworkIdFlagDefault string
@@ -139,26 +116,6 @@ func registerOperationVirtualNetworksUpdateVirtualNetworkVirtualNetworkIDParamFl
 	return nil
 }
 
-func retrieveOperationVirtualNetworksUpdateVirtualNetworkAPIVersionFlag(m *virtual_networks.UpdateVirtualNetworkParams, cmdPrefix string, cmd *cobra.Command) (error, bool) {
-	retAdded := false
-	if cmd.Flags().Changed("API-Version") {
-
-		var apiVersionFlagName string
-		if cmdPrefix == "" {
-			apiVersionFlagName = "API-Version"
-		} else {
-			apiVersionFlagName = fmt.Sprintf("%v.API-Version", cmdPrefix)
-		}
-
-		apiVersionFlagValue, err := cmd.Flags().GetString(apiVersionFlagName)
-		if err != nil {
-			return err, false
-		}
-		m.APIVersion = &apiVersionFlagValue
-
-	}
-	return nil, retAdded
-}
 func retrieveOperationVirtualNetworksUpdateVirtualNetworkBodyFlag(m *virtual_networks.UpdateVirtualNetworkParams, cmdPrefix string, cmd *cobra.Command) (error, bool) {
 	retAdded := false
 	if cmd.Flags().Changed("body") {
@@ -199,13 +156,13 @@ func retrieveOperationVirtualNetworksUpdateVirtualNetworkBodyFlag(m *virtual_net
 }
 func retrieveOperationVirtualNetworksUpdateVirtualNetworkVirtualNetworkIDFlag(m *virtual_networks.UpdateVirtualNetworkParams, cmdPrefix string, cmd *cobra.Command) (error, bool) {
 	retAdded := false
-	if cmd.Flags().Changed("virtual_network_id") {
+	if cmd.Flags().Changed("id") {
 
 		var virtualNetworkIdFlagName string
 		if cmdPrefix == "" {
-			virtualNetworkIdFlagName = "virtual_network_id"
+			virtualNetworkIdFlagName = "id"
 		} else {
-			virtualNetworkIdFlagName = fmt.Sprintf("%v.virtual_network_id", cmdPrefix)
+			virtualNetworkIdFlagName = fmt.Sprintf("%v.id", cmdPrefix)
 		}
 
 		virtualNetworkIdFlagValue, err := cmd.Flags().GetString(virtualNetworkIdFlagName)
@@ -213,6 +170,7 @@ func retrieveOperationVirtualNetworksUpdateVirtualNetworkVirtualNetworkIDFlag(m 
 			return err, false
 		}
 		m.VirtualNetworkID = virtualNetworkIdFlagValue
+		m.Body.Data.ID = &m.VirtualNetworkID
 
 	}
 	return nil, retAdded
@@ -303,10 +261,6 @@ func registerModelUpdateVirtualNetworkParamsBodyDataFlags(depth int, cmdPrefix s
 		return err
 	}
 
-	if err := registerUpdateVirtualNetworkParamsBodyDataType(depth, cmdPrefix, cmd); err != nil {
-		return err
-	}
-
 	return nil
 }
 
@@ -324,34 +278,6 @@ func registerUpdateVirtualNetworkParamsBodyDataAttributes(depth int, cmdPrefix s
 	return nil
 }
 
-func registerUpdateVirtualNetworkParamsBodyDataType(depth int, cmdPrefix string, cmd *cobra.Command) error {
-	if depth > maxDepth {
-		return nil
-	}
-
-	typeDescription := `Enum: ["virtual_network"]. Required. `
-
-	var typeFlagName = "type"
-
-	var typeFlagDefault string
-
-	_ = cmd.PersistentFlags().String(typeFlagName, typeFlagDefault, typeDescription)
-	cmd.MarkPersistentFlagRequired(typeFlagName)
-
-	if err := cmd.RegisterFlagCompletionFunc(typeFlagName,
-		func(cmd *cobra.Command, args []string, toComplete string) ([]string, cobra.ShellCompDirective) {
-			var res []string
-			if err := json.Unmarshal([]byte(`["virtual_network"]`), &res); err != nil {
-				panic(err)
-			}
-			return res, cobra.ShellCompDirectiveDefault
-		}); err != nil {
-		return err
-	}
-
-	return nil
-}
-
 // retrieve flags from commands, and set value in model. Return true if any flag is passed by user to fill model field.
 func retrieveModelUpdateVirtualNetworkParamsBodyDataFlags(depth int, m *virtual_networks.UpdateVirtualNetworkParamsBodyData, cmdPrefix string, cmd *cobra.Command) (error, bool) {
 	retAdded := false
@@ -361,12 +287,6 @@ func retrieveModelUpdateVirtualNetworkParamsBodyDataFlags(depth int, m *virtual_
 		return err, false
 	}
 	retAdded = retAdded || attributesAdded
-
-	err, typeAdded := retrieveUpdateVirtualNetworkParamsBodyDataTypeFlags(depth, m, cmdPrefix, cmd)
-	if err != nil {
-		return err, false
-	}
-	retAdded = retAdded || typeAdded
 
 	return nil, retAdded
 }
@@ -394,27 +314,6 @@ func retrieveUpdateVirtualNetworkParamsBodyDataAttributesFlags(depth int, m *vir
 	retAdded = retAdded || attributesAdded
 	if attributesAdded {
 		m.Attributes = attributesFlagValue
-	}
-
-	return nil, retAdded
-}
-
-func retrieveUpdateVirtualNetworkParamsBodyDataTypeFlags(depth int, m *virtual_networks.UpdateVirtualNetworkParamsBodyData, cmdPrefix string, cmd *cobra.Command) (error, bool) {
-	if depth > maxDepth {
-		return nil, false
-	}
-	retAdded := false
-
-	var typeFlagName = "type"
-	if cmd.Flags().Changed(typeFlagName) {
-
-		typeFlagValue, err := cmd.Flags().GetString(typeFlagName)
-		if err != nil {
-			return err, false
-		}
-		m.Type = &typeFlagValue
-
-		retAdded = true
 	}
 
 	return nil, retAdded

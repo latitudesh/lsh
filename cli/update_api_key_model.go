@@ -6,7 +6,6 @@ package cli
 // Editing this file might prove futile when you re-run the swagger generate command
 
 import (
-	"encoding/json"
 	"fmt"
 
 	"github.com/go-openapi/swag"
@@ -32,12 +31,7 @@ func registerUpdateAPIKeyData(depth int, cmdPrefix string, cmd *cobra.Command) e
 		return nil
 	}
 
-	var dataFlagName string
-	if cmdPrefix == "" {
-		dataFlagName = "data"
-	} else {
-		dataFlagName = fmt.Sprintf("%v.data", cmdPrefix)
-	}
+	var dataFlagName = ""
 
 	if err := registerModelUpdateAPIKeyDataFlags(depth+1, dataFlagName, cmd); err != nil {
 		return err
@@ -95,14 +89,6 @@ func registerModelUpdateAPIKeyDataFlags(depth int, cmdPrefix string, cmd *cobra.
 		return err
 	}
 
-	if err := registerUpdateAPIKeyDataID(depth, cmdPrefix, cmd); err != nil {
-		return err
-	}
-
-	if err := registerUpdateAPIKeyDataType(depth, cmdPrefix, cmd); err != nil {
-		return err
-	}
-
 	return nil
 }
 
@@ -111,69 +97,9 @@ func registerUpdateAPIKeyDataAttributes(depth int, cmdPrefix string, cmd *cobra.
 		return nil
 	}
 
-	var attributesFlagName string
-	if cmdPrefix == "" {
-		attributesFlagName = "attributes"
-	} else {
-		attributesFlagName = fmt.Sprintf("%v.attributes", cmdPrefix)
-	}
+	var attributesFlagName = ""
 
 	if err := registerModelUpdateAPIKeyDataAttributesFlags(depth+1, attributesFlagName, cmd); err != nil {
-		return err
-	}
-
-	return nil
-}
-
-func registerUpdateAPIKeyDataID(depth int, cmdPrefix string, cmd *cobra.Command) error {
-	if depth > maxDepth {
-		return nil
-	}
-
-	idDescription := ``
-
-	var idFlagName string
-	if cmdPrefix == "" {
-		idFlagName = "id"
-	} else {
-		idFlagName = fmt.Sprintf("%v.id", cmdPrefix)
-	}
-
-	var idFlagDefault string
-
-	_ = cmd.PersistentFlags().String(idFlagName, idFlagDefault, idDescription)
-	cmd.MarkPersistentFlagRequired(idFlagName)
-
-	return nil
-}
-
-func registerUpdateAPIKeyDataType(depth int, cmdPrefix string, cmd *cobra.Command) error {
-	if depth > maxDepth {
-		return nil
-	}
-
-	typeDescription := `Enum: ["api_keys"]. Required. `
-
-	var typeFlagName string
-	if cmdPrefix == "" {
-		typeFlagName = "type"
-	} else {
-		typeFlagName = fmt.Sprintf("%v.type", cmdPrefix)
-	}
-
-	var typeFlagDefault string
-
-	_ = cmd.PersistentFlags().String(typeFlagName, typeFlagDefault, typeDescription)
-	cmd.MarkPersistentFlagRequired(typeFlagName)
-
-	if err := cmd.RegisterFlagCompletionFunc(typeFlagName,
-		func(cmd *cobra.Command, args []string, toComplete string) ([]string, cobra.ShellCompDirective) {
-			var res []string
-			if err := json.Unmarshal([]byte(`["api_keys"]`), &res); err != nil {
-				panic(err)
-			}
-			return res, cobra.ShellCompDirectiveDefault
-		}); err != nil {
 		return err
 	}
 
@@ -190,18 +116,6 @@ func retrieveModelUpdateAPIKeyDataFlags(depth int, m *models.UpdateAPIKeyData, c
 	}
 	retAdded = retAdded || attributesAdded
 
-	err, idAdded := retrieveUpdateAPIKeyDataIDFlags(depth, m, cmdPrefix, cmd)
-	if err != nil {
-		return err, false
-	}
-	retAdded = retAdded || idAdded
-
-	err, typeAdded := retrieveUpdateAPIKeyDataTypeFlags(depth, m, cmdPrefix, cmd)
-	if err != nil {
-		return err, false
-	}
-	retAdded = retAdded || typeAdded
-
 	return nil, retAdded
 }
 
@@ -211,7 +125,7 @@ func retrieveUpdateAPIKeyDataAttributesFlags(depth int, m *models.UpdateAPIKeyDa
 	}
 	retAdded := false
 
-	attributesFlagName := fmt.Sprintf("%v.attributes", cmdPrefix)
+	attributesFlagName := fmt.Sprintf("%vattributes", cmdPrefix)
 	if cmd.Flags().Changed(attributesFlagName) {
 		// info: complex object attributes UpdateAPIKeyDataAttributes is retrieved outside this Changed() block
 	}
@@ -220,6 +134,7 @@ func retrieveUpdateAPIKeyDataAttributesFlags(depth int, m *models.UpdateAPIKeyDa
 		attributesFlagValue = &models.UpdateAPIKeyDataAttributes{}
 	}
 
+	attributesFlagName = ""
 	err, attributesAdded := retrieveModelUpdateAPIKeyDataAttributesFlags(depth+1, attributesFlagValue, attributesFlagName, cmd)
 	if err != nil {
 		return err, false
@@ -227,62 +142,6 @@ func retrieveUpdateAPIKeyDataAttributesFlags(depth int, m *models.UpdateAPIKeyDa
 	retAdded = retAdded || attributesAdded
 	if attributesAdded {
 		m.Attributes = attributesFlagValue
-	}
-
-	return nil, retAdded
-}
-
-func retrieveUpdateAPIKeyDataIDFlags(depth int, m *models.UpdateAPIKeyData, cmdPrefix string, cmd *cobra.Command) (error, bool) {
-	if depth > maxDepth {
-		return nil, false
-	}
-	retAdded := false
-
-	idFlagName := fmt.Sprintf("%v.id", cmdPrefix)
-	if cmd.Flags().Changed(idFlagName) {
-
-		var idFlagName string
-		if cmdPrefix == "" {
-			idFlagName = "id"
-		} else {
-			idFlagName = fmt.Sprintf("%v.id", cmdPrefix)
-		}
-
-		idFlagValue, err := cmd.Flags().GetString(idFlagName)
-		if err != nil {
-			return err, false
-		}
-		m.ID = idFlagValue
-
-		retAdded = true
-	}
-
-	return nil, retAdded
-}
-
-func retrieveUpdateAPIKeyDataTypeFlags(depth int, m *models.UpdateAPIKeyData, cmdPrefix string, cmd *cobra.Command) (error, bool) {
-	if depth > maxDepth {
-		return nil, false
-	}
-	retAdded := false
-
-	typeFlagName := fmt.Sprintf("%v.type", cmdPrefix)
-	if cmd.Flags().Changed(typeFlagName) {
-
-		var typeFlagName string
-		if cmdPrefix == "" {
-			typeFlagName = "type"
-		} else {
-			typeFlagName = fmt.Sprintf("%v.type", cmdPrefix)
-		}
-
-		typeFlagValue, err := cmd.Flags().GetString(typeFlagName)
-		if err != nil {
-			return err, false
-		}
-		m.Type = &typeFlagValue
-
-		retAdded = true
 	}
 
 	return nil, retAdded
@@ -315,7 +174,7 @@ func registerUpdateAPIKeyDataAttributesAPIVersion(depth int, cmdPrefix string, c
 	if cmdPrefix == "" {
 		apiVersionFlagName = "api_version"
 	} else {
-		apiVersionFlagName = fmt.Sprintf("%v.api_version", cmdPrefix)
+		apiVersionFlagName = fmt.Sprintf("%vapi_version", cmdPrefix)
 	}
 
 	var apiVersionFlagDefault string
@@ -336,7 +195,7 @@ func registerUpdateAPIKeyDataAttributesName(depth int, cmdPrefix string, cmd *co
 	if cmdPrefix == "" {
 		nameFlagName = "name"
 	} else {
-		nameFlagName = fmt.Sprintf("%v.name", cmdPrefix)
+		nameFlagName = fmt.Sprintf("%vname", cmdPrefix)
 	}
 
 	var nameFlagDefault string
@@ -371,14 +230,14 @@ func retrieveUpdateAPIKeyDataAttributesAPIVersionFlags(depth int, m *models.Upda
 	}
 	retAdded := false
 
-	apiVersionFlagName := fmt.Sprintf("%v.api_version", cmdPrefix)
+	apiVersionFlagName := fmt.Sprintf("%vapi_version", cmdPrefix)
 	if cmd.Flags().Changed(apiVersionFlagName) {
 
 		var apiVersionFlagName string
 		if cmdPrefix == "" {
 			apiVersionFlagName = "api_version"
 		} else {
-			apiVersionFlagName = fmt.Sprintf("%v.api_version", cmdPrefix)
+			apiVersionFlagName = fmt.Sprintf("%vapi_version", cmdPrefix)
 		}
 
 		apiVersionFlagValue, err := cmd.Flags().GetString(apiVersionFlagName)
@@ -399,14 +258,14 @@ func retrieveUpdateAPIKeyDataAttributesNameFlags(depth int, m *models.UpdateAPIK
 	}
 	retAdded := false
 
-	nameFlagName := fmt.Sprintf("%v.name", cmdPrefix)
+	nameFlagName := fmt.Sprintf("%vname", cmdPrefix)
 	if cmd.Flags().Changed(nameFlagName) {
 
 		var nameFlagName string
 		if cmdPrefix == "" {
 			nameFlagName = "name"
 		} else {
-			nameFlagName = fmt.Sprintf("%v.name", cmdPrefix)
+			nameFlagName = fmt.Sprintf("%vname", cmdPrefix)
 		}
 
 		nameFlagValue, err := cmd.Flags().GetString(nameFlagName)

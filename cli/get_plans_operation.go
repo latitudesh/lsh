@@ -39,9 +39,6 @@ func runOperationPlansGetPlans(cmd *cobra.Command, args []string) error {
 	}
 	// retrieve flag values from cmd and fill params
 	params := plans.NewGetPlansParams()
-	if err, _ := retrieveOperationPlansGetPlansAPIVersionFlag(params, "", cmd); err != nil {
-		return err
-	}
 	if err, _ := retrieveOperationPlansGetPlansFilterDiskEqlFlag(params, "", cmd); err != nil {
 		return err
 	}
@@ -102,9 +99,6 @@ func runOperationPlansGetPlans(cmd *cobra.Command, args []string) error {
 
 // registerOperationPlansGetPlansParamFlags registers all flags needed to fill params
 func registerOperationPlansGetPlansParamFlags(cmd *cobra.Command) error {
-	if err := registerOperationPlansGetPlansAPIVersionParamFlags("", cmd); err != nil {
-		return err
-	}
 	if err := registerOperationPlansGetPlansFilterDiskEqlParamFlags("", cmd); err != nil {
 		return err
 	}
@@ -144,23 +138,6 @@ func registerOperationPlansGetPlansParamFlags(cmd *cobra.Command) error {
 	return nil
 }
 
-func registerOperationPlansGetPlansAPIVersionParamFlags(cmdPrefix string, cmd *cobra.Command) error {
-
-	apiVersionDescription := ``
-
-	var apiVersionFlagName string
-	if cmdPrefix == "" {
-		apiVersionFlagName = "API-Version"
-	} else {
-		apiVersionFlagName = fmt.Sprintf("%v.API-Version", cmdPrefix)
-	}
-
-	var apiVersionFlagDefault string = "2023-06-01"
-
-	_ = cmd.PersistentFlags().String(apiVersionFlagName, apiVersionFlagDefault, apiVersionDescription)
-
-	return nil
-}
 func registerOperationPlansGetPlansFilterDiskEqlParamFlags(cmdPrefix string, cmd *cobra.Command) error {
 
 	filterDiskDescription := "Filter plans with disk size in Gigabytes equals the provided value."
@@ -377,26 +354,6 @@ func registerOperationPlansGetPlansFilterStockLevelParamFlags(cmdPrefix string, 
 	return nil
 }
 
-func retrieveOperationPlansGetPlansAPIVersionFlag(m *plans.GetPlansParams, cmdPrefix string, cmd *cobra.Command) (error, bool) {
-	retAdded := false
-	if cmd.Flags().Changed("API-Version") {
-
-		var apiVersionFlagName string
-		if cmdPrefix == "" {
-			apiVersionFlagName = "API-Version"
-		} else {
-			apiVersionFlagName = fmt.Sprintf("%v.API-Version", cmdPrefix)
-		}
-
-		apiVersionFlagValue, err := cmd.Flags().GetString(apiVersionFlagName)
-		if err != nil {
-			return err, false
-		}
-		m.APIVersion = &apiVersionFlagValue
-
-	}
-	return nil, retAdded
-}
 func retrieveOperationPlansGetPlansFilterDiskEqlFlag(m *plans.GetPlansParams, cmdPrefix string, cmd *cobra.Command) (error, bool) {
 	retAdded := false
 	if cmd.Flags().Changed("disk_eql") {

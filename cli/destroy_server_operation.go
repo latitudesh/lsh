@@ -37,9 +37,6 @@ func runOperationServersDestroyServer(cmd *cobra.Command, args []string) error {
 	}
 	// retrieve flag values from cmd and fill params
 	params := servers.NewDestroyServerParams()
-	if err, _ := retrieveOperationServersDestroyServerAPIVersionFlag(params, "", cmd); err != nil {
-		return err
-	}
 	if err, _ := retrieveOperationServersDestroyServerServerIDFlag(params, "", cmd); err != nil {
 		return err
 	}
@@ -68,41 +65,21 @@ func runOperationServersDestroyServer(cmd *cobra.Command, args []string) error {
 
 // registerOperationServersDestroyServerParamFlags registers all flags needed to fill params
 func registerOperationServersDestroyServerParamFlags(cmd *cobra.Command) error {
-	if err := registerOperationServersDestroyServerAPIVersionParamFlags("", cmd); err != nil {
-		return err
-	}
 	if err := registerOperationServersDestroyServerServerIDParamFlags("", cmd); err != nil {
 		return err
 	}
 	return nil
 }
 
-func registerOperationServersDestroyServerAPIVersionParamFlags(cmdPrefix string, cmd *cobra.Command) error {
-
-	apiVersionDescription := ``
-
-	var apiVersionFlagName string
-	if cmdPrefix == "" {
-		apiVersionFlagName = "API-Version"
-	} else {
-		apiVersionFlagName = fmt.Sprintf("%v.API-Version", cmdPrefix)
-	}
-
-	var apiVersionFlagDefault string = "2023-06-01"
-
-	_ = cmd.PersistentFlags().String(apiVersionFlagName, apiVersionFlagDefault, apiVersionDescription)
-
-	return nil
-}
 func registerOperationServersDestroyServerServerIDParamFlags(cmdPrefix string, cmd *cobra.Command) error {
 
 	serverIdDescription := `Required. The server ID`
 
 	var serverIdFlagName string
 	if cmdPrefix == "" {
-		serverIdFlagName = "server_id"
+		serverIdFlagName = "id"
 	} else {
-		serverIdFlagName = fmt.Sprintf("%v.server_id", cmdPrefix)
+		serverIdFlagName = fmt.Sprintf("%v.id", cmdPrefix)
 	}
 
 	var serverIdFlagDefault string
@@ -113,35 +90,15 @@ func registerOperationServersDestroyServerServerIDParamFlags(cmdPrefix string, c
 	return nil
 }
 
-func retrieveOperationServersDestroyServerAPIVersionFlag(m *servers.DestroyServerParams, cmdPrefix string, cmd *cobra.Command) (error, bool) {
-	retAdded := false
-	if cmd.Flags().Changed("API-Version") {
-
-		var apiVersionFlagName string
-		if cmdPrefix == "" {
-			apiVersionFlagName = "API-Version"
-		} else {
-			apiVersionFlagName = fmt.Sprintf("%v.API-Version", cmdPrefix)
-		}
-
-		apiVersionFlagValue, err := cmd.Flags().GetString(apiVersionFlagName)
-		if err != nil {
-			return err, false
-		}
-		m.APIVersion = &apiVersionFlagValue
-
-	}
-	return nil, retAdded
-}
 func retrieveOperationServersDestroyServerServerIDFlag(m *servers.DestroyServerParams, cmdPrefix string, cmd *cobra.Command) (error, bool) {
 	retAdded := false
-	if cmd.Flags().Changed("server_id") {
+	if cmd.Flags().Changed("id") {
 
 		var serverIdFlagName string
 		if cmdPrefix == "" {
-			serverIdFlagName = "server_id"
+			serverIdFlagName = "id"
 		} else {
-			serverIdFlagName = fmt.Sprintf("%v.server_id", cmdPrefix)
+			serverIdFlagName = fmt.Sprintf("%v.id", cmdPrefix)
 		}
 
 		serverIdFlagValue, err := cmd.Flags().GetString(serverIdFlagName)

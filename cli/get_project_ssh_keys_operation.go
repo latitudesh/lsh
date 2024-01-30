@@ -39,9 +39,6 @@ func runOperationSSHKeysGetProjectSSHKeys(cmd *cobra.Command, args []string) err
 	}
 	// retrieve flag values from cmd and fill params
 	params := ssh_keys.NewGetProjectSSHKeysParams()
-	if err, _ := retrieveOperationSSHKeysGetProjectSSHKeysAPIVersionFlag(params, "", cmd); err != nil {
-		return err
-	}
 	if err, _ := retrieveOperationSSHKeysGetProjectSSHKeysProjectIDOrSlugFlag(params, "", cmd); err != nil {
 		return err
 	}
@@ -70,41 +67,21 @@ func runOperationSSHKeysGetProjectSSHKeys(cmd *cobra.Command, args []string) err
 
 // registerOperationSSHKeysGetProjectSSHKeysParamFlags registers all flags needed to fill params
 func registerOperationSSHKeysGetProjectSSHKeysParamFlags(cmd *cobra.Command) error {
-	if err := registerOperationSSHKeysGetProjectSSHKeysAPIVersionParamFlags("", cmd); err != nil {
-		return err
-	}
 	if err := registerOperationSSHKeysGetProjectSSHKeysProjectIDOrSlugParamFlags("", cmd); err != nil {
 		return err
 	}
 	return nil
 }
 
-func registerOperationSSHKeysGetProjectSSHKeysAPIVersionParamFlags(cmdPrefix string, cmd *cobra.Command) error {
-
-	apiVersionDescription := ``
-
-	var apiVersionFlagName string
-	if cmdPrefix == "" {
-		apiVersionFlagName = "API-Version"
-	} else {
-		apiVersionFlagName = fmt.Sprintf("%v.API-Version", cmdPrefix)
-	}
-
-	var apiVersionFlagDefault string = "2023-06-01"
-
-	_ = cmd.PersistentFlags().String(apiVersionFlagName, apiVersionFlagDefault, apiVersionDescription)
-
-	return nil
-}
 func registerOperationSSHKeysGetProjectSSHKeysProjectIDOrSlugParamFlags(cmdPrefix string, cmd *cobra.Command) error {
 
-	projectIdOrSlugDescription := `Required. `
+	projectIdOrSlugDescription := `Project Id or Slug (Required).`
 
 	var projectIdOrSlugFlagName string
 	if cmdPrefix == "" {
-		projectIdOrSlugFlagName = "project_id_or_slug"
+		projectIdOrSlugFlagName = "project"
 	} else {
-		projectIdOrSlugFlagName = fmt.Sprintf("%v.project_id_or_slug", cmdPrefix)
+		projectIdOrSlugFlagName = fmt.Sprintf("%v.project", cmdPrefix)
 	}
 
 	var projectIdOrSlugFlagDefault string
@@ -115,35 +92,15 @@ func registerOperationSSHKeysGetProjectSSHKeysProjectIDOrSlugParamFlags(cmdPrefi
 	return nil
 }
 
-func retrieveOperationSSHKeysGetProjectSSHKeysAPIVersionFlag(m *ssh_keys.GetProjectSSHKeysParams, cmdPrefix string, cmd *cobra.Command) (error, bool) {
-	retAdded := false
-	if cmd.Flags().Changed("API-Version") {
-
-		var apiVersionFlagName string
-		if cmdPrefix == "" {
-			apiVersionFlagName = "API-Version"
-		} else {
-			apiVersionFlagName = fmt.Sprintf("%v.API-Version", cmdPrefix)
-		}
-
-		apiVersionFlagValue, err := cmd.Flags().GetString(apiVersionFlagName)
-		if err != nil {
-			return err, false
-		}
-		m.APIVersion = &apiVersionFlagValue
-
-	}
-	return nil, retAdded
-}
 func retrieveOperationSSHKeysGetProjectSSHKeysProjectIDOrSlugFlag(m *ssh_keys.GetProjectSSHKeysParams, cmdPrefix string, cmd *cobra.Command) (error, bool) {
 	retAdded := false
-	if cmd.Flags().Changed("project_id_or_slug") {
+	if cmd.Flags().Changed("project") {
 
 		var projectIdOrSlugFlagName string
 		if cmdPrefix == "" {
-			projectIdOrSlugFlagName = "project_id_or_slug"
+			projectIdOrSlugFlagName = "project"
 		} else {
-			projectIdOrSlugFlagName = fmt.Sprintf("%v.project_id_or_slug", cmdPrefix)
+			projectIdOrSlugFlagName = fmt.Sprintf("%v.project", cmdPrefix)
 		}
 
 		projectIdOrSlugFlagValue, err := cmd.Flags().GetString(projectIdOrSlugFlagName)

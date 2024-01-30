@@ -61,11 +61,6 @@ GetProjectSSHKeyParams contains all the parameters to send to the API endpoint
 */
 type GetProjectSSHKeyParams struct {
 
-	// APIVersion.
-	//
-	// Default: "2023-06-01"
-	APIVersion *string
-
 	// ProjectIDOrSlug.
 	ProjectIDOrSlug string
 
@@ -89,13 +84,7 @@ func (o *GetProjectSSHKeyParams) WithDefaults() *GetProjectSSHKeyParams {
 //
 // All values with no default are reset to their zero value.
 func (o *GetProjectSSHKeyParams) SetDefaults() {
-	var (
-		aPIVersionDefault = string("2023-06-01")
-	)
-
-	val := GetProjectSSHKeyParams{
-		APIVersion: &aPIVersionDefault,
-	}
+	val := GetProjectSSHKeyParams{}
 
 	val.timeout = o.timeout
 	val.Context = o.Context
@@ -136,17 +125,6 @@ func (o *GetProjectSSHKeyParams) SetHTTPClient(client *http.Client) {
 	o.HTTPClient = client
 }
 
-// WithAPIVersion adds the aPIVersion to the get project ssh key params
-func (o *GetProjectSSHKeyParams) WithAPIVersion(aPIVersion *string) *GetProjectSSHKeyParams {
-	o.SetAPIVersion(aPIVersion)
-	return o
-}
-
-// SetAPIVersion adds the apiVersion to the get project ssh key params
-func (o *GetProjectSSHKeyParams) SetAPIVersion(aPIVersion *string) {
-	o.APIVersion = aPIVersion
-}
-
 // WithProjectIDOrSlug adds the projectIDOrSlug to the get project ssh key params
 func (o *GetProjectSSHKeyParams) WithProjectIDOrSlug(projectIDOrSlug string) *GetProjectSSHKeyParams {
 	o.SetProjectIDOrSlug(projectIDOrSlug)
@@ -176,14 +154,6 @@ func (o *GetProjectSSHKeyParams) WriteToRequest(r runtime.ClientRequest, reg str
 		return err
 	}
 	var res []error
-
-	if o.APIVersion != nil {
-
-		// header param API-Version
-		if err := r.SetHeaderParam("API-Version", *o.APIVersion); err != nil {
-			return err
-		}
-	}
 
 	// path param project_id_or_slug
 	if err := r.SetPathParam("project_id_or_slug", o.ProjectIDOrSlug); err != nil {

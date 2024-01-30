@@ -273,6 +273,13 @@ UpdateServerBody update server body
 swagger:model UpdateServerBody
 */
 type UpdateServerBody struct {
+	// data
+	// Required: true
+	Data *UpdateServerParamsBodyData `json:"data"`
+
+}
+
+type UpdateServerParamsBodyData struct {
 
 	// attributes
 	Attributes *UpdateServerParamsBodyAttributes `json:"attributes,omitempty"`
@@ -304,12 +311,12 @@ func (o *UpdateServerBody) Validate(formats strfmt.Registry) error {
 }
 
 func (o *UpdateServerBody) validateAttributes(formats strfmt.Registry) error {
-	if swag.IsZero(o.Attributes) { // not required
+	if swag.IsZero(o.Data.Attributes) { // not required
 		return nil
 	}
 
-	if o.Attributes != nil {
-		if err := o.Attributes.Validate(formats); err != nil {
+	if o.Data.Attributes != nil {
+		if err := o.Data.Attributes.Validate(formats); err != nil {
 			if ve, ok := err.(*errors.Validation); ok {
 				return ve.ValidateName("body" + "." + "attributes")
 			} else if ce, ok := err.(*errors.CompositeError); ok {
@@ -349,12 +356,12 @@ func (o *UpdateServerBody) validateTypeEnum(path, location string, value string)
 }
 
 func (o *UpdateServerBody) validateType(formats strfmt.Registry) error {
-	if swag.IsZero(o.Type) { // not required
+	if swag.IsZero(o.Data.Type) { // not required
 		return nil
 	}
 
 	// value enum
-	if err := o.validateTypeEnum("body"+"."+"type", "body", o.Type); err != nil {
+	if err := o.validateTypeEnum("body"+"."+"type", "body", o.Data.Type); err != nil {
 		return err
 	}
 
@@ -377,13 +384,13 @@ func (o *UpdateServerBody) ContextValidate(ctx context.Context, formats strfmt.R
 
 func (o *UpdateServerBody) contextValidateAttributes(ctx context.Context, formats strfmt.Registry) error {
 
-	if o.Attributes != nil {
+	if o.Data.Attributes != nil {
 
-		if swag.IsZero(o.Attributes) { // not required
+		if swag.IsZero(o.Data.Attributes) { // not required
 			return nil
 		}
 
-		if err := o.Attributes.ContextValidate(ctx, formats); err != nil {
+		if err := o.Data.Attributes.ContextValidate(ctx, formats); err != nil {
 			if ve, ok := err.(*errors.Validation); ok {
 				return ve.ValidateName("body" + "." + "attributes")
 			} else if ce, ok := err.(*errors.CompositeError); ok {
