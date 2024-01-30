@@ -17,6 +17,7 @@ import (
 	"github.com/go-openapi/swag"
 
 	apierrors "github.com/latitudesh/lsh/internal/api/errors"
+	"github.com/latitudesh/lsh/internal/output/table"
 	"github.com/latitudesh/lsh/models"
 )
 
@@ -99,6 +100,73 @@ func (o *GetPlansOK) String() string {
 
 func (o *GetPlansOK) GetPayload() *GetPlansOKBody {
 	return o.Payload
+}
+
+type PlanTableRow struct {
+	ID string `json:"id,omitempty"`
+	Slug string `json:"slug,omitempty"`
+	Features string `json:"features,omitempty"`
+	Specs string `json:"specs,omitempty"`
+	InStock string `json:"in_stock,omitempty"`
+	AvailableIn string `json:"available_in,omitempty"`
+	CPU string `json:"cpu,omitempty"`
+	Memory string `json:"memory,omitempty"`
+	Drives string `json:"drives,omitempty"`
+	NIC string `json:"nic,omitempty"`
+}
+
+func (o *GetPlansOK) RenderOutput() {
+	data := o.Payload.Data
+
+	var rows []PlanTableRow
+
+	for _, plan := range data {
+		attributes := plan.Attributes
+
+		var inStock []string
+		var availableIn []string
+
+		for _, region := range attributes.Regions {
+			inStock = append(inStock, region.Locations.InStock...)
+			availableIn = append(availableIn, region.Locations.Available...)
+		}
+
+		row := PlanTableRow{
+			ID:        	 table.RenderString(plan.ID),
+			Slug:        table.RenderString(attributes.Slug),
+			Features:    table.RenderStringList(attributes.Features),
+			InStock:     table.RenderStringList(inStock),
+			AvailableIn: table.RenderStringList(availableIn),
+			CPU: 				 table.RenderPlanCPU(*plan.Attributes.Specs.CPU),
+			Memory: 		 table.RenderPlanMemory(*plan.Attributes.Specs.Memory),
+			Drives: 		 table.RenderPlanDrives(plan.Attributes.Specs.Drives),
+			NIC: 				 table.RenderPlanNICs(plan.Attributes.Specs.Nics),
+		}
+
+		rows = append(rows, row)
+	}
+
+	headers := table.ExtractHeaders(rows[0])
+
+	var values [][]string
+
+	for _, row := range rows {
+		var tr []string
+
+		for _, key := range headers {
+			value, err := table.GetFieldValue(row, key)
+			if err != nil {
+				fmt.Printf("Error accessing field %s: %v\n", key, err)
+				continue
+			}
+
+			tr = append(tr, fmt.Sprintf("%v", value))
+		}
+
+		values = append(values, tr)
+	}
+
+	table.Render(table.Table{Headers: headers, Rows: values})
 }
 
 func (o *GetPlansOK) readResponse(response runtime.ClientResponse, consumer runtime.Consumer, formats strfmt.Registry) error {

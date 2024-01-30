@@ -38,9 +38,16 @@ func PrintResult(str string) {
 		fmt.Println("\nAction has been executed successfully!")
 	}
 
-	format := viper.GetString("format")
+	formatAsJSON := viper.GetBool("json")
 
-	switch format {
+	if formatAsJSON {
+		output.RenderJSON(str)
+		return
+	}
+
+	formatOutputFlag := viper.GetString("output")
+
+	switch formatOutputFlag {
 	case "json":
 		output.RenderJSON(str)
 	case "table":

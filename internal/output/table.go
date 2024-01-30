@@ -11,6 +11,27 @@ import (
 )
 
 func RenderTable(str string) error {
+	// // fmt.Println(str)
+	// // Create an instance of models.PlanData
+	// var planDataInstance plans.GetPlansOKBody
+
+	// // Unmarshal the JSON data into models.PlanData
+	// err := json.Unmarshal([]byte(str), &planDataInstance)
+	// if err != nil {
+	// 	fmt.Println("Error:", err)
+	// 	return nil
+	// }
+
+	// // Print the result
+	// dataa := planDataInstance.Data
+
+	// for key, value := range dataa {
+	// 	fmt.Println(key)
+	// 	fmt.Println(value)
+	// }
+
+	// return nil
+
 	var data map[string]interface{}
 	if err := json.Unmarshal([]byte(str), &data); err != nil {
 		fmt.Println("Error unmarshalling JSON:", err)
@@ -32,7 +53,7 @@ func RenderTable(str string) error {
 	}
 
 	fmt.Printf("\n")
-	table.Render()
+	// table.Render()
 	fmt.Printf("\n")
 
 	return nil
@@ -68,11 +89,39 @@ func extractHeadersFromAttributes(entry interface{}) map[string]bool {
 
 	ignoredAttributes := map[string]bool{"created_at": true, "updated_at": true, "role": true}
 
-	for key, _ := range entry.(map[string]interface{})["attributes"].(map[string]interface{}) {
-		// headersMap[key] = true
-		// if !containsNestedValues(value) && !ignoredAttributes[key] {
-		// 	headersMap[key] = true
-		// }
+	nestedAttributes := map[string]bool{"locations": true}
+
+	// data, ok := entry.(map[string]interface{})
+
+	// if ok {
+	// 	// fmt.Println("attributes", data["attributes"])
+
+	// 	var planDataAttributes models.PlanDataAttributes
+
+	// 	if err := json.Unmarshal([]byte(data["attributes"]), &planDataAttributes); err == nil {
+	// 		// Check if the unmarshaled struct matches the expected type
+	// 		if reflect.TypeOf(newStruct).AssignableTo(reflect.TypeOf(s)) {
+	// 			return newStruct, nil
+	// 		}
+	// 	}
+	// }
+
+	for key, value := range entry.(map[string]interface{})["attributes"].(map[string]interface{}) {
+		list, ok := value.([]interface{})
+
+		if ok {
+			for _, val := range list {
+				object, isObject := val.(map[string]interface{})
+
+				if isObject {
+					for key, _ := range object {
+						if nestedAttributes[key] {
+							headersMap[key] = true
+						}
+					}
+				}
+			}
+		}
 
 		if !ignoredAttributes[key] {
 			headersMap[key] = true

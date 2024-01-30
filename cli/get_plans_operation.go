@@ -90,12 +90,12 @@ func runOperationPlansGetPlans(cmd *cobra.Command, args []string) error {
 		return nil
 	}
 
-	msgStr, err := parseOperationPlansGetPlansResult(result)
-	if err != nil {
-		return err
-	}
+	// msgStr, err := parseOperationPlansGetPlansResult(result)
+	// if err != nil {
+	// 	return err
+	// }
 	if !debug {
-		utils.PrintResult(msgStr)
+		result.RenderOutput()
 	}
 	return nil
 }
