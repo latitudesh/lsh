@@ -58,12 +58,8 @@ func runOperationProjectsCreateProject(cmd *cobra.Command, args []string) error 
 		return nil
 	}
 
-	msgStr, err := parseOperationProjectsCreateProjectResult(result)
-	if err != nil {
-		return err
-	}
 	if !debug {
-		utils.PrintResult(msgStr)
+		result.RenderOutput()
 	}
 	return nil
 }
@@ -172,19 +168,6 @@ func retrieveOperationProjectsCreateProjectBodyFlag(m *projects.CreateProjectPar
 	retAdded = retAdded || added
 
 	return nil, retAdded
-}
-
-// parseOperationProjectsCreateProjectResult parses request result and return the string content
-func parseOperationProjectsCreateProjectResult(resp0 *projects.CreateProjectCreated) (string, error) {
-	if !swag.IsZero(resp0) && !swag.IsZero(resp0.Payload) {
-		msgStr, err := json.Marshal(resp0.Payload)
-		if err != nil {
-			return "", err
-		}
-		return string(msgStr), nil
-	}
-
-	return "", nil
 }
 
 // register flags to command

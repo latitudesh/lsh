@@ -57,13 +57,8 @@ func runOperationServersCreateServer(cmd *cobra.Command, args []string) error {
 		return nil
 	}
 
-	msgStr, err := parseOperationServersCreateServerResult(result)
-	if err != nil {
-		return err
-	}
 	if !debug {
-
-		utils.PrintResult(msgStr)
+		result.RenderOutput()
 	}
 	return nil
 }
@@ -172,19 +167,6 @@ func retrieveOperationServersCreateServerBodyFlag(m *servers.CreateServerParams,
 	retAdded = retAdded || added
 
 	return nil, retAdded
-}
-
-// parseOperationServersCreateServerResult parses request result and return the string content
-func parseOperationServersCreateServerResult(resp0 *servers.CreateServerCreated) (string, error) {
-	if !swag.IsZero(resp0) && !swag.IsZero(resp0.Payload) {
-		msgStr, err := json.Marshal(resp0.Payload)
-		if err != nil {
-			return "", err
-		}
-		return string(msgStr), nil
-	}
-
-	return "", nil
 }
 
 // register flags to command
