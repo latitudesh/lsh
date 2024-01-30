@@ -128,12 +128,6 @@ func MakeRootCmd() (*cobra.Command, error) {
 	}
 	rootCmd.AddCommand(operationGroupPlansCmd)
 
-	operationGroupPowerActionsCmd, err := makeOperationGroupPowerActionsCmd()
-	if err != nil {
-		return nil, err
-	}
-	rootCmd.AddCommand(operationGroupPowerActionsCmd)
-
 	operationGroupProjectsCmd, err := makeOperationGroupProjectsCmd()
 	if err != nil {
 		return nil, err
@@ -271,20 +265,6 @@ func makeOperationGroupPlansCmd() (*cobra.Command, error) {
 	operationGroupPlansCmd.AddCommand(operationGetPlansCmd)
 
 	return operationGroupPlansCmd, nil
-}
-func makeOperationGroupPowerActionsCmd() (*cobra.Command, error) {
-	operationGroupPowerActionsCmd := &cobra.Command{
-		Use:  "power_actions",
-		Long: ``,
-	}
-
-	operationCreateServerActionCmd, err := makeOperationPowerActionsCreateServerActionCmd()
-	if err != nil {
-		return nil, err
-	}
-	operationGroupPowerActionsCmd.AddCommand(operationCreateServerActionCmd)
-
-	return operationGroupPowerActionsCmd, nil
 }
 func makeOperationGroupProjectsCmd() (*cobra.Command, error) {
 	operationGroupProjectsCmd := &cobra.Command{
