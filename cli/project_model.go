@@ -606,7 +606,7 @@ func retrieveProjectAttributesBillingMethodFlags(depth int, m *models.ProjectAtt
 		if err != nil {
 			return err, false
 		}
-		m.BillingMethod = &billingMethodFlagValue
+		m.BillingMethod = billingMethodFlagValue
 
 		retAdded = true
 	}
@@ -634,7 +634,7 @@ func retrieveProjectAttributesBillingTypeFlags(depth int, m *models.ProjectAttri
 		if err != nil {
 			return err, false
 		}
-		m.BillingType = &billingTypeFlagValue
+		m.BillingType = billingTypeFlagValue
 
 		retAdded = true
 	}
@@ -662,7 +662,7 @@ func retrieveProjectAttributesCostFlags(depth int, m *models.ProjectAttributes, 
 		if err != nil {
 			return err, false
 		}
-		m.Cost = &costFlagValue
+		m.Cost = costFlagValue
 
 		retAdded = true
 	}
@@ -718,7 +718,7 @@ func retrieveProjectAttributesDescriptionFlags(depth int, m *models.ProjectAttri
 		if err != nil {
 			return err, false
 		}
-		m.Description = &descriptionFlagValue
+		m.Description = descriptionFlagValue
 
 		retAdded = true
 	}
@@ -746,7 +746,7 @@ func retrieveProjectAttributesEnvironmentFlags(depth int, m *models.ProjectAttri
 		if err != nil {
 			return err, false
 		}
-		m.Environment = &environmentFlagValue
+		m.Environment = environmentFlagValue
 
 		retAdded = true
 	}
