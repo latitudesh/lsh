@@ -58,12 +58,8 @@ func runOperationVirtualNetworksCreateVirtualNetwork(cmd *cobra.Command, args []
 		return nil
 	}
 
-	msgStr, err := parseOperationVirtualNetworksCreateVirtualNetworkResult(result)
-	if err != nil {
-		return err
-	}
 	if !debug {
-		utils.PrintResult(msgStr)
+		result.RenderOutput()
 	}
 	return nil
 }
@@ -172,19 +168,6 @@ func retrieveOperationVirtualNetworksCreateVirtualNetworkBodyFlag(m *virtual_net
 	retAdded = retAdded || added
 
 	return nil, retAdded
-}
-
-// parseOperationVirtualNetworksCreateVirtualNetworkResult parses request result and return the string content
-func parseOperationVirtualNetworksCreateVirtualNetworkResult(resp0 *virtual_networks.CreateVirtualNetworkCreated) (string, error) {
-	if !swag.IsZero(resp0) && !swag.IsZero(resp0.Payload) {
-		msgStr, err := json.Marshal(resp0.Payload)
-		if err != nil {
-			return "", err
-		}
-		return string(msgStr), nil
-	}
-
-	return "", nil
 }
 
 // register flags to command

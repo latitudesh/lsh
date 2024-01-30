@@ -7,13 +7,12 @@ package virtual_networks
 
 import (
 	"fmt"
-	"io"
 
 	"github.com/go-openapi/runtime"
 	"github.com/go-openapi/strfmt"
 
 	apierrors "github.com/latitudesh/lsh/internal/api/errors"
-	"github.com/latitudesh/lsh/models"
+	"github.com/latitudesh/lsh/internal/output"
 )
 
 // DestroyVirtualNetworkReader is a Reader for the DestroyVirtualNetwork structure.
@@ -98,75 +97,11 @@ func (o *DestroyVirtualNetworkNoContent) String() string {
 	return fmt.Sprintf("[DELETE /virtual_networks/{id}][%d] destroyVirtualNetworkNoContent ", 204)
 }
 
+func (o *DestroyVirtualNetworkNoContent) RenderOutput() {
+	output.SuccessfulDeletion("Virtual Network")
+}
+
 func (o *DestroyVirtualNetworkNoContent) readResponse(response runtime.ClientResponse, consumer runtime.Consumer, formats strfmt.Registry) error {
-
-	return nil
-}
-
-// NewDestroyVirtualNetworkNotAcceptable creates a DestroyVirtualNetworkNotAcceptable with default headers values
-func NewDestroyVirtualNetworkNotAcceptable() *DestroyVirtualNetworkNotAcceptable {
-	return &DestroyVirtualNetworkNotAcceptable{}
-}
-
-/*
-DestroyVirtualNetworkNotAcceptable describes a response with status code 406, with default header values.
-
-Not Acceptable
-*/
-type DestroyVirtualNetworkNotAcceptable struct {
-	Payload *models.ErrorObject
-}
-
-// IsSuccess returns true when this destroy virtual network not acceptable response has a 2xx status code
-func (o *DestroyVirtualNetworkNotAcceptable) IsSuccess() bool {
-	return false
-}
-
-// IsRedirect returns true when this destroy virtual network not acceptable response has a 3xx status code
-func (o *DestroyVirtualNetworkNotAcceptable) IsRedirect() bool {
-	return false
-}
-
-// IsClientError returns true when this destroy virtual network not acceptable response has a 4xx status code
-func (o *DestroyVirtualNetworkNotAcceptable) IsClientError() bool {
-	return true
-}
-
-// IsServerError returns true when this destroy virtual network not acceptable response has a 5xx status code
-func (o *DestroyVirtualNetworkNotAcceptable) IsServerError() bool {
-	return false
-}
-
-// IsCode returns true when this destroy virtual network not acceptable response a status code equal to that given
-func (o *DestroyVirtualNetworkNotAcceptable) IsCode(code int) bool {
-	return code == 406
-}
-
-// Code gets the status code for the destroy virtual network not acceptable response
-func (o *DestroyVirtualNetworkNotAcceptable) Code() int {
-	return 406
-}
-
-func (o *DestroyVirtualNetworkNotAcceptable) Error() string {
-	return fmt.Sprintf("[DELETE /virtual_networks/{id}][%d] destroyVirtualNetworkNotAcceptable  %+v", 406, o.Payload)
-}
-
-func (o *DestroyVirtualNetworkNotAcceptable) String() string {
-	return fmt.Sprintf("[DELETE /virtual_networks/{id}][%d] destroyVirtualNetworkNotAcceptable  %+v", 406, o.Payload)
-}
-
-func (o *DestroyVirtualNetworkNotAcceptable) GetPayload() *models.ErrorObject {
-	return o.Payload
-}
-
-func (o *DestroyVirtualNetworkNotAcceptable) readResponse(response runtime.ClientResponse, consumer runtime.Consumer, formats strfmt.Registry) error {
-
-	o.Payload = new(models.ErrorObject)
-
-	// response payload
-	if err := consumer.Consume(response.Body(), o.Payload); err != nil && err != io.EOF {
-		return err
-	}
 
 	return nil
 }
