@@ -123,24 +123,24 @@ type ProjectAttributes struct {
 
 	// billing method
 	// Enum: [Normal 95th percentile]
-	BillingMethod *string `json:"billing_method,omitempty"`
+	BillingMethod string `json:"billing_method,omitempty"`
 
 	// billing type
 	// Enum: [Yearly Monthly Hourly Normal]
-	BillingType *string `json:"billing_type,omitempty"`
+	BillingType string `json:"billing_type,omitempty"`
 
 	// cost
-	Cost *string `json:"cost,omitempty"`
+	Cost string `json:"cost,omitempty"`
 
 	// created at
 	CreatedAt string `json:"created_at,omitempty"`
 
 	// The project description
-	Description *string `json:"description,omitempty"`
+	Description string `json:"description,omitempty"`
 
 	// environment
 	// Enum: [Development Staging Production]
-	Environment *string `json:"environment,omitempty"`
+	Environment string `json:"environment,omitempty"`
 
 	// The project name
 	Name string `json:"name,omitempty"`
@@ -246,7 +246,7 @@ func (m *ProjectAttributes) validateBillingMethod(formats strfmt.Registry) error
 	}
 
 	// value enum
-	if err := m.validateBillingMethodEnum("attributes"+"."+"billing_method", "body", *m.BillingMethod); err != nil {
+	if err := m.validateBillingMethodEnum("attributes"+"."+"billing_method", "body", m.BillingMethod); err != nil {
 		return err
 	}
 
@@ -294,7 +294,7 @@ func (m *ProjectAttributes) validateBillingType(formats strfmt.Registry) error {
 	}
 
 	// value enum
-	if err := m.validateBillingTypeEnum("attributes"+"."+"billing_type", "body", *m.BillingType); err != nil {
+	if err := m.validateBillingTypeEnum("attributes"+"."+"billing_type", "body", m.BillingType); err != nil {
 		return err
 	}
 
@@ -339,7 +339,7 @@ func (m *ProjectAttributes) validateEnvironment(formats strfmt.Registry) error {
 	}
 
 	// value enum
-	if err := m.validateEnvironmentEnum("attributes"+"."+"environment", "body", *m.Environment); err != nil {
+	if err := m.validateEnvironmentEnum("attributes"+"."+"environment", "body", m.Environment); err != nil {
 		return err
 	}
 
