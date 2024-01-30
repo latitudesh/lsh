@@ -89,6 +89,10 @@ func MakeRootCmd() (*cobra.Command, error) {
 	rootCmd.PersistentFlags().String("base-path", client.DefaultBasePath, fmt.Sprintf("For example: %v", client.DefaultBasePath))
 	viper.BindPFlag("base_path", rootCmd.PersistentFlags().Lookup("base-path"))
 
+	var formatFlag string
+	rootCmd.PersistentFlags().StringVarP(&formatFlag, "format", "f", "table", fmt.Sprintf("For example: %v", "json"))
+	viper.BindPFlag("format", rootCmd.PersistentFlags().Lookup("format"))
+
 	// configure debug flag
 	rootCmd.PersistentFlags().BoolVar(&debug, "debug", false, "output debug logs")
 	// configure config location

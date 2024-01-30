@@ -2,24 +2,13 @@
 package utils
 
 import (
-	"bytes"
-	"encoding/json"
 	"errors"
 	"fmt"
 
 	apierrors "github.com/latitudesh/lsh/internal/api/errors"
 	"github.com/latitudesh/lsh/internal/output"
+	"github.com/spf13/viper"
 )
-
-// PrettifyJson formats a JSON response, enhancing its readability on the terminal.
-func PrettifyJson(str string) (string, error) {
-	var prettyJSON bytes.Buffer
-	if err := json.Indent(&prettyJSON, []byte(str), "", "    "); err != nil {
-		return str, err
-	}
-
-	return prettyJSON.String(), nil
-}
 
 func PrintError(respErr error) error {
 	switch e := respErr.(type) {
@@ -42,13 +31,21 @@ func PrintError(respErr error) error {
 	return nil
 }
 
-func PrintResult(jsonData string) {
+func PrintResult(str string) {
 	// TODO: create a better feedback for empty responses, to let the users
 	// know which action was executed and whether it failed or not.
-	if jsonData == "" {
+	if str == "" {
 		fmt.Println("\nAction has been executed successfully!")
-		return
 	}
 
-	fmt.Println(PrettifyJson(jsonData))
+	format := viper.GetString("format")
+
+	switch format {
+	case "json":
+		output.RenderJSON(str)
+	case "table":
+		output.RenderTable(str)
+	default:
+		fmt.Println("Unsupported output format")
+	}
 }
