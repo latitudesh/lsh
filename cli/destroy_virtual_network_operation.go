@@ -55,13 +55,8 @@ func runOperationVirtualNetworksDestroyVirtualNetwork(cmd *cobra.Command, args [
 		return nil
 	}
 
-	msgStr, err := parseOperationVirtualNetworksDestroyVirtualNetworkResult(result)
-	if err != nil {
-		return err
-	}
 	if !debug {
-
-		utils.PrintResult(msgStr)
+		result.RenderOutput()
 	}
 	return nil
 }
@@ -152,11 +147,4 @@ func retrieveOperationVirtualNetworksDestroyVirtualNetworkIDFlag(m *virtual_netw
 
 	}
 	return nil, retAdded
-}
-
-// parseOperationVirtualNetworksDestroyVirtualNetworkResult parses request result and return the string content
-func parseOperationVirtualNetworksDestroyVirtualNetworkResult(resp0 *virtual_networks.DestroyVirtualNetworkNoContent) (string, error) {
-	// warning: non schema response destroyVirtualNetworkNoContent is not supported by go-swagger cli yet.
-
-	return "", nil
 }
