@@ -6,13 +6,11 @@ package cli
 // Editing this file might prove futile when you re-run the swagger generate command
 
 import (
-	"encoding/json"
 	"fmt"
 
 	"github.com/latitudesh/lsh/client/api_keys"
 	"github.com/latitudesh/lsh/internal/utils"
 
-	"github.com/go-openapi/swag"
 	"github.com/spf13/cobra"
 )
 
@@ -54,12 +52,8 @@ func runOperationAPIKeysGetAPIKeys(cmd *cobra.Command, args []string) error {
 		return nil
 	}
 
-	msgStr, err := parseOperationAPIKeysGetAPIKeysResult(result)
-	if err != nil {
-		return err
-	}
 	if !debug {
-		utils.PrintResult(msgStr)
+		result.RenderOutput()
 	}
 	return nil
 }
@@ -109,17 +103,4 @@ func retrieveOperationAPIKeysGetAPIKeysAPIVersionFlag(m *api_keys.GetAPIKeysPara
 
 	}
 	return nil, retAdded
-}
-
-// parseOperationAPIKeysGetAPIKeysResult parses request result and return the string content
-func parseOperationAPIKeysGetAPIKeysResult(resp0 *api_keys.GetAPIKeysOK) (string, error) {
-	if !swag.IsZero(resp0) && !swag.IsZero(resp0.Payload) {
-		msgStr, err := json.Marshal(resp0.Payload)
-		if err != nil {
-			return "", err
-		}
-		return string(msgStr), nil
-	}
-
-	return "", nil
 }

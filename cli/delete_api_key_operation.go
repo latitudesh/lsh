@@ -55,13 +55,8 @@ func runOperationAPIKeysDeleteAPIKey(cmd *cobra.Command, args []string) error {
 		return nil
 	}
 
-	msgStr, err := parseOperationAPIKeysDeleteAPIKeyResult(result)
-	if err != nil {
-		return err
-	}
-
 	if !debug {
-		utils.PrintResult(msgStr)
+		result.RenderOutput()
 	}
 	return nil
 }
@@ -153,11 +148,4 @@ func retrieveOperationAPIKeysDeleteAPIKeyIDFlag(m *api_keys.DeleteAPIKeyParams, 
 
 	}
 	return nil, retAdded
-}
-
-// parseOperationAPIKeysDeleteAPIKeyResult parses request result and return the string content
-func parseOperationAPIKeysDeleteAPIKeyResult(resp0 *api_keys.DeleteAPIKeyOK) (string, error) {
-	// warning: non schema response deleteApiKeyOK is not supported by go-swagger cli yet.
-
-	return "", nil
 }

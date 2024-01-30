@@ -6,9 +6,9 @@ import (
 	"fmt"
 )
 
-func RenderJSON(str string) error {
+func RenderJSON(JSONResult []byte) error {
 	var prettyJSON bytes.Buffer
-	if err := json.Indent(&prettyJSON, []byte(str), "", "    "); err != nil {
+	if err := json.Indent(&prettyJSON, JSONResult, "", "    "); err != nil {
 		return err
 	}
 

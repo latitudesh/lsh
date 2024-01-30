@@ -6,13 +6,18 @@ package api_keys
 // Editing this file might prove futile when you re-run the swagger generate command
 
 import (
+	"encoding/json"
 	"fmt"
 	"io"
 
 	"github.com/go-openapi/runtime"
 	"github.com/go-openapi/strfmt"
+	"github.com/go-openapi/swag"
+	"github.com/spf13/viper"
 
 	apierrors "github.com/latitudesh/lsh/internal/api/errors"
+	"github.com/latitudesh/lsh/internal/output"
+	"github.com/latitudesh/lsh/internal/output/table"
 	"github.com/latitudesh/lsh/models"
 )
 
@@ -95,6 +100,89 @@ func (o *GetAPIKeysOK) String() string {
 
 func (o *GetAPIKeysOK) GetPayload() *models.APIKeys {
 	return o.Payload
+}
+
+type APIKeyTableRow struct {
+	ID string `json:"id,omitempty"`
+	TokenLastSlice string `json:"token_last_slice,omitempty"`
+	User string `json:"user,omitempty"`
+	APIVersion string `json:"api_version,omitempty"`
+	LastUsedAt string `json:"last_used_at,omitempty"`
+	Name string `json:"name,omitempty"`
+}
+
+func (o *GetAPIKeysOK) RenderOutput() {
+	formatAsJSON := viper.GetBool("json")
+
+	if formatAsJSON {
+		o.RenderJSON()
+		return
+	}
+
+	formatOutputFlag := viper.GetString("output")
+
+	switch formatOutputFlag {
+	case "json":
+		o.RenderJSON()
+	case "table":
+		o.RenderTable()
+	default:
+		fmt.Println("Unsupported output format")
+	}
+}
+
+func (o *GetAPIKeysOK) RenderJSON() {
+	if !swag.IsZero(o) && !swag.IsZero(o.Payload) {
+		JSONString, err := json.Marshal(o.Payload)
+		if err != nil {
+			fmt.Println("Could not decode the result as JSON.")
+		}
+
+		output.RenderJSON(JSONString)
+	}
+}
+
+func (o *GetAPIKeysOK) RenderTable() {
+	data := o.Payload.Data
+
+	var rows []APIKeyTableRow
+
+	for _, api_key := range data {
+		attributes := api_key.Attributes
+
+		row := APIKeyTableRow{
+			ID:        	 					 table.RenderString(api_key.ID),
+			TokenLastSlice:        table.RenderString(attributes.TokenLastSlice),
+			User:    							 table.RenderString(attributes.User.Email),
+			APIVersion:     			 table.RenderString(attributes.APIVersion),
+			LastUsedAt: 					 table.RenderDateTime(attributes.LastUsedAt),
+			Name: 				 				 table.RenderString(attributes.Name),
+		}
+
+		rows = append(rows, row)
+	}
+
+	headers := table.ExtractHeaders(rows[0])
+
+	var values [][]string
+
+	for _, row := range rows {
+		var tr []string
+
+		for _, key := range headers {
+			value, err := table.GetFieldValue(row, key)
+			if err != nil {
+				fmt.Printf("Error accessing field %s: %v\n", key, err)
+				continue
+			}
+
+			tr = append(tr, fmt.Sprintf("%v", value))
+		}
+
+		values = append(values, tr)
+	}
+
+	table.Render(table.Table{Headers: headers, Rows: values})
 }
 
 func (o *GetAPIKeysOK) readResponse(response runtime.ClientResponse, consumer runtime.Consumer, formats strfmt.Registry) error {
