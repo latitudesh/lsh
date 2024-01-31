@@ -35,9 +35,6 @@ func runOperationProjectsDeleteProject(cmd *cobra.Command, args []string) error 
 	}
 	// retrieve flag values from cmd and fill params
 	params := projects.NewDeleteProjectParams()
-	if err, _ := retrieveOperationProjectsDeleteProjectAPIVersionFlag(params, "", cmd); err != nil {
-		return err
-	}
 	if err, _ := retrieveOperationProjectsDeleteProjectIDOrSlugFlag(params, "", cmd); err != nil {
 		return err
 	}
@@ -61,32 +58,12 @@ func runOperationProjectsDeleteProject(cmd *cobra.Command, args []string) error 
 
 // registerOperationProjectsDeleteProjectParamFlags registers all flags needed to fill params
 func registerOperationProjectsDeleteProjectParamFlags(cmd *cobra.Command) error {
-	if err := registerOperationProjectsDeleteProjectAPIVersionParamFlags("", cmd); err != nil {
-		return err
-	}
 	if err := registerOperationProjectsDeleteProjectIDOrSlugParamFlags("", cmd); err != nil {
 		return err
 	}
 	return nil
 }
 
-func registerOperationProjectsDeleteProjectAPIVersionParamFlags(cmdPrefix string, cmd *cobra.Command) error {
-
-	apiVersionDescription := ``
-
-	var apiVersionFlagName string
-	if cmdPrefix == "" {
-		apiVersionFlagName = "API-Version"
-	} else {
-		apiVersionFlagName = fmt.Sprintf("%v.API-Version", cmdPrefix)
-	}
-
-	var apiVersionFlagDefault string = "2023-06-01"
-
-	_ = cmd.PersistentFlags().String(apiVersionFlagName, apiVersionFlagDefault, apiVersionDescription)
-
-	return nil
-}
 func registerOperationProjectsDeleteProjectIDOrSlugParamFlags(cmdPrefix string, cmd *cobra.Command) error {
 
 	idOrSlugDescription := `Required. The project ID or Slug`
@@ -106,26 +83,6 @@ func registerOperationProjectsDeleteProjectIDOrSlugParamFlags(cmdPrefix string, 
 	return nil
 }
 
-func retrieveOperationProjectsDeleteProjectAPIVersionFlag(m *projects.DeleteProjectParams, cmdPrefix string, cmd *cobra.Command) (error, bool) {
-	retAdded := false
-	if cmd.Flags().Changed("API-Version") {
-
-		var apiVersionFlagName string
-		if cmdPrefix == "" {
-			apiVersionFlagName = "API-Version"
-		} else {
-			apiVersionFlagName = fmt.Sprintf("%v.API-Version", cmdPrefix)
-		}
-
-		apiVersionFlagValue, err := cmd.Flags().GetString(apiVersionFlagName)
-		if err != nil {
-			return err, false
-		}
-		m.APIVersion = &apiVersionFlagValue
-
-	}
-	return nil, retAdded
-}
 func retrieveOperationProjectsDeleteProjectIDOrSlugFlag(m *projects.DeleteProjectParams, cmdPrefix string, cmd *cobra.Command) (error, bool) {
 	retAdded := false
 	if cmd.Flags().Changed("id_or_slug") {

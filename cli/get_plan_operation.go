@@ -35,9 +35,6 @@ func runOperationPlansGetPlan(cmd *cobra.Command, args []string) error {
 	}
 	// retrieve flag values from cmd and fill params
 	params := plans.NewGetPlanParams()
-	if err, _ := retrieveOperationPlansGetPlanAPIVersionFlag(params, "", cmd); err != nil {
-		return err
-	}
 	if err, _ := retrieveOperationPlansGetPlanPlanIDFlag(params, "", cmd); err != nil {
 		return err
 	}
@@ -61,41 +58,21 @@ func runOperationPlansGetPlan(cmd *cobra.Command, args []string) error {
 
 // registerOperationPlansGetPlanParamFlags registers all flags needed to fill params
 func registerOperationPlansGetPlanParamFlags(cmd *cobra.Command) error {
-	if err := registerOperationPlansGetPlanAPIVersionParamFlags("", cmd); err != nil {
-		return err
-	}
 	if err := registerOperationPlansGetPlanPlanIDParamFlags("", cmd); err != nil {
 		return err
 	}
 	return nil
 }
 
-func registerOperationPlansGetPlanAPIVersionParamFlags(cmdPrefix string, cmd *cobra.Command) error {
-
-	apiVersionDescription := ``
-
-	var apiVersionFlagName string
-	if cmdPrefix == "" {
-		apiVersionFlagName = "API-Version"
-	} else {
-		apiVersionFlagName = fmt.Sprintf("%v.API-Version", cmdPrefix)
-	}
-
-	var apiVersionFlagDefault string = "2023-06-01"
-
-	_ = cmd.PersistentFlags().String(apiVersionFlagName, apiVersionFlagDefault, apiVersionDescription)
-
-	return nil
-}
 func registerOperationPlansGetPlanPlanIDParamFlags(cmdPrefix string, cmd *cobra.Command) error {
 
 	planIdDescription := `Required. `
 
 	var planIdFlagName string
 	if cmdPrefix == "" {
-		planIdFlagName = "plan_id"
+		planIdFlagName = "id"
 	} else {
-		planIdFlagName = fmt.Sprintf("%v.plan_id", cmdPrefix)
+		planIdFlagName = fmt.Sprintf("%v.id", cmdPrefix)
 	}
 
 	var planIdFlagDefault string
@@ -106,35 +83,15 @@ func registerOperationPlansGetPlanPlanIDParamFlags(cmdPrefix string, cmd *cobra.
 	return nil
 }
 
-func retrieveOperationPlansGetPlanAPIVersionFlag(m *plans.GetPlanParams, cmdPrefix string, cmd *cobra.Command) (error, bool) {
-	retAdded := false
-	if cmd.Flags().Changed("API-Version") {
-
-		var apiVersionFlagName string
-		if cmdPrefix == "" {
-			apiVersionFlagName = "API-Version"
-		} else {
-			apiVersionFlagName = fmt.Sprintf("%v.API-Version", cmdPrefix)
-		}
-
-		apiVersionFlagValue, err := cmd.Flags().GetString(apiVersionFlagName)
-		if err != nil {
-			return err, false
-		}
-		m.APIVersion = &apiVersionFlagValue
-
-	}
-	return nil, retAdded
-}
 func retrieveOperationPlansGetPlanPlanIDFlag(m *plans.GetPlanParams, cmdPrefix string, cmd *cobra.Command) (error, bool) {
 	retAdded := false
-	if cmd.Flags().Changed("plan_id") {
+	if cmd.Flags().Changed("id") {
 
 		var planIdFlagName string
 		if cmdPrefix == "" {
-			planIdFlagName = "plan_id"
+			planIdFlagName = "id"
 		} else {
-			planIdFlagName = fmt.Sprintf("%v.plan_id", cmdPrefix)
+			planIdFlagName = fmt.Sprintf("%v.id", cmdPrefix)
 		}
 
 		planIdFlagValue, err := cmd.Flags().GetString(planIdFlagName)

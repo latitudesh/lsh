@@ -35,9 +35,6 @@ func runOperationServersServerUnscheduleDeletion(cmd *cobra.Command, args []stri
 	}
 	// retrieve flag values from cmd and fill params
 	params := servers.NewServerUnscheduleDeletionParams()
-	if err, _ := retrieveOperationServersServerUnscheduleDeletionAPIVersionFlag(params, "", cmd); err != nil {
-		return err
-	}
 	if err, _ := retrieveOperationServersServerUnscheduleDeletionServerIDFlag(params, "", cmd); err != nil {
 		return err
 	}
@@ -61,41 +58,21 @@ func runOperationServersServerUnscheduleDeletion(cmd *cobra.Command, args []stri
 
 // registerOperationServersServerUnscheduleDeletionParamFlags registers all flags needed to fill params
 func registerOperationServersServerUnscheduleDeletionParamFlags(cmd *cobra.Command) error {
-	if err := registerOperationServersServerUnscheduleDeletionAPIVersionParamFlags("", cmd); err != nil {
-		return err
-	}
 	if err := registerOperationServersServerUnscheduleDeletionServerIDParamFlags("", cmd); err != nil {
 		return err
 	}
 	return nil
 }
 
-func registerOperationServersServerUnscheduleDeletionAPIVersionParamFlags(cmdPrefix string, cmd *cobra.Command) error {
-
-	apiVersionDescription := ``
-
-	var apiVersionFlagName string
-	if cmdPrefix == "" {
-		apiVersionFlagName = "API-Version"
-	} else {
-		apiVersionFlagName = fmt.Sprintf("%v.API-Version", cmdPrefix)
-	}
-
-	var apiVersionFlagDefault string = "2023-06-01"
-
-	_ = cmd.PersistentFlags().String(apiVersionFlagName, apiVersionFlagDefault, apiVersionDescription)
-
-	return nil
-}
 func registerOperationServersServerUnscheduleDeletionServerIDParamFlags(cmdPrefix string, cmd *cobra.Command) error {
 
-	serverIdDescription := `Required. `
+	serverIdDescription := `The Server Id (Required).`
 
 	var serverIdFlagName string
 	if cmdPrefix == "" {
-		serverIdFlagName = "server_id"
+		serverIdFlagName = "id"
 	} else {
-		serverIdFlagName = fmt.Sprintf("%v.server_id", cmdPrefix)
+		serverIdFlagName = fmt.Sprintf("%v.id", cmdPrefix)
 	}
 
 	var serverIdFlagDefault string
@@ -106,35 +83,15 @@ func registerOperationServersServerUnscheduleDeletionServerIDParamFlags(cmdPrefi
 	return nil
 }
 
-func retrieveOperationServersServerUnscheduleDeletionAPIVersionFlag(m *servers.ServerUnscheduleDeletionParams, cmdPrefix string, cmd *cobra.Command) (error, bool) {
-	retAdded := false
-	if cmd.Flags().Changed("API-Version") {
-
-		var apiVersionFlagName string
-		if cmdPrefix == "" {
-			apiVersionFlagName = "API-Version"
-		} else {
-			apiVersionFlagName = fmt.Sprintf("%v.API-Version", cmdPrefix)
-		}
-
-		apiVersionFlagValue, err := cmd.Flags().GetString(apiVersionFlagName)
-		if err != nil {
-			return err, false
-		}
-		m.APIVersion = &apiVersionFlagValue
-
-	}
-	return nil, retAdded
-}
 func retrieveOperationServersServerUnscheduleDeletionServerIDFlag(m *servers.ServerUnscheduleDeletionParams, cmdPrefix string, cmd *cobra.Command) (error, bool) {
 	retAdded := false
-	if cmd.Flags().Changed("server_id") {
+	if cmd.Flags().Changed("id") {
 
 		var serverIdFlagName string
 		if cmdPrefix == "" {
-			serverIdFlagName = "server_id"
+			serverIdFlagName = "id"
 		} else {
-			serverIdFlagName = fmt.Sprintf("%v.server_id", cmdPrefix)
+			serverIdFlagName = fmt.Sprintf("%v.id", cmdPrefix)
 		}
 
 		serverIdFlagValue, err := cmd.Flags().GetString(serverIdFlagName)

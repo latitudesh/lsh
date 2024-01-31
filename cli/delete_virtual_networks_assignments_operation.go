@@ -37,9 +37,6 @@ func runOperationVirtualNetworkAssignmentsDeleteVirtualNetworksAssignments(cmd *
 	}
 	// retrieve flag values from cmd and fill params
 	params := virtual_network_assignments.NewDeleteVirtualNetworksAssignmentsParams()
-	if err, _ := retrieveOperationVirtualNetworkAssignmentsDeleteVirtualNetworksAssignmentsAPIVersionFlag(params, "", cmd); err != nil {
-		return err
-	}
 	if err, _ := retrieveOperationVirtualNetworkAssignmentsDeleteVirtualNetworksAssignmentsAssignmentIDFlag(params, "", cmd); err != nil {
 		return err
 	}
@@ -63,41 +60,21 @@ func runOperationVirtualNetworkAssignmentsDeleteVirtualNetworksAssignments(cmd *
 
 // registerOperationVirtualNetworkAssignmentsDeleteVirtualNetworksAssignmentsParamFlags registers all flags needed to fill params
 func registerOperationVirtualNetworkAssignmentsDeleteVirtualNetworksAssignmentsParamFlags(cmd *cobra.Command) error {
-	if err := registerOperationVirtualNetworkAssignmentsDeleteVirtualNetworksAssignmentsAPIVersionParamFlags("", cmd); err != nil {
-		return err
-	}
 	if err := registerOperationVirtualNetworkAssignmentsDeleteVirtualNetworksAssignmentsAssignmentIDParamFlags("", cmd); err != nil {
 		return err
 	}
 	return nil
 }
 
-func registerOperationVirtualNetworkAssignmentsDeleteVirtualNetworksAssignmentsAPIVersionParamFlags(cmdPrefix string, cmd *cobra.Command) error {
-
-	apiVersionDescription := ``
-
-	var apiVersionFlagName string
-	if cmdPrefix == "" {
-		apiVersionFlagName = "API-Version"
-	} else {
-		apiVersionFlagName = fmt.Sprintf("%v.API-Version", cmdPrefix)
-	}
-
-	var apiVersionFlagDefault string = "2023-06-01"
-
-	_ = cmd.PersistentFlags().String(apiVersionFlagName, apiVersionFlagDefault, apiVersionDescription)
-
-	return nil
-}
 func registerOperationVirtualNetworkAssignmentsDeleteVirtualNetworksAssignmentsAssignmentIDParamFlags(cmdPrefix string, cmd *cobra.Command) error {
 
-	assignmentIdDescription := `Required. `
+	assignmentIdDescription := `Virtual Network Assignment Id (Required).`
 
 	var assignmentIdFlagName string
 	if cmdPrefix == "" {
-		assignmentIdFlagName = "assignment_id"
+		assignmentIdFlagName = "id"
 	} else {
-		assignmentIdFlagName = fmt.Sprintf("%v.assignment_id", cmdPrefix)
+		assignmentIdFlagName = fmt.Sprintf("%v.id", cmdPrefix)
 	}
 
 	var assignmentIdFlagDefault string
@@ -108,35 +85,15 @@ func registerOperationVirtualNetworkAssignmentsDeleteVirtualNetworksAssignmentsA
 	return nil
 }
 
-func retrieveOperationVirtualNetworkAssignmentsDeleteVirtualNetworksAssignmentsAPIVersionFlag(m *virtual_network_assignments.DeleteVirtualNetworksAssignmentsParams, cmdPrefix string, cmd *cobra.Command) (error, bool) {
-	retAdded := false
-	if cmd.Flags().Changed("API-Version") {
-
-		var apiVersionFlagName string
-		if cmdPrefix == "" {
-			apiVersionFlagName = "API-Version"
-		} else {
-			apiVersionFlagName = fmt.Sprintf("%v.API-Version", cmdPrefix)
-		}
-
-		apiVersionFlagValue, err := cmd.Flags().GetString(apiVersionFlagName)
-		if err != nil {
-			return err, false
-		}
-		m.APIVersion = &apiVersionFlagValue
-
-	}
-	return nil, retAdded
-}
 func retrieveOperationVirtualNetworkAssignmentsDeleteVirtualNetworksAssignmentsAssignmentIDFlag(m *virtual_network_assignments.DeleteVirtualNetworksAssignmentsParams, cmdPrefix string, cmd *cobra.Command) (error, bool) {
 	retAdded := false
-	if cmd.Flags().Changed("assignment_id") {
+	if cmd.Flags().Changed("id") {
 
 		var assignmentIdFlagName string
 		if cmdPrefix == "" {
-			assignmentIdFlagName = "assignment_id"
+			assignmentIdFlagName = "id"
 		} else {
-			assignmentIdFlagName = fmt.Sprintf("%v.assignment_id", cmdPrefix)
+			assignmentIdFlagName = fmt.Sprintf("%v.id", cmdPrefix)
 		}
 
 		assignmentIdFlagValue, err := cmd.Flags().GetString(assignmentIdFlagName)

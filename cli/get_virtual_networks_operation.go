@@ -37,9 +37,6 @@ func runOperationVirtualNetworksGetVirtualNetworks(cmd *cobra.Command, args []st
 	}
 	// retrieve flag values from cmd and fill params
 	params := virtual_networks.NewGetVirtualNetworksParams()
-	if err, _ := retrieveOperationVirtualNetworksGetVirtualNetworksAPIVersionFlag(params, "", cmd); err != nil {
-		return err
-	}
 	if err, _ := retrieveOperationVirtualNetworksGetVirtualNetworksFilterLocationFlag(params, "", cmd); err != nil {
 		return err
 	}
@@ -67,9 +64,6 @@ func runOperationVirtualNetworksGetVirtualNetworks(cmd *cobra.Command, args []st
 
 // registerOperationVirtualNetworksGetVirtualNetworksParamFlags registers all flags needed to fill params
 func registerOperationVirtualNetworksGetVirtualNetworksParamFlags(cmd *cobra.Command) error {
-	if err := registerOperationVirtualNetworksGetVirtualNetworksAPIVersionParamFlags("", cmd); err != nil {
-		return err
-	}
 	if err := registerOperationVirtualNetworksGetVirtualNetworksFilterLocationParamFlags("", cmd); err != nil {
 		return err
 	}
@@ -79,23 +73,6 @@ func registerOperationVirtualNetworksGetVirtualNetworksParamFlags(cmd *cobra.Com
 	return nil
 }
 
-func registerOperationVirtualNetworksGetVirtualNetworksAPIVersionParamFlags(cmdPrefix string, cmd *cobra.Command) error {
-
-	apiVersionDescription := ``
-
-	var apiVersionFlagName string
-	if cmdPrefix == "" {
-		apiVersionFlagName = "API-Version"
-	} else {
-		apiVersionFlagName = fmt.Sprintf("%v.API-Version", cmdPrefix)
-	}
-
-	var apiVersionFlagDefault string = "2023-06-01"
-
-	_ = cmd.PersistentFlags().String(apiVersionFlagName, apiVersionFlagDefault, apiVersionDescription)
-
-	return nil
-}
 func registerOperationVirtualNetworksGetVirtualNetworksFilterLocationParamFlags(cmdPrefix string, cmd *cobra.Command) error {
 
 	filterLocationDescription := `The location slug to filter by`
@@ -131,26 +108,6 @@ func registerOperationVirtualNetworksGetVirtualNetworksFilterProjectParamFlags(c
 	return nil
 }
 
-func retrieveOperationVirtualNetworksGetVirtualNetworksAPIVersionFlag(m *virtual_networks.GetVirtualNetworksParams, cmdPrefix string, cmd *cobra.Command) (error, bool) {
-	retAdded := false
-	if cmd.Flags().Changed("API-Version") {
-
-		var apiVersionFlagName string
-		if cmdPrefix == "" {
-			apiVersionFlagName = "API-Version"
-		} else {
-			apiVersionFlagName = fmt.Sprintf("%v.API-Version", cmdPrefix)
-		}
-
-		apiVersionFlagValue, err := cmd.Flags().GetString(apiVersionFlagName)
-		if err != nil {
-			return err, false
-		}
-		m.APIVersion = &apiVersionFlagValue
-
-	}
-	return nil, retAdded
-}
 func retrieveOperationVirtualNetworksGetVirtualNetworksFilterLocationFlag(m *virtual_networks.GetVirtualNetworksParams, cmdPrefix string, cmd *cobra.Command) (error, bool) {
 	retAdded := false
 	if cmd.Flags().Changed("location") {

@@ -25,6 +25,11 @@ import (
 func NewCreateServerParams() *CreateServerParams {
 	return &CreateServerParams{
 		timeout: cr.DefaultTimeout,
+		Body: CreateServerBody{
+			Data: &CreateServerParamsBodyData{
+				Type: &serverType,
+			},
+		},
 	}
 }
 
@@ -61,11 +66,6 @@ CreateServerParams contains all the parameters to send to the API endpoint
 */
 type CreateServerParams struct {
 
-	// APIVersion.
-	//
-	// Default: "2023-06-01"
-	APIVersion *string
-
 	// Body.
 	Body CreateServerBody
 
@@ -86,13 +86,7 @@ func (o *CreateServerParams) WithDefaults() *CreateServerParams {
 //
 // All values with no default are reset to their zero value.
 func (o *CreateServerParams) SetDefaults() {
-	var (
-		aPIVersionDefault = string("2023-06-01")
-	)
-
-	val := CreateServerParams{
-		APIVersion: &aPIVersionDefault,
-	}
+	val := CreateServerParams{}
 
 	val.timeout = o.timeout
 	val.Context = o.Context
@@ -133,17 +127,6 @@ func (o *CreateServerParams) SetHTTPClient(client *http.Client) {
 	o.HTTPClient = client
 }
 
-// WithAPIVersion adds the aPIVersion to the create server params
-func (o *CreateServerParams) WithAPIVersion(aPIVersion *string) *CreateServerParams {
-	o.SetAPIVersion(aPIVersion)
-	return o
-}
-
-// SetAPIVersion adds the apiVersion to the create server params
-func (o *CreateServerParams) SetAPIVersion(aPIVersion *string) {
-	o.APIVersion = aPIVersion
-}
-
 // WithBody adds the body to the create server params
 func (o *CreateServerParams) WithBody(body CreateServerBody) *CreateServerParams {
 	o.SetBody(body)
@@ -163,13 +146,6 @@ func (o *CreateServerParams) WriteToRequest(r runtime.ClientRequest, reg strfmt.
 	}
 	var res []error
 
-	if o.APIVersion != nil {
-
-		// header param API-Version
-		if err := r.SetHeaderParam("API-Version", *o.APIVersion); err != nil {
-			return err
-		}
-	}
 	if err := r.SetBodyParam(o.Body); err != nil {
 		return err
 	}

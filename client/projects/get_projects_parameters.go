@@ -61,11 +61,6 @@ GetProjectsParams contains all the parameters to send to the API endpoint
 */
 type GetProjectsParams struct {
 
-	// APIVersion.
-	//
-	// Default: "2023-06-01"
-	APIVersion *string
-
 	/* ExtraFieldsProjects.
 
 	   The `last_renewal_date` and `next_renewal_date` are provided as extra attributes that show previous and future billing cycle dates. To request it, just set `extra_fields[projects]=last_renewal_date,next_renewal_date` in the query string.
@@ -119,13 +114,7 @@ func (o *GetProjectsParams) WithDefaults() *GetProjectsParams {
 //
 // All values with no default are reset to their zero value.
 func (o *GetProjectsParams) SetDefaults() {
-	var (
-		aPIVersionDefault = string("2023-06-01")
-	)
-
-	val := GetProjectsParams{
-		APIVersion: &aPIVersionDefault,
-	}
+	val := GetProjectsParams{}
 
 	val.timeout = o.timeout
 	val.Context = o.Context
@@ -164,17 +153,6 @@ func (o *GetProjectsParams) WithHTTPClient(client *http.Client) *GetProjectsPara
 // SetHTTPClient adds the HTTPClient to the get projects params
 func (o *GetProjectsParams) SetHTTPClient(client *http.Client) {
 	o.HTTPClient = client
-}
-
-// WithAPIVersion adds the aPIVersion to the get projects params
-func (o *GetProjectsParams) WithAPIVersion(aPIVersion *string) *GetProjectsParams {
-	o.SetAPIVersion(aPIVersion)
-	return o
-}
-
-// SetAPIVersion adds the apiVersion to the get projects params
-func (o *GetProjectsParams) SetAPIVersion(aPIVersion *string) {
-	o.APIVersion = aPIVersion
 }
 
 // WithExtraFieldsProjects adds the extraFieldsProjects to the get projects params
@@ -250,14 +228,6 @@ func (o *GetProjectsParams) WriteToRequest(r runtime.ClientRequest, reg strfmt.R
 		return err
 	}
 	var res []error
-
-	if o.APIVersion != nil {
-
-		// header param API-Version
-		if err := r.SetHeaderParam("API-Version", *o.APIVersion); err != nil {
-			return err
-		}
-	}
 
 	if o.ExtraFieldsProjects != nil {
 

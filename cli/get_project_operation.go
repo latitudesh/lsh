@@ -37,9 +37,6 @@ func runOperationProjectsGetProject(cmd *cobra.Command, args []string) error {
 	}
 	// retrieve flag values from cmd and fill params
 	params := projects.NewGetProjectParams()
-	if err, _ := retrieveOperationProjectsGetProjectAPIVersionFlag(params, "", cmd); err != nil {
-		return err
-	}
 	if err, _ := retrieveOperationProjectsGetProjectExtraFieldsProjectsFlag(params, "", cmd); err != nil {
 		return err
 	}
@@ -66,9 +63,6 @@ func runOperationProjectsGetProject(cmd *cobra.Command, args []string) error {
 
 // registerOperationProjectsGetProjectParamFlags registers all flags needed to fill params
 func registerOperationProjectsGetProjectParamFlags(cmd *cobra.Command) error {
-	if err := registerOperationProjectsGetProjectAPIVersionParamFlags("", cmd); err != nil {
-		return err
-	}
 	if err := registerOperationProjectsGetProjectExtraFieldsProjectsParamFlags("", cmd); err != nil {
 		return err
 	}
@@ -78,23 +72,6 @@ func registerOperationProjectsGetProjectParamFlags(cmd *cobra.Command) error {
 	return nil
 }
 
-func registerOperationProjectsGetProjectAPIVersionParamFlags(cmdPrefix string, cmd *cobra.Command) error {
-
-	apiVersionDescription := ``
-
-	var apiVersionFlagName string
-	if cmdPrefix == "" {
-		apiVersionFlagName = "API-Version"
-	} else {
-		apiVersionFlagName = fmt.Sprintf("%v.API-Version", cmdPrefix)
-	}
-
-	var apiVersionFlagDefault string = "2023-06-01"
-
-	_ = cmd.PersistentFlags().String(apiVersionFlagName, apiVersionFlagDefault, apiVersionDescription)
-
-	return nil
-}
 func registerOperationProjectsGetProjectExtraFieldsProjectsParamFlags(cmdPrefix string, cmd *cobra.Command) error {
 
 	extraFieldsProjectsDescription := `The ` + "`" + `last_renewal_date` + "`" + ` and ` + "`" + `next_renewal_date` + "`" + ` are provided as extra attributes that show previous and future billing cycle dates. To request it, just set ` + "`" + `extra_fields[projects]=last_renewal_date,next_renewal_date` + "`" + ` in the query string.`
@@ -131,26 +108,6 @@ func registerOperationProjectsGetProjectIDOrSlugParamFlags(cmdPrefix string, cmd
 	return nil
 }
 
-func retrieveOperationProjectsGetProjectAPIVersionFlag(m *projects.GetProjectParams, cmdPrefix string, cmd *cobra.Command) (error, bool) {
-	retAdded := false
-	if cmd.Flags().Changed("API-Version") {
-
-		var apiVersionFlagName string
-		if cmdPrefix == "" {
-			apiVersionFlagName = "API-Version"
-		} else {
-			apiVersionFlagName = fmt.Sprintf("%v.API-Version", cmdPrefix)
-		}
-
-		apiVersionFlagValue, err := cmd.Flags().GetString(apiVersionFlagName)
-		if err != nil {
-			return err, false
-		}
-		m.APIVersion = &apiVersionFlagValue
-
-	}
-	return nil, retAdded
-}
 func retrieveOperationProjectsGetProjectExtraFieldsProjectsFlag(m *projects.GetProjectParams, cmdPrefix string, cmd *cobra.Command) (error, bool) {
 	retAdded := false
 	if cmd.Flags().Changed("extra_fields[projects]") {

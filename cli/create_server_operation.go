@@ -39,9 +39,6 @@ func runOperationServersCreateServer(cmd *cobra.Command, args []string) error {
 	}
 	// retrieve flag values from cmd and fill params
 	params := servers.NewCreateServerParams()
-	if err, _ := retrieveOperationServersCreateServerAPIVersionFlag(params, "", cmd); err != nil {
-		return err
-	}
 	if err, _ := retrieveOperationServersCreateServerBodyFlag(params, "", cmd); err != nil {
 		return err
 	}
@@ -65,32 +62,12 @@ func runOperationServersCreateServer(cmd *cobra.Command, args []string) error {
 
 // registerOperationServersCreateServerParamFlags registers all flags needed to fill params
 func registerOperationServersCreateServerParamFlags(cmd *cobra.Command) error {
-	if err := registerOperationServersCreateServerAPIVersionParamFlags("", cmd); err != nil {
-		return err
-	}
 	if err := registerOperationServersCreateServerBodyParamFlags("", cmd); err != nil {
 		return err
 	}
 	return nil
 }
 
-func registerOperationServersCreateServerAPIVersionParamFlags(cmdPrefix string, cmd *cobra.Command) error {
-
-	apiVersionDescription := ``
-
-	var apiVersionFlagName string
-	if cmdPrefix == "" {
-		apiVersionFlagName = "API-Version"
-	} else {
-		apiVersionFlagName = fmt.Sprintf("%v.API-Version", cmdPrefix)
-	}
-
-	var apiVersionFlagDefault string = "2023-06-01"
-
-	_ = cmd.PersistentFlags().String(apiVersionFlagName, apiVersionFlagDefault, apiVersionDescription)
-
-	return nil
-}
 func registerOperationServersCreateServerBodyParamFlags(cmdPrefix string, cmd *cobra.Command) error {
 
 	var bodyFlagName string
@@ -110,26 +87,6 @@ func registerOperationServersCreateServerBodyParamFlags(cmdPrefix string, cmd *c
 	return nil
 }
 
-func retrieveOperationServersCreateServerAPIVersionFlag(m *servers.CreateServerParams, cmdPrefix string, cmd *cobra.Command) (error, bool) {
-	retAdded := false
-	if cmd.Flags().Changed("API-Version") {
-
-		var apiVersionFlagName string
-		if cmdPrefix == "" {
-			apiVersionFlagName = "API-Version"
-		} else {
-			apiVersionFlagName = fmt.Sprintf("%v.API-Version", cmdPrefix)
-		}
-
-		apiVersionFlagValue, err := cmd.Flags().GetString(apiVersionFlagName)
-		if err != nil {
-			return err, false
-		}
-		m.APIVersion = &apiVersionFlagValue
-
-	}
-	return nil, retAdded
-}
 func retrieveOperationServersCreateServerBodyFlag(m *servers.CreateServerParams, cmdPrefix string, cmd *cobra.Command) (error, bool) {
 	retAdded := false
 	if cmd.Flags().Changed("body") {
@@ -241,10 +198,6 @@ func registerModelCreateServerParamsBodyDataFlags(depth int, cmdPrefix string, c
 		return err
 	}
 
-	if err := registerCreateServerParamsBodyDataType(depth, cmdPrefix, cmd); err != nil {
-		return err
-	}
-
 	return nil
 }
 
@@ -262,33 +215,6 @@ func registerCreateServerParamsBodyDataAttributes(depth int, cmdPrefix string, c
 	return nil
 }
 
-func registerCreateServerParamsBodyDataType(depth int, cmdPrefix string, cmd *cobra.Command) error {
-	if depth > maxDepth {
-		return nil
-	}
-
-	typeDescription := `Enum: ["servers"]. Required. `
-
-	var typeFlagName = "type"
-
-	var typeFlagDefault string
-
-	_ = cmd.PersistentFlags().String(typeFlagName, typeFlagDefault, typeDescription)
-
-	if err := cmd.RegisterFlagCompletionFunc(typeFlagName,
-		func(cmd *cobra.Command, args []string, toComplete string) ([]string, cobra.ShellCompDirective) {
-			var res []string
-			if err := json.Unmarshal([]byte(`["servers"]`), &res); err != nil {
-				panic(err)
-			}
-			return res, cobra.ShellCompDirectiveDefault
-		}); err != nil {
-		return err
-	}
-
-	return nil
-}
-
 // retrieve flags from commands, and set value in model. Return true if any flag is passed by user to fill model field.
 func retrieveModelCreateServerParamsBodyDataFlags(depth int, m *servers.CreateServerParamsBodyData, cmdPrefix string, cmd *cobra.Command) (error, bool) {
 	retAdded := false
@@ -298,12 +224,6 @@ func retrieveModelCreateServerParamsBodyDataFlags(depth int, m *servers.CreateSe
 		return err, false
 	}
 	retAdded = retAdded || attributesAdded
-
-	err, typeAdded := retrieveCreateServerParamsBodyDataTypeFlags(depth, m, cmdPrefix, cmd)
-	if err != nil {
-		return err, false
-	}
-	retAdded = retAdded || typeAdded
 
 	return nil, retAdded
 }
@@ -331,27 +251,6 @@ func retrieveCreateServerParamsBodyDataAttributesFlags(depth int, m *servers.Cre
 	retAdded = retAdded || attributesAdded
 	if attributesAdded {
 		m.Attributes = attributesFlagValue
-	}
-
-	return nil, retAdded
-}
-
-func retrieveCreateServerParamsBodyDataTypeFlags(depth int, m *servers.CreateServerParamsBodyData, cmdPrefix string, cmd *cobra.Command) (error, bool) {
-	if depth > maxDepth {
-		return nil, false
-	}
-	retAdded := false
-
-	var typeFlagName = "type"
-	if cmd.Flags().Changed(typeFlagName) {
-
-		typeFlagValue, err := cmd.Flags().GetString(typeFlagName)
-		if err != nil {
-			return err, false
-		}
-		m.Type = &typeFlagValue
-
-		retAdded = true
 	}
 
 	return nil, retAdded

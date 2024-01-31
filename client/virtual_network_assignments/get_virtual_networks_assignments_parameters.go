@@ -61,11 +61,6 @@ GetVirtualNetworksAssignmentsParams contains all the parameters to send to the A
 */
 type GetVirtualNetworksAssignmentsParams struct {
 
-	// APIVersion.
-	//
-	// Default: "2023-06-01"
-	APIVersion *string
-
 	/* FilterServer.
 
 	   The server ID to filter by
@@ -101,13 +96,7 @@ func (o *GetVirtualNetworksAssignmentsParams) WithDefaults() *GetVirtualNetworks
 //
 // All values with no default are reset to their zero value.
 func (o *GetVirtualNetworksAssignmentsParams) SetDefaults() {
-	var (
-		aPIVersionDefault = string("2023-06-01")
-	)
-
-	val := GetVirtualNetworksAssignmentsParams{
-		APIVersion: &aPIVersionDefault,
-	}
+	val := GetVirtualNetworksAssignmentsParams{}
 
 	val.timeout = o.timeout
 	val.Context = o.Context
@@ -146,17 +135,6 @@ func (o *GetVirtualNetworksAssignmentsParams) WithHTTPClient(client *http.Client
 // SetHTTPClient adds the HTTPClient to the get virtual networks assignments params
 func (o *GetVirtualNetworksAssignmentsParams) SetHTTPClient(client *http.Client) {
 	o.HTTPClient = client
-}
-
-// WithAPIVersion adds the aPIVersion to the get virtual networks assignments params
-func (o *GetVirtualNetworksAssignmentsParams) WithAPIVersion(aPIVersion *string) *GetVirtualNetworksAssignmentsParams {
-	o.SetAPIVersion(aPIVersion)
-	return o
-}
-
-// SetAPIVersion adds the apiVersion to the get virtual networks assignments params
-func (o *GetVirtualNetworksAssignmentsParams) SetAPIVersion(aPIVersion *string) {
-	o.APIVersion = aPIVersion
 }
 
 // WithFilterServer adds the filterServer to the get virtual networks assignments params
@@ -199,14 +177,6 @@ func (o *GetVirtualNetworksAssignmentsParams) WriteToRequest(r runtime.ClientReq
 		return err
 	}
 	var res []error
-
-	if o.APIVersion != nil {
-
-		// header param API-Version
-		if err := r.SetHeaderParam("API-Version", *o.APIVersion); err != nil {
-			return err
-		}
-	}
 
 	if o.FilterServer != nil {
 

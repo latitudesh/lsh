@@ -40,9 +40,6 @@ func runOperationAPIKeysPostAPIKey(cmd *cobra.Command, args []string) error {
 	}
 	// retrieve flag values from cmd and fill params
 	params := api_keys.NewPostAPIKeyParams()
-	if err, _ := retrieveOperationAPIKeysPostAPIKeyAPIVersionFlag(params, "", cmd); err != nil {
-		return err
-	}
 	if err, _ := retrieveOperationAPIKeysPostAPIKeyBodyFlag(params, "", cmd); err != nil {
 		return err
 	}
@@ -66,32 +63,12 @@ func runOperationAPIKeysPostAPIKey(cmd *cobra.Command, args []string) error {
 
 // registerOperationAPIKeysPostAPIKeyParamFlags registers all flags needed to fill params
 func registerOperationAPIKeysPostAPIKeyParamFlags(cmd *cobra.Command) error {
-	if err := registerOperationAPIKeysPostAPIKeyAPIVersionParamFlags("", cmd); err != nil {
-		return err
-	}
 	if err := registerOperationAPIKeysPostAPIKeyBodyParamFlags("", cmd); err != nil {
 		return err
 	}
 	return nil
 }
 
-func registerOperationAPIKeysPostAPIKeyAPIVersionParamFlags(cmdPrefix string, cmd *cobra.Command) error {
-
-	apiVersionDescription := ``
-
-	var apiVersionFlagName string
-	if cmdPrefix == "" {
-		apiVersionFlagName = "API-Version"
-	} else {
-		apiVersionFlagName = fmt.Sprintf("%v.API-Version", cmdPrefix)
-	}
-
-	var apiVersionFlagDefault string = "2023-06-01"
-
-	_ = cmd.PersistentFlags().String(apiVersionFlagName, apiVersionFlagDefault, apiVersionDescription)
-
-	return nil
-}
 func registerOperationAPIKeysPostAPIKeyBodyParamFlags(cmdPrefix string, cmd *cobra.Command) error {
 
 	var bodyFlagName string
@@ -111,26 +88,6 @@ func registerOperationAPIKeysPostAPIKeyBodyParamFlags(cmdPrefix string, cmd *cob
 	return nil
 }
 
-func retrieveOperationAPIKeysPostAPIKeyAPIVersionFlag(m *api_keys.PostAPIKeyParams, cmdPrefix string, cmd *cobra.Command) (error, bool) {
-	retAdded := false
-	if cmd.Flags().Changed("API-Version") {
-
-		var apiVersionFlagName string
-		if cmdPrefix == "" {
-			apiVersionFlagName = "API-Version"
-		} else {
-			apiVersionFlagName = fmt.Sprintf("%v.API-Version", cmdPrefix)
-		}
-
-		apiVersionFlagValue, err := cmd.Flags().GetString(apiVersionFlagName)
-		if err != nil {
-			return err, false
-		}
-		m.APIVersion = &apiVersionFlagValue
-
-	}
-	return nil, retAdded
-}
 func retrieveOperationAPIKeysPostAPIKeyBodyFlag(m *api_keys.PostAPIKeyParams, cmdPrefix string, cmd *cobra.Command) (error, bool) {
 	retAdded := false
 	if cmd.Flags().Changed("body") {

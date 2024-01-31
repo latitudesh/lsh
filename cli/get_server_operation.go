@@ -35,9 +35,6 @@ func runOperationServersGetServer(cmd *cobra.Command, args []string) error {
 	}
 	// retrieve flag values from cmd and fill params
 	params := servers.NewGetServerParams()
-	if err, _ := retrieveOperationServersGetServerAPIVersionFlag(params, "", cmd); err != nil {
-		return err
-	}
 	if err, _ := retrieveOperationServersGetServerExtraFieldsServersFlag(params, "", cmd); err != nil {
 		return err
 	}
@@ -64,9 +61,6 @@ func runOperationServersGetServer(cmd *cobra.Command, args []string) error {
 
 // registerOperationServersGetServerParamFlags registers all flags needed to fill params
 func registerOperationServersGetServerParamFlags(cmd *cobra.Command) error {
-	if err := registerOperationServersGetServerAPIVersionParamFlags("", cmd); err != nil {
-		return err
-	}
 	if err := registerOperationServersGetServerExtraFieldsServersParamFlags("", cmd); err != nil {
 		return err
 	}
@@ -76,23 +70,6 @@ func registerOperationServersGetServerParamFlags(cmd *cobra.Command) error {
 	return nil
 }
 
-func registerOperationServersGetServerAPIVersionParamFlags(cmdPrefix string, cmd *cobra.Command) error {
-
-	apiVersionDescription := ``
-
-	var apiVersionFlagName string
-	if cmdPrefix == "" {
-		apiVersionFlagName = "API-Version"
-	} else {
-		apiVersionFlagName = fmt.Sprintf("%v.API-Version", cmdPrefix)
-	}
-
-	var apiVersionFlagDefault string = "2023-06-01"
-
-	_ = cmd.PersistentFlags().String(apiVersionFlagName, apiVersionFlagDefault, apiVersionDescription)
-
-	return nil
-}
 func registerOperationServersGetServerExtraFieldsServersParamFlags(cmdPrefix string, cmd *cobra.Command) error {
 
 	extraFieldsServersDescription := `The ` + "`" + `credentials` + "`" + ` are provided as extra attributes that is lazy loaded. To request it, just set ` + "`" + `extra_fields[servers]=credentials` + "`" + ` in the query string.`
@@ -116,9 +93,9 @@ func registerOperationServersGetServerServerIDParamFlags(cmdPrefix string, cmd *
 
 	var serverIdFlagName string
 	if cmdPrefix == "" {
-		serverIdFlagName = "server_id"
+		serverIdFlagName = "id"
 	} else {
-		serverIdFlagName = fmt.Sprintf("%v.server_id", cmdPrefix)
+		serverIdFlagName = fmt.Sprintf("%v.id", cmdPrefix)
 	}
 
 	var serverIdFlagDefault string
@@ -129,26 +106,6 @@ func registerOperationServersGetServerServerIDParamFlags(cmdPrefix string, cmd *
 	return nil
 }
 
-func retrieveOperationServersGetServerAPIVersionFlag(m *servers.GetServerParams, cmdPrefix string, cmd *cobra.Command) (error, bool) {
-	retAdded := false
-	if cmd.Flags().Changed("API-Version") {
-
-		var apiVersionFlagName string
-		if cmdPrefix == "" {
-			apiVersionFlagName = "API-Version"
-		} else {
-			apiVersionFlagName = fmt.Sprintf("%v.API-Version", cmdPrefix)
-		}
-
-		apiVersionFlagValue, err := cmd.Flags().GetString(apiVersionFlagName)
-		if err != nil {
-			return err, false
-		}
-		m.APIVersion = &apiVersionFlagValue
-
-	}
-	return nil, retAdded
-}
 func retrieveOperationServersGetServerExtraFieldsServersFlag(m *servers.GetServerParams, cmdPrefix string, cmd *cobra.Command) (error, bool) {
 	retAdded := false
 	if cmd.Flags().Changed("extra_fields[servers]") {
@@ -171,13 +128,13 @@ func retrieveOperationServersGetServerExtraFieldsServersFlag(m *servers.GetServe
 }
 func retrieveOperationServersGetServerServerIDFlag(m *servers.GetServerParams, cmdPrefix string, cmd *cobra.Command) (error, bool) {
 	retAdded := false
-	if cmd.Flags().Changed("server_id") {
+	if cmd.Flags().Changed("id") {
 
 		var serverIdFlagName string
 		if cmdPrefix == "" {
-			serverIdFlagName = "server_id"
+			serverIdFlagName = "id"
 		} else {
-			serverIdFlagName = fmt.Sprintf("%v.server_id", cmdPrefix)
+			serverIdFlagName = fmt.Sprintf("%v.id", cmdPrefix)
 		}
 
 		serverIdFlagValue, err := cmd.Flags().GetString(serverIdFlagName)

@@ -13,6 +13,7 @@ import (
 	"path/filepath"
 
 	"github.com/latitudesh/lsh/client"
+	"github.com/latitudesh/lsh/internal/version"
 
 	"github.com/go-openapi/runtime"
 	httptransport "github.com/go-openapi/runtime/client"
@@ -79,7 +80,11 @@ func MakeRootCmd() (*cobra.Command, error) {
 	// Use executable name as the command name
 	rootCmd := &cobra.Command{
 		Use: exeName,
+		Version: version.Version,
 	}
+
+	// Edit commands template
+	rootCmd.SetVersionTemplate(fmt.Sprintf("lsh %s\n", rootCmd.Version))
 
 	// register basic flags
 	rootCmd.PersistentFlags().String("hostname", client.DefaultHost, "hostname of the service")

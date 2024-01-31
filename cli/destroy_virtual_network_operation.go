@@ -37,9 +37,6 @@ func runOperationVirtualNetworksDestroyVirtualNetwork(cmd *cobra.Command, args [
 	}
 	// retrieve flag values from cmd and fill params
 	params := virtual_networks.NewDestroyVirtualNetworkParams()
-	if err, _ := retrieveOperationVirtualNetworksDestroyVirtualNetworkAPIVersionFlag(params, "", cmd); err != nil {
-		return err
-	}
 	if err, _ := retrieveOperationVirtualNetworksDestroyVirtualNetworkIDFlag(params, "", cmd); err != nil {
 		return err
 	}
@@ -63,32 +60,12 @@ func runOperationVirtualNetworksDestroyVirtualNetwork(cmd *cobra.Command, args [
 
 // registerOperationVirtualNetworksDestroyVirtualNetworkParamFlags registers all flags needed to fill params
 func registerOperationVirtualNetworksDestroyVirtualNetworkParamFlags(cmd *cobra.Command) error {
-	if err := registerOperationVirtualNetworksDestroyVirtualNetworkAPIVersionParamFlags("", cmd); err != nil {
-		return err
-	}
 	if err := registerOperationVirtualNetworksDestroyVirtualNetworkIDParamFlags("", cmd); err != nil {
 		return err
 	}
 	return nil
 }
 
-func registerOperationVirtualNetworksDestroyVirtualNetworkAPIVersionParamFlags(cmdPrefix string, cmd *cobra.Command) error {
-
-	apiVersionDescription := ``
-
-	var apiVersionFlagName string
-	if cmdPrefix == "" {
-		apiVersionFlagName = "API-Version"
-	} else {
-		apiVersionFlagName = fmt.Sprintf("%v.API-Version", cmdPrefix)
-	}
-
-	var apiVersionFlagDefault string = "2023-06-01"
-
-	_ = cmd.PersistentFlags().String(apiVersionFlagName, apiVersionFlagDefault, apiVersionDescription)
-
-	return nil
-}
 func registerOperationVirtualNetworksDestroyVirtualNetworkIDParamFlags(cmdPrefix string, cmd *cobra.Command) error {
 
 	idDescription := `Required. The virtual network ID`
@@ -108,26 +85,6 @@ func registerOperationVirtualNetworksDestroyVirtualNetworkIDParamFlags(cmdPrefix
 	return nil
 }
 
-func retrieveOperationVirtualNetworksDestroyVirtualNetworkAPIVersionFlag(m *virtual_networks.DestroyVirtualNetworkParams, cmdPrefix string, cmd *cobra.Command) (error, bool) {
-	retAdded := false
-	if cmd.Flags().Changed("API-Version") {
-
-		var apiVersionFlagName string
-		if cmdPrefix == "" {
-			apiVersionFlagName = "API-Version"
-		} else {
-			apiVersionFlagName = fmt.Sprintf("%v.API-Version", cmdPrefix)
-		}
-
-		apiVersionFlagValue, err := cmd.Flags().GetString(apiVersionFlagName)
-		if err != nil {
-			return err, false
-		}
-		m.APIVersion = &apiVersionFlagValue
-
-	}
-	return nil, retAdded
-}
 func retrieveOperationVirtualNetworksDestroyVirtualNetworkIDFlag(m *virtual_networks.DestroyVirtualNetworkParams, cmdPrefix string, cmd *cobra.Command) (error, bool) {
 	retAdded := false
 	if cmd.Flags().Changed("id") {

@@ -61,11 +61,6 @@ GetAPIKeysParams contains all the parameters to send to the API endpoint
 */
 type GetAPIKeysParams struct {
 
-	// APIVersion.
-	//
-	// Default: "2023-06-01"
-	APIVersion *string
-
 	timeout    time.Duration
 	Context    context.Context
 	HTTPClient *http.Client
@@ -83,13 +78,7 @@ func (o *GetAPIKeysParams) WithDefaults() *GetAPIKeysParams {
 //
 // All values with no default are reset to their zero value.
 func (o *GetAPIKeysParams) SetDefaults() {
-	var (
-		aPIVersionDefault = string("2023-06-01")
-	)
-
-	val := GetAPIKeysParams{
-		APIVersion: &aPIVersionDefault,
-	}
+	val := GetAPIKeysParams{}
 
 	val.timeout = o.timeout
 	val.Context = o.Context
@@ -130,17 +119,6 @@ func (o *GetAPIKeysParams) SetHTTPClient(client *http.Client) {
 	o.HTTPClient = client
 }
 
-// WithAPIVersion adds the aPIVersion to the get api keys params
-func (o *GetAPIKeysParams) WithAPIVersion(aPIVersion *string) *GetAPIKeysParams {
-	o.SetAPIVersion(aPIVersion)
-	return o
-}
-
-// SetAPIVersion adds the apiVersion to the get api keys params
-func (o *GetAPIKeysParams) SetAPIVersion(aPIVersion *string) {
-	o.APIVersion = aPIVersion
-}
-
 // WriteToRequest writes these params to a swagger request
 func (o *GetAPIKeysParams) WriteToRequest(r runtime.ClientRequest, reg strfmt.Registry) error {
 
@@ -148,14 +126,6 @@ func (o *GetAPIKeysParams) WriteToRequest(r runtime.ClientRequest, reg strfmt.Re
 		return err
 	}
 	var res []error
-
-	if o.APIVersion != nil {
-
-		// header param API-Version
-		if err := r.SetHeaderParam("API-Version", *o.APIVersion); err != nil {
-			return err
-		}
-	}
 
 	if len(res) > 0 {
 		return errors.CompositeValidationError(res...)

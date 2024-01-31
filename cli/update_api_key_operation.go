@@ -40,9 +40,6 @@ func runOperationAPIKeysUpdateAPIKey(cmd *cobra.Command, args []string) error {
 	}
 	// retrieve flag values from cmd and fill params
 	params := api_keys.NewUpdateAPIKeyParams()
-	if err, _ := retrieveOperationAPIKeysUpdateAPIKeyAPIVersionFlag(params, "", cmd); err != nil {
-		return err
-	}
 	if err, _ := retrieveOperationAPIKeysUpdateAPIKeyBodyFlag(params, "", cmd); err != nil {
 		return err
 	}
@@ -69,9 +66,6 @@ func runOperationAPIKeysUpdateAPIKey(cmd *cobra.Command, args []string) error {
 
 // registerOperationAPIKeysUpdateAPIKeyParamFlags registers all flags needed to fill params
 func registerOperationAPIKeysUpdateAPIKeyParamFlags(cmd *cobra.Command) error {
-	if err := registerOperationAPIKeysUpdateAPIKeyAPIVersionParamFlags("", cmd); err != nil {
-		return err
-	}
 	if err := registerOperationAPIKeysUpdateAPIKeyBodyParamFlags("", cmd); err != nil {
 		return err
 	}
@@ -81,23 +75,6 @@ func registerOperationAPIKeysUpdateAPIKeyParamFlags(cmd *cobra.Command) error {
 	return nil
 }
 
-func registerOperationAPIKeysUpdateAPIKeyAPIVersionParamFlags(cmdPrefix string, cmd *cobra.Command) error {
-
-	apiVersionDescription := ``
-
-	var apiVersionFlagName string
-	if cmdPrefix == "" {
-		apiVersionFlagName = "API-Version"
-	} else {
-		apiVersionFlagName = fmt.Sprintf("%v.API-Version", cmdPrefix)
-	}
-
-	var apiVersionFlagDefault string = "2023-06-01"
-
-	_ = cmd.PersistentFlags().String(apiVersionFlagName, apiVersionFlagDefault, apiVersionDescription)
-
-	return nil
-}
 func registerOperationAPIKeysUpdateAPIKeyBodyParamFlags(cmdPrefix string, cmd *cobra.Command) error {
 
 	var bodyFlagName string
@@ -110,7 +87,7 @@ func registerOperationAPIKeysUpdateAPIKeyBodyParamFlags(cmdPrefix string, cmd *c
 	_ = cmd.PersistentFlags().String(bodyFlagName, "", "Optional json string for [body]. ")
 
 	// add flags for body
-	if err := registerModelUpdateAPIKeyFlags(0, "updateApiKey", cmd); err != nil {
+	if err := registerModelUpdateAPIKeyFlags(0, "", cmd); err != nil {
 		return err
 	}
 
@@ -135,26 +112,6 @@ func registerOperationAPIKeysUpdateAPIKeyIDParamFlags(cmdPrefix string, cmd *cob
 	return nil
 }
 
-func retrieveOperationAPIKeysUpdateAPIKeyAPIVersionFlag(m *api_keys.UpdateAPIKeyParams, cmdPrefix string, cmd *cobra.Command) (error, bool) {
-	retAdded := false
-	if cmd.Flags().Changed("API-Version") {
-
-		var apiVersionFlagName string
-		if cmdPrefix == "" {
-			apiVersionFlagName = "API-Version"
-		} else {
-			apiVersionFlagName = fmt.Sprintf("%v.API-Version", cmdPrefix)
-		}
-
-		apiVersionFlagValue, err := cmd.Flags().GetString(apiVersionFlagName)
-		if err != nil {
-			return err, false
-		}
-		m.APIVersion = &apiVersionFlagValue
-
-	}
-	return nil, retAdded
-}
 func retrieveOperationAPIKeysUpdateAPIKeyBodyFlag(m *api_keys.UpdateAPIKeyParams, cmdPrefix string, cmd *cobra.Command) (error, bool) {
 	retAdded := false
 	if cmd.Flags().Changed("body") {
@@ -174,7 +131,7 @@ func retrieveOperationAPIKeysUpdateAPIKeyBodyFlag(m *api_keys.UpdateAPIKeyParams
 	if swag.IsZero(bodyValueModel) {
 		bodyValueModel = &models.UpdateAPIKey{}
 	}
-	err, added := retrieveModelUpdateAPIKeyFlags(0, bodyValueModel, "updateApiKey", cmd)
+	err, added := retrieveModelUpdateAPIKeyFlags(0, bodyValueModel, "", cmd)
 	if err != nil {
 		return err, false
 	}
@@ -209,6 +166,7 @@ func retrieveOperationAPIKeysUpdateAPIKeyIDFlag(m *api_keys.UpdateAPIKeyParams, 
 			return err, false
 		}
 		m.ID = idFlagValue
+		m.Body.Data.ID = m.ID
 
 	}
 	return nil, retAdded
@@ -229,12 +187,7 @@ func registerUpdateAPIKeyOKBodyData(depth int, cmdPrefix string, cmd *cobra.Comm
 		return nil
 	}
 
-	var dataFlagName string
-	if cmdPrefix == "" {
-		dataFlagName = "data"
-	} else {
-		dataFlagName = fmt.Sprintf("%v.data", cmdPrefix)
-	}
+	var dataFlagName = ""
 
 	if err := registerModelAPIKeyFlags(depth+1, dataFlagName, cmd); err != nil {
 		return err
@@ -262,7 +215,7 @@ func retrieveUpdateAPIKeyOKBodyDataFlags(depth int, m *api_keys.UpdateAPIKeyOKBo
 	}
 	retAdded := false
 
-	dataFlagName := fmt.Sprintf("%v.data", cmdPrefix)
+	dataFlagName := fmt.Sprintf("%vdata", cmdPrefix)
 	if cmd.Flags().Changed(dataFlagName) {
 		// info: complex object data models.APIKey is retrieved outside this Changed() block
 	}
@@ -271,6 +224,7 @@ func retrieveUpdateAPIKeyOKBodyDataFlags(depth int, m *api_keys.UpdateAPIKeyOKBo
 		dataFlagValue = &models.APIKey{}
 	}
 
+	dataFlagName = ""
 	err, dataAdded := retrieveModelAPIKeyFlags(depth+1, dataFlagValue, dataFlagName, cmd)
 	if err != nil {
 		return err, false

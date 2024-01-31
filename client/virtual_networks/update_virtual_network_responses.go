@@ -303,6 +303,10 @@ type UpdateVirtualNetworkParamsBodyData struct {
 	// attributes
 	Attributes *UpdateVirtualNetworkParamsBodyDataAttributes `json:"attributes,omitempty"`
 
+	// id
+	// Required: true
+	ID *string `json:"id"`
+
 	// type
 	// Required: true
 	// Enum: [virtual_network]

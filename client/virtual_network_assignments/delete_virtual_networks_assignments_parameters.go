@@ -61,11 +61,6 @@ DeleteVirtualNetworksAssignmentsParams contains all the parameters to send to th
 */
 type DeleteVirtualNetworksAssignmentsParams struct {
 
-	// APIVersion.
-	//
-	// Default: "2023-06-01"
-	APIVersion *string
-
 	// AssignmentID.
 	AssignmentID string
 
@@ -86,13 +81,7 @@ func (o *DeleteVirtualNetworksAssignmentsParams) WithDefaults() *DeleteVirtualNe
 //
 // All values with no default are reset to their zero value.
 func (o *DeleteVirtualNetworksAssignmentsParams) SetDefaults() {
-	var (
-		aPIVersionDefault = string("2023-06-01")
-	)
-
-	val := DeleteVirtualNetworksAssignmentsParams{
-		APIVersion: &aPIVersionDefault,
-	}
+	val := DeleteVirtualNetworksAssignmentsParams{}
 
 	val.timeout = o.timeout
 	val.Context = o.Context
@@ -133,17 +122,6 @@ func (o *DeleteVirtualNetworksAssignmentsParams) SetHTTPClient(client *http.Clie
 	o.HTTPClient = client
 }
 
-// WithAPIVersion adds the aPIVersion to the delete virtual networks assignments params
-func (o *DeleteVirtualNetworksAssignmentsParams) WithAPIVersion(aPIVersion *string) *DeleteVirtualNetworksAssignmentsParams {
-	o.SetAPIVersion(aPIVersion)
-	return o
-}
-
-// SetAPIVersion adds the apiVersion to the delete virtual networks assignments params
-func (o *DeleteVirtualNetworksAssignmentsParams) SetAPIVersion(aPIVersion *string) {
-	o.APIVersion = aPIVersion
-}
-
 // WithAssignmentID adds the assignmentID to the delete virtual networks assignments params
 func (o *DeleteVirtualNetworksAssignmentsParams) WithAssignmentID(assignmentID string) *DeleteVirtualNetworksAssignmentsParams {
 	o.SetAssignmentID(assignmentID)
@@ -162,14 +140,6 @@ func (o *DeleteVirtualNetworksAssignmentsParams) WriteToRequest(r runtime.Client
 		return err
 	}
 	var res []error
-
-	if o.APIVersion != nil {
-
-		// header param API-Version
-		if err := r.SetHeaderParam("API-Version", *o.APIVersion); err != nil {
-			return err
-		}
-	}
 
 	// path param assignment_id
 	if err := r.SetPathParam("assignment_id", o.AssignmentID); err != nil {

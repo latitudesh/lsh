@@ -12,6 +12,8 @@ import (
 	"github.com/go-openapi/strfmt"
 )
 
+var sshKeysType = "ssh_keys"
+
 // New creates a new ssh keys API client.
 func New(transport runtime.ClientTransport, formats strfmt.Registry) ClientService {
 	return &Client{transport: transport, formats: formats}
