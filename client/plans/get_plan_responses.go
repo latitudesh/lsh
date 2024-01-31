@@ -16,6 +16,7 @@ import (
 	apierrors "github.com/latitudesh/lsh/internal/api/errors"
 	"github.com/latitudesh/lsh/internal/output"
 	"github.com/latitudesh/lsh/internal/output/table"
+	tablerows "github.com/latitudesh/lsh/internal/output/table/rows"
 	"github.com/latitudesh/lsh/models"
 )
 
@@ -150,41 +151,9 @@ func (o *GetPlanOK) RenderJSON() {
 }
 
 func (o *GetPlanOK) RenderTable() {
-	resource := o.Payload.Data
-
-	var rows []GetPlanTableRow
-
-	attributes := resource.Attributes
-
-	var inStock []string
-	var availableIn []string
-
-	for _, region := range attributes.Regions {
-		inStock = append(inStock, region.Locations.InStock...)
-		availableIn = append(availableIn, region.Locations.Available...)
-	}
-
-	row := GetPlanTableRow{
-		ID:          table.RenderString(resource.ID),
-		Slug:        table.RenderString(attributes.Slug),
-		AvailableIn: table.RenderStringList(availableIn),
-		InStock:     table.RenderStringList(inStock),
-		Features:    table.RenderStringList(attributes.Features),
-		CPU:         table.RenderPlanCPU(*attributes.Specs.CPU),
-		Memory:      table.RenderPlanMemory(*attributes.Specs.Memory),
-		Drives:      table.RenderPlanDrives(attributes.Specs.Drives),
-		NIC:         table.RenderPlanNICs(attributes.Specs.Nics),
-	}
-
-	rows = append(rows, row)
-
-	var interfaceRows []interface{}
-
-	for _, row := range rows {
-		interfaceRows = append(interfaceRows, row)
-	}
-
-	table.Render(interfaceRows)
+	data := []*models.PlanData{o.Payload.Data}
+	rows := tablerows.CreatePlanRows(data)
+	table.Render(rows)
 }
 
 func (o *GetPlanOK) readResponse(response runtime.ClientResponse, consumer runtime.Consumer, formats strfmt.Registry) error {

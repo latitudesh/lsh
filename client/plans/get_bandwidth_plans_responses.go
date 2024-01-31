@@ -16,6 +16,7 @@ import (
 	apierrors "github.com/latitudesh/lsh/internal/api/errors"
 	"github.com/latitudesh/lsh/internal/output"
 	"github.com/latitudesh/lsh/internal/output/table"
+	tablerows "github.com/latitudesh/lsh/internal/output/table/rows"
 	"github.com/latitudesh/lsh/models"
 )
 
@@ -100,16 +101,6 @@ func (o *GetBandwidthPlansOK) GetPayload() *models.BandwidthPlans {
 	return o.Payload
 }
 
-type BandwidthPlanTableRow struct {
-	ID            string `json:"id,omitempty"`
-	Region        string `json:"region,omitempty"`
-	Locations     string `json:"locations,omitempty"`
-	USDPriceHour  string `json:"usd_price_hour,omitempty"`
-	USDPriceMonth string `json:"usd_price_month,omitempty"`
-	BRLPriceHour  string `json:"brl_price_hour,omitempty"`
-	BRLPriceMonth string `json:"brl_price_month,omitempty"`
-}
-
 func (o *GetBandwidthPlansOK) Render() {
 	formatAsJSON := viper.GetBool("json")
 
@@ -142,33 +133,8 @@ func (o *GetBandwidthPlansOK) RenderJSON() {
 }
 
 func (o *GetBandwidthPlansOK) RenderTable() {
-	data := o.Payload.Data
-
-	var rows []BandwidthPlanTableRow
-
-	for _, api_key := range data {
-		attributes := api_key.Attributes
-
-		row := BandwidthPlanTableRow{
-			ID:            table.RenderString(api_key.ID),
-			Region:        table.RenderString(attributes.Region),
-			Locations:     table.RenderStringList(attributes.Locations),
-			USDPriceHour:  table.RenderInt(attributes.Pricing.Usd.Hourly),
-			USDPriceMonth: table.RenderInt(attributes.Pricing.Usd.Monthly),
-			BRLPriceHour:  table.RenderInt(attributes.Pricing.Brl.Hourly),
-			BRLPriceMonth: table.RenderInt(attributes.Pricing.Brl.Monthly),
-		}
-
-		rows = append(rows, row)
-	}
-
-	var interfaceRows []interface{}
-
-	for _, row := range rows {
-		interfaceRows = append(interfaceRows, row)
-	}
-
-	table.Render(interfaceRows)
+	rows := tablerows.CreateBandwidthPlanRows(o.Payload.Data)
+	table.Render(rows)
 }
 
 func (o *GetBandwidthPlansOK) readResponse(response runtime.ClientResponse, consumer runtime.Consumer, formats strfmt.Registry) error {
