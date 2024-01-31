@@ -16,6 +16,7 @@ import (
 	apierrors "github.com/latitudesh/lsh/internal/api/errors"
 	"github.com/latitudesh/lsh/internal/output"
 	"github.com/latitudesh/lsh/internal/output/table"
+	tablerows "github.com/latitudesh/lsh/internal/output/table/rows"
 	"github.com/latitudesh/lsh/models"
 )
 
@@ -100,22 +101,6 @@ func (o *GetProjectsOK) GetPayload() *models.Projects {
 	return o.Payload
 }
 
-type ProjectTableRow struct {
-	ID             string `json:"id,omitempty"`
-	Name           string `json:"name,omitempty"`
-	Slug           string `json:"slug,omitempty"`
-	Description    string `json:"description,omitempty"`
-	BillingMethod  string `json:"billing_method,omitempty"`
-	Cost           string `json:"cost,omitempty"`
-	Environment    string `json:"environment,omitempty"`
-	ProvisiongType string `json:"provisioning_type,omitempty"`
-	Team           string `json:"team,omitempty"`
-	IPs            string `json:"ips,omitempty"`
-	Prefixes       string `json:"prefixes,omitempty"`
-	Servers        string `json:"servers,omitempty"`
-	Vlans          string `json:"vlans,omitempty"`
-}
-
 func (o *GetProjectsOK) Render() {
 	formatAsJSON := viper.GetBool("json")
 
@@ -148,38 +133,8 @@ func (o *GetProjectsOK) RenderJSON() {
 }
 
 func (o *GetProjectsOK) RenderTable() {
-	data := o.Payload.Data
-
-	var rows []ProjectTableRow
-
-	for _, resource := range data {
-		attributes := resource.Attributes
-
-		row := ProjectTableRow{
-			ID:            table.RenderString(resource.ID),
-			Name:          table.RenderString(attributes.Name),
-			Slug:          table.RenderString(attributes.Slug),
-			Description:   table.RenderString(attributes.Description),
-			BillingMethod: table.RenderString(attributes.BillingMethod),
-			Cost:          table.RenderString(attributes.Cost),
-			Environment:   table.RenderString(attributes.Environment),
-			Team:          table.RenderString(attributes.Team.Name),
-			IPs:           table.RenderFloat(attributes.Stats.IPAddresses),
-			Prefixes:      table.RenderFloat(attributes.Stats.Prefixes),
-			Servers:       table.RenderFloat(attributes.Stats.Servers),
-			Vlans:         table.RenderFloat(attributes.Stats.Vlans),
-		}
-
-		rows = append(rows, row)
-	}
-
-	var interfaceRows []interface{}
-
-	for _, row := range rows {
-		interfaceRows = append(interfaceRows, row)
-	}
-
-	table.Render(interfaceRows)
+	rows := tablerows.CreateProjectRows(o.Payload.Data)
+	table.Render(rows)
 }
 
 func (o *GetProjectsOK) readResponse(response runtime.ClientResponse, consumer runtime.Consumer, formats strfmt.Registry) error {

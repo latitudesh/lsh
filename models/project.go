@@ -148,6 +148,8 @@ type ProjectAttributes struct {
 	// A unique project identifier
 	Slug string `json:"slug,omitempty"`
 
+	ProvisiongType string `json:"provisioning_type,omitempty"`
+
 	// stats
 	Stats *ProjectAttributesStats `json:"stats,omitempty"`
 
