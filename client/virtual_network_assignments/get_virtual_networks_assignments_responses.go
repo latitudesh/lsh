@@ -18,6 +18,7 @@ import (
 	apierrors "github.com/latitudesh/lsh/internal/api/errors"
 	"github.com/latitudesh/lsh/internal/output"
 	"github.com/latitudesh/lsh/internal/output/table"
+	tablerows "github.com/latitudesh/lsh/internal/output/table/rows"
 	"github.com/latitudesh/lsh/models"
 )
 
@@ -102,15 +103,6 @@ func (o *GetVirtualNetworksAssignmentsOK) GetPayload() *models.VirtualNetworkAss
 	return o.Payload
 }
 
-type VirtualNetworkAssignmentTableRow struct {
-	ID string `json:"id,omitempty"`
-	Vid string `json:"vid,omitempty"`
-	VirtualNetworkID string `json:"virtual_network_id,omitempty"`
-	Description string `json:"description,omitempty"`
-	Status string `json:"status,omitempty"`
-	Server string `json:"server,omitempty"`
-}
-
 func (o *GetVirtualNetworksAssignmentsOK) Render() {
 	formatAsJSON := viper.GetBool("json")
 
@@ -143,32 +135,8 @@ func (o *GetVirtualNetworksAssignmentsOK) RenderJSON() {
 }
 
 func (o *GetVirtualNetworksAssignmentsOK) RenderTable() {
-	data := o.Payload.Data
-
-	var rows []VirtualNetworkAssignmentTableRow
-
-	for _, resource := range data {
-		attributes := resource.Attributes
-
-		row := VirtualNetworkAssignmentTableRow{
-			ID:        	 				 	table.RenderString(resource.ID),
-			Vid:									table.RenderInt(attributes.Vid),
-			VirtualNetworkID:			table.RenderString(attributes.VirtualNetworkID),
-			Description:					table.RenderString(attributes.Description),
-			Status:								table.RenderString(attributes.Status),
-			Server:								table.RenderString(attributes.ServerID),
-		}
-
-		rows = append(rows, row)
-	}
-
-	var interfaceRows []interface{}
-
-	for _, row := range rows {
-		interfaceRows = append(interfaceRows, row)
-	}
-
-	table.Render(interfaceRows)
+	rows := tablerows.CreateVirtualNetworkAssignmentsRows(o.Payload.Data)
+	table.Render(rows)
 }
 
 func (o *GetVirtualNetworksAssignmentsOK) readResponse(response runtime.ClientResponse, consumer runtime.Consumer, formats strfmt.Registry) error {

@@ -21,6 +21,7 @@ import (
 	apierrors "github.com/latitudesh/lsh/internal/api/errors"
 	"github.com/latitudesh/lsh/internal/output"
 	"github.com/latitudesh/lsh/internal/output/table"
+	tablerows "github.com/latitudesh/lsh/internal/output/table/rows"
 	"github.com/latitudesh/lsh/models"
 )
 
@@ -117,17 +118,6 @@ func (o *UpdateVirtualNetworkOK) GetPayload() *models.VirtualNetwork {
 	return o.Payload
 }
 
-type UpdateVirtualNetworkTableRow struct {
-	ID string `json:"id,omitempty"`
-	Vid string `json:"vid,omitempty"`
-	Description string `json:"description,omitempty"`
-	Assignments string `json:"assignments,omitempty"`
-	City string `json:"city,omitempty"`
-	Country string `json:"country,omitempty"`
-	Slug string `json:"slug,omitempty"`
-	Facility string `json:"facility,omitempty"`
-}
-
 func (o *UpdateVirtualNetworkOK) Render() {
 	formatAsJSON := viper.GetBool("json")
 
@@ -160,32 +150,9 @@ func (o *UpdateVirtualNetworkOK) RenderJSON() {
 }
 
 func (o *UpdateVirtualNetworkOK) RenderTable() {
-	resource := o.Payload
-
-	var rows []UpdateVirtualNetworkTableRow
-
-	attributes := resource.Attributes
-
-	row := UpdateVirtualNetworkTableRow{
-		ID:        	 				 	table.RenderString(resource.ID),
-		Vid:									table.RenderInt(attributes.Vid),
-		Description:					table.RenderString(attributes.Description),
-		Assignments:					table.RenderInt(attributes.AssignmentsCount),
-		City:									table.RenderString(attributes.Region.City),
-		Country:							table.RenderString(attributes.Region.Country),
-		Slug:									table.RenderString(attributes.Region.Site.Slug),
-		Facility:							table.RenderString(attributes.Region.Site.Facility),
-	}
-
-	rows = append(rows, row)
-
-	var interfaceRows []interface{}
-
-	for _, row := range rows {
-		interfaceRows = append(interfaceRows, row)
-	}
-
-	table.Render(interfaceRows)
+	data := []*models.VirtualNetwork{o.Payload}
+	rows := tablerows.CreateVirtualNetworksRows(data)
+	table.Render(rows)
 }
 
 func (o *UpdateVirtualNetworkOK) readResponse(response runtime.ClientResponse, consumer runtime.Consumer, formats strfmt.Registry) error {
