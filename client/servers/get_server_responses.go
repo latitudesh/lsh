@@ -16,6 +16,7 @@ import (
 	apierrors "github.com/latitudesh/lsh/internal/api/errors"
 	"github.com/latitudesh/lsh/internal/output"
 	"github.com/latitudesh/lsh/internal/output/table"
+	tablerows "github.com/latitudesh/lsh/internal/output/table/rows"
 	"github.com/latitudesh/lsh/models"
 )
 
@@ -106,22 +107,6 @@ func (o *GetServerOK) GetPayload() *models.Server {
 	return o.Payload
 }
 
-type GetServerTableRow struct {
-	ID              string `json:"id,omitempty"`
-	Hostname        string `json:"hostname,omitempty"`
-	PrimaryIPV4     string `json:"primary_ipv4,omitempty"`
-	Status          string `json:"status,omitempty"`
-	IPMIStatus      string `json:"ipmi_status,omitempty"`
-	Location        string `json:"location,omitempty"`
-	Project         string `json:"project,omitempty"`
-	Team            string `json:"team,omitempty"`
-	Plan            string `json:"plan,omitempty"`
-	OperatingSystem string `json:"operating_system,omitempty"`
-	CPU             string `json:"cpu,omitempty"`
-	Disk            string `json:"disk,omitempty"`
-	RAM             string `json:"ram,omitempty"`
-}
-
 func (o *GetServerOK) Render() {
 	formatAsJSON := viper.GetBool("json")
 
@@ -154,36 +139,9 @@ func (o *GetServerOK) RenderJSON() {
 }
 
 func (o *GetServerOK) RenderTable() {
-	resource := o.Payload.Data
-
-	var rows []GetServerTableRow
-
-	attributes := resource.Attributes
-
-	row := GetServerTableRow{
-		ID:              table.RenderString(resource.ID),
-		Hostname:        table.RenderString(attributes.Hostname),
-		PrimaryIPV4:     table.RenderString(*attributes.PrimaryIPV4),
-		Status:          table.RenderString(attributes.Status),
-		IPMIStatus:      table.RenderString(attributes.IpmiStatus),
-		Location:        table.RenderString(attributes.Region.Site.Slug),
-		Project:         table.RenderString(attributes.Project.Name),
-		Team:            table.RenderString(attributes.Team.Name),
-		Plan:            table.RenderString(attributes.Plan.Name),
-		OperatingSystem: table.RenderString(attributes.OperatingSystem.Slug),
-		CPU:             table.RenderString(attributes.Specs.CPU),
-		Disk:            table.RenderString(attributes.Specs.Disk),
-		RAM:             table.RenderString(attributes.Specs.RAM),
-	}
-	rows = append(rows, row)
-
-	var interfaceRows []interface{}
-
-	for _, row := range rows {
-		interfaceRows = append(interfaceRows, row)
-	}
-
-	table.Render(interfaceRows)
+	data := []*models.ServerData{o.Payload.Data}
+	rows := tablerows.CreateServerRows(data)
+	table.Render(rows)
 }
 
 func (o *GetServerOK) readResponse(response runtime.ClientResponse, consumer runtime.Consumer, formats strfmt.Registry) error {

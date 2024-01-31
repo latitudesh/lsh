@@ -19,6 +19,7 @@ import (
 	apierrors "github.com/latitudesh/lsh/internal/api/errors"
 	"github.com/latitudesh/lsh/internal/output"
 	"github.com/latitudesh/lsh/internal/output/table"
+	tablerows "github.com/latitudesh/lsh/internal/output/table/rows"
 	"github.com/latitudesh/lsh/internal/utils"
 	"github.com/latitudesh/lsh/models"
 )
@@ -123,22 +124,6 @@ func (o *UpdateServerOK) GetPayload() *models.Server {
 	return o.Payload
 }
 
-type UpdateServerTableRow struct {
-	ID              string `json:"id,omitempty"`
-	Hostname        string `json:"hostname,omitempty"`
-	PrimaryIPV4     string `json:"primary_ipv4,omitempty"`
-	Status          string `json:"status,omitempty"`
-	IPMIStatus      string `json:"ipmi_status,omitempty"`
-	Location        string `json:"location,omitempty"`
-	Project         string `json:"project,omitempty"`
-	Team            string `json:"team,omitempty"`
-	Plan            string `json:"plan,omitempty"`
-	OperatingSystem string `json:"operating_system,omitempty"`
-	CPU             string `json:"cpu,omitempty"`
-	Disk            string `json:"disk,omitempty"`
-	RAM             string `json:"ram,omitempty"`
-}
-
 func (o *UpdateServerOK) Render() {
 	formatAsJSON := viper.GetBool("json")
 
@@ -171,36 +156,9 @@ func (o *UpdateServerOK) RenderJSON() {
 }
 
 func (o *UpdateServerOK) RenderTable() {
-	resource := o.Payload.Data
-
-	var rows []UpdateServerTableRow
-
-	attributes := resource.Attributes
-
-	row := UpdateServerTableRow{
-		ID:              table.RenderString(resource.ID),
-		Hostname:        table.RenderString(attributes.Hostname),
-		PrimaryIPV4:     table.RenderString(*attributes.PrimaryIPV4),
-		Status:          table.RenderString(attributes.Status),
-		IPMIStatus:      table.RenderString(attributes.IpmiStatus),
-		Location:        table.RenderString(attributes.Region.Site.Slug),
-		Project:         table.RenderString(attributes.Project.Name),
-		Team:            table.RenderString(attributes.Team.Name),
-		Plan:            table.RenderString(attributes.Plan.Name),
-		OperatingSystem: table.RenderString(attributes.OperatingSystem.Slug),
-		CPU:             table.RenderString(attributes.Specs.CPU),
-		Disk:            table.RenderString(attributes.Specs.Disk),
-		RAM:             table.RenderString(attributes.Specs.RAM),
-	}
-	rows = append(rows, row)
-
-	var interfaceRows []interface{}
-
-	for _, row := range rows {
-		interfaceRows = append(interfaceRows, row)
-	}
-
-	table.Render(interfaceRows)
+	data := []*models.ServerData{o.Payload.Data}
+	rows := tablerows.CreateServerRows(data)
+	table.Render(rows)
 }
 
 func (o *UpdateServerOK) readResponse(response runtime.ClientResponse, consumer runtime.Consumer, formats strfmt.Registry) error {
@@ -223,7 +181,6 @@ type UpdateServerBody struct {
 	// data
 	// Required: true
 	Data *UpdateServerParamsBodyData `json:"data"`
-
 }
 
 type UpdateServerParamsBodyData struct {

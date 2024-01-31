@@ -19,6 +19,7 @@ import (
 	apierrors "github.com/latitudesh/lsh/internal/api/errors"
 	"github.com/latitudesh/lsh/internal/output"
 	"github.com/latitudesh/lsh/internal/output/table"
+	tablerows "github.com/latitudesh/lsh/internal/output/table/rows"
 	"github.com/latitudesh/lsh/models"
 )
 
@@ -163,36 +164,9 @@ func (o *CreateServerCreated) RenderJSON() {
 }
 
 func (o *CreateServerCreated) RenderTable() {
-	resource := o.Payload.Data
-
-	var rows []CreateServerTableRow
-
-	attributes := resource.Attributes
-
-	row := CreateServerTableRow{
-		ID:              table.RenderString(resource.ID),
-		Hostname:        table.RenderString(attributes.Hostname),
-		PrimaryIPV4:     table.RenderString(*attributes.PrimaryIPV4),
-		Status:          table.RenderString(attributes.Status),
-		IPMIStatus:      table.RenderString(attributes.IpmiStatus),
-		Location:        table.RenderString(attributes.Region.Site.Slug),
-		Project:         table.RenderString(attributes.Project.Name),
-		Team:            table.RenderString(attributes.Team.Name),
-		Plan:            table.RenderString(attributes.Plan.Name),
-		OperatingSystem: table.RenderString(attributes.OperatingSystem.Slug),
-		CPU:             table.RenderString(attributes.Specs.CPU),
-		Disk:            table.RenderString(attributes.Specs.Disk),
-		RAM:             table.RenderString(attributes.Specs.RAM),
-	}
-	rows = append(rows, row)
-
-	var interfaceRows []interface{}
-
-	for _, row := range rows {
-		interfaceRows = append(interfaceRows, row)
-	}
-
-	table.Render(interfaceRows)
+	data := []*models.ServerData{o.Payload.Data}
+	rows := tablerows.CreateServerRows(data)
+	table.Render(rows)
 }
 
 func (o *CreateServerCreated) readResponse(response runtime.ClientResponse, consumer runtime.Consumer, formats strfmt.Registry) error {
