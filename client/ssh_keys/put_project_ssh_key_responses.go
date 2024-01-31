@@ -19,6 +19,7 @@ import (
 	apierrors "github.com/latitudesh/lsh/internal/api/errors"
 	"github.com/latitudesh/lsh/internal/output"
 	"github.com/latitudesh/lsh/internal/output/table"
+	tablerows "github.com/latitudesh/lsh/internal/output/table/rows"
 	"github.com/latitudesh/lsh/models"
 )
 
@@ -173,29 +174,9 @@ func (o *PutProjectSSHKeyOK) RenderJSON() {
 }
 
 func (o *PutProjectSSHKeyOK) RenderTable() {
-	resource := o.Payload.Data
-
-	var rows []UpdateSSHKeyTableRow
-
-	attributes := resource.Attributes
-
-	row := UpdateSSHKeyTableRow{
-		ID:          table.RenderString(resource.ID),
-		Name:        table.RenderString(attributes.Name),
-		User:        table.RenderString(fmt.Sprintf("%v %v", attributes.User.FirstName, attributes.User.LastName)),
-		PublicKey:   table.RenderString(attributes.PublicKey),
-		Fingerprint: table.RenderString(attributes.Fingerprint),
-	}
-
-	rows = append(rows, row)
-
-	var interfaceRows []interface{}
-
-	for _, row := range rows {
-		interfaceRows = append(interfaceRows, row)
-	}
-
-	table.Render(interfaceRows)
+	data := []*models.SSHKeyData{o.Payload.Data}
+	rows := tablerows.CreateSSHKeyRows(data)
+	table.Render(rows)
 }
 
 /*

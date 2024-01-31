@@ -18,6 +18,7 @@ import (
 	apierrors "github.com/latitudesh/lsh/internal/api/errors"
 	"github.com/latitudesh/lsh/internal/output"
 	"github.com/latitudesh/lsh/internal/output/table"
+	tablerows "github.com/latitudesh/lsh/internal/output/table/rows"
 	"github.com/latitudesh/lsh/models"
 )
 
@@ -108,14 +109,6 @@ func (o *GetProjectSSHKeyOK) GetPayload() *GetProjectSSHKeyOKBody {
 	return o.Payload
 }
 
-type GetSSHKeyTableRow struct {
-	ID          string `json:"id,omitempty"`
-	Name        string `json:"name,omitempty"`
-	User        string `json:"user,omitempty"`
-	PublicKey   string `json:"public_key,omitempty"`
-	Fingerprint string `json:"fingerprint,omitempty"`
-}
-
 func (o *GetProjectSSHKeyOK) Render() {
 	formatAsJSON := viper.GetBool("json")
 
@@ -148,29 +141,9 @@ func (o *GetProjectSSHKeyOK) RenderJSON() {
 }
 
 func (o *GetProjectSSHKeyOK) RenderTable() {
-	resource := o.Payload.Data
-
-	var rows []GetSSHKeyTableRow
-
-	attributes := resource.Attributes
-
-	row := GetSSHKeyTableRow{
-		ID:          table.RenderString(resource.ID),
-		Name:        table.RenderString(attributes.Name),
-		User:        table.RenderString(fmt.Sprintf("%v %v", attributes.User.FirstName, attributes.User.LastName)),
-		PublicKey:   table.RenderString(attributes.PublicKey),
-		Fingerprint: table.RenderString(attributes.Fingerprint),
-	}
-
-	rows = append(rows, row)
-
-	var interfaceRows []interface{}
-
-	for _, row := range rows {
-		interfaceRows = append(interfaceRows, row)
-	}
-
-	table.Render(interfaceRows)
+	data := []*models.SSHKeyData{o.Payload.Data}
+	rows := tablerows.CreateSSHKeyRows(data)
+	table.Render(rows)
 }
 
 func (o *GetProjectSSHKeyOK) readResponse(response runtime.ClientResponse, consumer runtime.Consumer, formats strfmt.Registry) error {

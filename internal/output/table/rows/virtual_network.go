@@ -13,11 +13,11 @@ type VirtualNetwork struct {
 	Location    string `json:"location,omitempty"`
 }
 
-func NewVirtualNetwork(virtual_network *models.VirtualNetwork) *VirtualNetwork {
-	attr := virtual_network.Attributes
+func NewVirtualNetwork(virtualNetwork *models.VirtualNetwork) *VirtualNetwork {
+	attr := virtualNetwork.Attributes
 
 	return &VirtualNetwork{
-		ID:          table.RenderString(virtual_network.ID),
+		ID:          table.RenderString(virtualNetwork.ID),
 		VID:         table.RenderInt(attr.Vid),
 		Description: table.RenderString(attr.Description),
 		Assignments: table.RenderInt(attr.AssignmentsCount),
@@ -25,12 +25,12 @@ func NewVirtualNetwork(virtual_network *models.VirtualNetwork) *VirtualNetwork {
 	}
 }
 
-func CreateVirtualNetworksRows(virtual_networks []*models.VirtualNetwork) []interface{} {
+func CreateVirtualNetworksRows(virtualNetworks []*models.VirtualNetwork) []interface{} {
 	var rows []VirtualNetwork
 	var rowsInterface []interface{}
 
-	for _, virtual_network := range virtual_networks {
-		rows = append(rows, *NewVirtualNetwork(virtual_network))
+	for _, virtualNetwork := range virtualNetworks {
+		rows = append(rows, *NewVirtualNetwork(virtualNetwork))
 	}
 
 	for _, row := range rows {
