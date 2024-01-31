@@ -149,12 +149,12 @@ func (o *GetAPIKeysOK) RenderTable() {
 		attributes := api_key.Attributes
 
 		row := APIKeyTableRow{
-			ID:             table.RenderString(api_key.ID),
-			TokenLastSlice: table.RenderString(attributes.TokenLastSlice),
-			User:           table.RenderString(attributes.User.Email),
-			APIVersion:     table.RenderString(attributes.APIVersion),
-			LastUsedAt:     table.RenderDateTime(attributes.LastUsedAt),
-			Name:           table.RenderString(attributes.Name),
+			ID:             table.String(api_key.ID),
+			TokenLastSlice: table.String(attributes.TokenLastSlice),
+			User:           table.String(attributes.User.Email),
+			APIVersion:     table.String(attributes.APIVersion),
+			LastUsedAt:     table.DateTime(attributes.LastUsedAt),
+			Name:           table.String(attributes.Name),
 		}
 
 		rows = append(rows, row)

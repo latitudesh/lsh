@@ -162,12 +162,12 @@ func (o *PostAPIKeyCreated) RenderTable() {
 	var rows []CreateAPIKeyTableRow
 
 	row := CreateAPIKeyTableRow{
-		ID:        	 					 table.RenderString(o.Payload.Data.ID),
-		TokenLastSlice:        table.RenderString(attributes.TokenLastSlice),
-		User:    							 table.RenderString(attributes.User.Email),
-		APIVersion:     			 table.RenderString(attributes.APIVersion),
-		LastUsedAt: 					 table.RenderDateTime(attributes.LastUsedAt),
-		Name: 				 				 table.RenderString(attributes.Name),
+		ID:        	 					 table.String(o.Payload.Data.ID),
+		TokenLastSlice:        table.String(attributes.TokenLastSlice),
+		User:    							 table.String(attributes.User.Email),
+		APIVersion:     			 table.String(attributes.APIVersion),
+		LastUsedAt: 					 table.DateTime(attributes.LastUsedAt),
+		Name: 				 				 table.String(attributes.Name),
 	}
 
 	rows = append(rows, row)

@@ -22,16 +22,16 @@ func NewProjectRow(project *models.Project) *ProjectRow {
 	attr := project.Attributes
 
 	return &ProjectRow{
-		ID:             table.RenderString(project.ID),
-		Name:           table.RenderString(attr.Name),
-		Description:    table.RenderString(attr.Description),
-		Slug:           table.RenderString(attr.Slug),
-		IPs:            table.RenderFloat(attr.Stats.IPAddresses),
-		Servers:        table.RenderFloat(attr.Stats.Servers),
-		Vlans:          table.RenderFloat(attr.Stats.Vlans),
-		Team:           table.RenderString(attr.Team.Name),
-		Environment:    table.RenderString(attr.Environment),
-		ProvisiongType: table.RenderString(attr.ProvisiongType),
+		ID:             table.String(project.ID),
+		Name:           table.String(attr.Name),
+		Description:    table.String(attr.Description),
+		Slug:           table.String(attr.Slug),
+		IPs:            table.Float(attr.Stats.IPAddresses),
+		Servers:        table.Float(attr.Stats.Servers),
+		Vlans:          table.Float(attr.Stats.Vlans),
+		Team:           table.String(attr.Team.Name),
+		Environment:    table.String(attr.Environment),
+		ProvisiongType: table.String(attr.ProvisiongType),
 	}
 }
 

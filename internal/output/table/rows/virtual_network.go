@@ -17,11 +17,11 @@ func NewVirtualNetwork(virtualNetwork *models.VirtualNetwork) *VirtualNetwork {
 	attr := virtualNetwork.Attributes
 
 	return &VirtualNetwork{
-		ID:          table.RenderString(virtualNetwork.ID),
-		VID:         table.RenderInt(attr.Vid),
-		Description: table.RenderString(attr.Description),
-		Assignments: table.RenderInt(attr.AssignmentsCount),
-		Location:    table.RenderString(attr.Region.Site.Slug),
+		ID:          table.String(virtualNetwork.ID),
+		VID:         table.Int(attr.Vid),
+		Description: table.String(attr.Description),
+		Assignments: table.Int(attr.AssignmentsCount),
+		Location:    table.String(attr.Region.Site.Slug),
 	}
 }
 

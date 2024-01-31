@@ -163,9 +163,9 @@ func (o *ServerScheduleDeletionCreated) RenderTable() {
 	attributes := resource.Attributes
 
 	row := CreateServerScheduleDeletionTableRow{
-		ID:          table.RenderString(resource.ID),
-		ServerID:    table.RenderString(attributes.ServerID),
-		ScheduledAt: table.RenderString(attributes.ScheduledDeletionAt),
+		ID:          table.String(resource.ID),
+		ServerID:    table.String(attributes.ServerID),
+		ScheduledAt: table.String(attributes.ScheduledDeletionAt),
 	}
 	rows = append(rows, row)
 

@@ -18,12 +18,12 @@ func NewVirtualNetworkAssignment(assignment *models.VirtualNetworkAssignment) *V
 	attr := assignment.Attributes
 
 	return &VirtualNetworkAssignment{
-		ID:               table.RenderString(assignment.ID),
-		Vid:              table.RenderInt(attr.Vid),
-		VirtualNetworkID: table.RenderString(attr.VirtualNetworkID),
-		Description:      table.RenderString(attr.Description),
-		Status:           table.RenderString(attr.Status),
-		Server:           table.RenderString(attr.Server.ID),
+		ID:               table.String(assignment.ID),
+		Vid:              table.Int(attr.Vid),
+		VirtualNetworkID: table.String(attr.VirtualNetworkID),
+		Description:      table.String(attr.Description),
+		Status:           table.String(attr.Status),
+		Server:           table.String(attr.Server.ID),
 	}
 }
 

@@ -17,11 +17,11 @@ func NewSSHKeyRow(SSHKey *models.SSHKeyData) *SSHKeyRow {
 	attr := SSHKey.Attributes
 
 	return &SSHKeyRow{
-		ID:          table.RenderString(SSHKey.ID),
-		Name:        table.RenderString(attr.Name),
-		User:        table.RenderString(attr.User.Email),
-		PublicKey:   table.RenderString(attr.PublicKey),
-		Fingerprint: table.RenderString(attr.Fingerprint),
+		ID:          table.String(SSHKey.ID),
+		Name:        table.String(attr.Name),
+		User:        table.String(attr.User.Email),
+		PublicKey:   table.String(attr.PublicKey),
+		Fingerprint: table.String(attr.Fingerprint),
 	}
 }
 

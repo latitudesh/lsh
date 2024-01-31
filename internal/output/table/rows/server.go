@@ -22,16 +22,16 @@ func NewServerRow(server *models.ServerData) *ServerRow {
 	attr := server.Attributes
 
 	return &ServerRow{
-		ID:              table.RenderString(server.ID),
-		Hostname:        table.RenderString(attr.Hostname),
-		PrimaryIPV4:     table.RenderString(*attr.PrimaryIPV4),
-		Location:        table.RenderString(attr.Region.Site.Slug),
-		Status:          table.RenderString(attr.Status),
-		IPMIStatus:      table.RenderString(attr.IpmiStatus),
-		Project:         table.RenderString(attr.Project.Slug),
-		Team:            table.RenderString(attr.Team.Name),
-		Plan:            table.RenderString(attr.Plan.Name),
-		OperatingSystem: table.RenderString(attr.OperatingSystem.Slug),
+		ID:              table.String(server.ID),
+		Hostname:        table.String(attr.Hostname),
+		PrimaryIPV4:     table.String(*attr.PrimaryIPV4),
+		Location:        table.String(attr.Region.Site.Slug),
+		Status:          table.String(attr.Status),
+		IPMIStatus:      table.String(attr.IpmiStatus),
+		Project:         table.String(attr.Project.Slug),
+		Team:            table.String(attr.Team.Name),
+		Plan:            table.String(attr.Plan.Name),
+		OperatingSystem: table.String(attr.OperatingSystem.Slug),
 	}
 }
 

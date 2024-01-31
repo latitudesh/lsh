@@ -17,6 +17,7 @@ import (
 	"github.com/latitudesh/lsh/internal/output"
 	"github.com/latitudesh/lsh/internal/output/table"
 	tablerows "github.com/latitudesh/lsh/internal/output/table/rows"
+	"github.com/latitudesh/lsh/internal/utils"
 	"github.com/latitudesh/lsh/models"
 )
 
@@ -107,18 +108,6 @@ func (o *GetPlanOK) GetPayload() *models.Plan {
 	return o.Payload
 }
 
-type GetPlanTableRow struct {
-	ID          string `json:"id,omitempty"`
-	Slug        string `json:"slug,omitempty"`
-	Features    string `json:"features,omitempty"`
-	InStock     string `json:"in_stock,omitempty"`
-	AvailableIn string `json:"available_in,omitempty"`
-	CPU         string `json:"cpu,omitempty"`
-	Memory      string `json:"memory,omitempty"`
-	Drives      string `json:"drives,omitempty"`
-	NIC         string `json:"nic,omitempty"`
-}
-
 func (o *GetPlanOK) Render() {
 	formatAsJSON := viper.GetBool("json")
 
@@ -151,9 +140,8 @@ func (o *GetPlanOK) RenderJSON() {
 }
 
 func (o *GetPlanOK) RenderTable() {
-	data := []*models.PlanData{o.Payload.Data}
-	rows := tablerows.CreatePlanRows(data)
-	table.Render(rows)
+	rows := []table.Row{tablerows.NewPlanRow(o.Payload.Data)}
+	utils.RenderTableU(rows)
 }
 
 func (o *GetPlanOK) readResponse(response runtime.ClientResponse, consumer runtime.Consumer, formats strfmt.Registry) error {
