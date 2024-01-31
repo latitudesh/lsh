@@ -19,5 +19,5 @@ func RenderPlanMemory(value models.PlanDataAttributesSpecsMemory) string {
 }
 
 func (t *PlanMemory) Render() string {
-	return fmt.Sprintf("%vGB RAM", t.Value.Total)
+	return fmt.Sprintf("%vGB", t.Value.Total)
 }

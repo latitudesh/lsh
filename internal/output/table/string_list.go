@@ -21,5 +21,5 @@ func (t *StringList) Render() string {
 		output = append(output, v)
 	}
 
-	return strings.Join(output, ", ")
+	return strings.Join(output, ",")
 }
