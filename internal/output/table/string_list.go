@@ -1,6 +1,10 @@
 package table
 
-import "strings"
+import (
+	"strings"
+)
+
+const Separator = ", "
 
 type StringList struct {
 	Value []string
@@ -15,11 +19,15 @@ func RenderStringList(value []string) string {
 }
 
 func (t *StringList) Render() string {
-	var output []string
+	var output strings.Builder
 
-	for _, v := range t.Value {
-		output = append(output, v)
+	for i, v := range t.Value {
+		output.WriteString(v)
+
+		if i < len(t.Value)-1 {
+			output.WriteString(Separator)
+		}
 	}
 
-	return strings.Join(output, ",")
+	return output.String()
 }

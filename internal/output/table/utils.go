@@ -9,7 +9,8 @@ import (
 	"github.com/olekukonko/tablewriter"
 )
 
-const MaxLength = 20
+const MaxColWidth = 20
+const MaxLength = 50
 
 type Table struct {
 	Headers []string
@@ -32,7 +33,7 @@ func Render(rows []interface{}) {
 				fmt.Printf("Field not found: %s\n", fieldKey)
 				continue
 			}
-			tr = append(tr, truncate(fmt.Sprintf("%v", field.Interface())))
+			tr = append(tr, truncate(fmt.Sprintf("%s", field.Interface())))
 		}
 
 		values = append(values, tr)
@@ -44,12 +45,10 @@ func Render(rows []interface{}) {
 func render(table Table) {
 	tableWriter := tablewriter.NewWriter(os.Stdout)
 
-	tableWriter.SetAutoWrapText(false)
-	tableWriter.SetColWidth(MaxLength)
-
+	// tableWriter.SetAutoWrapText(false)
 	tableWriter.SetRowLine(true)
 	tableWriter.SetHeader(table.Headers)
-
+	tableWriter.SetColWidth(MaxColWidth)
 	for _, row := range table.Rows {
 		tableWriter.Append(row)
 	}
