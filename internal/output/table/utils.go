@@ -9,7 +9,7 @@ import (
 	"github.com/olekukonko/tablewriter"
 )
 
-const MaxLength = 50
+const MaxLength = 20
 
 type Table struct {
 	Headers []string
@@ -43,6 +43,10 @@ func Render(rows []interface{}) {
 
 func render(table Table) {
 	tableWriter := tablewriter.NewWriter(os.Stdout)
+
+	tableWriter.SetAutoWrapText(false)
+	tableWriter.SetColWidth(MaxLength)
+
 	tableWriter.SetRowLine(true)
 	tableWriter.SetHeader(table.Headers)
 
