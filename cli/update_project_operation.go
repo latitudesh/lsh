@@ -546,7 +546,13 @@ func retrieveUpdateProjectParamsBodyDataAttributesDescriptionFlags(depth int, m 
 	}
 	retAdded := false
 
-	descriptionFlagName := fmt.Sprintf("%v.description", cmdPrefix)
+	var descriptionFlagName string
+	if cmdPrefix == "" {
+		descriptionFlagName = "description"
+	} else {
+		descriptionFlagName = fmt.Sprintf("%v.description", cmdPrefix)
+	}
+
 	if cmd.Flags().Changed(descriptionFlagName) {
 
 		var descriptionFlagName = "description"
