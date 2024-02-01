@@ -296,6 +296,10 @@ func (o *GetPlansParams) WriteToRequest(r runtime.ClientRequest, reg strfmt.Regi
 	}
 	var res []error
 
+	if err := r.SetQueryParam("page[size]", "100"); err != nil {
+		return err
+	}
+
 	if o.FilterDiskEql != nil {
 
 		// query param filter[disk][eql]

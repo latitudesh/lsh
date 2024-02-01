@@ -178,6 +178,10 @@ func (o *GetVirtualNetworksAssignmentsParams) WriteToRequest(r runtime.ClientReq
 	}
 	var res []error
 
+	if err := r.SetQueryParam("page[size]", "100"); err != nil {
+		return err
+	}
+
 	if o.FilterServer != nil {
 
 		// query param filter[server]
