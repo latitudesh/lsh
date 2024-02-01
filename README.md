@@ -3,7 +3,7 @@
 
   
 
-lsh is the [Latitude.sh](http://latitude.sh/) command-line tool that will help you make it easier to retrieve any data from your team or perform any action you need.
+lsh is the [Latitude.sh](http://latitude.sh/) command-line interface that will help you make it easier to retrieve any data from your team or perform any action you need.
 
   
 
