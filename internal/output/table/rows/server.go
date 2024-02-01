@@ -5,47 +5,51 @@ import (
 	"github.com/latitudesh/lsh/models"
 )
 
-type ServerRow struct {
-	ID              string `json:"id,omitempty"`
-	Hostname        string `json:"hostname,omitempty"`
-	PrimaryIPV4     string `json:"primary_ipv4,omitempty"`
-	Status          string `json:"status,omitempty"`
-	IPMIStatus      string `json:"ipmi_status,omitempty"`
-	Location        string `json:"location,omitempty"`
-	Project         string `json:"project,omitempty"`
-	Team            string `json:"team,omitempty"`
-	Plan            string `json:"plan,omitempty"`
-	OperatingSystem string `json:"operating_system,omitempty"`
-}
-
-func NewServerRow(server *models.ServerData) *ServerRow {
+func NewServerRow(server *models.ServerData) table.Row {
 	attr := server.Attributes
 
-	return &ServerRow{
-		ID:              table.String(server.ID),
-		Hostname:        table.String(attr.Hostname),
-		PrimaryIPV4:     table.String(*attr.PrimaryIPV4),
-		Location:        table.String(attr.Region.Site.Slug),
-		Status:          table.String(attr.Status),
-		IPMIStatus:      table.String(attr.IpmiStatus),
-		Project:         table.String(attr.Project.Slug),
-		Team:            table.String(attr.Team.Name),
-		Plan:            table.String(attr.Plan.Name),
-		OperatingSystem: table.String(attr.OperatingSystem.Slug),
+	return table.Row{
+		"id": table.Cell{
+			Label: "ID",
+			Value: table.String(server.ID),
+		},
+		"hostname": table.Cell{
+			Label:     "Hostname",
+			Value:     table.String(attr.Hostname),
+			MaxLength: 15,
+		},
+		"primary_ipv4": table.Cell{
+			Label: "Primary IPV4",
+			Value: table.String(*attr.PrimaryIPV4),
+		},
+		"location": table.Cell{
+			Label: "Location",
+			Value: table.String(attr.Region.Site.Slug),
+		},
+		"status": table.Cell{
+			Label: "Status",
+			Value: table.String(attr.Status),
+		},
+		"ipmi_status": table.Cell{
+			Label: "IPMI Status",
+			Value: table.String(attr.IpmiStatus),
+		},
+		"project": table.Cell{
+			Label: "Project",
+			Value: table.String(attr.Project.Slug),
+		},
+		"team": table.Cell{
+			Label: "Team",
+			Value: table.String(attr.Team.Name),
+		},
+		"plan": table.Cell{
+			Label: "Plan",
+			Value: table.String(attr.Plan.Name),
+		},
+		"operating_system": table.Cell{
+			Label:     "OS",
+			Value:     table.String(attr.OperatingSystem.Slug),
+			MaxLength: 15,
+		},
 	}
-}
-
-func CreateServerRows(servers []*models.ServerData) []interface{} {
-	var rows []ServerRow
-	var rowsInterface []interface{}
-
-	for _, server := range servers {
-		rows = append(rows, *NewServerRow(server))
-	}
-
-	for _, row := range rows {
-		rowsInterface = append(rowsInterface, row)
-	}
-
-	return rowsInterface
 }

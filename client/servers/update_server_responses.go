@@ -156,9 +156,8 @@ func (o *UpdateServerOK) RenderJSON() {
 }
 
 func (o *UpdateServerOK) RenderTable() {
-	data := []*models.ServerData{o.Payload.Data}
-	rows := tablerows.CreateServerRows(data)
-	table.Render(rows)
+	rows := []table.Row{tablerows.NewServerRow(o.Payload.Data)}
+	utils.RenderTableU(rows)
 }
 
 func (o *UpdateServerOK) readResponse(response runtime.ClientResponse, consumer runtime.Consumer, formats strfmt.Registry) error {

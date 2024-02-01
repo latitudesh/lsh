@@ -17,6 +17,7 @@ import (
 	"github.com/latitudesh/lsh/internal/output"
 	"github.com/latitudesh/lsh/internal/output/table"
 	tablerows "github.com/latitudesh/lsh/internal/output/table/rows"
+	"github.com/latitudesh/lsh/internal/utils"
 	"github.com/latitudesh/lsh/models"
 )
 
@@ -133,8 +134,13 @@ func (o *GetServersOK) RenderJSON() {
 }
 
 func (o *GetServersOK) RenderTable() {
-	rows := tablerows.CreateServerRows(o.Payload.Data)
-	table.Render(rows)
+	var rows []table.Row
+
+	for _, server := range o.Payload.Data {
+		rows = append(rows, tablerows.NewServerRow(server))
+	}
+
+	utils.RenderTableU(rows)
 }
 
 func (o *GetServersOK) readResponse(response runtime.ClientResponse, consumer runtime.Consumer, formats strfmt.Registry) error {
