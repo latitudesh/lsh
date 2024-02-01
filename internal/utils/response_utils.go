@@ -46,7 +46,7 @@ func RenderTableU(rows []table.Row) {
 		var tr []string
 
 		for _, attr := range headers.IDs {
-			tr = append(tr, row[attr].Value)
+			tr = append(tr, renderCell(row[attr]))
 		}
 
 		tableWriter.Append(tr)
@@ -71,4 +71,21 @@ func ExtractHeadersU(row table.Row) Header {
 	}
 
 	return headers
+}
+
+func renderCell(cell table.Cell) string {
+	maxLength := 30
+
+	if cell.MaxLength > 0 {
+		maxLength = cell.MaxLength
+	}
+
+	return fmt.Sprintf("%v", truncate(cell.Value, maxLength))
+}
+
+func truncate(input string, maxLength int) string {
+	if len(input) > maxLength {
+		return input[:maxLength] + "..."
+	}
+	return input
 }

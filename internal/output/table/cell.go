@@ -8,6 +8,7 @@ func NewCell(label, value string) Cell {
 }
 
 type Cell struct {
-	Value string
-	Label string
+	Value     string
+	Label     string
+	MaxLength int
 }
