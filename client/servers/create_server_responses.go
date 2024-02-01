@@ -117,22 +117,6 @@ func (o *CreateServerCreated) GetPayload() *models.Server {
 	return o.Payload
 }
 
-type CreateServerTableRow struct {
-	ID              string `json:"id,omitempty"`
-	Hostname        string `json:"hostname,omitempty"`
-	PrimaryIPV4     string `json:"primary_ipv4,omitempty"`
-	Status          string `json:"status,omitempty"`
-	IPMIStatus      string `json:"ipmi_status,omitempty"`
-	Location        string `json:"location,omitempty"`
-	Project         string `json:"project,omitempty"`
-	Team            string `json:"team,omitempty"`
-	Plan            string `json:"plan,omitempty"`
-	OperatingSystem string `json:"operating_system,omitempty"`
-	CPU             string `json:"cpu,omitempty"`
-	Disk            string `json:"disk,omitempty"`
-	RAM             string `json:"ram,omitempty"`
-}
-
 func (o *CreateServerCreated) Render() {
 	formatAsJSON := viper.GetBool("json")
 

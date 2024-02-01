@@ -17,6 +17,7 @@ import (
 	"github.com/latitudesh/lsh/internal/output"
 	"github.com/latitudesh/lsh/internal/output/table"
 	tablerows "github.com/latitudesh/lsh/internal/output/table/rows"
+	"github.com/latitudesh/lsh/internal/utils"
 	"github.com/latitudesh/lsh/models"
 )
 
@@ -139,8 +140,13 @@ func (o *GetProjectSSHKeysOK) RenderJSON() {
 }
 
 func (o *GetProjectSSHKeysOK) RenderTable() {
-	rows := tablerows.CreateSSHKeyRows(o.Payload.Data)
-	table.Render(rows)
+	var rows []table.Row
+
+	for _, sshKey := range o.Payload.Data {
+		rows = append(rows, tablerows.NewSSHKeyRow(sshKey))
+	}
+
+	utils.RenderTableU(rows)
 }
 
 func (o *GetProjectSSHKeysOK) readResponse(response runtime.ClientResponse, consumer runtime.Consumer, formats strfmt.Registry) error {

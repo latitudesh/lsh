@@ -6,36 +6,35 @@ import (
 )
 
 type SSHKeyRow struct {
-	ID          string `json:"id,omitempty"`
-	Name        string `json:"name,omitempty"`
 	User        string `json:"user,omitempty"`
 	PublicKey   string `json:"public_key,omitempty"`
 	Fingerprint string `json:"fingerprint,omitempty"`
 }
 
-func NewSSHKeyRow(SSHKey *models.SSHKeyData) *SSHKeyRow {
+func NewSSHKeyRow(SSHKey *models.SSHKeyData) table.Row {
 	attr := SSHKey.Attributes
 
-	return &SSHKeyRow{
-		ID:          table.String(SSHKey.ID),
-		Name:        table.String(attr.Name),
-		User:        table.String(attr.User.Email),
-		PublicKey:   table.String(attr.PublicKey),
-		Fingerprint: table.String(attr.Fingerprint),
+	return table.Row{
+		"id": table.Cell{
+			Label: "ID",
+			Value: table.String(SSHKey.ID),
+		},
+		"name": table.Cell{
+			Label: "Name",
+			Value: table.String(attr.Name),
+		},
+		"user": table.Cell{
+			Label: "User",
+			Value: table.String(attr.User.Email),
+		},
+		"public_key": table.Cell{
+			Label:     "Public Key",
+			Value:     table.String(attr.PublicKey),
+			MaxLength: 25,
+		},
+		"fingerprint": table.Cell{
+			Label: "Fingerprint",
+			Value: table.String(attr.Fingerprint),
+		},
 	}
-}
-
-func CreateSSHKeyRows(SSHKeys []*models.SSHKeyData) []interface{} {
-	var rows []SSHKeyRow
-	var rowsInterface []interface{}
-
-	for _, SSHKey := range SSHKeys {
-		rows = append(rows, *NewSSHKeyRow(SSHKey))
-	}
-
-	for _, row := range rows {
-		rowsInterface = append(rowsInterface, row)
-	}
-
-	return rowsInterface
 }

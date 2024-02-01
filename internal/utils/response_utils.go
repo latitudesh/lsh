@@ -74,7 +74,7 @@ func ExtractHeadersU(row table.Row) Header {
 }
 
 func renderCell(cell table.Cell) string {
-	maxLength := 30
+	maxLength := 50
 
 	if cell.MaxLength > 0 {
 		maxLength = cell.MaxLength

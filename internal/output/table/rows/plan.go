@@ -16,15 +16,42 @@ func NewPlanRow(plan *models.PlanData) table.Row {
 	regions := parseRegions(attr.Regions)
 
 	return table.Row{
-		"id":           table.NewCell("ID", table.String(plan.ID)),
-		"slug":         table.NewCell("Slug", table.String(attr.Slug)),
-		"available_in": table.NewCell("Available In", table.StringList(regions.AvailableIn)),
-		"in_stock":     table.NewCell("In Stock", table.StringList(regions.InStock)),
-		"features":     table.NewCell("Features", table.StringList(attr.Features)),
-		"cpu":          table.NewCell("CPU", table.PlanCPU(*attr.Specs.CPU)),
-		"memory":       table.NewCell("Memory", table.PlanMemory(*attr.Specs.Memory)),
-		"drives":       table.NewCell("Drives", table.PlanDrives(attr.Specs.Drives)),
-		"nic":          table.NewCell("NIC", table.PlanNICs(attr.Specs.Nics)),
+		"id": table.Cell{
+			Label: "ID",
+			Value: table.String(plan.ID),
+		},
+		"slug": table.Cell{
+			Label: "Slug",
+			Value: table.String(attr.Slug),
+		},
+		"available_in": table.Cell{
+			Label: "Available In",
+			Value: table.StringList(regions.AvailableIn),
+		},
+		"in_stock": table.Cell{
+			Label: "In Stock",
+			Value: table.StringList(regions.InStock),
+		},
+		"features": table.Cell{
+			Label: "Features",
+			Value: table.StringList(attr.Features),
+		},
+		"cpu": table.Cell{
+			Label: "CPU",
+			Value: table.PlanCPU(*attr.Specs.CPU),
+		},
+		"memory": table.Cell{
+			Label: "Memory",
+			Value: table.PlanMemory(*attr.Specs.Memory),
+		},
+		"drives": table.Cell{
+			Label: "Drives",
+			Value: table.PlanDrives(attr.Specs.Drives),
+		},
+		"nic": table.Cell{
+			Label: "NIC",
+			Value: table.PlanNICs(attr.Specs.Nics),
+		},
 	}
 }
 
