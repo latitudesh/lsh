@@ -513,7 +513,13 @@ func registerCreateServerParamsBodyDataAttributesSSHKeys(depth int, cmdPrefix st
 		return nil
 	}
 
-	// warning: ssh_keys []string array type is not supported by go-swagger cli yet
+	sshKeysDescription := `The SSH Keys to set on the server`
+
+	var sshKeysFlagName = "ssh_keys"
+
+	var sshKeysFlagDefault []string
+
+	_ = cmd.PersistentFlags().StringSlice(sshKeysFlagName, sshKeysFlagDefault, sshKeysDescription)
 
 	return nil
 }
@@ -777,7 +783,14 @@ func retrieveCreateServerParamsBodyDataAttributesSSHKeysFlags(depth int, m *serv
 
 	var sshKeysFlagName = "ssh_keys"
 	if cmd.Flags().Changed(sshKeysFlagName) {
-		// warning: ssh_keys array type []string is not supported by go-swagger cli yet
+	
+		sshKeysFlagValue, err := cmd.Flags().GetStringSlice(sshKeysFlagName)
+		if err != nil {
+			return err, false
+		}
+		m.SSHKeys = sshKeysFlagValue
+
+		retAdded = true
 	}
 
 	return nil, retAdded
