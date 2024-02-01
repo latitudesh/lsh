@@ -52,18 +52,14 @@ func runOperationAPIKeysUpdateAPIKey(cmd *cobra.Command, args []string) error {
 		return nil
 	}
 
-	result, err := appCli.APIKeys.UpdateAPIKey(params, nil)
+	response, err := appCli.APIKeys.UpdateAPIKey(params, nil)
 	if err != nil {
 		utils.PrintError(err)
 		return nil
 	}
 
-	msgStr, err := parseOperationAPIKeysUpdateAPIKeyResult(result)
-	if err != nil {
-		return err
-	}
 	if !debug {
-		utils.PrintResult(msgStr)
+		response.Render()
 	}
 	return nil
 }
@@ -174,19 +170,6 @@ func retrieveOperationAPIKeysUpdateAPIKeyIDFlag(m *api_keys.UpdateAPIKeyParams, 
 
 	}
 	return nil, retAdded
-}
-
-// parseOperationAPIKeysUpdateAPIKeyResult parses request result and return the string content
-func parseOperationAPIKeysUpdateAPIKeyResult(resp0 *api_keys.UpdateAPIKeyOK) (string, error) {
-	if !swag.IsZero(resp0) && !swag.IsZero(resp0.Payload) {
-		msgStr, err := json.Marshal(resp0.Payload)
-		if err != nil {
-			return "", err
-		}
-		return string(msgStr), nil
-	}
-
-	return "", nil
 }
 
 // register flags to command

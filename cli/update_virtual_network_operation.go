@@ -51,19 +51,14 @@ func runOperationVirtualNetworksUpdateVirtualNetwork(cmd *cobra.Command, args []
 		return nil
 	}
 
-	result, err := appCli.VirtualNetworks.UpdateVirtualNetwork(params, nil)
+	response, err := appCli.VirtualNetworks.UpdateVirtualNetwork(params, nil)
 	if err != nil {
 		utils.PrintError(err)
 		return nil
 	}
 
-	msgStr, err := parseOperationVirtualNetworksUpdateVirtualNetworkResult(result)
-	if err != nil {
-		return err
-	}
 	if !debug {
-
-		utils.PrintResult(msgStr)
+		response.Render()
 	}
 	return nil
 }
@@ -174,19 +169,6 @@ func retrieveOperationVirtualNetworksUpdateVirtualNetworkVirtualNetworkIDFlag(m 
 
 	}
 	return nil, retAdded
-}
-
-// parseOperationVirtualNetworksUpdateVirtualNetworkResult parses request result and return the string content
-func parseOperationVirtualNetworksUpdateVirtualNetworkResult(resp0 *virtual_networks.UpdateVirtualNetworkOK) (string, error) {
-	if !swag.IsZero(resp0) && !swag.IsZero(resp0.Payload) {
-		msgStr, err := json.Marshal(resp0.Payload)
-		if err != nil {
-			return "", err
-		}
-		return string(msgStr), nil
-	}
-
-	return "", nil
 }
 
 // register flags to command

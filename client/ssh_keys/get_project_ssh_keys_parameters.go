@@ -141,6 +141,10 @@ func (o *GetProjectSSHKeysParams) WriteToRequest(r runtime.ClientRequest, reg st
 	}
 	var res []error
 
+	if err := r.SetQueryParam("page[size]", "100"); err != nil {
+		return err
+	}
+
 	// path param project_id_or_slug
 	if err := r.SetPathParam("project_id_or_slug", o.ProjectIDOrSlug); err != nil {
 		return err

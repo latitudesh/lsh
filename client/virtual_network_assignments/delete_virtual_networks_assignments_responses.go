@@ -11,6 +11,7 @@ import (
 	"github.com/go-openapi/runtime"
 	"github.com/go-openapi/strfmt"
 	apierrors "github.com/latitudesh/lsh/internal/api/errors"
+	"github.com/latitudesh/lsh/internal/output"
 )
 
 // DeleteVirtualNetworksAssignmentsReader is a Reader for the DeleteVirtualNetworksAssignments structure.
@@ -99,6 +100,10 @@ func (o *DeleteVirtualNetworksAssignmentsNoContent) Error() string {
 
 func (o *DeleteVirtualNetworksAssignmentsNoContent) String() string {
 	return fmt.Sprintf("[DELETE /virtual_networks/assignments/{assignment_id}][%d] deleteVirtualNetworksAssignmentsNoContent ", 204)
+}
+
+func (o *DeleteVirtualNetworksAssignmentsNoContent) Render() {
+	output.SuccessfulDeletion("Virtual Network Assigment")
 }
 
 func (o *DeleteVirtualNetworksAssignmentsNoContent) readResponse(response runtime.ClientResponse, consumer runtime.Consumer, formats strfmt.Registry) error {

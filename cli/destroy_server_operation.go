@@ -46,19 +46,14 @@ func runOperationServersDestroyServer(cmd *cobra.Command, args []string) error {
 		return nil
 	}
 
-	result, err := appCli.Servers.DestroyServer(params, nil)
+	response, err := appCli.Servers.DestroyServer(params, nil)
 	if err != nil {
 		utils.PrintError(err)
 		return nil
 	}
 
-	msgStr, err := parseOperationServersDestroyServerResult(result)
-	if err != nil {
-		return err
-	}
-
 	if !debug {
-		utils.PrintResult(msgStr)
+		response.Render()
 	}
 	return nil
 }
@@ -109,11 +104,4 @@ func retrieveOperationServersDestroyServerServerIDFlag(m *servers.DestroyServerP
 
 	}
 	return nil, retAdded
-}
-
-// parseOperationServersDestroyServerResult parses request result and return the string content
-func parseOperationServersDestroyServerResult(resp0 *servers.DestroyServerNoContent) (string, error) {
-	// warning: non schema response destroyServerNoContent is not supported by go-swagger cli yet.
-
-	return "", nil
 }

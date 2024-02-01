@@ -49,18 +49,14 @@ func runOperationProjectsCreateProject(cmd *cobra.Command, args []string) error 
 		return nil
 	}
 
-	result, err := appCli.Projects.CreateProject(params, nil)
+	response, err := appCli.Projects.CreateProject(params, nil)
 	if err != nil {
 		utils.PrintError(err)
 		return nil
 	}
 
-	msgStr, err := parseOperationProjectsCreateProjectResult(result)
-	if err != nil {
-		return err
-	}
 	if !debug {
-		utils.PrintResult(msgStr)
+		response.Render()
 	}
 	return nil
 }
@@ -129,19 +125,6 @@ func retrieveOperationProjectsCreateProjectBodyFlag(m *projects.CreateProjectPar
 	retAdded = retAdded || added
 
 	return nil, retAdded
-}
-
-// parseOperationProjectsCreateProjectResult parses request result and return the string content
-func parseOperationProjectsCreateProjectResult(resp0 *projects.CreateProjectCreated) (string, error) {
-	if !swag.IsZero(resp0) && !swag.IsZero(resp0.Payload) {
-		msgStr, err := json.Marshal(resp0.Payload)
-		if err != nil {
-			return "", err
-		}
-		return string(msgStr), nil
-	}
-
-	return "", nil
 }
 
 // register flags to command
@@ -429,10 +412,7 @@ func registerCreateProjectParamsBodyDataAttributesProvisioningType(depth int, cm
 
 	var provisioningTypeFlagName = "provisioning_type"
 
-	var provisioningTypeFlagDefault string
-
-	_ = cmd.PersistentFlags().String(provisioningTypeFlagName, provisioningTypeFlagDefault, provisioningTypeDescription)
-	cmd.MarkPersistentFlagRequired(provisioningTypeFlagName)
+	_ = cmd.PersistentFlags().String(provisioningTypeFlagName, "on_demand", provisioningTypeDescription)
 
 	if err := cmd.RegisterFlagCompletionFunc(provisioningTypeFlagName,
 		func(cmd *cobra.Command, args []string, toComplete string) ([]string, cobra.ShellCompDirective) {
@@ -548,17 +528,21 @@ func retrieveCreateProjectParamsBodyDataAttributesProvisioningTypeFlags(depth in
 	}
 	retAdded := false
 
-	var provisioningTypeFlagName = "provisioning_type"
-	if cmd.Flags().Changed(provisioningTypeFlagName) {
+	var provisioningTypeFlagName string
 
-		provisioningTypeFlagValue, err := cmd.Flags().GetString(provisioningTypeFlagName)
-		if err != nil {
-			return err, false
-		}
-		m.ProvisioningType = &provisioningTypeFlagValue
-
-		retAdded = true
+	if cmdPrefix == "" {
+		provisioningTypeFlagName = "provisioning_type"
+	} else {
+		provisioningTypeFlagName = fmt.Sprintf("%v.provisioning_type", cmdPrefix)
 	}
+
+	provisioningTypeFlagValue, err := cmd.Flags().GetString(provisioningTypeFlagName)
+	if err != nil {
+		return err, false
+	}
+	m.ProvisioningType = &provisioningTypeFlagValue
+
+	retAdded = true
 
 	return nil, retAdded
 }

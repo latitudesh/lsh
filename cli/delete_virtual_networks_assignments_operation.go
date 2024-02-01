@@ -46,19 +46,14 @@ func runOperationVirtualNetworkAssignmentsDeleteVirtualNetworksAssignments(cmd *
 		return nil
 	}
 
-	result, err := appCli.VirtualNetworkAssignments.DeleteVirtualNetworksAssignments(params, nil)
+	response, err := appCli.VirtualNetworkAssignments.DeleteVirtualNetworksAssignments(params, nil)
 	if err != nil {
 		utils.PrintError(err)
 		return nil
 	}
 
-	msgStr, err := parseOperationVirtualNetworkAssignmentsDeleteVirtualNetworksAssignmentsResult(result)
-	if err != nil {
-		return err
-	}
 	if !debug {
-
-		utils.PrintResult(msgStr)
+		response.Render()
 	}
 	return nil
 }
@@ -109,11 +104,4 @@ func retrieveOperationVirtualNetworkAssignmentsDeleteVirtualNetworksAssignmentsA
 
 	}
 	return nil, retAdded
-}
-
-// parseOperationVirtualNetworkAssignmentsDeleteVirtualNetworksAssignmentsResult parses request result and return the string content
-func parseOperationVirtualNetworkAssignmentsDeleteVirtualNetworksAssignmentsResult(resp0 *virtual_network_assignments.DeleteVirtualNetworksAssignmentsNoContent) (string, error) {
-	// warning: non schema response deleteVirtualNetworksAssignmentsNoContent is not supported by go-swagger cli yet.
-
-	return "", nil
 }

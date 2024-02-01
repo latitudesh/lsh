@@ -55,19 +55,14 @@ func runOperationSSHKeysPutProjectSSHKey(cmd *cobra.Command, args []string) erro
 		return nil
 	}
 
-	result, err := appCli.SSHKeys.PutProjectSSHKey(params, nil)
+	response, err := appCli.SSHKeys.PutProjectSSHKey(params, nil)
 	if err != nil {
 		utils.PrintError(err)
 		return nil
 	}
 
-	msgStr, err := parseOperationSSHKeysPutProjectSSHKeyResult(result)
-	if err != nil {
-		return err
-	}
 	if !debug {
-
-		utils.PrintResult(msgStr)
+		response.Render()
 	}
 	return nil
 }
@@ -219,19 +214,6 @@ func retrieveOperationSSHKeysPutProjectSSHKeySSHKeyIDFlag(m *ssh_keys.PutProject
 
 	}
 	return nil, retAdded
-}
-
-// parseOperationSSHKeysPutProjectSSHKeyResult parses request result and return the string content
-func parseOperationSSHKeysPutProjectSSHKeyResult(resp0 *ssh_keys.PutProjectSSHKeyOK) (string, error) {
-	if !swag.IsZero(resp0) && !swag.IsZero(resp0.Payload) {
-		msgStr, err := json.Marshal(resp0.Payload)
-		if err != nil {
-			return "", err
-		}
-		return string(msgStr), nil
-	}
-
-	return "", nil
 }
 
 // register flags to command

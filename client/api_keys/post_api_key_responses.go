@@ -7,6 +7,7 @@ package api_keys
 
 import (
 	"context"
+	"encoding/json"
 	"fmt"
 	"io"
 
@@ -14,8 +15,11 @@ import (
 	"github.com/go-openapi/runtime"
 	"github.com/go-openapi/strfmt"
 	"github.com/go-openapi/swag"
+	"github.com/spf13/viper"
 
 	apierrors "github.com/latitudesh/lsh/internal/api/errors"
+	"github.com/latitudesh/lsh/internal/output"
+	"github.com/latitudesh/lsh/internal/output/table"
 	"github.com/latitudesh/lsh/models"
 )
 
@@ -112,145 +116,74 @@ func (o *PostAPIKeyCreated) GetPayload() *PostAPIKeyCreatedBody {
 	return o.Payload
 }
 
+func (o *PostAPIKeyCreated) Render() {
+	formatAsJSON := viper.GetBool("json")
+
+	if formatAsJSON {
+		o.RenderJSON()
+		return
+	}
+
+	formatOutputFlag := viper.GetString("output")
+
+	switch formatOutputFlag {
+	case "json":
+		o.RenderJSON()
+	case "table":
+		o.RenderTable()
+	default:
+		fmt.Println("Unsupported output format")
+	}
+}
+
+func (o *PostAPIKeyCreated) RenderJSON() {
+	if !swag.IsZero(o) && !swag.IsZero(o.Payload) {
+		JSONString, err := json.Marshal(o.Payload)
+		if err != nil {
+			fmt.Println("Could not decode the result as JSON.")
+		}
+
+		output.RenderJSON(JSONString)
+	}
+}
+
+type CreateAPIKeyTableRow struct {
+	ID string `json:"id,omitempty"`
+	TokenLastSlice string `json:"token_last_slice,omitempty"`
+	User string `json:"user,omitempty"`
+	APIVersion string `json:"api_version,omitempty"`
+	LastUsedAt string `json:"last_used_at,omitempty"`
+	Name string `json:"name,omitempty"`
+}
+
+func (o *PostAPIKeyCreated) RenderTable() {
+	attributes := o.Payload.Data.Attributes
+
+	var rows []CreateAPIKeyTableRow
+
+	row := CreateAPIKeyTableRow{
+		ID:        	 					 table.RenderString(o.Payload.Data.ID),
+		TokenLastSlice:        table.RenderString(attributes.TokenLastSlice),
+		User:    							 table.RenderString(attributes.User.Email),
+		APIVersion:     			 table.RenderString(attributes.APIVersion),
+		LastUsedAt: 					 table.RenderDateTime(attributes.LastUsedAt),
+		Name: 				 				 table.RenderString(attributes.Name),
+	}
+
+	rows = append(rows, row)
+
+	var interfaceRows []interface{}
+
+	for _, row := range rows {
+		interfaceRows = append(interfaceRows, row)
+	}
+
+	table.Render(interfaceRows)
+}
+
 func (o *PostAPIKeyCreated) readResponse(response runtime.ClientResponse, consumer runtime.Consumer, formats strfmt.Registry) error {
 
 	o.Payload = new(PostAPIKeyCreatedBody)
-
-	// response payload
-	if err := consumer.Consume(response.Body(), o.Payload); err != nil && err != io.EOF {
-		return err
-	}
-
-	return nil
-}
-
-// NewPostAPIKeyBadRequest creates a PostAPIKeyBadRequest with default headers values
-func NewPostAPIKeyBadRequest() *PostAPIKeyBadRequest {
-	return &PostAPIKeyBadRequest{}
-}
-
-/*
-PostAPIKeyBadRequest describes a response with status code 400, with default header values.
-
-Bad Request
-*/
-type PostAPIKeyBadRequest struct {
-	Payload *models.ErrorObject
-}
-
-// IsSuccess returns true when this post Api key bad request response has a 2xx status code
-func (o *PostAPIKeyBadRequest) IsSuccess() bool {
-	return false
-}
-
-// IsRedirect returns true when this post Api key bad request response has a 3xx status code
-func (o *PostAPIKeyBadRequest) IsRedirect() bool {
-	return false
-}
-
-// IsClientError returns true when this post Api key bad request response has a 4xx status code
-func (o *PostAPIKeyBadRequest) IsClientError() bool {
-	return true
-}
-
-// IsServerError returns true when this post Api key bad request response has a 5xx status code
-func (o *PostAPIKeyBadRequest) IsServerError() bool {
-	return false
-}
-
-// IsCode returns true when this post Api key bad request response a status code equal to that given
-func (o *PostAPIKeyBadRequest) IsCode(code int) bool {
-	return code == 400
-}
-
-// Code gets the status code for the post Api key bad request response
-func (o *PostAPIKeyBadRequest) Code() int {
-	return 400
-}
-
-func (o *PostAPIKeyBadRequest) Error() string {
-	return fmt.Sprintf("[POST /auth/api_keys][%d] postApiKeyBadRequest  %+v", 400, o.Payload)
-}
-
-func (o *PostAPIKeyBadRequest) String() string {
-	return fmt.Sprintf("[POST /auth/api_keys][%d] postApiKeyBadRequest  %+v", 400, o.Payload)
-}
-
-func (o *PostAPIKeyBadRequest) GetPayload() *models.ErrorObject {
-	return o.Payload
-}
-
-func (o *PostAPIKeyBadRequest) readResponse(response runtime.ClientResponse, consumer runtime.Consumer, formats strfmt.Registry) error {
-
-	o.Payload = new(models.ErrorObject)
-
-	// response payload
-	if err := consumer.Consume(response.Body(), o.Payload); err != nil && err != io.EOF {
-		return err
-	}
-
-	return nil
-}
-
-// NewPostAPIKeyUnprocessableEntity creates a PostAPIKeyUnprocessableEntity with default headers values
-func NewPostAPIKeyUnprocessableEntity() *PostAPIKeyUnprocessableEntity {
-	return &PostAPIKeyUnprocessableEntity{}
-}
-
-/*
-PostAPIKeyUnprocessableEntity describes a response with status code 422, with default header values.
-
-Unprocessable Entity
-*/
-type PostAPIKeyUnprocessableEntity struct {
-	Payload *models.ErrorObject
-}
-
-// IsSuccess returns true when this post Api key unprocessable entity response has a 2xx status code
-func (o *PostAPIKeyUnprocessableEntity) IsSuccess() bool {
-	return false
-}
-
-// IsRedirect returns true when this post Api key unprocessable entity response has a 3xx status code
-func (o *PostAPIKeyUnprocessableEntity) IsRedirect() bool {
-	return false
-}
-
-// IsClientError returns true when this post Api key unprocessable entity response has a 4xx status code
-func (o *PostAPIKeyUnprocessableEntity) IsClientError() bool {
-	return true
-}
-
-// IsServerError returns true when this post Api key unprocessable entity response has a 5xx status code
-func (o *PostAPIKeyUnprocessableEntity) IsServerError() bool {
-	return false
-}
-
-// IsCode returns true when this post Api key unprocessable entity response a status code equal to that given
-func (o *PostAPIKeyUnprocessableEntity) IsCode(code int) bool {
-	return code == 422
-}
-
-// Code gets the status code for the post Api key unprocessable entity response
-func (o *PostAPIKeyUnprocessableEntity) Code() int {
-	return 422
-}
-
-func (o *PostAPIKeyUnprocessableEntity) Error() string {
-	return fmt.Sprintf("[POST /auth/api_keys][%d] postApiKeyUnprocessableEntity  %+v", 422, o.Payload)
-}
-
-func (o *PostAPIKeyUnprocessableEntity) String() string {
-	return fmt.Sprintf("[POST /auth/api_keys][%d] postApiKeyUnprocessableEntity  %+v", 422, o.Payload)
-}
-
-func (o *PostAPIKeyUnprocessableEntity) GetPayload() *models.ErrorObject {
-	return o.Payload
-}
-
-func (o *PostAPIKeyUnprocessableEntity) readResponse(response runtime.ClientResponse, consumer runtime.Consumer, formats strfmt.Registry) error {
-
-	o.Payload = new(models.ErrorObject)
 
 	// response payload
 	if err := consumer.Consume(response.Body(), o.Payload); err != nil && err != io.EOF {

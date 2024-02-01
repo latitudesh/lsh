@@ -48,19 +48,14 @@ func runOperationServersCreateServer(cmd *cobra.Command, args []string) error {
 		return nil
 	}
 
-	result, err := appCli.Servers.CreateServer(params, nil)
+	response, err := appCli.Servers.CreateServer(params, nil)
 	if err != nil {
 		utils.PrintError(err)
 		return nil
 	}
 
-	msgStr, err := parseOperationServersCreateServerResult(result)
-	if err != nil {
-		return err
-	}
 	if !debug {
-
-		utils.PrintResult(msgStr)
+		response.Render()
 	}
 	return nil
 }
@@ -129,19 +124,6 @@ func retrieveOperationServersCreateServerBodyFlag(m *servers.CreateServerParams,
 	retAdded = retAdded || added
 
 	return nil, retAdded
-}
-
-// parseOperationServersCreateServerResult parses request result and return the string content
-func parseOperationServersCreateServerResult(resp0 *servers.CreateServerCreated) (string, error) {
-	if !swag.IsZero(resp0) && !swag.IsZero(resp0.Payload) {
-		msgStr, err := json.Marshal(resp0.Payload)
-		if err != nil {
-			return "", err
-		}
-		return string(msgStr), nil
-	}
-
-	return "", nil
 }
 
 // register flags to command
@@ -513,7 +495,13 @@ func registerCreateServerParamsBodyDataAttributesSSHKeys(depth int, cmdPrefix st
 		return nil
 	}
 
-	// warning: ssh_keys []string array type is not supported by go-swagger cli yet
+	sshKeysDescription := `The SSH Keys to set on the server`
+
+	var sshKeysFlagName = "ssh_keys"
+
+	var sshKeysFlagDefault []string
+
+	_ = cmd.PersistentFlags().StringSlice(sshKeysFlagName, sshKeysFlagDefault, sshKeysDescription)
 
 	return nil
 }
@@ -777,7 +765,14 @@ func retrieveCreateServerParamsBodyDataAttributesSSHKeysFlags(depth int, m *serv
 
 	var sshKeysFlagName = "ssh_keys"
 	if cmd.Flags().Changed(sshKeysFlagName) {
-		// warning: ssh_keys array type []string is not supported by go-swagger cli yet
+	
+		sshKeysFlagValue, err := cmd.Flags().GetStringSlice(sshKeysFlagName)
+		if err != nil {
+			return err, false
+		}
+		m.SSHKeys = sshKeysFlagValue
+
+		retAdded = true
 	}
 
 	return nil, retAdded

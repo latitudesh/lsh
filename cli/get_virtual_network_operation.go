@@ -6,7 +6,6 @@ package cli
 // Editing this file might prove futile when you re-run the swagger generate command
 
 import (
-	"encoding/json"
 	"fmt"
 
 	"github.com/latitudesh/lsh/client/virtual_networks"
@@ -49,19 +48,14 @@ func runOperationVirtualNetworksGetVirtualNetwork(cmd *cobra.Command, args []str
 		return nil
 	}
 
-	result, err := appCli.VirtualNetworks.GetVirtualNetwork(params, nil)
+	response, err := appCli.VirtualNetworks.GetVirtualNetwork(params, nil)
 	if err != nil {
 		utils.PrintError(err)
 		return nil
 	}
 
-	msgStr, err := parseOperationVirtualNetworksGetVirtualNetworkResult(result)
-	if err != nil {
-		return err
-	}
 	if !debug {
-
-		utils.PrintResult(msgStr)
+		response.Render()
 	}
 	return nil
 }
@@ -112,19 +106,6 @@ func retrieveOperationVirtualNetworksGetVirtualNetworkIDFlag(m *virtual_networks
 
 	}
 	return nil, retAdded
-}
-
-// parseOperationVirtualNetworksGetVirtualNetworkResult parses request result and return the string content
-func parseOperationVirtualNetworksGetVirtualNetworkResult(resp0 *virtual_networks.GetVirtualNetworkOK) (string, error) {
-	if !swag.IsZero(resp0) && !swag.IsZero(resp0.Payload) {
-		msgStr, err := json.Marshal(resp0.Payload)
-		if err != nil {
-			return "", err
-		}
-		return string(msgStr), nil
-	}
-
-	return "", nil
 }
 
 // register flags to command

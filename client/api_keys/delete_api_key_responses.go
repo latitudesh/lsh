@@ -12,6 +12,7 @@ import (
 	"github.com/go-openapi/strfmt"
 
 	apierrors "github.com/latitudesh/lsh/internal/api/errors"
+	"github.com/latitudesh/lsh/internal/output"
 )
 
 // DeleteAPIKeyReader is a Reader for the DeleteAPIKey structure.
@@ -94,6 +95,10 @@ func (o *DeleteAPIKeyOK) Error() string {
 
 func (o *DeleteAPIKeyOK) String() string {
 	return fmt.Sprintf("[DELETE /auth/api_keys/{id}][%d] deleteApiKeyOK ", 200)
+}
+
+func (o *DeleteAPIKeyOK) Render() {
+	output.SuccessfulDeletion("API Key")
 }
 
 func (o *DeleteAPIKeyOK) readResponse(response runtime.ClientResponse, consumer runtime.Consumer, formats strfmt.Registry) error {

@@ -16,8 +16,12 @@ import (
 	"github.com/go-openapi/strfmt"
 	"github.com/go-openapi/swag"
 	"github.com/go-openapi/validate"
+	"github.com/spf13/viper"
 
 	apierrors "github.com/latitudesh/lsh/internal/api/errors"
+	"github.com/latitudesh/lsh/internal/output"
+	"github.com/latitudesh/lsh/internal/output/table"
+	tablerows "github.com/latitudesh/lsh/internal/output/table/rows"
 	"github.com/latitudesh/lsh/models"
 )
 
@@ -114,75 +118,44 @@ func (o *UpdateVirtualNetworkOK) GetPayload() *models.VirtualNetwork {
 	return o.Payload
 }
 
-func (o *UpdateVirtualNetworkOK) readResponse(response runtime.ClientResponse, consumer runtime.Consumer, formats strfmt.Registry) error {
+func (o *UpdateVirtualNetworkOK) Render() {
+	formatAsJSON := viper.GetBool("json")
 
-	o.Payload = new(models.VirtualNetwork)
-
-	// response payload
-	if err := consumer.Consume(response.Body(), o.Payload); err != nil && err != io.EOF {
-		return err
+	if formatAsJSON {
+		o.RenderJSON()
+		return
 	}
 
-	return nil
+	formatOutputFlag := viper.GetString("output")
+
+	switch formatOutputFlag {
+	case "json":
+		o.RenderJSON()
+	case "table":
+		o.RenderTable()
+	default:
+		fmt.Println("Unsupported output format")
+	}
 }
 
-// NewUpdateVirtualNetworkForbidden creates a UpdateVirtualNetworkForbidden with default headers values
-func NewUpdateVirtualNetworkForbidden() *UpdateVirtualNetworkForbidden {
-	return &UpdateVirtualNetworkForbidden{}
+func (o *UpdateVirtualNetworkOK) RenderJSON() {
+	if !swag.IsZero(o) && !swag.IsZero(o.Payload) {
+		JSONString, err := json.Marshal(o.Payload)
+		if err != nil {
+			fmt.Println("Could not decode the result as JSON.")
+		}
+
+		output.RenderJSON(JSONString)
+	}
 }
 
-/*
-UpdateVirtualNetworkForbidden describes a response with status code 403, with default header values.
-
-Forbidden
-*/
-type UpdateVirtualNetworkForbidden struct {
-	Payload *models.VirtualNetwork
+func (o *UpdateVirtualNetworkOK) RenderTable() {
+	data := []*models.VirtualNetwork{o.Payload}
+	rows := tablerows.CreateVirtualNetworksRows(data)
+	table.Render(rows)
 }
 
-// IsSuccess returns true when this update virtual network forbidden response has a 2xx status code
-func (o *UpdateVirtualNetworkForbidden) IsSuccess() bool {
-	return false
-}
-
-// IsRedirect returns true when this update virtual network forbidden response has a 3xx status code
-func (o *UpdateVirtualNetworkForbidden) IsRedirect() bool {
-	return false
-}
-
-// IsClientError returns true when this update virtual network forbidden response has a 4xx status code
-func (o *UpdateVirtualNetworkForbidden) IsClientError() bool {
-	return true
-}
-
-// IsServerError returns true when this update virtual network forbidden response has a 5xx status code
-func (o *UpdateVirtualNetworkForbidden) IsServerError() bool {
-	return false
-}
-
-// IsCode returns true when this update virtual network forbidden response a status code equal to that given
-func (o *UpdateVirtualNetworkForbidden) IsCode(code int) bool {
-	return code == 403
-}
-
-// Code gets the status code for the update virtual network forbidden response
-func (o *UpdateVirtualNetworkForbidden) Code() int {
-	return 403
-}
-
-func (o *UpdateVirtualNetworkForbidden) Error() string {
-	return fmt.Sprintf("[PATCH /virtual_networks/{virtual_network_id}][%d] updateVirtualNetworkForbidden  %+v", 403, o.Payload)
-}
-
-func (o *UpdateVirtualNetworkForbidden) String() string {
-	return fmt.Sprintf("[PATCH /virtual_networks/{virtual_network_id}][%d] updateVirtualNetworkForbidden  %+v", 403, o.Payload)
-}
-
-func (o *UpdateVirtualNetworkForbidden) GetPayload() *models.VirtualNetwork {
-	return o.Payload
-}
-
-func (o *UpdateVirtualNetworkForbidden) readResponse(response runtime.ClientResponse, consumer runtime.Consumer, formats strfmt.Registry) error {
+func (o *UpdateVirtualNetworkOK) readResponse(response runtime.ClientResponse, consumer runtime.Consumer, formats strfmt.Registry) error {
 
 	o.Payload = new(models.VirtualNetwork)
 

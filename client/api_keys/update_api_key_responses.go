@@ -7,6 +7,7 @@ package api_keys
 
 import (
 	"context"
+	"encoding/json"
 	"fmt"
 	"io"
 
@@ -14,8 +15,11 @@ import (
 	"github.com/go-openapi/runtime"
 	"github.com/go-openapi/strfmt"
 	"github.com/go-openapi/swag"
+	"github.com/spf13/viper"
 
 	apierrors "github.com/latitudesh/lsh/internal/api/errors"
+	"github.com/latitudesh/lsh/internal/output"
+	"github.com/latitudesh/lsh/internal/output/table"
 	"github.com/latitudesh/lsh/models"
 )
 
@@ -112,145 +116,74 @@ func (o *UpdateAPIKeyOK) GetPayload() *UpdateAPIKeyOKBody {
 	return o.Payload
 }
 
+func (o *UpdateAPIKeyOK) Render() {
+	formatAsJSON := viper.GetBool("json")
+
+	if formatAsJSON {
+		o.RenderJSON()
+		return
+	}
+
+	formatOutputFlag := viper.GetString("output")
+
+	switch formatOutputFlag {
+	case "json":
+		o.RenderJSON()
+	case "table":
+		o.RenderTable()
+	default:
+		fmt.Println("Unsupported output format")
+	}
+}
+
+func (o *UpdateAPIKeyOK) RenderJSON() {
+	if !swag.IsZero(o) && !swag.IsZero(o.Payload) {
+		JSONString, err := json.Marshal(o.Payload)
+		if err != nil {
+			fmt.Println("Could not decode the result as JSON.")
+		}
+
+		output.RenderJSON(JSONString)
+	}
+}
+
+type UpdateAPIKeyTableRow struct {
+	ID string `json:"id,omitempty"`
+	TokenLastSlice string `json:"token_last_slice,omitempty"`
+	User string `json:"user,omitempty"`
+	APIVersion string `json:"api_version,omitempty"`
+	LastUsedAt string `json:"last_used_at,omitempty"`
+	Name string `json:"name,omitempty"`
+}
+
+func (o *UpdateAPIKeyOK) RenderTable() {
+	attributes := o.Payload.Data.Attributes
+
+	var rows []UpdateAPIKeyTableRow
+
+	row := UpdateAPIKeyTableRow{
+		ID:        	 					 table.RenderString(o.Payload.Data.ID),
+		TokenLastSlice:        table.RenderString(attributes.TokenLastSlice),
+		User:    							 table.RenderString(attributes.User.Email),
+		APIVersion:     			 table.RenderString(attributes.APIVersion),
+		LastUsedAt: 					 table.RenderDateTime(attributes.LastUsedAt),
+		Name: 				 				 table.RenderString(attributes.Name),
+	}
+
+	rows = append(rows, row)
+
+	var interfaceRows []interface{}
+
+	for _, row := range rows {
+		interfaceRows = append(interfaceRows, row)
+	}
+
+	table.Render(interfaceRows)
+}
+
 func (o *UpdateAPIKeyOK) readResponse(response runtime.ClientResponse, consumer runtime.Consumer, formats strfmt.Registry) error {
 
 	o.Payload = new(UpdateAPIKeyOKBody)
-
-	// response payload
-	if err := consumer.Consume(response.Body(), o.Payload); err != nil && err != io.EOF {
-		return err
-	}
-
-	return nil
-}
-
-// NewUpdateAPIKeyBadRequest creates a UpdateAPIKeyBadRequest with default headers values
-func NewUpdateAPIKeyBadRequest() *UpdateAPIKeyBadRequest {
-	return &UpdateAPIKeyBadRequest{}
-}
-
-/*
-UpdateAPIKeyBadRequest describes a response with status code 400, with default header values.
-
-Bad Request
-*/
-type UpdateAPIKeyBadRequest struct {
-	Payload *models.ErrorObject
-}
-
-// IsSuccess returns true when this update Api key bad request response has a 2xx status code
-func (o *UpdateAPIKeyBadRequest) IsSuccess() bool {
-	return false
-}
-
-// IsRedirect returns true when this update Api key bad request response has a 3xx status code
-func (o *UpdateAPIKeyBadRequest) IsRedirect() bool {
-	return false
-}
-
-// IsClientError returns true when this update Api key bad request response has a 4xx status code
-func (o *UpdateAPIKeyBadRequest) IsClientError() bool {
-	return true
-}
-
-// IsServerError returns true when this update Api key bad request response has a 5xx status code
-func (o *UpdateAPIKeyBadRequest) IsServerError() bool {
-	return false
-}
-
-// IsCode returns true when this update Api key bad request response a status code equal to that given
-func (o *UpdateAPIKeyBadRequest) IsCode(code int) bool {
-	return code == 400
-}
-
-// Code gets the status code for the update Api key bad request response
-func (o *UpdateAPIKeyBadRequest) Code() int {
-	return 400
-}
-
-func (o *UpdateAPIKeyBadRequest) Error() string {
-	return fmt.Sprintf("[PUT /auth/api_keys/{id}][%d] updateApiKeyBadRequest  %+v", 400, o.Payload)
-}
-
-func (o *UpdateAPIKeyBadRequest) String() string {
-	return fmt.Sprintf("[PUT /auth/api_keys/{id}][%d] updateApiKeyBadRequest  %+v", 400, o.Payload)
-}
-
-func (o *UpdateAPIKeyBadRequest) GetPayload() *models.ErrorObject {
-	return o.Payload
-}
-
-func (o *UpdateAPIKeyBadRequest) readResponse(response runtime.ClientResponse, consumer runtime.Consumer, formats strfmt.Registry) error {
-
-	o.Payload = new(models.ErrorObject)
-
-	// response payload
-	if err := consumer.Consume(response.Body(), o.Payload); err != nil && err != io.EOF {
-		return err
-	}
-
-	return nil
-}
-
-// NewUpdateAPIKeyNotFound creates a UpdateAPIKeyNotFound with default headers values
-func NewUpdateAPIKeyNotFound() *UpdateAPIKeyNotFound {
-	return &UpdateAPIKeyNotFound{}
-}
-
-/*
-UpdateAPIKeyNotFound describes a response with status code 404, with default header values.
-
-API Key Not Found
-*/
-type UpdateAPIKeyNotFound struct {
-	Payload *models.ErrorObject
-}
-
-// IsSuccess returns true when this update Api key not found response has a 2xx status code
-func (o *UpdateAPIKeyNotFound) IsSuccess() bool {
-	return false
-}
-
-// IsRedirect returns true when this update Api key not found response has a 3xx status code
-func (o *UpdateAPIKeyNotFound) IsRedirect() bool {
-	return false
-}
-
-// IsClientError returns true when this update Api key not found response has a 4xx status code
-func (o *UpdateAPIKeyNotFound) IsClientError() bool {
-	return true
-}
-
-// IsServerError returns true when this update Api key not found response has a 5xx status code
-func (o *UpdateAPIKeyNotFound) IsServerError() bool {
-	return false
-}
-
-// IsCode returns true when this update Api key not found response a status code equal to that given
-func (o *UpdateAPIKeyNotFound) IsCode(code int) bool {
-	return code == 404
-}
-
-// Code gets the status code for the update Api key not found response
-func (o *UpdateAPIKeyNotFound) Code() int {
-	return 404
-}
-
-func (o *UpdateAPIKeyNotFound) Error() string {
-	return fmt.Sprintf("[PUT /auth/api_keys/{id}][%d] updateApiKeyNotFound  %+v", 404, o.Payload)
-}
-
-func (o *UpdateAPIKeyNotFound) String() string {
-	return fmt.Sprintf("[PUT /auth/api_keys/{id}][%d] updateApiKeyNotFound  %+v", 404, o.Payload)
-}
-
-func (o *UpdateAPIKeyNotFound) GetPayload() *models.ErrorObject {
-	return o.Payload
-}
-
-func (o *UpdateAPIKeyNotFound) readResponse(response runtime.ClientResponse, consumer runtime.Consumer, formats strfmt.Registry) error {
-
-	o.Payload = new(models.ErrorObject)
 
 	// response payload
 	if err := consumer.Consume(response.Body(), o.Payload); err != nil && err != io.EOF {

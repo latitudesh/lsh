@@ -12,7 +12,6 @@ import (
 
 	"github.com/latitudesh/lsh/client/api_keys"
 	"github.com/latitudesh/lsh/client/plans"
-	"github.com/latitudesh/lsh/client/power_actions"
 	"github.com/latitudesh/lsh/client/projects"
 	"github.com/latitudesh/lsh/client/server_reinstall"
 	"github.com/latitudesh/lsh/client/servers"
@@ -65,7 +64,6 @@ func New(transport runtime.ClientTransport, formats strfmt.Registry) *LatitudeSh
 	cli.Transport = transport
 	cli.APIKeys = api_keys.New(transport, formats)
 	cli.Plans = plans.New(transport, formats)
-	cli.PowerActions = power_actions.New(transport, formats)
 	cli.Projects = projects.New(transport, formats)
 	cli.ServerReinstall = server_reinstall.New(transport, formats)
 	cli.Servers = servers.New(transport, formats)
@@ -120,8 +118,6 @@ type LatitudeShAPI struct {
 
 	Plans plans.ClientService
 
-	PowerActions power_actions.ClientService
-
 	Projects projects.ClientService
 
 	ServerReinstall server_reinstall.ClientService
@@ -142,7 +138,6 @@ func (c *LatitudeShAPI) SetTransport(transport runtime.ClientTransport) {
 	c.Transport = transport
 	c.APIKeys.SetTransport(transport)
 	c.Plans.SetTransport(transport)
-	c.PowerActions.SetTransport(transport)
 	c.Projects.SetTransport(transport)
 	c.ServerReinstall.SetTransport(transport)
 	c.Servers.SetTransport(transport)
