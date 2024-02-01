@@ -9,8 +9,8 @@ import (
 	"github.com/olekukonko/tablewriter"
 )
 
-const MaxColWidth = 20
-const MaxLength = 50
+const MaxColWidth = 18
+const MaxLength = 120
 
 type Table struct {
 	Headers []string
@@ -33,7 +33,7 @@ func Render(rows []interface{}) {
 				fmt.Printf("Field not found: %s\n", fieldKey)
 				continue
 			}
-			tr = append(tr, truncate(fmt.Sprintf("%s", field.Interface())))
+			tr = append(tr, Truncate(fmt.Sprintf("%s", field.Interface()), MaxLength))
 		}
 
 		values = append(values, tr)
@@ -116,9 +116,9 @@ func removeOmitempty(tag string) string {
 	return strings.Split(tag, ",")[0]
 }
 
-func truncate(input string) string {
-	if len(input) > MaxLength {
-		return input[:MaxLength] + "..."
+func Truncate(input string, maxLength int) string {
+	if len(input) > maxLength {
+		return input[:maxLength] + "..."
 	}
-	return input
+	return fmt.Sprintf("%v", input)
 }

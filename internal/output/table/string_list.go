@@ -4,28 +4,26 @@ import (
 	"strings"
 )
 
-const Separator = ", "
-
 type StringList struct {
 	Value []string
 }
 
-func RenderStringList(value []string) string {
+func RenderStringList(value []string, separator string) string {
 	output := &StringList{
 		Value: value,
 	}
 
-	return output.Render()
+	return output.Render(separator)
 }
 
-func (t *StringList) Render() string {
+func (t *StringList) Render(separator string) string {
 	var output strings.Builder
 
 	for i, v := range t.Value {
 		output.WriteString(v)
 
 		if i < len(t.Value)-1 {
-			output.WriteString(Separator)
+			output.WriteString(separator)
 		}
 	}
 

@@ -21,7 +21,7 @@ func NewBandwidthPlanRow(plan *models.BandwidthPlan) *BandwidthPlanRow {
 	return &BandwidthPlanRow{
 		ID:            table.RenderString(plan.ID),
 		Region:        table.RenderString(attr.Region),
-		Locations:     table.RenderStringList(attr.Locations),
+		Locations:     table.RenderStringList(attr.Locations, ", "),
 		USDPriceHour:  table.RenderInt(attr.Pricing.Usd.Hourly),
 		USDPriceMonth: table.RenderInt(attr.Pricing.Usd.Monthly),
 		BRLPriceHour:  table.RenderInt(attr.Pricing.Brl.Hourly),

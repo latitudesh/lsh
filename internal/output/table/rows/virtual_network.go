@@ -21,7 +21,7 @@ func NewVirtualNetwork(virtualNetwork *models.VirtualNetwork) *VirtualNetwork {
 		VID:         table.RenderInt(attr.Vid),
 		Description: table.RenderString(attr.Description),
 		Assignments: table.RenderInt(attr.AssignmentsCount),
-		Location:    table.RenderString(attr.Region.Site.Slug),
+		Location:    table.RenderString(virtualNetworkLocation(attr)),
 	}
 }
 
@@ -38,4 +38,14 @@ func CreateVirtualNetworksRows(virtualNetworks []*models.VirtualNetwork) []inter
 	}
 
 	return rowsInterface
+}
+
+func virtualNetworkLocation(attributes *models.VirtualNetworkAttributes) string {
+	region := attributes.Region
+
+	if region != nil && region.Site != nil {
+		return region.Site.Slug
+	}
+
+	return ""
 }

@@ -31,9 +31,9 @@ func NewPlanRow(plan *models.PlanData) *PlanRow {
 	return &PlanRow{
 		ID:          table.RenderString(plan.ID),
 		Slug:        table.RenderString(attr.Slug),
-		AvailableIn: table.RenderStringList(availableIn),
-		InStock:     table.RenderStringList(inStock),
-		Features:    table.RenderStringList(attr.Features),
+		AvailableIn: table.RenderStringList(availableIn, ", "),
+		InStock:     table.RenderStringList(inStock, "\n"),
+		Features:    table.RenderStringList(attr.Features, "\n\n"),
 		CPU:         table.RenderPlanCPU(*attr.Specs.CPU),
 		Memory:      table.RenderPlanMemory(*attr.Specs.Memory),
 		Drives:      table.RenderPlanDrives(attr.Specs.Drives),

@@ -8,14 +8,13 @@ import (
 type ServerRow struct {
 	ID              string `json:"id,omitempty"`
 	Hostname        string `json:"hostname,omitempty"`
-	PrimaryIPV4     string `json:"primary_ipv4,omitempty"`
+	PrimaryIPV4     string `json:"ipv4,omitempty"`
 	Status          string `json:"status,omitempty"`
 	IPMIStatus      string `json:"ipmi_status,omitempty"`
 	Location        string `json:"location,omitempty"`
 	Project         string `json:"project,omitempty"`
-	Team            string `json:"team,omitempty"`
 	Plan            string `json:"plan,omitempty"`
-	OperatingSystem string `json:"operating_system,omitempty"`
+	OperatingSystem string `json:"os,omitempty"`
 }
 
 func NewServerRow(server *models.ServerData) *ServerRow {
@@ -29,9 +28,8 @@ func NewServerRow(server *models.ServerData) *ServerRow {
 		Status:          table.RenderString(attr.Status),
 		IPMIStatus:      table.RenderString(attr.IpmiStatus),
 		Project:         table.RenderString(project(attr)),
-		Team:            table.RenderString(team(attr)),
 		Plan:            table.RenderString(plan(attr)),
-		OperatingSystem: table.RenderString(operatingSystem(attr)),
+		OperatingSystem: table.RenderString(table.Truncate(operatingSystem(attr), 10)),
 	}
 }
 
@@ -75,16 +73,6 @@ func operatingSystem(attributes *models.ServerDataAttributes) string {
 
 	if operatingSystem != nil {
 		return operatingSystem.Slug
-	}
-
-	return ""
-}
-
-func team(attributes *models.ServerDataAttributes) string {
-	team := attributes.Team
-
-	if team != nil {
-		return team.Name
 	}
 
 	return ""

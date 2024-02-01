@@ -20,7 +20,7 @@ func NewSSHKeyRow(SSHKey *models.SSHKeyData) *SSHKeyRow {
 		ID:          table.RenderString(SSHKey.ID),
 		Name:        table.RenderString(attr.Name),
 		User:        table.RenderString(attr.User.Email),
-		PublicKey:   table.RenderString(attr.PublicKey),
+		PublicKey:   table.RenderString(table.Truncate(attr.PublicKey, 30)),
 		Fingerprint: table.RenderString(attr.Fingerprint),
 	}
 }
