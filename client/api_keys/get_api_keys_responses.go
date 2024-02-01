@@ -16,6 +16,8 @@ import (
 	apierrors "github.com/latitudesh/lsh/internal/api/errors"
 	"github.com/latitudesh/lsh/internal/output"
 	"github.com/latitudesh/lsh/internal/output/table"
+	tablerows "github.com/latitudesh/lsh/internal/output/table/rows"
+	"github.com/latitudesh/lsh/internal/utils"
 	"github.com/latitudesh/lsh/models"
 )
 
@@ -100,15 +102,6 @@ func (o *GetAPIKeysOK) GetPayload() *models.APIKeys {
 	return o.Payload
 }
 
-type APIKeyTableRow struct {
-	ID             string `json:"id,omitempty"`
-	TokenLastSlice string `json:"token_last_slice,omitempty"`
-	User           string `json:"user,omitempty"`
-	APIVersion     string `json:"api_version,omitempty"`
-	LastUsedAt     string `json:"last_used_at,omitempty"`
-	Name           string `json:"name,omitempty"`
-}
-
 func (o *GetAPIKeysOK) Render() {
 	formatAsJSON := viper.GetBool("json")
 
@@ -141,32 +134,13 @@ func (o *GetAPIKeysOK) RenderJSON() {
 }
 
 func (o *GetAPIKeysOK) RenderTable() {
-	data := o.Payload.Data
+	var rows []table.Row
 
-	var rows []APIKeyTableRow
-
-	for _, api_key := range data {
-		attributes := api_key.Attributes
-
-		row := APIKeyTableRow{
-			ID:             table.String(api_key.ID),
-			TokenLastSlice: table.String(attributes.TokenLastSlice),
-			User:           table.String(attributes.User.Email),
-			APIVersion:     table.String(attributes.APIVersion),
-			LastUsedAt:     table.DateTime(attributes.LastUsedAt),
-			Name:           table.String(attributes.Name),
-		}
-
-		rows = append(rows, row)
+	for _, APIKey := range o.Payload.Data {
+		rows = append(rows, tablerows.NewAPIKeyRow(APIKey))
 	}
 
-	var interfaceRows []interface{}
-
-	for _, row := range rows {
-		interfaceRows = append(interfaceRows, row)
-	}
-
-	table.Render(interfaceRows)
+	utils.RenderTableU(rows)
 }
 
 func (o *GetAPIKeysOK) readResponse(response runtime.ClientResponse, consumer runtime.Consumer, formats strfmt.Registry) error {

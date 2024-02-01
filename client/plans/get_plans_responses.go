@@ -105,18 +105,6 @@ func (o *GetPlansOK) GetPayload() *GetPlansOKBody {
 	return o.Payload
 }
 
-type PlanTableRow struct {
-	ID          string `json:"id,omitempty"`
-	Slug        string `json:"slug,omitempty"`
-	Features    string `json:"features,omitempty"`
-	InStock     string `json:"in_stock,omitempty"`
-	AvailableIn string `json:"available_in,omitempty"`
-	CPU         string `json:"cpu,omitempty"`
-	Memory      string `json:"memory,omitempty"`
-	Drives      string `json:"drives,omitempty"`
-	NIC         string `json:"nic,omitempty"`
-}
-
 func (o *GetPlansOK) Render() {
 	formatAsJSON := viper.GetBool("json")
 

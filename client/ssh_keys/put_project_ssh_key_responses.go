@@ -135,14 +135,6 @@ func (o *PutProjectSSHKeyOK) readResponse(response runtime.ClientResponse, consu
 	return nil
 }
 
-type UpdateSSHKeyTableRow struct {
-	ID          string `json:"id,omitempty"`
-	Name        string `json:"name,omitempty"`
-	User        string `json:"user,omitempty"`
-	PublicKey   string `json:"public_key,omitempty"`
-	Fingerprint string `json:"fingerprint,omitempty"`
-}
-
 func (o *PutProjectSSHKeyOK) Render() {
 	formatAsJSON := viper.GetBool("json")
 

@@ -16,6 +16,8 @@ import (
 	apierrors "github.com/latitudesh/lsh/internal/api/errors"
 	"github.com/latitudesh/lsh/internal/output"
 	"github.com/latitudesh/lsh/internal/output/table"
+	tablerows "github.com/latitudesh/lsh/internal/output/table/rows"
+	"github.com/latitudesh/lsh/internal/utils"
 	"github.com/latitudesh/lsh/models"
 )
 
@@ -118,12 +120,6 @@ func (o *ServerScheduleDeletionCreated) GetPayload() *models.ServerScheduleDelet
 	return o.Payload
 }
 
-type CreateServerScheduleDeletionTableRow struct {
-	ID          string `json:"id,omitempty"`
-	ServerID    string `json:"server_id,omitempty"`
-	ScheduledAt string `json:"scheduled_at,omitempty"`
-}
-
 func (o *ServerScheduleDeletionCreated) Render() {
 	formatAsJSON := viper.GetBool("json")
 
@@ -156,26 +152,8 @@ func (o *ServerScheduleDeletionCreated) RenderJSON() {
 }
 
 func (o *ServerScheduleDeletionCreated) RenderTable() {
-	resource := o.Payload.Data
-
-	var rows []CreateServerScheduleDeletionTableRow
-
-	attributes := resource.Attributes
-
-	row := CreateServerScheduleDeletionTableRow{
-		ID:          table.String(resource.ID),
-		ServerID:    table.String(attributes.ServerID),
-		ScheduledAt: table.String(attributes.ScheduledDeletionAt),
-	}
-	rows = append(rows, row)
-
-	var interfaceRows []interface{}
-
-	for _, row := range rows {
-		interfaceRows = append(interfaceRows, row)
-	}
-
-	table.Render(interfaceRows)
+	rows := []table.Row{tablerows.NewServerScheduledDeletionRow(o.Payload.Data)}
+	utils.RenderTableU(rows)
 }
 
 func (o *ServerScheduleDeletionCreated) readResponse(response runtime.ClientResponse, consumer runtime.Consumer, formats strfmt.Registry) error {
