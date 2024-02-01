@@ -25,13 +25,13 @@ func NewServerRow(server *models.ServerData) *ServerRow {
 		ID:              table.RenderString(server.ID),
 		Hostname:        table.RenderString(attr.Hostname),
 		PrimaryIPV4:     table.RenderString(*attr.PrimaryIPV4),
-		Location:        table.RenderString(attr.Region.Site.Slug),
+		Location:        table.RenderString(location(attr)),
 		Status:          table.RenderString(attr.Status),
 		IPMIStatus:      table.RenderString(attr.IpmiStatus),
-		Project:         table.RenderString(attr.Project.Slug),
-		Team:            table.RenderString(attr.Team.Name),
-		Plan:            table.RenderString(attr.Plan.Name),
-		OperatingSystem: table.RenderString(attr.OperatingSystem.Slug),
+		Project:         table.RenderString(project(attr)),
+		Team:            table.RenderString(team(attr)),
+		Plan:            table.RenderString(plan(attr)),
+		OperatingSystem: table.RenderString(operatingSystem(attr)),
 	}
 }
 
@@ -48,4 +48,54 @@ func CreateServerRows(servers []*models.ServerData) []interface{} {
 	}
 
 	return rowsInterface
+}
+
+func location(attributes *models.ServerDataAttributes) string {
+	region := attributes.Region
+
+	if region != nil && region.Site != nil {
+		return region.Site.Slug
+	}
+
+	return ""
+}
+
+func project(attributes *models.ServerDataAttributes) string {
+	project := attributes.Project
+
+	if project != nil {
+		return project.Slug
+	}
+
+	return ""
+}
+
+func operatingSystem(attributes *models.ServerDataAttributes) string {
+	operatingSystem := attributes.OperatingSystem
+
+	if operatingSystem != nil {
+		return operatingSystem.Slug
+	}
+
+	return ""
+}
+
+func team(attributes *models.ServerDataAttributes) string {
+	team := attributes.Team
+
+	if team != nil {
+		return team.Name
+	}
+
+	return ""
+}
+
+func plan(attributes *models.ServerDataAttributes) string {
+	plan := attributes.Plan
+
+	if plan != nil {
+		return plan.Name
+	}
+
+	return ""
 }
