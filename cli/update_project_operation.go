@@ -523,11 +523,14 @@ func retrieveUpdateProjectParamsBodyDataAttributesBandwidthAlertFlags(depth int,
 	}
 	retAdded := false
 
-	bandwidthAlertFlagName := fmt.Sprintf("%v.bandwidth_alert", cmdPrefix)
+	var bandwidthAlertFlagName string
+	if cmdPrefix == "" {
+		bandwidthAlertFlagName = "bandwidth_alert"
+	} else {
+		bandwidthAlertFlagName = fmt.Sprintf("%v.bandwidth_alert", cmdPrefix)
+	}
+
 	if cmd.Flags().Changed(bandwidthAlertFlagName) {
-
-		var bandwidthAlertFlagName = "bandwidth_alert"
-
 		bandwidthAlertFlagValue, err := cmd.Flags().GetBool(bandwidthAlertFlagName)
 		if err != nil {
 			return err, false
@@ -554,9 +557,6 @@ func retrieveUpdateProjectParamsBodyDataAttributesDescriptionFlags(depth int, m 
 	}
 
 	if cmd.Flags().Changed(descriptionFlagName) {
-
-		var descriptionFlagName = "description"
-
 		descriptionFlagValue, err := cmd.Flags().GetString(descriptionFlagName)
 		if err != nil {
 			return err, false
@@ -575,7 +575,13 @@ func retrieveUpdateProjectParamsBodyDataAttributesEnvironmentFlags(depth int, m 
 	}
 	retAdded := false
 
-	environmentFlagName := fmt.Sprintf("%v.environment", cmdPrefix)
+	var environmentFlagName string
+	if cmdPrefix == "" {
+		environmentFlagName = "environment"
+	} else {
+		environmentFlagName = fmt.Sprintf("%v.environment", cmdPrefix)
+	}
+
 	if cmd.Flags().Changed(environmentFlagName) {
 
 		var environmentFlagName = "environment"
