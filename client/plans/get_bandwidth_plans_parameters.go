@@ -144,6 +144,10 @@ func (o *GetBandwidthPlansParams) WriteToRequest(r runtime.ClientRequest, reg st
 	}
 	var res []error
 
+	if err := r.SetQueryParam("page[size]", "100"); err != nil {
+		return err
+	}
+
 	if o.FilterID != nil {
 
 		// query param filter[id]

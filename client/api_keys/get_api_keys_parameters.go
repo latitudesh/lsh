@@ -127,6 +127,10 @@ func (o *GetAPIKeysParams) WriteToRequest(r runtime.ClientRequest, reg strfmt.Re
 	}
 	var res []error
 
+	if err := r.SetQueryParam("page[size]", "100"); err != nil {
+		return err
+	}
+
 	if len(res) > 0 {
 		return errors.CompositeValidationError(res...)
 	}

@@ -229,6 +229,10 @@ func (o *GetProjectsParams) WriteToRequest(r runtime.ClientRequest, reg strfmt.R
 	}
 	var res []error
 
+	if err := r.SetQueryParam("page[size]", "100"); err != nil {
+		return err
+	}
+
 	if o.ExtraFieldsProjects != nil {
 
 		// query param extra_fields[projects]
