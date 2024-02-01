@@ -17,7 +17,6 @@ import (
 	"github.com/latitudesh/lsh/internal/output"
 	"github.com/latitudesh/lsh/internal/output/table"
 	tablerows "github.com/latitudesh/lsh/internal/output/table/rows"
-	"github.com/latitudesh/lsh/internal/utils"
 	"github.com/latitudesh/lsh/models"
 )
 
@@ -153,7 +152,7 @@ func (o *ServerScheduleDeletionCreated) RenderJSON() {
 
 func (o *ServerScheduleDeletionCreated) RenderTable() {
 	rows := []table.Row{tablerows.NewServerScheduledDeletionRow(o.Payload.Data)}
-	utils.RenderTableU(rows)
+	table.Render(rows)
 }
 
 func (o *ServerScheduleDeletionCreated) readResponse(response runtime.ClientResponse, consumer runtime.Consumer, formats strfmt.Registry) error {

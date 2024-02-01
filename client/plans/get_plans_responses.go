@@ -20,7 +20,6 @@ import (
 	"github.com/latitudesh/lsh/internal/output"
 	"github.com/latitudesh/lsh/internal/output/table"
 	tablerows "github.com/latitudesh/lsh/internal/output/table/rows"
-	"github.com/latitudesh/lsh/internal/utils"
 	"github.com/latitudesh/lsh/models"
 )
 
@@ -143,7 +142,7 @@ func (o *GetPlansOK) RenderTable() {
 		rows = append(rows, tablerows.NewPlanRow(plan))
 	}
 
-	utils.RenderTableU(rows)
+	table.Render(rows)
 }
 
 func (o *GetPlansOK) readResponse(response runtime.ClientResponse, consumer runtime.Consumer, formats strfmt.Registry) error {

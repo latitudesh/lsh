@@ -17,7 +17,6 @@ import (
 	"github.com/latitudesh/lsh/internal/output"
 	"github.com/latitudesh/lsh/internal/output/table"
 	tablerows "github.com/latitudesh/lsh/internal/output/table/rows"
-	"github.com/latitudesh/lsh/internal/utils"
 	"github.com/latitudesh/lsh/models"
 )
 
@@ -140,7 +139,7 @@ func (o *GetServersOK) RenderTable() {
 		rows = append(rows, tablerows.NewServerRow(server))
 	}
 
-	utils.RenderTableU(rows)
+	table.Render(rows)
 }
 
 func (o *GetServersOK) readResponse(response runtime.ClientResponse, consumer runtime.Consumer, formats strfmt.Registry) error {

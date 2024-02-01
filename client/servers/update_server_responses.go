@@ -157,7 +157,7 @@ func (o *UpdateServerOK) RenderJSON() {
 
 func (o *UpdateServerOK) RenderTable() {
 	rows := []table.Row{tablerows.NewServerRow(o.Payload.Data)}
-	utils.RenderTableU(rows)
+	table.Render(rows)
 }
 
 func (o *UpdateServerOK) readResponse(response runtime.ClientResponse, consumer runtime.Consumer, formats strfmt.Registry) error {

@@ -17,7 +17,6 @@ import (
 	"github.com/latitudesh/lsh/internal/output"
 	"github.com/latitudesh/lsh/internal/output/table"
 	tablerows "github.com/latitudesh/lsh/internal/output/table/rows"
-	"github.com/latitudesh/lsh/internal/utils"
 	"github.com/latitudesh/lsh/models"
 )
 
@@ -141,7 +140,7 @@ func (o *GetPlanOK) RenderJSON() {
 
 func (o *GetPlanOK) RenderTable() {
 	rows := []table.Row{tablerows.NewPlanRow(o.Payload.Data)}
-	utils.RenderTableU(rows)
+	table.Render(rows)
 }
 
 func (o *GetPlanOK) readResponse(response runtime.ClientResponse, consumer runtime.Consumer, formats strfmt.Registry) error {

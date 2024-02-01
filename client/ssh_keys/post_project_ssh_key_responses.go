@@ -20,7 +20,6 @@ import (
 	"github.com/latitudesh/lsh/internal/output"
 	"github.com/latitudesh/lsh/internal/output/table"
 	tablerows "github.com/latitudesh/lsh/internal/output/table/rows"
-	"github.com/latitudesh/lsh/internal/utils"
 	"github.com/latitudesh/lsh/models"
 )
 
@@ -162,7 +161,7 @@ func (o *PostProjectSSHKeyCreated) RenderJSON() {
 
 func (o *PostProjectSSHKeyCreated) RenderTable() {
 	rows := []table.Row{tablerows.NewSSHKeyRow(o.Payload.Data)}
-	utils.RenderTableU(rows)
+	table.Render(rows)
 }
 
 /*
