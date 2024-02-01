@@ -20,6 +20,7 @@ import (
 	"github.com/latitudesh/lsh/internal/output"
 	"github.com/latitudesh/lsh/internal/output/table"
 	tablerows "github.com/latitudesh/lsh/internal/output/table/rows"
+	"github.com/latitudesh/lsh/internal/utils"
 	"github.com/latitudesh/lsh/models"
 )
 
@@ -154,9 +155,8 @@ func (o *AssignServerVirtualNetworkCreated) RenderJSON() {
 }
 
 func (o *AssignServerVirtualNetworkCreated) RenderTable() {
-	data := []*models.VirtualNetworkAssignment{o.Payload}
-	rows := tablerows.CreateVirtualNetworkAssignmentsRows(data)
-	table.Render(rows)
+	rows := []table.Row{tablerows.NewVirtualNetworkAssignmentRow(o.Payload)}
+	utils.RenderTableU(rows)
 }
 
 func (o *AssignServerVirtualNetworkCreated) readResponse(response runtime.ClientResponse, consumer runtime.Consumer, formats strfmt.Registry) error {

@@ -19,6 +19,7 @@ import (
 	"github.com/latitudesh/lsh/internal/output"
 	"github.com/latitudesh/lsh/internal/output/table"
 	tablerows "github.com/latitudesh/lsh/internal/output/table/rows"
+	"github.com/latitudesh/lsh/internal/utils"
 	"github.com/latitudesh/lsh/models"
 )
 
@@ -141,9 +142,8 @@ func (o *GetVirtualNetworkOK) RenderJSON() {
 }
 
 func (o *GetVirtualNetworkOK) RenderTable() {
-	data := []*models.VirtualNetwork{o.Payload.Data}
-	rows := tablerows.CreateVirtualNetworksRows(data)
-	table.Render(rows)
+	rows := []table.Row{tablerows.NewVirtualNetworkRow(o.Payload.Data)}
+	utils.RenderTableU(rows)
 }
 
 func (o *GetVirtualNetworkOK) readResponse(response runtime.ClientResponse, consumer runtime.Consumer, formats strfmt.Registry) error {

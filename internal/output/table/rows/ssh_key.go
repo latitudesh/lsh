@@ -5,12 +5,6 @@ import (
 	"github.com/latitudesh/lsh/models"
 )
 
-type SSHKeyRow struct {
-	User        string `json:"user,omitempty"`
-	PublicKey   string `json:"public_key,omitempty"`
-	Fingerprint string `json:"fingerprint,omitempty"`
-}
-
 func NewSSHKeyRow(SSHKey *models.SSHKeyData) table.Row {
 	attr := SSHKey.Attributes
 

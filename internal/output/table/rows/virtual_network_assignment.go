@@ -5,39 +5,33 @@ import (
 	"github.com/latitudesh/lsh/models"
 )
 
-type VirtualNetworkAssignment struct {
-	ID               string `json:"id,omitempty"`
-	Vid              string `json:"vid,omitempty"`
-	VirtualNetworkID string `json:"assignment_id,omitempty"`
-	Description      string `json:"description,omitempty"`
-	Status           string `json:"status,omitempty"`
-	Server           string `json:"server,omitempty"`
-}
-
-func NewVirtualNetworkAssignment(assignment *models.VirtualNetworkAssignment) *VirtualNetworkAssignment {
+func NewVirtualNetworkAssignmentRow(assignment *models.VirtualNetworkAssignment) table.Row {
 	attr := assignment.Attributes
 
-	return &VirtualNetworkAssignment{
-		ID:               table.String(assignment.ID),
-		Vid:              table.Int(attr.Vid),
-		VirtualNetworkID: table.String(attr.VirtualNetworkID),
-		Description:      table.String(attr.Description),
-		Status:           table.String(attr.Status),
-		Server:           table.String(attr.Server.ID),
+	return table.Row{
+		"id": table.Cell{
+			Label: "ID",
+			Value: table.String(assignment.ID),
+		},
+		"vid": table.Cell{
+			Label: "VID",
+			Value: table.Int(attr.Vid),
+		},
+		"virtual_network_id": table.Cell{
+			Label: "Virtual Network ID",
+			Value: table.String(attr.VirtualNetworkID),
+		},
+		"description": table.Cell{
+			Label: "Description",
+			Value: table.String(attr.Description),
+		},
+		"status": table.Cell{
+			Label: "Status",
+			Value: table.String(attr.Status),
+		},
+		"server_id": table.Cell{
+			Label: "Server ID",
+			Value: table.String(attr.Server.ID),
+		},
 	}
-}
-
-func CreateVirtualNetworkAssignmentsRows(assignments []*models.VirtualNetworkAssignment) []interface{} {
-	var rows []VirtualNetworkAssignment
-	var rowsInterface []interface{}
-
-	for _, assignment := range assignments {
-		rows = append(rows, *NewVirtualNetworkAssignment(assignment))
-	}
-
-	for _, row := range rows {
-		rowsInterface = append(rowsInterface, row)
-	}
-
-	return rowsInterface
 }

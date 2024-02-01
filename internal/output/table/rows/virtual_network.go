@@ -5,37 +5,29 @@ import (
 	"github.com/latitudesh/lsh/models"
 )
 
-type VirtualNetwork struct {
-	ID          string `json:"id,omitempty"`
-	VID         string `json:"vid,omitempty"`
-	Description string `json:"description,omitempty"`
-	Assignments string `json:"assignments,omitempty"`
-	Location    string `json:"location,omitempty"`
-}
-
-func NewVirtualNetwork(virtualNetwork *models.VirtualNetwork) *VirtualNetwork {
+func NewVirtualNetworkRow(virtualNetwork *models.VirtualNetwork) table.Row {
 	attr := virtualNetwork.Attributes
 
-	return &VirtualNetwork{
-		ID:          table.String(virtualNetwork.ID),
-		VID:         table.Int(attr.Vid),
-		Description: table.String(attr.Description),
-		Assignments: table.Int(attr.AssignmentsCount),
-		Location:    table.String(attr.Region.Site.Slug),
+	return table.Row{
+		"id": table.Cell{
+			Label: "ID",
+			Value: table.String(virtualNetwork.ID),
+		},
+		"vid": table.Cell{
+			Label: "VID",
+			Value: table.Int(attr.Vid),
+		},
+		"description": table.Cell{
+			Label: "Description",
+			Value: table.String(attr.Description),
+		},
+		"assignments": table.Cell{
+			Label: "Assignments",
+			Value: table.Int(attr.AssignmentsCount),
+		},
+		"location": table.Cell{
+			Label: "Location",
+			Value: table.String(attr.Region.Site.Slug),
+		},
 	}
-}
-
-func CreateVirtualNetworksRows(virtualNetworks []*models.VirtualNetwork) []interface{} {
-	var rows []VirtualNetwork
-	var rowsInterface []interface{}
-
-	for _, virtualNetwork := range virtualNetworks {
-		rows = append(rows, *NewVirtualNetwork(virtualNetwork))
-	}
-
-	for _, row := range rows {
-		rowsInterface = append(rowsInterface, row)
-	}
-
-	return rowsInterface
 }
