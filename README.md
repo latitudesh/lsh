@@ -1,53 +1,125 @@
-# Latitude CLI
 
-A Command Line Interface to interact with our API. It uses [go-swagger](https://github.com/go-swagger/go-swagger/) to generate the CLI based on the swagger definitions from our API.
+# lsh
 
-## Dependencies
+  
 
-- [Golang](https://go.dev/doc/install)
-- [go-swagger](https://github.com/go-swagger/go-swagger/)
-- [api-spec-converter](https://github.com/LucyBot-Inc/api-spec-converter)
+lsh is the [Latitude.sh](http://latitude.sh/) command-line interface that will help you make it easier to retrieve any data from your team or perform any action you need.
 
-## Generating the CLI
+  
 
-go-swagger is not compatible with OpenAPI 3.0, so before trying to generate the CLI, we need to generate a schema with swagger 2.0. To do so, you can run this command:
+## [](https://dash.readme.com/project/control/v2023-06-01/docs/overview)Installation
 
-```sh
-api-spec-converter --from=openapi_3 --to=swagger_2 --syntax=json --order=alpha PATH_TO_API_REPO/swagger/v3/swagger.json > swagger.json
+  
+
+#### MacOS / Linux / WSL
+
+  
+
+Installing the latest version
+
+  
+
+```bash
+
+curl -sSL  https://raw.githubusercontent.com/latitudesh/lsh/feat/installation-script/install.sh | bash
+
 ```
 
-- Then, on the root directory of this project, run this command to generate the CLI:
+  
 
-```sh
-swagger generate cli --target=. --spec=swagger.json --cli-app-name lsh
+#### Windows is not supported yet.
+
+##
+
+### From Github
+
+  
+
+Visit the Releases page and select any version you want to download.
+
+  
+  
+
+## [](https://docs.latitude.sh/docs/getting-started)Getting Started
+
+  
+
+Log in into Latitude.sh. An API Key is required.
+
+  
+
+`lsh login <API_KEY>`
+
+  
+
+List your servers
+
+  
+
+`lsh servers list`
+
+  
+
+## [](https://docs.latitude.sh/docs/commands) Commands
+
+  
+
+The list of the available commands is available [here](https://docs.latitude.sh/docs/commands).
+
+  
+  
+
+## [](https://docs.latitude.sh/docs/examples-1) Examples
+
+  
+
+List a server with a specific hostname
+
+```bash
+
+lsh servers list --hostname <HOSTNAME>
+
 ```
 
-> Note: If you run into errors when running this command, check the troubleshooting section.
+Create a server with Ubuntu 22 
 
-- After generating the CLI, build the executable with:
+```bash
 
-```sh
-# Build the executable
-go build -o lsh cmd/lsh/main.go
+lsh servers create --operating_system ubuntu_22_04_x64_lts --project <PROJECT_ID_OR_SLUG> --site <LOCATION> --hostname <HOSTNAME> --plan <PLAN>
 
-# Copy to your GOPATH so you can run this from any directory
-cp lsh $(go env GOPATH)
+```
+  
+List all GPU plans
+
+```bash
+
+lsh plans list --gpu true
+
 ```
 
-## Usage
+You can see more examples [here](https://docs.latitude.sh/docs/examples-1). Reach out if you want to see other use cases on `lsh`.
+  
 
-The first step is to setup your credentials:
+## Docs
 
-```sh
-lsh login $YOUR_LATITUDE_API_KEY
-```
+  
 
-This will store your credentials locally in a config file, so you can run commands without having to pass the credentials every time.
+For more information, see the documentation.
 
-Everything is set up! :tada: You should be able to run CLI commands (check `lsh help` for more info).
+- [lsh Docs](https://docs.latitude.sh/docs/getting-started)
 
-To check if the CLI was successfully generated, you can make a request to an API endpoint, for example: `lsh roles get-roles`. This should return a list of available roles that can be assigned to users.
+- [Product Docs](https://docs.latitude.sh/docs)
 
-## Troubleshooting
+- [API Docs](https://docs.latitude.sh/reference)
 
-TODO
+- [SDKs & Postman Collection](https://docs.latitude.sh/reference/client-libraries)
+
+  
+
+## Provide feedback and contribute
+
+  
+
+- [Open an issue](https://github.com/latitudesh/lsh/issues?q=is%3Aissue+is%3Aopen+sort%3Aupdated-desc) for questions, feedback, bug reports or feature requests.
+
+- We welcome pull requests for bug fixes, new features, and improvements to the examples.
