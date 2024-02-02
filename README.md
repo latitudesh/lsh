@@ -21,7 +21,7 @@ Installing the latest version
 
 ```bash
 
-curl -sSL  https://raw.githubusercontent.com/latitudesh/lsh/feat/installation-script/install.sh | bash
+curl -sSL  https://raw.githubusercontent.com/latitudesh/lsh/main/install.sh | bash
 
 ```
 
