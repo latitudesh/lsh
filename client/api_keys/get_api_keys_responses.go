@@ -141,6 +141,11 @@ func (o *GetAPIKeysOK) RenderJSON() {
 }
 
 func (o *GetAPIKeysOK) RenderTable() {
+	if len(o.Payload.Data) == 0 {
+		table.RenderEmptyState("No results found.")
+		return
+	}
+
 	data := o.Payload.Data
 
 	var rows []APIKeyTableRow

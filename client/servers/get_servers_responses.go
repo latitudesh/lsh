@@ -133,6 +133,11 @@ func (o *GetServersOK) RenderJSON() {
 }
 
 func (o *GetServersOK) RenderTable() {
+	if len(o.Payload.Data) == 0 {
+		table.RenderEmptyState("No results found.")
+		return
+	}
+
 	rows := tablerows.CreateServerRows(o.Payload.Data)
 	table.Render(rows)
 }

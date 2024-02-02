@@ -133,6 +133,11 @@ func (o *GetProjectsOK) RenderJSON() {
 }
 
 func (o *GetProjectsOK) RenderTable() {
+	if len(o.Payload.Data) == 0 {
+		table.RenderEmptyState("No results found.")
+		return
+	}
+
 	rows := tablerows.CreateProjectRows(o.Payload.Data)
 	table.Render(rows)
 }
