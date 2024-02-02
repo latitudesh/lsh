@@ -24,7 +24,7 @@ func NewServerRow(server *models.ServerData) table.Row {
 		},
 		"location": table.Cell{
 			Label: "Location",
-			Value: table.String(attr.Region.Site.Slug),
+			Value: table.String(location(attr)),
 		},
 		"status": table.Cell{
 			Label: "Status",
@@ -36,20 +36,56 @@ func NewServerRow(server *models.ServerData) table.Row {
 		},
 		"project": table.Cell{
 			Label: "Project",
-			Value: table.String(attr.Project.Slug),
-		},
-		"team": table.Cell{
-			Label: "Team",
-			Value: table.String(attr.Team.Name),
+			Value: table.String(project(attr)),
 		},
 		"plan": table.Cell{
 			Label: "Plan",
-			Value: table.String(attr.Plan.Name),
+			Value: table.String(plan(attr)),
 		},
 		"operating_system": table.Cell{
 			Label:     "OS",
 			Value:     table.String(attr.OperatingSystem.Slug),
-			MaxLength: 15,
+			MaxLength: 10,
 		},
 	}
+}
+
+func location(attributes *models.ServerDataAttributes) string {
+	region := attributes.Region
+
+	if region != nil && region.Site != nil {
+		return region.Site.Slug
+	}
+
+	return ""
+}
+
+func project(attributes *models.ServerDataAttributes) string {
+	project := attributes.Project
+
+	if project != nil {
+		return project.Slug
+	}
+
+	return ""
+}
+
+func operatingSystem(attributes *models.ServerDataAttributes) string {
+	operatingSystem := attributes.OperatingSystem
+
+	if operatingSystem != nil {
+		return operatingSystem.Slug
+	}
+
+	return ""
+}
+
+func plan(attributes *models.ServerDataAttributes) string {
+	plan := attributes.Plan
+
+	if plan != nil {
+		return plan.Name
+	}
+
+	return ""
 }

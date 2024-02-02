@@ -198,12 +198,15 @@ func registerAuthInoWriterFlags(cmd *cobra.Command) error {
 // makeAuthInfoWriter retrieves cmd flags and construct an auth info writer
 func makeAuthInfoWriter(cmd *cobra.Command) (runtime.ClientAuthInfoWriter, error) {
 	auths := []runtime.ClientAuthInfoWriter{}
+	userAgent := fmt.Sprintf("Latitude-CLI: %s", version.Version)
+
 	/*Authorization */
 	if viper.IsSet("Authorization") {
 		AuthorizationKey := viper.GetString("Authorization")
 		ApiVersion := viper.GetString("api-version")
 		auths = append(auths, httptransport.APIKeyAuth("Authorization", "header", AuthorizationKey))
 		auths = append(auths, httptransport.APIKeyAuth("API-Version", "header", ApiVersion))
+		auths = append(auths, httptransport.APIKeyAuth("User-Agent", "header", userAgent))
 	}
 	if len(auths) == 0 {
 		logDebugf("Warning: No auth params detected.")

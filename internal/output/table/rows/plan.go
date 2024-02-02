@@ -26,15 +26,15 @@ func NewPlanRow(plan *models.PlanData) table.Row {
 		},
 		"available_in": table.Cell{
 			Label: "Available In",
-			Value: table.StringList(regions.AvailableIn),
+			Value: table.StringList(regions.AvailableIn, ", "),
 		},
 		"in_stock": table.Cell{
 			Label: "In Stock",
-			Value: table.StringList(regions.InStock),
+			Value: table.StringList(regions.InStock, "\n"),
 		},
 		"features": table.Cell{
 			Label: "Features",
-			Value: table.StringList(attr.Features),
+			Value: table.StringList(attr.Features, "\n\n"),
 		},
 		"cpu": table.Cell{
 			Label: "CPU",

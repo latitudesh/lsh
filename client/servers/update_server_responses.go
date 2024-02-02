@@ -20,7 +20,6 @@ import (
 	"github.com/latitudesh/lsh/internal/output"
 	"github.com/latitudesh/lsh/internal/output/table"
 	tablerows "github.com/latitudesh/lsh/internal/output/table/rows"
-	"github.com/latitudesh/lsh/internal/utils"
 	"github.com/latitudesh/lsh/models"
 )
 
@@ -31,7 +30,6 @@ type UpdateServerReader struct {
 
 // ReadResponse reads a server response into the received o.
 func (o *UpdateServerReader) ReadResponse(response runtime.ClientResponse, consumer runtime.Consumer) (interface{}, error) {
-	utils.BodyReader(response)
 	switch response.Code() {
 	case 200:
 		result := NewUpdateServerOK()

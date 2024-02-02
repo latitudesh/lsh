@@ -27,7 +27,17 @@ func NewVirtualNetworkRow(virtualNetwork *models.VirtualNetwork) table.Row {
 		},
 		"location": table.Cell{
 			Label: "Location",
-			Value: table.String(attr.Region.Site.Slug),
+			Value: table.String(virtualNetworkLocation(attr)),
 		},
 	}
+}
+
+func virtualNetworkLocation(attributes *models.VirtualNetworkAttributes) string {
+	region := attributes.Region
+
+	if region != nil && region.Site != nil {
+		return region.Site.Slug
+	}
+
+	return ""
 }

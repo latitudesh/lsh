@@ -24,7 +24,7 @@ func NewSSHKeyRow(SSHKey *models.SSHKeyData) table.Row {
 		"public_key": table.Cell{
 			Label:     "Public Key",
 			Value:     table.String(attr.PublicKey),
-			MaxLength: 25,
+			MaxLength: 30,
 		},
 		"fingerprint": table.Cell{
 			Label: "Fingerprint",

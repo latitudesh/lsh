@@ -412,10 +412,7 @@ func registerCreateProjectParamsBodyDataAttributesProvisioningType(depth int, cm
 
 	var provisioningTypeFlagName = "provisioning_type"
 
-	var provisioningTypeFlagDefault string
-
-	_ = cmd.PersistentFlags().String(provisioningTypeFlagName, provisioningTypeFlagDefault, provisioningTypeDescription)
-	cmd.MarkPersistentFlagRequired(provisioningTypeFlagName)
+	_ = cmd.PersistentFlags().String(provisioningTypeFlagName, "on_demand", provisioningTypeDescription)
 
 	if err := cmd.RegisterFlagCompletionFunc(provisioningTypeFlagName,
 		func(cmd *cobra.Command, args []string, toComplete string) ([]string, cobra.ShellCompDirective) {
@@ -531,17 +528,21 @@ func retrieveCreateProjectParamsBodyDataAttributesProvisioningTypeFlags(depth in
 	}
 	retAdded := false
 
-	var provisioningTypeFlagName = "provisioning_type"
-	if cmd.Flags().Changed(provisioningTypeFlagName) {
+	var provisioningTypeFlagName string
 
-		provisioningTypeFlagValue, err := cmd.Flags().GetString(provisioningTypeFlagName)
-		if err != nil {
-			return err, false
-		}
-		m.ProvisioningType = &provisioningTypeFlagValue
-
-		retAdded = true
+	if cmdPrefix == "" {
+		provisioningTypeFlagName = "provisioning_type"
+	} else {
+		provisioningTypeFlagName = fmt.Sprintf("%v.provisioning_type", cmdPrefix)
 	}
+
+	provisioningTypeFlagValue, err := cmd.Flags().GetString(provisioningTypeFlagName)
+	if err != nil {
+		return err, false
+	}
+	m.ProvisioningType = &provisioningTypeFlagValue
+
+	retAdded = true
 
 	return nil, retAdded
 }

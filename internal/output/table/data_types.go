@@ -9,20 +9,18 @@ import (
 	"github.com/latitudesh/lsh/models"
 )
 
-const ListSeparator = ", "
-
 func String(value string) string {
 	return value
 }
 
-func StringList(value []string) string {
+func StringList(value []string, separator string) string {
 	var output strings.Builder
 
 	for i, v := range value {
 		output.WriteString(v)
 
 		if i < len(value)-1 {
-			output.WriteString(ListSeparator)
+			output.WriteString(separator)
 		}
 	}
 

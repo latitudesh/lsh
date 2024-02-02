@@ -19,7 +19,7 @@ func NewBandwidthPlanRow(plan *models.BandwidthPlan) table.Row {
 		},
 		"locations": table.Cell{
 			Label: "Locations",
-			Value: table.StringList(attr.Locations),
+			Value: table.StringList(attr.Locations, ", "),
 		},
 		"usd_price_hour": table.Cell{
 			Label: "USD/Hour",

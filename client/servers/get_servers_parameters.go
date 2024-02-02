@@ -157,6 +157,7 @@ type GetServersParams struct {
 	*/
 	FilterStatus *string
 
+
 	timeout    time.Duration
 	Context    context.Context
 	HTTPClient *http.Client
@@ -409,6 +410,10 @@ func (o *GetServersParams) WriteToRequest(r runtime.ClientRequest, reg strfmt.Re
 		return err
 	}
 	var res []error
+
+	if err := r.SetQueryParam("page[size]", "100"); err != nil {
+		return err
+	}
 
 	if o.ExtraFieldsServers != nil {
 

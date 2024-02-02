@@ -7,8 +7,8 @@ import (
 	"github.com/olekukonko/tablewriter"
 )
 
-const MaxColWidth = 20
-const MaxLength = 50
+const MaxColWidth = 18
+const MaxLength = 120
 
 type Table struct {
 	Headers []string
@@ -56,7 +56,7 @@ func extractHeaders(row Row) Header {
 }
 
 func renderCell(cell Cell) string {
-	maxLength := 50
+	maxLength := MaxLength
 
 	if cell.MaxLength > 0 {
 		maxLength = cell.MaxLength
@@ -69,5 +69,5 @@ func truncate(input string, maxLength int) string {
 	if len(input) > maxLength {
 		return input[:maxLength] + "..."
 	}
-	return input
+	return fmt.Sprintf("%v", input)
 }
