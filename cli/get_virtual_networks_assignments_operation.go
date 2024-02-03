@@ -59,7 +59,7 @@ func runOperationVirtualNetworkAssignmentsGetVirtualNetworksAssignments(cmd *cob
 	}
 
 	if !debug {
-		response.Render()
+		utils.Render(response.GetPayload())
 	}
 	return nil
 }

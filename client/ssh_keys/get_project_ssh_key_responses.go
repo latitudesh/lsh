@@ -5,7 +5,6 @@ package ssh_keys
 
 import (
 	"context"
-	"encoding/json"
 	"fmt"
 	"io"
 
@@ -13,12 +12,9 @@ import (
 	"github.com/go-openapi/runtime"
 	"github.com/go-openapi/strfmt"
 	"github.com/go-openapi/swag"
-	"github.com/spf13/viper"
 
 	apierrors "github.com/latitudesh/lsh/internal/api/errors"
-	"github.com/latitudesh/lsh/internal/output"
-	"github.com/latitudesh/lsh/internal/output/table"
-	tablerows "github.com/latitudesh/lsh/internal/output/table/rows"
+	"github.com/latitudesh/lsh/internal/renderer"
 	"github.com/latitudesh/lsh/models"
 )
 
@@ -105,44 +101,8 @@ func (o *GetProjectSSHKeyOK) String() string {
 	return fmt.Sprintf("[GET /projects/{project_id_or_slug}/ssh_keys/{ssh_key_id}][%d] getProjectSshKeyOK  %+v", 200, o.Payload)
 }
 
-func (o *GetProjectSSHKeyOK) GetPayload() *GetProjectSSHKeyOKBody {
-	return o.Payload
-}
-
-func (o *GetProjectSSHKeyOK) Render() {
-	formatAsJSON := viper.GetBool("json")
-
-	if formatAsJSON {
-		o.RenderJSON()
-		return
-	}
-
-	formatOutputFlag := viper.GetString("output")
-
-	switch formatOutputFlag {
-	case "json":
-		o.RenderJSON()
-	case "table":
-		o.RenderTable()
-	default:
-		fmt.Println("Unsupported output format")
-	}
-}
-
-func (o *GetProjectSSHKeyOK) RenderJSON() {
-	if !swag.IsZero(o) && !swag.IsZero(o.Payload) {
-		JSONString, err := json.Marshal(o.Payload)
-		if err != nil {
-			fmt.Println("Could not decode the result as JSON.")
-		}
-
-		output.RenderJSON(JSONString)
-	}
-}
-
-func (o *GetProjectSSHKeyOK) RenderTable() {
-	rows := []table.Row{tablerows.NewSSHKeyRow(o.Payload.Data)}
-	table.Render(rows)
+func (o *GetProjectSSHKeyOK) GetPayload() []renderer.ResponseData {
+	return []renderer.ResponseData{o.Payload.Data}
 }
 
 func (o *GetProjectSSHKeyOK) readResponse(response runtime.ClientResponse, consumer runtime.Consumer, formats strfmt.Registry) error {

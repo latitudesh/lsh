@@ -56,7 +56,7 @@ func runOperationVirtualNetworksCreateVirtualNetwork(cmd *cobra.Command, args []
 	}
 
 	if !debug {
-		response.Render()
+		utils.Render(response.GetPayload())
 	}
 	return nil
 }

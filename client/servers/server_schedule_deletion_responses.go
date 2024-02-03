@@ -4,19 +4,14 @@ package servers
 // Editing this file might prove futile when you re-run the swagger generate command
 
 import (
-	"encoding/json"
 	"fmt"
 	"io"
 
 	"github.com/go-openapi/runtime"
 	"github.com/go-openapi/strfmt"
-	"github.com/go-openapi/swag"
-	"github.com/spf13/viper"
 
 	apierrors "github.com/latitudesh/lsh/internal/api/errors"
-	"github.com/latitudesh/lsh/internal/output"
-	"github.com/latitudesh/lsh/internal/output/table"
-	tablerows "github.com/latitudesh/lsh/internal/output/table/rows"
+	"github.com/latitudesh/lsh/internal/renderer"
 	"github.com/latitudesh/lsh/models"
 )
 
@@ -115,44 +110,8 @@ func (o *ServerScheduleDeletionCreated) String() string {
 	return fmt.Sprintf("[POST /servers/{server_id}/schedule_deletion][%d] serverScheduleDeletionCreated  %+v", 201, o.Payload)
 }
 
-func (o *ServerScheduleDeletionCreated) GetPayload() *models.ServerScheduleDeletion {
-	return o.Payload
-}
-
-func (o *ServerScheduleDeletionCreated) Render() {
-	formatAsJSON := viper.GetBool("json")
-
-	if formatAsJSON {
-		o.RenderJSON()
-		return
-	}
-
-	formatOutputFlag := viper.GetString("output")
-
-	switch formatOutputFlag {
-	case "json":
-		o.RenderJSON()
-	case "table":
-		o.RenderTable()
-	default:
-		fmt.Println("Unsupported output format")
-	}
-}
-
-func (o *ServerScheduleDeletionCreated) RenderJSON() {
-	if !swag.IsZero(o) && !swag.IsZero(o.Payload) {
-		JSONString, err := json.Marshal(o.Payload)
-		if err != nil {
-			fmt.Println("Could not decode the result as JSON.")
-		}
-
-		output.RenderJSON(JSONString)
-	}
-}
-
-func (o *ServerScheduleDeletionCreated) RenderTable() {
-	rows := []table.Row{tablerows.NewServerScheduledDeletionRow(o.Payload.Data)}
-	table.Render(rows)
+func (o *ServerScheduleDeletionCreated) GetPayload() []renderer.ResponseData {
+	return []renderer.ResponseData{o.Payload.Data}
 }
 
 func (o *ServerScheduleDeletionCreated) readResponse(response runtime.ClientResponse, consumer runtime.Consumer, formats strfmt.Registry) error {

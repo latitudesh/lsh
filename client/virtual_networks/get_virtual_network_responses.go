@@ -5,7 +5,6 @@ package virtual_networks
 
 import (
 	"context"
-	"encoding/json"
 	"fmt"
 	"io"
 
@@ -13,12 +12,9 @@ import (
 	"github.com/go-openapi/runtime"
 	"github.com/go-openapi/strfmt"
 	"github.com/go-openapi/swag"
-	"github.com/spf13/viper"
 
 	apierrors "github.com/latitudesh/lsh/internal/api/errors"
-	"github.com/latitudesh/lsh/internal/output"
-	"github.com/latitudesh/lsh/internal/output/table"
-	tablerows "github.com/latitudesh/lsh/internal/output/table/rows"
+	"github.com/latitudesh/lsh/internal/renderer"
 	"github.com/latitudesh/lsh/models"
 )
 
@@ -105,44 +101,8 @@ func (o *GetVirtualNetworkOK) String() string {
 	return fmt.Sprintf("[GET /virtual_networks/{id}][%d] getVirtualNetworkOK  %+v", 200, o.Payload)
 }
 
-func (o *GetVirtualNetworkOK) GetPayload() *GetVirtualNetworkOKBody {
-	return o.Payload
-}
-
-func (o *GetVirtualNetworkOK) Render() {
-	formatAsJSON := viper.GetBool("json")
-
-	if formatAsJSON {
-		o.RenderJSON()
-		return
-	}
-
-	formatOutputFlag := viper.GetString("output")
-
-	switch formatOutputFlag {
-	case "json":
-		o.RenderJSON()
-	case "table":
-		o.RenderTable()
-	default:
-		fmt.Println("Unsupported output format")
-	}
-}
-
-func (o *GetVirtualNetworkOK) RenderJSON() {
-	if !swag.IsZero(o) && !swag.IsZero(o.Payload) {
-		JSONString, err := json.Marshal(o.Payload)
-		if err != nil {
-			fmt.Println("Could not decode the result as JSON.")
-		}
-
-		output.RenderJSON(JSONString)
-	}
-}
-
-func (o *GetVirtualNetworkOK) RenderTable() {
-	rows := []table.Row{tablerows.NewVirtualNetworkRow(o.Payload.Data)}
-	table.Render(rows)
+func (o *GetVirtualNetworkOK) GetPayload() []renderer.ResponseData {
+	return []renderer.ResponseData{o.Payload.Data}
 }
 
 func (o *GetVirtualNetworkOK) readResponse(response runtime.ClientResponse, consumer runtime.Consumer, formats strfmt.Registry) error {

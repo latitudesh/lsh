@@ -14,12 +14,9 @@ import (
 	"github.com/go-openapi/strfmt"
 	"github.com/go-openapi/swag"
 	"github.com/go-openapi/validate"
-	"github.com/spf13/viper"
 
 	apierrors "github.com/latitudesh/lsh/internal/api/errors"
-	"github.com/latitudesh/lsh/internal/output"
-	"github.com/latitudesh/lsh/internal/output/table"
-	tablerows "github.com/latitudesh/lsh/internal/output/table/rows"
+	"github.com/latitudesh/lsh/internal/renderer"
 	"github.com/latitudesh/lsh/models"
 )
 
@@ -118,8 +115,8 @@ func (o *PutProjectSSHKeyOK) String() string {
 	return fmt.Sprintf("[PATCH /projects/{project_id_or_slug}/ssh_keys/{ssh_key_id}][%d] putProjectSshKeyOK  %+v", 200, o.Payload)
 }
 
-func (o *PutProjectSSHKeyOK) GetPayload() *PutProjectSSHKeyOKBody {
-	return o.Payload
+func (o *PutProjectSSHKeyOK) GetPayload() []renderer.ResponseData {
+	return []renderer.ResponseData{o.Payload.Data}
 }
 
 func (o *PutProjectSSHKeyOK) readResponse(response runtime.ClientResponse, consumer runtime.Consumer, formats strfmt.Registry) error {
@@ -132,42 +129,6 @@ func (o *PutProjectSSHKeyOK) readResponse(response runtime.ClientResponse, consu
 	}
 
 	return nil
-}
-
-func (o *PutProjectSSHKeyOK) Render() {
-	formatAsJSON := viper.GetBool("json")
-
-	if formatAsJSON {
-		o.RenderJSON()
-		return
-	}
-
-	formatOutputFlag := viper.GetString("output")
-
-	switch formatOutputFlag {
-	case "json":
-		o.RenderJSON()
-	case "table":
-		o.RenderTable()
-	default:
-		fmt.Println("Unsupported output format")
-	}
-}
-
-func (o *PutProjectSSHKeyOK) RenderJSON() {
-	if !swag.IsZero(o) && !swag.IsZero(o.Payload) {
-		JSONString, err := json.Marshal(o.Payload)
-		if err != nil {
-			fmt.Println("Could not decode the result as JSON.")
-		}
-
-		output.RenderJSON(JSONString)
-	}
-}
-
-func (o *PutProjectSSHKeyOK) RenderTable() {
-	rows := []table.Row{tablerows.NewSSHKeyRow(o.Payload.Data)}
-	table.Render(rows)
 }
 
 /*

@@ -55,7 +55,7 @@ func runOperationVirtualNetworkAssignmentsAssignServerVirtualNetwork(cmd *cobra.
 	}
 
 	if !debug {
-		response.Render()
+		utils.Render(response.GetPayload())
 	}
 
 	return nil
