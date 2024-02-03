@@ -55,7 +55,7 @@ func runOperationServersCreateServer(cmd *cobra.Command, args []string) error {
 	}
 
 	if !debug {
-		response.Render()
+		utils.Render(response.GetPayload())
 	}
 	return nil
 }
@@ -765,7 +765,7 @@ func retrieveCreateServerParamsBodyDataAttributesSSHKeysFlags(depth int, m *serv
 
 	var sshKeysFlagName = "ssh_keys"
 	if cmd.Flags().Changed(sshKeysFlagName) {
-	
+
 		sshKeysFlagValue, err := cmd.Flags().GetStringSlice(sshKeysFlagName)
 		if err != nil {
 			return err, false
