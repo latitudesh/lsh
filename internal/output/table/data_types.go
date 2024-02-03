@@ -6,7 +6,6 @@ import (
 	"time"
 
 	"github.com/go-openapi/strfmt"
-	"github.com/latitudesh/lsh/models"
 )
 
 func String(value string) string {
@@ -48,32 +47,4 @@ func DateTime(value *strfmt.DateTime) string {
 	}
 
 	return dateString
-}
-
-func PlanNICs(value []*models.PlanDataAttributesSpecsNicsItems0) string {
-	var formattedNics strings.Builder
-
-	for _, nic := range value {
-		formattedNics.WriteString(fmt.Sprintf("%vx %v\n", nic.Count, nic.Type))
-	}
-
-	return formattedNics.String()
-}
-
-func PlanMemory(value models.PlanDataAttributesSpecsMemory) string {
-	return fmt.Sprintf("%vGB", value.Total)
-}
-
-func PlanDrives(value []*models.PlanDataAttributesSpecsDrivesItems0) string {
-	var formattedDrives strings.Builder
-
-	for _, drive := range value {
-		formattedDrives.WriteString(fmt.Sprintf("%vx %v %v\n", drive.Count, drive.Type, drive.Size))
-	}
-
-	return formattedDrives.String()
-}
-
-func PlanCPU(value models.PlanDataAttributesSpecsCPU) string {
-	return fmt.Sprintf("%vx %v %vGHz (%v cores)", value.Count, value.Type, value.Clock, value.Cores)
 }

@@ -59,7 +59,7 @@ func runOperationAPIKeysUpdateAPIKey(cmd *cobra.Command, args []string) error {
 	}
 
 	if !debug {
-		response.Render()
+		utils.Render(response.GetPayload())
 	}
 	return nil
 }

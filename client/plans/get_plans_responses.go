@@ -5,7 +5,6 @@ package plans
 
 import (
 	"context"
-	"encoding/json"
 	"fmt"
 	"io"
 	"strconv"
@@ -14,12 +13,9 @@ import (
 	"github.com/go-openapi/runtime"
 	"github.com/go-openapi/strfmt"
 	"github.com/go-openapi/swag"
-	"github.com/spf13/viper"
 
 	apierrors "github.com/latitudesh/lsh/internal/api/errors"
-	"github.com/latitudesh/lsh/internal/output"
-	"github.com/latitudesh/lsh/internal/output/table"
-	tablerows "github.com/latitudesh/lsh/internal/output/table/rows"
+	"github.com/latitudesh/lsh/internal/renderer"
 	"github.com/latitudesh/lsh/models"
 )
 
@@ -100,49 +96,14 @@ func (o *GetPlansOK) String() string {
 	return fmt.Sprintf("[GET /plans][%d] getPlansOK  %+v", 200, o.Payload)
 }
 
-func (o *GetPlansOK) GetPayload() *GetPlansOKBody {
-	return o.Payload
-}
+func (o *GetPlansOK) GetPayload() []renderer.ResponseData {
+	var data []renderer.ResponseData
 
-func (o *GetPlansOK) Render() {
-	formatAsJSON := viper.GetBool("json")
-
-	if formatAsJSON {
-		o.RenderJSON()
-		return
+	for _, v := range o.Payload.Data {
+		data = append(data, v)
 	}
 
-	formatOutputFlag := viper.GetString("output")
-
-	switch formatOutputFlag {
-	case "json":
-		o.RenderJSON()
-	case "table":
-		o.RenderTable()
-	default:
-		fmt.Println("Unsupported output format")
-	}
-}
-
-func (o *GetPlansOK) RenderJSON() {
-	if !swag.IsZero(o) && !swag.IsZero(o.Payload) {
-		JSONString, err := json.Marshal(o.Payload)
-		if err != nil {
-			fmt.Println("Could not decode the result as JSON.")
-		}
-
-		output.RenderJSON(JSONString)
-	}
-}
-
-func (o *GetPlansOK) RenderTable() {
-	var rows []table.Row
-
-	for _, plan := range o.Payload.Data {
-		rows = append(rows, tablerows.NewPlanRow(plan))
-	}
-
-	table.Render(rows)
+	return data
 }
 
 func (o *GetPlansOK) readResponse(response runtime.ClientResponse, consumer runtime.Consumer, formats strfmt.Registry) error {
