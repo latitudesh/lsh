@@ -139,6 +139,11 @@ func (o *GetProjectSSHKeysOK) RenderJSON() {
 }
 
 func (o *GetProjectSSHKeysOK) RenderTable() {
+	if len(o.Payload.Data) == 0 {
+		table.RenderEmptyState("No results found.")
+		return
+	}
+
 	rows := tablerows.CreateSSHKeyRows(o.Payload.Data)
 	table.Render(rows)
 }

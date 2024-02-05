@@ -42,6 +42,17 @@ func Render(rows []interface{}) {
 	render(Table{Headers: headers, Rows: values})
 }
 
+func RenderEmptyState(message string) {
+	table := tablewriter.NewWriter(os.Stdout)
+
+	table.SetRowLine(true)
+	table.Append([]string{message})
+
+	fmt.Println()
+	table.Render()
+	fmt.Println()
+}
+
 func render(table Table) {
 	tableWriter := tablewriter.NewWriter(os.Stdout)
 

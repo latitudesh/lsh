@@ -148,6 +148,11 @@ func (o *GetPlansOK) RenderJSON() {
 }
 
 func (o *GetPlansOK) RenderTable() {
+	if len(o.Payload.Data) == 0 {
+		table.RenderEmptyState("No results found.")
+		return
+	}
+
 	rows := tablerows.CreatePlanRows(o.Payload.Data)
 	table.Render(rows)
 }
