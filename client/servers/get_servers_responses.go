@@ -92,7 +92,11 @@ func (o *GetServersOK) String() string {
 	return fmt.Sprintf("[GET /servers][%d] getServersOK  %+v", 200, o.Payload)
 }
 
-func (o *GetServersOK) GetPayload() []renderer.ResponseData {
+func (o *GetServersOK) GetPayload() *models.Servers {
+	return o.Payload
+}
+
+func (o *GetServersOK) GetData() []renderer.ResponseData {
 	var data []renderer.ResponseData
 
 	for _, v := range o.Payload.Data {

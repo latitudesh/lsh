@@ -98,9 +98,12 @@ func (o *GetPlanOK) String() string {
 	return fmt.Sprintf("[GET /plans/{plan_id}][%d] getPlanOK  %+v", 200, o.Payload)
 }
 
-func (o *GetPlanOK) GetPayload() []renderer.ResponseData {
-	data := []renderer.ResponseData{o.Payload.Data}
-	return data
+func (o *GetPlanOK) GetPayload() *models.Plan {
+	return o.Payload
+}
+
+func (o *GetPlanOK) GetData() []renderer.ResponseData {
+	return []renderer.ResponseData{o.Payload.Data}
 }
 
 func (o *GetPlanOK) readResponse(response runtime.ClientResponse, consumer runtime.Consumer, formats strfmt.Registry) error {

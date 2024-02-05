@@ -115,7 +115,11 @@ func (o *CreateProjectCreated) String() string {
 	return fmt.Sprintf("[POST /projects][%d] createProjectCreated  %+v", 201, o.Payload)
 }
 
-func (o *CreateProjectCreated) GetPayload() []renderer.ResponseData {
+func (o *CreateProjectCreated) GetPayload() *CreateProjectCreatedBody {
+	return o.Payload
+}
+
+func (o *CreateProjectCreated) GetData() []renderer.ResponseData {
 	return []renderer.ResponseData{o.Payload.Data}
 }
 

@@ -109,7 +109,11 @@ func (o *CreateServerCreated) String() string {
 	return fmt.Sprintf("[POST /servers][%d] createServerCreated  %+v", 201, o.Payload)
 }
 
-func (o *CreateServerCreated) GetPayload() []renderer.ResponseData {
+func (o *CreateServerCreated) GetPayload() *models.Server {
+	return o.Payload
+}
+
+func (o *CreateServerCreated) GetData() []renderer.ResponseData {
 	return []renderer.ResponseData{o.Payload.Data}
 }
 

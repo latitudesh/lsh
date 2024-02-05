@@ -101,7 +101,11 @@ func (o *GetProjectOK) String() string {
 	return fmt.Sprintf("[GET /projects/{id_or_slug}][%d] getProjectOK  %+v", 200, o.Payload)
 }
 
-func (o *GetProjectOK) GetPayload() []renderer.ResponseData {
+func (o *GetProjectOK) GetPayload() *GetProjectOKBody {
+	return o.Payload
+}
+
+func (o *GetProjectOK) GetData() []renderer.ResponseData {
 	return []renderer.ResponseData{o.Payload.Data}
 }
 

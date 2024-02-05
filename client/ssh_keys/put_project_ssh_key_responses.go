@@ -115,7 +115,11 @@ func (o *PutProjectSSHKeyOK) String() string {
 	return fmt.Sprintf("[PATCH /projects/{project_id_or_slug}/ssh_keys/{ssh_key_id}][%d] putProjectSshKeyOK  %+v", 200, o.Payload)
 }
 
-func (o *PutProjectSSHKeyOK) GetPayload() []renderer.ResponseData {
+func (o *PutProjectSSHKeyOK) GetPayload() *PutProjectSSHKeyOKBody {
+	return o.Payload
+}
+
+func (o *PutProjectSSHKeyOK) GetData() []renderer.ResponseData {
 	return []renderer.ResponseData{o.Payload.Data}
 }
 

@@ -115,7 +115,11 @@ func (o *UpdateServerOK) String() string {
 	return fmt.Sprintf("[PATCH /servers/{server_id}][%d] updateServerOK  %+v", 200, o.Payload)
 }
 
-func (o *UpdateServerOK) GetPayload() []renderer.ResponseData {
+func (o *UpdateServerOK) GetPayload() *models.Server {
+	return o.Payload
+}
+
+func (o *UpdateServerOK) GetData() []renderer.ResponseData {
 	return []renderer.ResponseData{o.Payload.Data}
 }
 

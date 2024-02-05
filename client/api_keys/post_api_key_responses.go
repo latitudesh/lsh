@@ -107,7 +107,11 @@ func (o *PostAPIKeyCreated) String() string {
 	return fmt.Sprintf("[POST /auth/api_keys][%d] postApiKeyCreated  %+v", 201, o.Payload)
 }
 
-func (o *PostAPIKeyCreated) GetPayload() []renderer.ResponseData {
+func (o *PostAPIKeyCreated) GetPayload() *PostAPIKeyCreatedBody {
+	return o.Payload
+}
+
+func (o *PostAPIKeyCreated) GetData() []renderer.ResponseData {
 	return []renderer.ResponseData{o.Payload.Data}
 }
 

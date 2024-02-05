@@ -51,7 +51,7 @@ func runOperationSSHKeysGetProjectSSHKeys(cmd *cobra.Command, args []string) err
 	}
 
 	if !debug {
-		utils.Render(response.GetPayload())
+		utils.Render(response.GetData())
 	}
 	return nil
 }

@@ -57,7 +57,7 @@ func runOperationProjectsUpdateProject(cmd *cobra.Command, args []string) error 
 	}
 
 	if !debug {
-		utils.Render(response.GetPayload())
+		utils.Render(response.GetData())
 	}
 	return nil
 }

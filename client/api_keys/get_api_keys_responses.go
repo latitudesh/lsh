@@ -92,7 +92,11 @@ func (o *GetAPIKeysOK) String() string {
 	return fmt.Sprintf("[GET /auth/api_keys][%d] getApiKeysOK  %+v", 200, o.Payload)
 }
 
-func (o *GetAPIKeysOK) GetPayload() []renderer.ResponseData {
+func (o *GetAPIKeysOK) GetPayload() *models.APIKeys {
+	return o.Payload
+}
+
+func (o *GetAPIKeysOK) GetData() []renderer.ResponseData {
 	var data []renderer.ResponseData
 
 	for _, v := range o.Payload.Data {

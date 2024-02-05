@@ -107,7 +107,11 @@ func (o *UpdateAPIKeyOK) String() string {
 	return fmt.Sprintf("[PUT /auth/api_keys/{id}][%d] updateApiKeyOK  %+v", 200, o.Payload)
 }
 
-func (o *UpdateAPIKeyOK) GetPayload() []renderer.ResponseData {
+func (o *UpdateAPIKeyOK) GetPayload() *UpdateAPIKeyOKBody {
+	return o.Payload
+}
+
+func (o *UpdateAPIKeyOK) GetData() []renderer.ResponseData {
 	return []renderer.ResponseData{o.Payload.Data}
 }
 

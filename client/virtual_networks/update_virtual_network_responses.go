@@ -109,7 +109,11 @@ func (o *UpdateVirtualNetworkOK) String() string {
 	return fmt.Sprintf("[PATCH /virtual_networks/{virtual_network_id}][%d] updateVirtualNetworkOK  %+v", 200, o.Payload)
 }
 
-func (o *UpdateVirtualNetworkOK) GetPayload() []renderer.ResponseData {
+func (o *UpdateVirtualNetworkOK) GetPayload() *models.VirtualNetwork {
+	return o.Payload
+}
+
+func (o *UpdateVirtualNetworkOK) GetData() []renderer.ResponseData {
 	return []renderer.ResponseData{o.Payload}
 }
 

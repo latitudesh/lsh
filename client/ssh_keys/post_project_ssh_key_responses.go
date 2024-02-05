@@ -109,7 +109,11 @@ func (o *PostProjectSSHKeyCreated) String() string {
 	return fmt.Sprintf("[POST /projects/{project_id_or_slug}/ssh_keys][%d] postProjectSshKeyCreated  %+v", 201, o.Payload)
 }
 
-func (o *PostProjectSSHKeyCreated) GetPayload() []renderer.ResponseData {
+func (o *PostProjectSSHKeyCreated) GetPayload() *PostProjectSSHKeyCreatedBody {
+	return o.Payload
+}
+
+func (o *PostProjectSSHKeyCreated) GetData() []renderer.ResponseData {
 	return []renderer.ResponseData{o.Payload.Data}
 }
 

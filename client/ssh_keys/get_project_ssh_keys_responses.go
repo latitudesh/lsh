@@ -98,7 +98,11 @@ func (o *GetProjectSSHKeysOK) String() string {
 	return fmt.Sprintf("[GET /projects/{project_id_or_slug}/ssh_keys][%d] getProjectSshKeysOK  %+v", 200, o.Payload)
 }
 
-func (o *GetProjectSSHKeysOK) GetPayload() []renderer.ResponseData {
+func (o *GetProjectSSHKeysOK) GetPayload() *models.SSHKey {
+	return o.Payload
+}
+
+func (o *GetProjectSSHKeysOK) GetData() []renderer.ResponseData {
 	var data []renderer.ResponseData
 
 	for _, v := range o.Payload.Data {

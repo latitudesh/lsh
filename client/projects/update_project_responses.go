@@ -115,7 +115,11 @@ func (o *UpdateProjectOK) String() string {
 	return fmt.Sprintf("[PATCH /projects/{id_or_slug}][%d] updateProjectOK  %+v", 200, o.Payload)
 }
 
-func (o *UpdateProjectOK) GetPayload() []renderer.ResponseData {
+func (o *UpdateProjectOK) GetPayload() *UpdateProjectOKBody {
+	return o.Payload
+}
+
+func (o *UpdateProjectOK) GetData() []renderer.ResponseData {
 	return []renderer.ResponseData{o.Payload.Data}
 }
 

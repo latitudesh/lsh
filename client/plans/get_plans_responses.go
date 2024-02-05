@@ -96,7 +96,11 @@ func (o *GetPlansOK) String() string {
 	return fmt.Sprintf("[GET /plans][%d] getPlansOK  %+v", 200, o.Payload)
 }
 
-func (o *GetPlansOK) GetPayload() []renderer.ResponseData {
+func (o *GetPlansOK) GetPayload() *GetPlansOKBody {
+	return o.Payload
+}
+
+func (o *GetPlansOK) GetData() []renderer.ResponseData {
 	var data []renderer.ResponseData
 
 	for _, v := range o.Payload.Data {

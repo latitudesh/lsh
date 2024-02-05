@@ -109,7 +109,11 @@ func (o *CreateVirtualNetworkCreated) String() string {
 	return fmt.Sprintf("[POST /virtual_networks][%d] createVirtualNetworkCreated  %+v", 201, o.Payload)
 }
 
-func (o *CreateVirtualNetworkCreated) GetPayload() []renderer.ResponseData {
+func (o *CreateVirtualNetworkCreated) GetPayload() *models.VirtualNetwork {
+	return o.Payload
+}
+
+func (o *CreateVirtualNetworkCreated) GetData() []renderer.ResponseData {
 	return []renderer.ResponseData{o.Payload}
 }
 

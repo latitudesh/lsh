@@ -115,7 +115,11 @@ func (o *AssignServerVirtualNetworkCreated) String() string {
 	return fmt.Sprintf("[POST /virtual_networks/assignments][%d] assignServerVirtualNetworkCreated  %+v", 201, o.Payload)
 }
 
-func (o *AssignServerVirtualNetworkCreated) GetPayload() []renderer.ResponseData {
+func (o *AssignServerVirtualNetworkCreated) GetPayload() *models.VirtualNetworkAssignment {
+	return o.Payload
+}
+
+func (o *AssignServerVirtualNetworkCreated) GetData() []renderer.ResponseData {
 	return []renderer.ResponseData{o.Payload}
 }
 

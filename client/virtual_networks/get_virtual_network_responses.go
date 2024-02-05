@@ -101,7 +101,11 @@ func (o *GetVirtualNetworkOK) String() string {
 	return fmt.Sprintf("[GET /virtual_networks/{id}][%d] getVirtualNetworkOK  %+v", 200, o.Payload)
 }
 
-func (o *GetVirtualNetworkOK) GetPayload() []renderer.ResponseData {
+func (o *GetVirtualNetworkOK) GetPayload() *GetVirtualNetworkOKBody {
+	return o.Payload
+}
+
+func (o *GetVirtualNetworkOK) GetData() []renderer.ResponseData {
 	return []renderer.ResponseData{o.Payload.Data}
 }
 

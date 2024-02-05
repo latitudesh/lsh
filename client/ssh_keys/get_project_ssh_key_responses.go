@@ -101,7 +101,11 @@ func (o *GetProjectSSHKeyOK) String() string {
 	return fmt.Sprintf("[GET /projects/{project_id_or_slug}/ssh_keys/{ssh_key_id}][%d] getProjectSshKeyOK  %+v", 200, o.Payload)
 }
 
-func (o *GetProjectSSHKeyOK) GetPayload() []renderer.ResponseData {
+func (o *GetProjectSSHKeyOK) GetPayload() *GetProjectSSHKeyOKBody {
+	return o.Payload
+}
+
+func (o *GetProjectSSHKeyOK) GetData() []renderer.ResponseData {
 	return []renderer.ResponseData{o.Payload.Data}
 }
 

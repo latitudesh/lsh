@@ -110,7 +110,11 @@ func (o *ServerScheduleDeletionCreated) String() string {
 	return fmt.Sprintf("[POST /servers/{server_id}/schedule_deletion][%d] serverScheduleDeletionCreated  %+v", 201, o.Payload)
 }
 
-func (o *ServerScheduleDeletionCreated) GetPayload() []renderer.ResponseData {
+func (o *ServerScheduleDeletionCreated) GetPayload() *models.ServerScheduleDeletion {
+	return o.Payload
+}
+
+func (o *ServerScheduleDeletionCreated) GetData() []renderer.ResponseData {
 	return []renderer.ResponseData{o.Payload.Data}
 }
 

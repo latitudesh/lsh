@@ -92,7 +92,11 @@ func (o *GetVirtualNetworksOK) String() string {
 	return fmt.Sprintf("[GET /virtual_networks][%d] getVirtualNetworksOK  %+v", 200, o.Payload)
 }
 
-func (o *GetVirtualNetworksOK) GetPayload() []renderer.ResponseData {
+func (o *GetVirtualNetworksOK) GetPayload() *models.VirtualNetworks {
+	return o.Payload
+}
+
+func (o *GetVirtualNetworksOK) GetData() []renderer.ResponseData {
 	var data []renderer.ResponseData
 
 	for _, v := range o.Payload.Data {

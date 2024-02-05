@@ -98,7 +98,11 @@ func (o *GetServerOK) String() string {
 	return fmt.Sprintf("[GET /servers/{server_id}][%d] getServerOK  %+v", 200, o.Payload)
 }
 
-func (o *GetServerOK) GetPayload() []renderer.ResponseData {
+func (o *GetServerOK) GetPayload() *models.Server {
+	return o.Payload
+}
+
+func (o *GetServerOK) GetData() []renderer.ResponseData {
 	return []renderer.ResponseData{o.Payload.Data}
 }
 
