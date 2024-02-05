@@ -56,7 +56,7 @@ func runOperationServersUpdateServer(cmd *cobra.Command, args []string) error {
 	}
 
 	if !debug {
-		response.Render()
+		utils.Render(response.GetData())
 	}
 	return nil
 }
@@ -93,12 +93,12 @@ func registerOperationServersUpdateServerBodyParamFlags(cmdPrefix string, cmd *c
 func registerOperationServersUpdateServerServerIDParamFlags(cmdPrefix string, cmd *cobra.Command) error {
 
 	serverIdDescription := `The Server Id (Required).`
-	
+
 	var serverIdFlagName string
 	if cmdPrefix == "" {
-	serverIdFlagName = "id"
+		serverIdFlagName = "id"
 	} else {
-	serverIdFlagName = fmt.Sprintf("%v.id", cmdPrefix)
+		serverIdFlagName = fmt.Sprintf("%v.id", cmdPrefix)
 	}
 
 	var serverIdFlagDefault string

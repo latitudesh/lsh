@@ -9,6 +9,7 @@ import (
 	"github.com/go-openapi/errors"
 	"github.com/go-openapi/strfmt"
 	"github.com/go-openapi/swag"
+	"github.com/latitudesh/lsh/internal/output/table"
 )
 
 // VirtualNetworkAssignment virtual network assignment
@@ -107,6 +108,37 @@ func (m *VirtualNetworkAssignment) UnmarshalBinary(b []byte) error {
 	}
 	*m = res
 	return nil
+}
+
+func (m *VirtualNetworkAssignment) TableRow() table.Row {
+	attr := m.Attributes
+
+	return table.Row{
+		"id": table.Cell{
+			Label: "ID",
+			Value: table.String(m.ID),
+		},
+		"vid": table.Cell{
+			Label: "VID",
+			Value: table.Int(attr.Vid),
+		},
+		"virtual_network_id": table.Cell{
+			Label: "Virtual Network ID",
+			Value: table.String(attr.VirtualNetworkID),
+		},
+		"description": table.Cell{
+			Label: "Description",
+			Value: table.String(attr.Description),
+		},
+		"status": table.Cell{
+			Label: "Status",
+			Value: table.String(attr.Status),
+		},
+		"server_id": table.Cell{
+			Label: "Server ID",
+			Value: table.String(attr.Server.ID),
+		},
+	}
 }
 
 type VirtualNetworkAssignmentServer struct {

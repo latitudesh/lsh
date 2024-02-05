@@ -4,18 +4,14 @@ package api_keys
 // Editing this file might prove futile when you re-run the swagger generate command
 
 import (
-	"encoding/json"
 	"fmt"
 	"io"
 
 	"github.com/go-openapi/runtime"
 	"github.com/go-openapi/strfmt"
-	"github.com/go-openapi/swag"
-	"github.com/spf13/viper"
 
 	apierrors "github.com/latitudesh/lsh/internal/api/errors"
-	"github.com/latitudesh/lsh/internal/output"
-	"github.com/latitudesh/lsh/internal/output/table"
+	"github.com/latitudesh/lsh/internal/renderer"
 	"github.com/latitudesh/lsh/models"
 )
 
@@ -100,78 +96,14 @@ func (o *GetAPIKeysOK) GetPayload() *models.APIKeys {
 	return o.Payload
 }
 
-type APIKeyTableRow struct {
-	ID             string `json:"id,omitempty"`
-	TokenLastSlice string `json:"token_last_slice,omitempty"`
-	User           string `json:"user,omitempty"`
-	APIVersion     string `json:"api_version,omitempty"`
-	LastUsedAt     string `json:"last_used_at,omitempty"`
-	Name           string `json:"name,omitempty"`
-}
+func (o *GetAPIKeysOK) GetData() []renderer.ResponseData {
+	var data []renderer.ResponseData
 
-func (o *GetAPIKeysOK) Render() {
-	formatAsJSON := viper.GetBool("json")
-
-	if formatAsJSON {
-		o.RenderJSON()
-		return
+	for _, v := range o.Payload.Data {
+		data = append(data, v)
 	}
 
-	formatOutputFlag := viper.GetString("output")
-
-	switch formatOutputFlag {
-	case "json":
-		o.RenderJSON()
-	case "table":
-		o.RenderTable()
-	default:
-		fmt.Println("Unsupported output format")
-	}
-}
-
-func (o *GetAPIKeysOK) RenderJSON() {
-	if !swag.IsZero(o) && !swag.IsZero(o.Payload) {
-		JSONString, err := json.Marshal(o.Payload)
-		if err != nil {
-			fmt.Println("Could not decode the result as JSON.")
-		}
-
-		output.RenderJSON(JSONString)
-	}
-}
-
-func (o *GetAPIKeysOK) RenderTable() {
-	if len(o.Payload.Data) == 0 {
-		table.RenderEmptyState("No results found.")
-		return
-	}
-
-	data := o.Payload.Data
-
-	var rows []APIKeyTableRow
-
-	for _, api_key := range data {
-		attributes := api_key.Attributes
-
-		row := APIKeyTableRow{
-			ID:             table.RenderString(api_key.ID),
-			TokenLastSlice: table.RenderString(attributes.TokenLastSlice),
-			User:           table.RenderString(attributes.User.Email),
-			APIVersion:     table.RenderString(attributes.APIVersion),
-			LastUsedAt:     table.RenderDateTime(attributes.LastUsedAt),
-			Name:           table.RenderString(attributes.Name),
-		}
-
-		rows = append(rows, row)
-	}
-
-	var interfaceRows []interface{}
-
-	for _, row := range rows {
-		interfaceRows = append(interfaceRows, row)
-	}
-
-	table.Render(interfaceRows)
+	return data
 }
 
 func (o *GetAPIKeysOK) readResponse(response runtime.ClientResponse, consumer runtime.Consumer, formats strfmt.Registry) error {

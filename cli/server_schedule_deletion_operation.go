@@ -51,7 +51,7 @@ func runOperationServersServerScheduleDeletion(cmd *cobra.Command, args []string
 	}
 
 	if !debug {
-		response.Render()
+		utils.Render(response.GetData())
 	}
 	return nil
 }
