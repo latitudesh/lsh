@@ -27,7 +27,7 @@ func Render(rows []Row) {
 
 	tableWriter.SetRowLine(true)
 	tableWriter.SetHeader(headers.Labels)
-	tableWriter.SetColWidth(20)
+	tableWriter.SetColWidth(MaxColWidth)
 
 	for _, row := range rows {
 		var tr []string
