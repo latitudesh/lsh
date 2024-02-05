@@ -44,6 +44,17 @@ func Render(rows []Row) {
 	fmt.Printf("\n")
 }
 
+func RenderEmptyState(message string) {
+	table := tablewriter.NewWriter(os.Stdout)
+
+	table.SetRowLine(true)
+	table.Append([]string{message})
+
+	fmt.Println()
+	table.Render()
+	fmt.Println()
+}
+
 func extractHeaders(row Row) Header {
 	var headers Header
 
