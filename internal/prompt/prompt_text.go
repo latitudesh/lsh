@@ -8,19 +8,19 @@ import (
 	"github.com/manifoldco/promptui"
 )
 
-type PromptInputText struct {
+type InputText struct {
 	Name  string
 	Label string
 }
 
-func NewPromptInputText(name, label string) *PromptInputText {
-	return &PromptInputText{
+func NewInputText(name, label string) *InputText {
+	return &InputText{
 		Name:  name,
 		Label: label,
 	}
 }
 
-func (p *PromptInputText) AssignValue(attributes interface{}) {
+func (p *InputText) AssignValue(attributes interface{}) {
 	currentValue := utils.GetFieldValue(attributes, p.Name).String()
 
 	fmt.Println(p.Name, currentValue)

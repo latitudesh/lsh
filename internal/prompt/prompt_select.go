@@ -8,21 +8,21 @@ import (
 	"github.com/manifoldco/promptui"
 )
 
-type PromptInputSelect struct {
+type InputSelect struct {
 	Name  string
 	Label string
 	Items []string
 }
 
-func NewPromptInputSelect(name string, label string, items []string) *PromptInputSelect {
-	return &PromptInputSelect{
+func NewInputSelect(name string, label string, items []string) *InputSelect {
+	return &InputSelect{
 		Name:  name,
 		Label: label,
 		Items: items,
 	}
 }
 
-func (p *PromptInputSelect) AssignValue(attributes interface{}) {
+func (p *InputSelect) AssignValue(attributes interface{}) {
 	currentValue := utils.GetFieldValue(attributes, p.Name).String()
 
 	if currentValue == "" {

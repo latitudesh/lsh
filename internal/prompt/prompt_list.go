@@ -10,19 +10,19 @@ import (
 	"github.com/manifoldco/promptui"
 )
 
-type PromptInputList struct {
+type InputList struct {
 	Name  string
 	Label string
 }
 
-func NewPromptInputList(name, label string) *PromptInputList {
-	return &PromptInputList{
+func NewInputList(name, label string) *InputList {
+	return &InputList{
 		Name:  name,
 		Label: label,
 	}
 }
 
-func (p *PromptInputList) AssignValue(attributes interface{}) {
+func (p *InputList) AssignValue(attributes interface{}) {
 	currentValue := utils.GetFieldValue(attributes, p.Name)
 
 	if currentValue.Kind() == reflect.Slice && currentValue.Len() == 0 {
