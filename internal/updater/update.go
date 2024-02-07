@@ -4,21 +4,11 @@ import (
 	"fmt"
 	"log"
 	"os"
-
-	"github.com/latitudesh/lsh/internal/version"
 )
 
-func Update() error {
+// Update expects a version string and updates the cli to it
+func Update(version string) error {
 	log.Println("Update started!")
-
-	release, err := LatestLshRelease()
-	if err != nil {
-		return err
-	}
-
-	if release.TagName == version.Version {
-		log.Println()
-	}
 
 	tempDir, err := os.MkdirTemp("", "temp")
 	if err != nil {
@@ -31,7 +21,7 @@ func Update() error {
 	}
 
 	filename := buildFilename()
-	downloadURL := fmt.Sprintf("https://github.com/latitudesh/lsh/releases/download/%s/%s.tar.gz", release.TagName, filename)
+	downloadURL := fmt.Sprintf("https://github.com/latitudesh/lsh/releases/download/%s/%s.tar.gz", version, filename)
 	filePath := fmt.Sprintf("%s/%s.tar.gz", tempDir, filename)
 
 	log.Println("Downloading new version...")

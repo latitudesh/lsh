@@ -1,9 +1,12 @@
 package cli
 
 import (
+	"fmt"
+	"log"
 	"runtime"
 
 	"github.com/latitudesh/lsh/internal/updater"
+	"github.com/latitudesh/lsh/internal/version"
 	"github.com/spf13/cobra"
 )
 
@@ -25,7 +28,19 @@ func makeOperationUpdateCmd() (*cobra.Command, error) {
 }
 
 func runOperationUpdate(cmd *cobra.Command, args []string) error {
-	err := updater.Update()
+	release, err := updater.LatestLshRelease()
+	if err != nil {
+		return err
+	}
+
+	releaseVersion := release.TagName
+
+	if releaseVersion == version.Version {
+		return fmt.Errorf("already at the latest version")
+	}
+
+	log.Printf("New version found: %s", releaseVersion)
+	err = updater.Update(releaseVersion)
 	if err != nil {
 		return err
 	}
