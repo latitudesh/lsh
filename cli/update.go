@@ -1,7 +1,6 @@
 package cli
 
 import (
-	"fmt"
 	"log"
 	"runtime"
 
@@ -36,7 +35,8 @@ func runOperationUpdate(cmd *cobra.Command, args []string) error {
 	releaseVersion := release.TagName
 
 	if releaseVersion == version.Version {
-		return fmt.Errorf("already at the latest version")
+		log.Println("Already at the latest version.")
+		return nil
 	}
 
 	log.Printf("New version found: %s", releaseVersion)

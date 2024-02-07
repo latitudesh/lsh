@@ -4,7 +4,6 @@ import (
 	"encoding/json"
 	"fmt"
 	"io"
-	"log"
 	"net/http"
 )
 
@@ -19,7 +18,7 @@ func LatestLshRelease() (*GithubRelease, error) {
 	release := GithubRelease{}
 	err := buildRelease("repos/latitudesh/lsh/releases/latest", &release)
 	if err != nil {
-		log.Fatal(err)
+		return nil, err
 	}
 	return &release, err
 }
