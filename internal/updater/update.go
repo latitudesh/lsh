@@ -18,6 +18,8 @@ func Update(version string) error {
 	if err != nil {
 		return err
 	}
+	defer os.RemoveAll(tempDir)
+
 	destinationPath := filepath.Join(tempDir, updateFile.Name)
 
 	log.Println("Downloading new version...")
@@ -27,12 +29,7 @@ func Update(version string) error {
 	}
 	log.Println("Download finished successfully!")
 
-	f, err := os.Open(filepath.Join(tempDir, updateFile.Name))
-	if err != nil {
-		return err
-	}
-
-	err = utils.Untar(tempDir, f)
+	err = decompress(tempDir, updateFile)
 	if err != nil {
 		return err
 	}
@@ -41,9 +38,8 @@ func Update(version string) error {
 	if err != nil {
 		return err
 	}
-
 	oldExecPath := currentExecPath + "-old"
-	newExecPath := filepath.Join(tempDir, updateFile.Dir, "lsh")
+	newExecPath := filepath.Join(tempDir, updateFile.Dir, updateFile.Executable)
 
 	// Rename current lsh binary to lsh-old
 	err = os.Rename(currentExecPath, oldExecPath)
@@ -52,19 +48,38 @@ func Update(version string) error {
 	}
 
 	// Rename and move downloaded lsh binary
-	os.Rename(newExecPath, currentExecPath)
+	err = os.Rename(newExecPath, currentExecPath)
 	if err != nil {
 		return err
 	}
 
-	// Remove old binary
-	os.Remove(oldExecPath)
-	if err != nil {
-		return err
+	// Remove old binary (linux|macOs only)
+	if OS != "windows" {
+		err = os.Remove(oldExecPath)
+		if err != nil {
+			return err
+		}
 	}
 
-	os.RemoveAll(tempDir)
 	log.Println("Update finished successfully!")
 
+	return nil
+}
+
+func decompress(destination string, file *UpdateFile) error {
+	source := filepath.Join(destination, file.Name)
+	if file.Extension == ".tar.gz" {
+		err := utils.Untar(source, destination)
+		if err != nil {
+			return err
+		}
+
+		return nil
+	}
+
+	err := utils.Unzip(source, destination)
+	if err != nil {
+		return err
+	}
 	return nil
 }

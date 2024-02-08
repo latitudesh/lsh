@@ -17,18 +17,22 @@ const (
 )
 
 type UpdateFile struct {
-	Name      string
-	Dir       string
-	Extension string
+	Name       string
+	Dir        string
+	Extension  string
+	Executable string
 }
 
 func NewUpdateFile() *UpdateFile {
 	dir := buildDirName()
 	ext := buildExtesion(OS)
+	exec := buildExecutableName(OS)
+
 	return &UpdateFile{
-		Name:      dir + ext,
-		Dir:       dir,
-		Extension: ext,
+		Dir:        buildDirName(),
+		Extension:  ext,
+		Name:       dir + ext,
+		Executable: exec,
 	}
 }
 
@@ -68,6 +72,13 @@ func buildExtesion(os string) string {
 		return ".zip"
 	}
 	return ".tar.gz"
+}
+
+func buildExecutableName(os string) string {
+	if os == "windows" {
+		return "lsh.exe"
+	}
+	return "lsh"
 }
 
 // parseArch expects a GOARCH and returns the arch in our github release format
