@@ -3,14 +3,32 @@ package operation
 import (
 	"github.com/latitudesh/lsh/internal/cmdflag"
 	"github.com/latitudesh/lsh/internal/utils"
+	"github.com/spf13/cobra"
 	"github.com/spf13/pflag"
 )
 
 type Operation interface {
 	GetFlagSet() *pflag.FlagSet
-	GetFlagsDefinition() cmdflag.Flags
-	RegisterFlags()
+	GetFlagsDefinition() cmdflag.FlagsSchema
+	RegisterFlags(cmd *cobra.Command)
+	ResourceIDFlag() cmdflag.FlagSchema
+	PromptID(params interface{})
 	PromptAttributes(attributes interface{})
+}
+
+func AssignResourceID(o Operation, params interface{}) error {
+	flagSet := o.GetFlagSet()
+	idFlag := o.ResourceIDFlag()
+	id, err := flagSet.GetString(idFlag.Name)
+	if err != nil {
+		return err
+	}
+
+	utils.AssignValue(params, idFlag.Name, id)
+
+	o.PromptID(params)
+
+	return nil
 }
 
 func AssignBodyAttributes(o Operation, attributes interface{}) error {

@@ -2,7 +2,7 @@ package cmdflag
 
 import "github.com/spf13/pflag"
 
-type Flag struct {
+type FlagSchema struct {
 	Name         string
 	Label        string
 	Description  string
@@ -10,9 +10,9 @@ type Flag struct {
 	Type         string
 }
 
-type Flags []Flag
+type FlagsSchema []FlagSchema
 
-func (f *Flags) Register(flagset *pflag.FlagSet) {
+func (f *FlagsSchema) Register(flagset *pflag.FlagSet) {
 	for _, v := range *f {
 		switch v.Type {
 		case "string":

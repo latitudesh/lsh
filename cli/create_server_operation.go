@@ -12,26 +12,36 @@ import (
 )
 
 type CreateServerOperation struct {
-	Command *cobra.Command
-	Flags   cmdflag.Flags
-	Params  *servers.CreateServerParams
+	FlagsSchema      cmdflag.FlagsSchema
+	Name             string
+	ShortDescription string
+	FlagSet          *pflag.FlagSet
 }
 
 func makeOperationServersCreateServerCmd() (*cobra.Command, error) {
-	cmd := &cobra.Command{
-		Use:   "create",
-		Short: "Deploy a new server.",
+	o := DestroyServerOperation{
+		Name:             "create",
+		ShortDescription: "Deploy a new server.",
 	}
 
-	registerCreateServerOperation(cmd)
+	cmd, err := o.Register()
+	if err != nil {
+		return nil, err
+	}
 
 	return cmd, nil
 }
 
-func registerCreateServerOperation(cmd *cobra.Command) {
-	op := CreateServerOperation{Command: cmd}
-	op.Command.RunE = op.run
-	op.RegisterFlags()
+func (o *CreateServerOperation) Register() (*cobra.Command, error) {
+	cmd := &cobra.Command{
+		Use:   o.Name,
+		Short: o.ShortDescription,
+		RunE:  o.run,
+	}
+
+	o.RegisterFlags(cmd)
+
+	return cmd, nil
 }
 
 func (o *CreateServerOperation) PromptAttributes(attributes interface{}) {
@@ -45,14 +55,14 @@ func (o *CreateServerOperation) PromptAttributes(attributes interface{}) {
 		prompt.NewInputText("ipxe_url", "iPXE URL"),
 		prompt.NewInputList("ssh_keys", "SSH Keys"),
 		prompt.NewInputText("user_data", "User Data"),
-		// prompt.NewInputSelect("raid", "RAID Level", []string{"raid-0", "raid-1"}),
+		prompt.NewInputSelect("raid", "RAID Level", o.supportedRAIDLevels()),
 	)
 
 	p.Run(attributes)
 }
 
-func (o *CreateServerOperation) RegisterFlags() {
-	o.Flags = cmdflag.Flags{
+func (o *CreateServerOperation) RegisterFlags(cmd *cobra.Command) {
+	o.FlagsSchema = cmdflag.FlagsSchema{
 		{
 			Name:         "hostname",
 			Description:  "The server hostname",
@@ -114,15 +124,22 @@ func (o *CreateServerOperation) RegisterFlags() {
 		},
 	}
 
-	o.Flags.Register(o.Command.Flags())
+	o.FlagsSchema.Register(o.FlagSet)
 }
 
-func (o *CreateServerOperation) GetFlagsDefinition() cmdflag.Flags {
-	return o.Flags
+func (o *CreateServerOperation) GetFlagsDefinition() cmdflag.FlagsSchema {
+	return o.FlagsSchema
+}
+
+func (o *CreateServerOperation) PromptID(params interface{}) {
+}
+
+func (o *CreateServerOperation) ResourceIDFlag() cmdflag.FlagSchema {
+	return o.FlagsSchema[0]
 }
 
 func (o *CreateServerOperation) GetFlagSet() *pflag.FlagSet {
-	return o.Command.Flags()
+	return o.FlagSet
 }
 
 func (o *CreateServerOperation) run(cmd *cobra.Command, args []string) error {
@@ -216,4 +233,8 @@ func (o *CreateServerOperation) supportedSites() []string {
 
 func (o *CreateServerOperation) supportedBillingTypes() []string {
 	return []string{"hourly", "monthly", "yearly"}
+}
+
+func (o *CreateServerOperation) supportedRAIDLevels() []string {
+	return []string{"raid-0", "raid-1"}
 }

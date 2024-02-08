@@ -1,43 +1,75 @@
 package cli
 
 import (
-	"fmt"
-	"os"
-
 	"github.com/latitudesh/lsh/client/servers"
 	"github.com/latitudesh/lsh/internal/cmdflag"
+	"github.com/latitudesh/lsh/internal/operation"
+	"github.com/latitudesh/lsh/internal/prompt"
 	"github.com/latitudesh/lsh/internal/utils"
-	"github.com/manifoldco/promptui"
 
 	"github.com/spf13/cobra"
+	"github.com/spf13/pflag"
 )
 
 type DestroyServerOperation struct {
-	Command *cobra.Command
-	Flags   cmdflag.Flags
-	Params  *servers.CreateServerParams
+	Name             string
+	ShortDescription string
+	FlagsSchema      cmdflag.FlagsSchema
+	FlagSet          *pflag.FlagSet
 }
 
-// makeOperationServersDestroyServerCmd returns a cmd to handle operation destroyServer
-func makeOperationServersDestroyServerCmd() (*cobra.Command, error) {
+func (o *DestroyServerOperation) Register() (*cobra.Command, error) {
 	cmd := &cobra.Command{
-		Use:   "destroy",
-		Short: `Remove a server.`,
+		Use:   o.Name,
+		Short: o.ShortDescription,
+		RunE:  o.run,
 	}
 
-	registerDestroyServerOperation(cmd)
+	o.RegisterFlags(cmd)
 
 	return cmd, nil
 }
 
-func registerDestroyServerOperation(cmd *cobra.Command) {
-	op := DestroyServerOperation{Command: cmd}
-	op.Command.RunE = op.run
-	op.RegisterFlags()
+func (o *DestroyServerOperation) ResourceIDFlag() cmdflag.FlagSchema {
+	return o.FlagsSchema[0]
 }
 
-func (o *DestroyServerOperation) RegisterFlags() {
-	o.Flags = cmdflag.Flags{
+func (o *DestroyServerOperation) PromptID(params interface{}) {
+	p := prompt.New(
+		prompt.NewInputText("id", "ID from the Server you want to destroy"),
+	)
+
+	p.Run(params)
+}
+
+func (o *DestroyServerOperation) PromptAttributes(attributes interface{}) {
+}
+
+func (o *DestroyServerOperation) GetFlagsDefinition() cmdflag.FlagsSchema {
+	return o.FlagsSchema
+}
+
+func (o *DestroyServerOperation) GetFlagSet() *pflag.FlagSet {
+	return o.FlagSet
+}
+
+func makeOperationServersDestroyServerCmd() (*cobra.Command, error) {
+	o := DestroyServerOperation{
+		Name:             "destroy",
+		ShortDescription: "Remove a server.",
+	}
+
+	cmd, err := o.Register()
+	if err != nil {
+		return nil, err
+	}
+
+	return cmd, nil
+}
+
+func (o *DestroyServerOperation) RegisterFlags(cmd *cobra.Command) {
+	o.FlagSet = cmd.Flags()
+	o.FlagsSchema = cmdflag.FlagsSchema{
 		{
 			Name:         "id",
 			Description:  "Required. The server ID",
@@ -46,25 +78,7 @@ func (o *DestroyServerOperation) RegisterFlags() {
 		},
 	}
 
-	o.Flags.Register(o.Command.Flags())
-}
-
-func (o *DestroyServerOperation) AssignID(params interface{}) error {
-	return nil
-}
-
-func (o *DestroyServerOperation) promptID(params *servers.DestroyServerParams) string {
-	prompt := promptui.Prompt{
-		Label: fmt.Sprintf("ID from the Server you want to delete"),
-	}
-
-	value, err := prompt.Run()
-	if err != nil {
-		fmt.Printf("Prompt failed %v\n", err)
-		os.Exit(1)
-	}
-
-	return value
+	o.FlagsSchema.Register(o.FlagSet)
 }
 
 func (o *DestroyServerOperation) run(cmd *cobra.Command, args []string) error {
@@ -74,19 +88,9 @@ func (o *DestroyServerOperation) run(cmd *cobra.Command, args []string) error {
 	}
 
 	params := servers.NewDestroyServerParams()
-	id, err := o.Command.Flags().GetString("id")
-	if err != nil {
-		return err
-	}
-
-	if len(id) > 0 {
-		params.SetID(id)
-	} else {
-		params.SetID(o.promptID(params))
-	}
+	operation.AssignResourceID(o, params)
 
 	if dryRun {
-
 		logDebugf("dry-run flag specified. Skip sending request.")
 		return nil
 	}
