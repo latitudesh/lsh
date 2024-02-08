@@ -60,12 +60,7 @@ DestroyServerParams contains all the parameters to send to the API endpoint
 	Typically these are written to a http.Request.
 */
 type DestroyServerParams struct {
-
-	/* ServerID.
-
-	   The server ID
-	*/
-	ServerID string
+	ID string
 
 	timeout    time.Duration
 	Context    context.Context
@@ -125,15 +120,15 @@ func (o *DestroyServerParams) SetHTTPClient(client *http.Client) {
 	o.HTTPClient = client
 }
 
-// WithServerID adds the serverID to the destroy server params
-func (o *DestroyServerParams) WithServerID(serverID string) *DestroyServerParams {
-	o.SetServerID(serverID)
+// WithID adds the id to the destroy server params
+func (o *DestroyServerParams) WithID(id string) *DestroyServerParams {
+	o.SetID(id)
 	return o
 }
 
-// SetServerID adds the serverId to the destroy server params
-func (o *DestroyServerParams) SetServerID(serverID string) {
-	o.ServerID = serverID
+// SetID adds the id to the destroy server params
+func (o *DestroyServerParams) SetID(id string) {
+	o.ID = id
 }
 
 // WriteToRequest writes these params to a swagger request
@@ -145,7 +140,7 @@ func (o *DestroyServerParams) WriteToRequest(r runtime.ClientRequest, reg strfmt
 	var res []error
 
 	// path param server_id
-	if err := r.SetPathParam("server_id", o.ServerID); err != nil {
+	if err := r.SetPathParam("server_id", o.ID); err != nil {
 		return err
 	}
 

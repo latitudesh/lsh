@@ -3,11 +3,19 @@ package cli
 import (
 	"github.com/latitudesh/lsh/client/servers"
 	"github.com/latitudesh/lsh/internal/cmdflag"
+	"github.com/latitudesh/lsh/internal/operation"
 	"github.com/latitudesh/lsh/internal/prompt"
 	"github.com/latitudesh/lsh/internal/utils"
 
 	"github.com/spf13/cobra"
+	"github.com/spf13/pflag"
 )
+
+type UpdateServerOperation struct {
+	Command *cobra.Command
+	Flags   cmdflag.Flags
+	Params  *servers.UpdateServerParams
+}
 
 func makeOperationServersUpdateServerCmd() (*cobra.Command, error) {
 	cmd := &cobra.Command{
@@ -18,12 +26,6 @@ func makeOperationServersUpdateServerCmd() (*cobra.Command, error) {
 	registerUpdateServerOperation(cmd)
 
 	return cmd, nil
-}
-
-type UpdateServerOperation struct {
-	Command *cobra.Command
-	Flags   cmdflag.Flags
-	Params  *servers.UpdateServerParams
 }
 
 func registerUpdateServerOperation(cmd *cobra.Command) {
@@ -45,29 +47,6 @@ func (o *UpdateServerOperation) AssignID(data interface{}) error {
 	return nil
 }
 
-func (o *UpdateServerOperation) AssignBodyAttributes(attributes interface{}) error {
-	for _, v := range o.Flags {
-		if v.Name == "id" {
-			continue
-		}
-
-		switch v.Type {
-		case "string":
-			value, err := o.Command.Flags().GetString(v.Name)
-
-			if err != nil {
-				return err
-			}
-
-			utils.AssignValue(attributes, v.Name, value)
-		}
-	}
-
-	o.promptAttributes(attributes)
-
-	return nil
-}
-
 func (o *UpdateServerOperation) promptID(bodyData interface{}) {
 	p := prompt.New(
 		prompt.NewInputText("id", "ID from the Server you want to update"),
@@ -76,7 +55,7 @@ func (o *UpdateServerOperation) promptID(bodyData interface{}) {
 	p.Run(bodyData)
 }
 
-func (o *UpdateServerOperation) promptAttributes(attributes interface{}) {
+func (o *UpdateServerOperation) PromptAttributes(attributes interface{}) {
 	p := prompt.New(
 		prompt.NewInputText("hostname", "Hostname"),
 		prompt.NewInputSelect("billing", "Billing", []string{"hourly", "monthly", "yearly"}),
@@ -107,12 +86,15 @@ func (o *UpdateServerOperation) RegisterFlags() {
 		},
 	}
 
-	for _, v := range o.Flags {
-		switch v.Type {
-		case "string":
-			o.Command.PersistentFlags().String(v.Name, v.DefaultValue, v.Label)
-		}
-	}
+	o.Flags.Register(o.Command.Flags())
+}
+
+func (o *UpdateServerOperation) GetFlagsDefinition() cmdflag.Flags {
+	return o.Flags
+}
+
+func (o *UpdateServerOperation) GetFlagSet() *pflag.FlagSet {
+	return o.Command.Flags()
 }
 
 func (o *UpdateServerOperation) run(cmd *cobra.Command, args []string) error {
@@ -123,7 +105,7 @@ func (o *UpdateServerOperation) run(cmd *cobra.Command, args []string) error {
 
 	params := servers.NewUpdateServerParams()
 	o.AssignID(params.Body.Data)
-	o.AssignBodyAttributes(params.Body.Data.Attributes)
+	operation.AssignBodyAttributes(o, params.Body.Data.Attributes)
 	params.SetID(params.Body.Data.ID)
 
 	if dryRun {
