@@ -4,6 +4,8 @@ import (
 	"log"
 	"os"
 	"path/filepath"
+
+	"github.com/latitudesh/lsh/internal/utils"
 )
 
 // Update expects a version string and updates the cli to it
@@ -30,7 +32,7 @@ func Update(version string) error {
 		return err
 	}
 
-	err = untarFile(tempDir, f)
+	err = utils.Untar(tempDir, f)
 	if err != nil {
 		return err
 	}

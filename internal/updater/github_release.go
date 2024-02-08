@@ -23,6 +23,19 @@ func LatestLshRelease() (*GithubRelease, error) {
 	return &release, err
 }
 
+// buildRelease Unmarshals github information into a release object
+func buildRelease(url string, release *GithubRelease) error {
+	resp, err := gitHubRequest("GET", url, &http.Client{})
+	if err != nil {
+		return err
+	}
+	err = json.Unmarshal([]byte(resp), release)
+	if err != nil {
+		return err
+	}
+	return nil
+}
+
 // gitHubRequest accepts a method, path and a client to execute a github request
 func gitHubRequest(method, path string, client *http.Client) (string, error) {
 	req, _ := http.NewRequest(method, fmt.Sprintf("https://api.github.com/%s", path), nil)
@@ -42,17 +55,4 @@ func gitHubRequest(method, path string, client *http.Client) (string, error) {
 	}
 
 	return string(body), nil
-}
-
-// buildRelease Unmarshals github information into a release object
-func buildRelease(url string, release *GithubRelease) error {
-	resp, err := gitHubRequest("GET", url, &http.Client{})
-	if err != nil {
-		return err
-	}
-	err = json.Unmarshal([]byte(resp), release)
-	if err != nil {
-		return err
-	}
-	return nil
 }
