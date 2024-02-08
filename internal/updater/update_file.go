@@ -39,15 +39,14 @@ func (uf *UpdateFile) Url(version string) string {
 	return fmt.Sprintf("https://github.com/latitudesh/lsh/releases/download/%s/%s", version, uf.Name)
 }
 
-// downloadFile Downloads file from the given url and saves to filepath
-func downloadFile(filepath string, url string) error {
-	resp, err := http.Get(url)
+func (uf *UpdateFile) Download(dstPath, version string) error {
+	resp, err := http.Get(uf.Url(version))
 	if err != nil {
 		return err
 	}
 	defer resp.Body.Close()
 
-	out, err := os.Create(filepath)
+	out, err := os.Create(dstPath)
 	if err != nil {
 		return err
 	}

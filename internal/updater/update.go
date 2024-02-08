@@ -1,9 +1,9 @@
 package updater
 
 import (
-	"fmt"
 	"log"
 	"os"
+	"path/filepath"
 )
 
 // Update expects a version string and updates the cli to it
@@ -16,16 +16,16 @@ func Update(version string) error {
 	if err != nil {
 		return err
 	}
-	DownloadPath := fmt.Sprintf("%s/%s", tempDir, updateFile.Name)
+	destinationPath := filepath.Join(tempDir, updateFile.Name)
 
 	log.Println("Downloading new version...")
-	err = downloadFile(DownloadPath, updateFile.Url(version))
+	err = updateFile.Download(destinationPath, version)
 	if err != nil {
 		return err
 	}
 	log.Println("Download finished successfully!")
 
-	f, err := os.Open(fmt.Sprintf("%s/%s", tempDir, updateFile.Name))
+	f, err := os.Open(filepath.Join(tempDir, updateFile.Name))
 	if err != nil {
 		return err
 	}
@@ -40,8 +40,8 @@ func Update(version string) error {
 		return err
 	}
 
-	oldExecPath := fmt.Sprintf("%s-old", currentExecPath)
-	newExecPath := fmt.Sprintf("%s/%s/lsh", tempDir, updateFile.Dir)
+	oldExecPath := currentExecPath + "-old"
+	newExecPath := filepath.Join(tempDir, updateFile.Dir, "lsh")
 
 	// Rename current lsh binary to lsh-old
 	err = os.Rename(currentExecPath, oldExecPath)
