@@ -10,23 +10,22 @@ import (
 func Update(version string) error {
 	log.Println("Update started!")
 
+	updateFile := NewUpdateFile()
+
 	tempDir, err := os.MkdirTemp("", "temp")
 	if err != nil {
 		return err
 	}
-
-	filename := buildFilename()
-	downloadURL := fmt.Sprintf("https://github.com/latitudesh/lsh/releases/download/%s/%s.tar.gz", version, filename)
-	filePath := fmt.Sprintf("%s/%s.tar.gz", tempDir, filename)
+	DownloadPath := fmt.Sprintf("%s/%s", tempDir, updateFile.Name)
 
 	log.Println("Downloading new version...")
-	err = downloadFile(filePath, downloadURL)
+	err = downloadFile(DownloadPath, updateFile.Url(version))
 	if err != nil {
 		return err
 	}
 	log.Println("Download finished successfully!")
 
-	f, err := os.Open(fmt.Sprintf("%s/%s.tar.gz", tempDir, filename))
+	f, err := os.Open(fmt.Sprintf("%s/%s", tempDir, updateFile.Name))
 	if err != nil {
 		return err
 	}
@@ -42,7 +41,7 @@ func Update(version string) error {
 	}
 
 	oldExecPath := fmt.Sprintf("%s-old", currentExecPath)
-	newExecPath := fmt.Sprintf("%s/%s/lsh", tempDir, filename)
+	newExecPath := fmt.Sprintf("%s/%s/lsh", tempDir, updateFile.Dir)
 
 	// Rename current lsh binary to lsh-old
 	err = os.Rename(currentExecPath, oldExecPath)

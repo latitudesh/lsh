@@ -19,6 +19,26 @@ const (
 	ARCH = runtime.GOARCH
 )
 
+type UpdateFile struct {
+	Name      string
+	Dir       string
+	Extension string
+}
+
+func NewUpdateFile() *UpdateFile {
+	dir := buildDirName()
+	ext := buildExtesion(OS)
+	return &UpdateFile{
+		Name:      dir + ext,
+		Dir:       dir,
+		Extension: ext,
+	}
+}
+
+func (uf *UpdateFile) Url(version string) string {
+	return fmt.Sprintf("https://github.com/latitudesh/lsh/releases/download/%s/%s", version, uf.Name)
+}
+
 // downloadFile Downloads file from the given url and saves to filepath
 func downloadFile(filepath string, url string) error {
 	resp, err := http.Get(url)
@@ -38,13 +58,20 @@ func downloadFile(filepath string, url string) error {
 }
 
 // buildFileName builds the correct file name for your Operating system and architecture
-func buildFilename() string {
+func buildDirName() string {
 	caser := cases.Title(language.English)
 	os := caser.String(OS)
 
 	arch := parseArch(ARCH)
 
 	return fmt.Sprintf("lsh_%s_%s", os, arch)
+}
+
+func buildExtesion(os string) string {
+	if os == "windows" {
+		return ".zip"
+	}
+	return ".tar.gz"
 }
 
 // parseArch expects a GOARCH and returns the arch in our github release format
