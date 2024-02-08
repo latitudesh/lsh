@@ -37,7 +37,7 @@ func downloadFile(filepath string, url string) error {
 	return err
 }
 
-// buildFileName gets the correct fileName for your Operating system and archtecture
+// buildFileName builds the correct file name for your Operating system and architecture
 func buildFilename() string {
 	caser := cases.Title(language.English)
 	os := caser.String(OS)

@@ -15,11 +15,6 @@ func Update(version string) error {
 		return err
 	}
 
-	homeDir, err := os.UserHomeDir()
-	if err != nil {
-		return err
-	}
-
 	filename := buildFilename()
 	downloadURL := fmt.Sprintf("https://github.com/latitudesh/lsh/releases/download/%s/%s.tar.gz", version, filename)
 	filePath := fmt.Sprintf("%s/%s.tar.gz", tempDir, filename)
@@ -41,24 +36,28 @@ func Update(version string) error {
 		return err
 	}
 
-	currentBinPath := fmt.Sprintf("%s/.lsh/lsh", homeDir)
-	newBinPath := fmt.Sprintf("%s/%s/lsh", tempDir, filename)
-	oldBinPath := fmt.Sprintf("%s/.lsh/lsh-old", homeDir)
+	currentExecPath, err := os.Executable()
+	if err != nil {
+		return err
+	}
+
+	oldExecPath := fmt.Sprintf("%s-old", currentExecPath)
+	newExecPath := fmt.Sprintf("%s/%s/lsh", tempDir, filename)
 
 	// Rename current lsh binary to lsh-old
-	err = os.Rename(currentBinPath, oldBinPath)
+	err = os.Rename(currentExecPath, oldExecPath)
 	if err != nil {
 		return err
 	}
 
 	// Rename and move downloaded lsh binary
-	os.Rename(newBinPath, currentBinPath)
+	os.Rename(newExecPath, currentExecPath)
 	if err != nil {
 		return err
 	}
 
 	// Remove old binary
-	os.Remove(oldBinPath)
+	os.Remove(oldExecPath)
 	if err != nil {
 		return err
 	}
