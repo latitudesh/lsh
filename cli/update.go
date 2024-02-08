@@ -27,22 +27,35 @@ func makeOperationUpdateCmd() (*cobra.Command, error) {
 }
 
 func runOperationUpdate(cmd *cobra.Command, args []string) error {
-	release, err := updater.LatestLshRelease()
+	latestVersion, err := verifyLatestVersion()
 	if err != nil {
 		return err
+	}
+
+	if latestVersion == "" {
+		log.Println("Already at the latest version.")
+		return nil
+	}
+
+	err = updater.Update(latestVersion)
+	if err != nil {
+		return err
+	}
+	return nil
+}
+
+func verifyLatestVersion() (string, error) {
+	release, err := updater.LatestLshRelease()
+	if err != nil {
+		return "", err
 	}
 
 	releaseVersion := release.TagName
 
 	if releaseVersion == version.Version {
-		log.Println("Already at the latest version.")
-		return nil
+		return "", nil
 	}
 
 	log.Printf("New version found: %s", releaseVersion)
-	err = updater.Update(releaseVersion)
-	if err != nil {
-		return err
-	}
-	return nil
+	return releaseVersion, nil
 }
