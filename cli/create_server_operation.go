@@ -50,7 +50,7 @@ func (o *CreateServerOperation) PromptAttributes(attributes interface{}) {
 		prompt.NewInputSelect("site", "Site", server.SupportedSites),
 		prompt.NewInputText("ipxe_url", "iPXE URL"),
 		prompt.NewInputList("ssh_keys", "SSH Keys"),
-		prompt.NewInputText("user_data", "User Data"),
+		prompt.NewInputNumber("user_data", "User Data"),
 		prompt.NewInputSelect("raid", "RAID Level", server.SupportedRAIDLevels),
 	)
 
@@ -116,9 +116,10 @@ func (o *CreateServerOperation) registerFlags(cmd *cobra.Command) {
 			Type:         "stringSlice",
 		},
 		{
-			Name:        "user_data",
-			Description: "User data to set on the server",
-			Type:        "int64",
+			Name:         "user_data",
+			Description:  "User data to set on the server",
+			DefaultValue: int64(0),
+			Type:         "int64",
 		},
 	}
 

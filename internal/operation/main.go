@@ -1,8 +1,13 @@
 package operation
 
 import (
+	"errors"
+	"fmt"
+
+	"github.com/go-openapi/swag"
 	"github.com/latitudesh/lsh/internal/cmdflag"
 	"github.com/latitudesh/lsh/internal/utils"
+	"github.com/spf13/pflag"
 )
 
 type Operation interface {
@@ -34,30 +39,13 @@ func AssignBodyAttributes(o Operation, attributes interface{}) error {
 			continue
 		}
 
-		switch v.Type {
-		case "string":
-			value, err := flags.FlagSet.GetString(v.Name)
+		value, err := getFlagValue(v, flags.FlagSet)
+		if err != nil {
+			fmt.Println(err)
+			return err
+		}
 
-			if err != nil {
-				return err
-			}
-
-			utils.AssignValue(attributes, v.Name, value)
-		case "stringSlice":
-			value, err := flags.FlagSet.GetStringSlice(v.Name)
-
-			if err != nil {
-				return err
-			}
-
-			utils.AssignValue(attributes, v.Name, value)
-		case "int64":
-			value, err := flags.FlagSet.GetInt64(v.Name)
-
-			if err != nil {
-				return err
-			}
-
+		if !swag.IsZero(value) {
 			utils.AssignValue(attributes, v.Name, value)
 		}
 	}
@@ -65,4 +53,26 @@ func AssignBodyAttributes(o Operation, attributes interface{}) error {
 	o.PromptAttributes(attributes)
 
 	return nil
+}
+
+func getFlagValue(flag cmdflag.FlagSchema, flagSet *pflag.FlagSet) (interface{}, error) {
+	switch flag.Type {
+	case "string":
+		return flagSet.GetString(flag.Name)
+	case "stringSlice":
+		value, err := flagSet.GetStringSlice(flag.Name)
+		if err != nil {
+			return nil, err
+		}
+
+		if len(value) > 0 {
+			return value, nil
+		}
+
+		return nil, nil
+	case "int64":
+		return flagSet.GetInt64(flag.Name)
+	default:
+		return nil, errors.New(fmt.Sprintf("Unsupported data type for flag: %v", flag.Name))
+	}
 }
