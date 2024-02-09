@@ -121,6 +121,12 @@ func MakeRootCmd() (*cobra.Command, error) {
 	}
 	rootCmd.AddCommand(operationLoginCmd)
 
+	operationUpdateCmd, err := makeOperationUpdateCmd()
+	if err != nil {
+		return nil, err
+	}
+	rootCmd.AddCommand(operationUpdateCmd)
+
 	operationGroupAPIKeysCmd, err := makeOperationGroupAPIKeysCmd()
 	if err != nil {
 		return nil, err
