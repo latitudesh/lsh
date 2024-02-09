@@ -2,6 +2,7 @@ package cli
 
 import (
 	"github.com/latitudesh/lsh/client/servers"
+	"github.com/latitudesh/lsh/internal/api/resource"
 	"github.com/latitudesh/lsh/internal/cmdflag"
 	"github.com/latitudesh/lsh/internal/operation"
 	"github.com/latitudesh/lsh/internal/prompt"
@@ -38,17 +39,19 @@ func (o *CreateServerOperation) Register() (*cobra.Command, error) {
 }
 
 func (o *CreateServerOperation) PromptAttributes(attributes interface{}) {
+	server := resource.NewServerResource()
+
 	p := prompt.New(
 		prompt.NewInputText("project", "Project"),
 		prompt.NewInputText("hostname", "Hostname"),
-		prompt.NewInputSelect("operating_system", "Operating System", o.supportedOperatingSystems()),
-		prompt.NewInputSelect("plan", "Plan", o.supportedPlans()),
-		prompt.NewInputSelect("billing", "Billing", o.supportedBillingTypes()),
-		prompt.NewInputSelect("site", "Site", o.supportedSites()),
+		prompt.NewInputSelect("operating_system", "Operating System", server.SupportedOperatingSystems),
+		prompt.NewInputSelect("plan", "Plan", server.SupportedPlans),
+		prompt.NewInputSelect("billing", "Billing", server.SupportedBillingTypes),
+		prompt.NewInputSelect("site", "Site", server.SupportedSites),
 		prompt.NewInputText("ipxe_url", "iPXE URL"),
 		prompt.NewInputList("ssh_keys", "SSH Keys"),
 		prompt.NewInputText("user_data", "User Data"),
-		prompt.NewInputSelect("raid", "RAID Level", o.supportedRAIDLevels()),
+		prompt.NewInputSelect("raid", "RAID Level", server.SupportedRAIDLevels),
 	)
 
 	p.Run(attributes)
@@ -154,74 +157,4 @@ func (o *CreateServerOperation) run(cmd *cobra.Command, args []string) error {
 		utils.Render(response.GetData())
 	}
 	return nil
-}
-
-func (o *CreateServerOperation) supportedOperatingSystems() []string {
-	return []string{
-		"ipxe",
-		"windows_server_2019_std_v1",
-		"ubuntu_22_04_x64_lts",
-		"debian_11",
-		"rockylinux_8",
-		"debian_10",
-		"rhel8",
-		"centos_7_4_x64",
-		"centos_8_x64",
-		"ubuntu_20_04_x64_lts",
-		"debian_12",
-		"ubuntu22_ml_in_a_box",
-		"windows2022",
-	}
-}
-
-func (o *CreateServerOperation) supportedPlans() []string {
-	return []string{
-		"c2-large-x86",
-		"c2-medium-x86",
-		"c2-small-x86",
-		"c3-large-x86",
-		"c3-medium-x86",
-		"c3-small-x86",
-		"c3-xlarge-x86",
-		"g3-large-x86",
-		"g3-medium-x86",
-		"g3-small-x86",
-		"g3-xlarge-x86",
-		"m3-large-x86",
-		"s2-small-x86",
-		"s3-large-x86",
-	}
-}
-
-func (o *CreateServerOperation) supportedSites() []string {
-	return []string{
-		"ASH",
-		"BGT",
-		"BUE",
-		"CHI",
-		"DAL",
-		"FRA",
-		"LAX",
-		"LON",
-		"MEX",
-		"MEX2",
-		"MIA",
-		"MIA2",
-		"NYC",
-		"SAN",
-		"SAN2",
-		"SAO",
-		"SAO2",
-		"SYD",
-		"TYO",
-		"TYO2",
-	}
-}
-
-func (o *CreateServerOperation) supportedBillingTypes() []string {
-	return []string{"hourly", "monthly", "yearly"}
-}
-
-func (o *CreateServerOperation) supportedRAIDLevels() []string {
-	return []string{"raid-0", "raid-1"}
 }

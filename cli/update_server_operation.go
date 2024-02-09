@@ -5,6 +5,7 @@ import (
 
 	"github.com/go-openapi/swag"
 	"github.com/latitudesh/lsh/client/servers"
+	"github.com/latitudesh/lsh/internal/api/resource"
 	"github.com/latitudesh/lsh/internal/cmdflag"
 	"github.com/latitudesh/lsh/internal/operation"
 	"github.com/latitudesh/lsh/internal/prompt"
@@ -49,9 +50,11 @@ func (o *UpdateServerOperation) promptID(bodyData interface{}) {
 }
 
 func (o *UpdateServerOperation) PromptAttributes(attributes interface{}) {
+	server := resource.NewServerResource()
+
 	p := prompt.New(
 		prompt.NewInputText("hostname", "Hostname"),
-		prompt.NewInputSelect("billing", "Billing", []string{"SKIP", "hourly", "monthly", "yearly"}),
+		prompt.NewInputSelect("billing", "Billing", server.SupportedBillingTypes),
 	)
 
 	p.Run(attributes)
