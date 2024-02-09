@@ -66,19 +66,19 @@ func (o *UpdateServerOperation) registerFlags(cmd *cobra.Command) {
 	schema := &cmdflag.FlagsSchema{
 		{
 			Name:         "id",
-			Label:        "The Server Id (Required).",
+			Description:  "The Server Id (Required).",
 			DefaultValue: "",
 			Type:         "string",
 		},
 		{
 			Name:         "hostname",
-			Label:        "",
+			Description:  "",
 			DefaultValue: "",
 			Type:         "string",
 		},
 		{
 			Name:         "billing",
-			Label:        "",
+			Description:  "",
 			DefaultValue: "",
 			Type:         "string",
 		},
