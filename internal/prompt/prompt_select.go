@@ -34,7 +34,7 @@ func (p *InputSelect) AssignValue(attributes interface{}) {
 		_, value, err := prompt.Run()
 
 		if err != nil {
-			fmt.Printf("Prompt failed %v\n", err)
+			fmt.Printf("Failed to read input: %v\n", err)
 			os.Exit(1)
 		}
 
