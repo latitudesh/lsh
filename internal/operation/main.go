@@ -29,7 +29,7 @@ func AssignResourceID(o Operation, params interface{}) error {
 func AssignBodyAttributes(o Operation, attributes interface{}) error {
 	flags := o.GetFlags()
 
-	for _, v := range flags.Schema {
+	for _, v := range *flags.Schema {
 		if v.Name == "id" {
 			continue
 		}

@@ -1,6 +1,8 @@
 package cmdflag
 
-import "github.com/spf13/pflag"
+import (
+	"github.com/spf13/pflag"
+)
 
 type FlagSchema struct {
 	Name         string
@@ -13,12 +15,14 @@ type FlagSchema struct {
 type FlagsSchema []FlagSchema
 
 type Flags struct {
-	Schema  FlagsSchema
+	Schema  *FlagsSchema
 	FlagSet *pflag.FlagSet
 }
 
-func (f *Flags) Register(s FlagsSchema) {
-	for _, v := range s {
+func (f *Flags) Register(s *FlagsSchema) {
+	f.Schema = s
+
+	for _, v := range *f.Schema {
 		switch v.Type {
 		case "string":
 			if defaultValue, ok := v.DefaultValue.(string); ok {
@@ -37,5 +41,6 @@ func (f *Flags) Register(s FlagsSchema) {
 }
 
 func (f *Flags) ResourceIDFlagName() string {
-	return f.Schema[0].Name
+	schema := *f.Schema
+	return schema[0].Name
 }

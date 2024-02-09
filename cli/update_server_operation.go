@@ -57,7 +57,7 @@ func (o *UpdateServerOperation) PromptAttributes(attributes interface{}) {
 func (o *UpdateServerOperation) registerFlags(cmd *cobra.Command) {
 	o.Flags = cmdflag.Flags{FlagSet: cmd.Flags()}
 
-	schema := cmdflag.FlagsSchema{
+	schema := &cmdflag.FlagsSchema{
 		{
 			Name:         "id",
 			Label:        "The Server Id (Required).",
@@ -102,6 +102,8 @@ func (o *UpdateServerOperation) run(cmd *cobra.Command, args []string) error {
 	params := servers.NewUpdateServerParams()
 	operation.AssignResourceID(o, params)
 	operation.AssignBodyAttributes(o, params.Body.Data.Attributes)
+
+	params.Body.Data.ID = params.ID
 
 	if dryRun {
 		logDebugf("dry-run flag specified. Skip sending request.")

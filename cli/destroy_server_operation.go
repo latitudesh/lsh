@@ -55,7 +55,7 @@ func (o *DestroyServerOperation) GetFlags() cmdflag.Flags {
 func (o *DestroyServerOperation) registerFlags(cmd *cobra.Command) {
 	o.Flags = cmdflag.Flags{FlagSet: cmd.Flags()}
 
-	schema := cmdflag.FlagsSchema{
+	schema := &cmdflag.FlagsSchema{
 		{
 			Name:         "id",
 			Description:  "Required. The server ID",

@@ -23,8 +23,6 @@ func NewInputText(name, label string) *InputText {
 func (p *InputText) AssignValue(attributes interface{}) {
 	currentValue := utils.GetFieldValue(attributes, p.Name).String()
 
-	fmt.Println(p.Name, currentValue)
-
 	if currentValue == "" {
 		prompt := promptui.Prompt{
 			Label: p.Label,

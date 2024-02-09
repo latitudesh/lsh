@@ -68,7 +68,7 @@ type UpdateServerParams struct {
 	// Body.
 	Body UpdateServerBody
 
-	ID string
+	ID string `json:"id"`
 
 	timeout    time.Duration
 	Context    context.Context

@@ -57,7 +57,7 @@ func (o *CreateServerOperation) PromptAttributes(attributes interface{}) {
 func (o *CreateServerOperation) registerFlags(cmd *cobra.Command) {
 	o.Flags = cmdflag.Flags{FlagSet: cmd.Flags()}
 
-	schema := cmdflag.FlagsSchema{
+	schema := &cmdflag.FlagsSchema{
 		{
 			Name:         "hostname",
 			Description:  "The server hostname",
