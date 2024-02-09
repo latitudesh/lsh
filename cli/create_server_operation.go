@@ -8,23 +8,12 @@ import (
 	"github.com/latitudesh/lsh/internal/utils"
 
 	"github.com/spf13/cobra"
-	"github.com/spf13/pflag"
 )
 
-type CreateServerOperation struct {
-	FlagsSchema      cmdflag.FlagsSchema
-	Name             string
-	ShortDescription string
-	FlagSet          *pflag.FlagSet
-}
-
 func makeOperationServersCreateServerCmd() (*cobra.Command, error) {
-	o := DestroyServerOperation{
-		Name:             "create",
-		ShortDescription: "Deploy a new server.",
-	}
+	operation := CreateServerOperation{}
 
-	cmd, err := o.Register()
+	cmd, err := operation.Register()
 	if err != nil {
 		return nil, err
 	}
@@ -32,14 +21,18 @@ func makeOperationServersCreateServerCmd() (*cobra.Command, error) {
 	return cmd, nil
 }
 
+type CreateServerOperation struct {
+	Flags cmdflag.Flags
+}
+
 func (o *CreateServerOperation) Register() (*cobra.Command, error) {
 	cmd := &cobra.Command{
-		Use:   o.Name,
-		Short: o.ShortDescription,
+		Use:   "create",
+		Short: "Deploy a new server.",
 		RunE:  o.run,
 	}
 
-	o.RegisterFlags(cmd)
+	o.registerFlags(cmd)
 
 	return cmd, nil
 }
@@ -61,8 +54,10 @@ func (o *CreateServerOperation) PromptAttributes(attributes interface{}) {
 	p.Run(attributes)
 }
 
-func (o *CreateServerOperation) RegisterFlags(cmd *cobra.Command) {
-	o.FlagsSchema = cmdflag.FlagsSchema{
+func (o *CreateServerOperation) registerFlags(cmd *cobra.Command) {
+	o.Flags = cmdflag.Flags{FlagSet: cmd.Flags()}
+
+	schema := cmdflag.FlagsSchema{
 		{
 			Name:         "hostname",
 			Description:  "The server hostname",
@@ -124,22 +119,14 @@ func (o *CreateServerOperation) RegisterFlags(cmd *cobra.Command) {
 		},
 	}
 
-	o.FlagsSchema.Register(o.FlagSet)
+	o.Flags.Register(schema)
 }
 
-func (o *CreateServerOperation) GetFlagsDefinition() cmdflag.FlagsSchema {
-	return o.FlagsSchema
+func (o *CreateServerOperation) GetFlags() cmdflag.Flags {
+	return o.Flags
 }
 
 func (o *CreateServerOperation) PromptID(params interface{}) {
-}
-
-func (o *CreateServerOperation) ResourceIDFlag() cmdflag.FlagSchema {
-	return o.FlagsSchema[0]
-}
-
-func (o *CreateServerOperation) GetFlagSet() *pflag.FlagSet {
-	return o.FlagSet
 }
 
 func (o *CreateServerOperation) run(cmd *cobra.Command, args []string) error {

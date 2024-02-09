@@ -12,21 +12,30 @@ type FlagSchema struct {
 
 type FlagsSchema []FlagSchema
 
-func (f *FlagsSchema) Register(flagset *pflag.FlagSet) {
-	for _, v := range *f {
+type Flags struct {
+	Schema  FlagsSchema
+	FlagSet *pflag.FlagSet
+}
+
+func (f *Flags) Register(s FlagsSchema) {
+	for _, v := range s {
 		switch v.Type {
 		case "string":
 			if defaultValue, ok := v.DefaultValue.(string); ok {
-				flagset.String(v.Name, defaultValue, v.Description)
+				f.FlagSet.String(v.Name, defaultValue, v.Description)
 			}
 		case "stringSlice":
 			if defaultValue, ok := v.DefaultValue.([]string); ok {
-				flagset.StringSlice(v.Name, defaultValue, v.Description)
+				f.FlagSet.StringSlice(v.Name, defaultValue, v.Description)
 			}
 		case "int64":
 			if defaultValue, ok := v.DefaultValue.(int64); ok {
-				flagset.Int64(v.Name, defaultValue, v.Description)
+				f.FlagSet.Int64(v.Name, defaultValue, v.Description)
 			}
 		}
 	}
+}
+
+func (f *Flags) ResourceIDFlagName() string {
+	return f.Schema[0].Name
 }

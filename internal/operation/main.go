@@ -3,28 +3,23 @@ package operation
 import (
 	"github.com/latitudesh/lsh/internal/cmdflag"
 	"github.com/latitudesh/lsh/internal/utils"
-	"github.com/spf13/cobra"
-	"github.com/spf13/pflag"
 )
 
 type Operation interface {
-	GetFlagSet() *pflag.FlagSet
-	GetFlagsDefinition() cmdflag.FlagsSchema
-	RegisterFlags(cmd *cobra.Command)
-	ResourceIDFlag() cmdflag.FlagSchema
+	GetFlags() cmdflag.Flags
 	PromptID(params interface{})
 	PromptAttributes(attributes interface{})
 }
 
 func AssignResourceID(o Operation, params interface{}) error {
-	flagSet := o.GetFlagSet()
-	idFlag := o.ResourceIDFlag()
-	id, err := flagSet.GetString(idFlag.Name)
+	flags := o.GetFlags()
+	idFlagName := flags.ResourceIDFlagName()
+	id, err := flags.FlagSet.GetString(idFlagName)
 	if err != nil {
 		return err
 	}
 
-	utils.AssignValue(params, idFlag.Name, id)
+	utils.AssignValue(params, idFlagName, id)
 
 	o.PromptID(params)
 
@@ -32,17 +27,16 @@ func AssignResourceID(o Operation, params interface{}) error {
 }
 
 func AssignBodyAttributes(o Operation, attributes interface{}) error {
-	flagSet := o.GetFlagSet()
-	flags := o.GetFlagsDefinition()
+	flags := o.GetFlags()
 
-	for _, v := range flags {
+	for _, v := range flags.Schema {
 		if v.Name == "id" {
 			continue
 		}
 
 		switch v.Type {
 		case "string":
-			value, err := flagSet.GetString(v.Name)
+			value, err := flags.FlagSet.GetString(v.Name)
 
 			if err != nil {
 				return err
@@ -50,7 +44,7 @@ func AssignBodyAttributes(o Operation, attributes interface{}) error {
 
 			utils.AssignValue(attributes, v.Name, value)
 		case "stringSlice":
-			value, err := flagSet.GetStringSlice(v.Name)
+			value, err := flags.FlagSet.GetStringSlice(v.Name)
 
 			if err != nil {
 				return err
@@ -58,7 +52,7 @@ func AssignBodyAttributes(o Operation, attributes interface{}) error {
 
 			utils.AssignValue(attributes, v.Name, value)
 		case "int64":
-			value, err := flagSet.GetInt64(v.Name)
+			value, err := flags.FlagSet.GetInt64(v.Name)
 
 			if err != nil {
 				return err

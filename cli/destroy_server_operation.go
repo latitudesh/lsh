@@ -8,30 +8,33 @@ import (
 	"github.com/latitudesh/lsh/internal/utils"
 
 	"github.com/spf13/cobra"
-	"github.com/spf13/pflag"
 )
 
-type DestroyServerOperation struct {
-	Name             string
-	ShortDescription string
-	FlagsSchema      cmdflag.FlagsSchema
-	FlagSet          *pflag.FlagSet
-}
+func makeOperationServersDestroyServerCmd() (*cobra.Command, error) {
+	operation := DestroyServerOperation{}
 
-func (o *DestroyServerOperation) Register() (*cobra.Command, error) {
-	cmd := &cobra.Command{
-		Use:   o.Name,
-		Short: o.ShortDescription,
-		RunE:  o.run,
+	cmd, err := operation.Register()
+	if err != nil {
+		return nil, err
 	}
-
-	o.RegisterFlags(cmd)
 
 	return cmd, nil
 }
 
-func (o *DestroyServerOperation) ResourceIDFlag() cmdflag.FlagSchema {
-	return o.FlagsSchema[0]
+type DestroyServerOperation struct {
+	Flags cmdflag.Flags
+}
+
+func (o *DestroyServerOperation) Register() (*cobra.Command, error) {
+	cmd := &cobra.Command{
+		Use:   "destroy",
+		Short: "Remove a server.",
+		RunE:  o.run,
+	}
+
+	o.registerFlags(cmd)
+
+	return cmd, nil
 }
 
 func (o *DestroyServerOperation) PromptID(params interface{}) {
@@ -45,31 +48,14 @@ func (o *DestroyServerOperation) PromptID(params interface{}) {
 func (o *DestroyServerOperation) PromptAttributes(attributes interface{}) {
 }
 
-func (o *DestroyServerOperation) GetFlagsDefinition() cmdflag.FlagsSchema {
-	return o.FlagsSchema
+func (o *DestroyServerOperation) GetFlags() cmdflag.Flags {
+	return o.Flags
 }
 
-func (o *DestroyServerOperation) GetFlagSet() *pflag.FlagSet {
-	return o.FlagSet
-}
+func (o *DestroyServerOperation) registerFlags(cmd *cobra.Command) {
+	o.Flags = cmdflag.Flags{FlagSet: cmd.Flags()}
 
-func makeOperationServersDestroyServerCmd() (*cobra.Command, error) {
-	o := DestroyServerOperation{
-		Name:             "destroy",
-		ShortDescription: "Remove a server.",
-	}
-
-	cmd, err := o.Register()
-	if err != nil {
-		return nil, err
-	}
-
-	return cmd, nil
-}
-
-func (o *DestroyServerOperation) RegisterFlags(cmd *cobra.Command) {
-	o.FlagSet = cmd.Flags()
-	o.FlagsSchema = cmdflag.FlagsSchema{
+	schema := cmdflag.FlagsSchema{
 		{
 			Name:         "id",
 			Description:  "Required. The server ID",
@@ -78,7 +64,7 @@ func (o *DestroyServerOperation) RegisterFlags(cmd *cobra.Command) {
 		},
 	}
 
-	o.FlagsSchema.Register(o.FlagSet)
+	o.Flags.Register(schema)
 }
 
 func (o *DestroyServerOperation) run(cmd *cobra.Command, args []string) error {
