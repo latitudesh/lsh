@@ -1,6 +1,9 @@
 package cli
 
 import (
+	"fmt"
+
+	"github.com/go-openapi/swag"
 	"github.com/latitudesh/lsh/client/servers"
 	"github.com/latitudesh/lsh/internal/cmdflag"
 	"github.com/latitudesh/lsh/internal/operation"
@@ -48,7 +51,7 @@ func (o *UpdateServerOperation) promptID(bodyData interface{}) {
 func (o *UpdateServerOperation) PromptAttributes(attributes interface{}) {
 	p := prompt.New(
 		prompt.NewInputText("hostname", "Hostname"),
-		prompt.NewInputSelect("billing", "Billing", []string{"hourly", "monthly", "yearly"}),
+		prompt.NewInputSelect("billing", "Billing", []string{"SKIP", "hourly", "monthly", "yearly"}),
 	)
 
 	p.Run(attributes)
@@ -104,6 +107,11 @@ func (o *UpdateServerOperation) run(cmd *cobra.Command, args []string) error {
 	operation.AssignBodyAttributes(o, params.Body.Data.Attributes)
 
 	params.Body.Data.ID = params.ID
+
+	if swag.IsZero(*params.Body.Data.Attributes) {
+		fmt.Println("Skipped action: no params provided")
+		return nil
+	}
 
 	if dryRun {
 		logDebugf("dry-run flag specified. Skip sending request.")

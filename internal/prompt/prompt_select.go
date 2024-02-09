@@ -38,6 +38,10 @@ func (p *InputSelect) AssignValue(attributes interface{}) {
 			os.Exit(1)
 		}
 
+		if value == "SKIP" {
+			return
+		}
+
 		utils.AssignValue(attributes, p.Name, value)
 	}
 }

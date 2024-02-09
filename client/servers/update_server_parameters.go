@@ -162,7 +162,7 @@ func (o *UpdateServerParams) WriteToRequest(r runtime.ClientRequest, reg strfmt.
 		return err
 	}
 
-	if err := r.SetPathParam("id", o.ID); err != nil {
+	if err := r.SetPathParam("server_id", o.ID); err != nil {
 		return err
 	}
 
