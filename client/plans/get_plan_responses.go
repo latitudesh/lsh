@@ -4,19 +4,14 @@ package plans
 // Editing this file might prove futile when you re-run the swagger generate command
 
 import (
-	"encoding/json"
 	"fmt"
 	"io"
 
 	"github.com/go-openapi/runtime"
 	"github.com/go-openapi/strfmt"
-	"github.com/go-openapi/swag"
-	"github.com/spf13/viper"
 
 	apierrors "github.com/latitudesh/lsh/internal/api/errors"
-	"github.com/latitudesh/lsh/internal/output"
-	"github.com/latitudesh/lsh/internal/output/table"
-	tablerows "github.com/latitudesh/lsh/internal/output/table/rows"
+	"github.com/latitudesh/lsh/internal/renderer"
 	"github.com/latitudesh/lsh/models"
 )
 
@@ -107,53 +102,8 @@ func (o *GetPlanOK) GetPayload() *models.Plan {
 	return o.Payload
 }
 
-type GetPlanTableRow struct {
-	ID          string `json:"id,omitempty"`
-	Slug        string `json:"slug,omitempty"`
-	Features    string `json:"features,omitempty"`
-	InStock     string `json:"in_stock,omitempty"`
-	AvailableIn string `json:"available_in,omitempty"`
-	CPU         string `json:"cpu,omitempty"`
-	Memory      string `json:"memory,omitempty"`
-	Drives      string `json:"drives,omitempty"`
-	NIC         string `json:"nic,omitempty"`
-}
-
-func (o *GetPlanOK) Render() {
-	formatAsJSON := viper.GetBool("json")
-
-	if formatAsJSON {
-		o.RenderJSON()
-		return
-	}
-
-	formatOutputFlag := viper.GetString("output")
-
-	switch formatOutputFlag {
-	case "json":
-		o.RenderJSON()
-	case "table":
-		o.RenderTable()
-	default:
-		fmt.Println("Unsupported output format")
-	}
-}
-
-func (o *GetPlanOK) RenderJSON() {
-	if !swag.IsZero(o) && !swag.IsZero(o.Payload) {
-		JSONString, err := json.Marshal(o.Payload)
-		if err != nil {
-			fmt.Println("Could not decode the result as JSON.")
-		}
-
-		output.RenderJSON(JSONString)
-	}
-}
-
-func (o *GetPlanOK) RenderTable() {
-	data := []*models.PlanData{o.Payload.Data}
-	rows := tablerows.CreatePlanRows(data)
-	table.Render(rows)
+func (o *GetPlanOK) GetData() []renderer.ResponseData {
+	return []renderer.ResponseData{o.Payload.Data}
 }
 
 func (o *GetPlanOK) readResponse(response runtime.ClientResponse, consumer runtime.Consumer, formats strfmt.Registry) error {

@@ -13,6 +13,7 @@ import (
 	"github.com/go-openapi/strfmt"
 	"github.com/go-openapi/swag"
 	"github.com/go-openapi/validate"
+	"github.com/latitudesh/lsh/internal/output/table"
 )
 
 // BandwidthPlan bandwidth plan
@@ -158,6 +159,41 @@ func (m *BandwidthPlan) UnmarshalBinary(b []byte) error {
 	}
 	*m = res
 	return nil
+}
+
+func (m *BandwidthPlan) TableRow() table.Row {
+	attr := m.Attributes
+
+	return table.Row{
+		"id": table.Cell{
+			Label: "ID",
+			Value: table.String(m.ID),
+		},
+		"region": table.Cell{
+			Label: "Region",
+			Value: table.String(attr.Region),
+		},
+		"locations": table.Cell{
+			Label: "Locations",
+			Value: table.StringList(attr.Locations, ", "),
+		},
+		"usd_price_hour": table.Cell{
+			Label: "USD/Hour",
+			Value: table.Int(attr.Pricing.Usd.Hourly),
+		},
+		"usd_price_month": table.Cell{
+			Label: "USD/Month",
+			Value: table.Int(attr.Pricing.Usd.Monthly),
+		},
+		"brl_price_hour": table.Cell{
+			Label: "BRL/Hour",
+			Value: table.Int(attr.Pricing.Brl.Hourly),
+		},
+		"brl_price_month": table.Cell{
+			Label: "BRL/Month",
+			Value: table.Int(attr.Pricing.Brl.Monthly),
+		},
+	}
 }
 
 // BandwidthPlanAttributes bandwidth plan attributes

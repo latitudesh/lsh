@@ -4,19 +4,14 @@ package plans
 // Editing this file might prove futile when you re-run the swagger generate command
 
 import (
-	"encoding/json"
 	"fmt"
 	"io"
 
 	"github.com/go-openapi/runtime"
 	"github.com/go-openapi/strfmt"
-	"github.com/go-openapi/swag"
-	"github.com/spf13/viper"
 
 	apierrors "github.com/latitudesh/lsh/internal/api/errors"
-	"github.com/latitudesh/lsh/internal/output"
-	"github.com/latitudesh/lsh/internal/output/table"
-	tablerows "github.com/latitudesh/lsh/internal/output/table/rows"
+	"github.com/latitudesh/lsh/internal/renderer"
 	"github.com/latitudesh/lsh/models"
 )
 
@@ -101,45 +96,14 @@ func (o *GetBandwidthPlansOK) GetPayload() *models.BandwidthPlans {
 	return o.Payload
 }
 
-func (o *GetBandwidthPlansOK) Render() {
-	formatAsJSON := viper.GetBool("json")
+func (o *GetBandwidthPlansOK) GetData() []renderer.ResponseData {
+	var data []renderer.ResponseData
 
-	if formatAsJSON {
-		o.RenderJSON()
-		return
+	for _, v := range o.Payload.Data {
+		data = append(data, v)
 	}
 
-	formatOutputFlag := viper.GetString("output")
-
-	switch formatOutputFlag {
-	case "json":
-		o.RenderJSON()
-	case "table":
-		o.RenderTable()
-	default:
-		fmt.Println("Unsupported output format")
-	}
-}
-
-func (o *GetBandwidthPlansOK) RenderJSON() {
-	if !swag.IsZero(o) && !swag.IsZero(o.Payload) {
-		JSONString, err := json.Marshal(o.Payload)
-		if err != nil {
-			fmt.Println("Could not decode the result as JSON.")
-		}
-
-		output.RenderJSON(JSONString)
-	}
-}
-
-func (o *GetBandwidthPlansOK) RenderTable() {
-	if len(o.Payload.Data) == 0 {
-		table.RenderEmptyState("No results found.")
-		return
-	}
-
-	rows := tablerows.CreateBandwidthPlanRows(o.Payload.Data)
-	table.Render(rows)
+	return data
 }
 
 func (o *GetBandwidthPlansOK) readResponse(response runtime.ClientResponse, consumer runtime.Consumer, formats strfmt.Registry) error {

@@ -4,19 +4,14 @@ package ssh_keys
 // Editing this file might prove futile when you re-run the swagger generate command
 
 import (
-	"encoding/json"
 	"fmt"
 	"io"
 
 	"github.com/go-openapi/runtime"
 	"github.com/go-openapi/strfmt"
-	"github.com/go-openapi/swag"
-	"github.com/spf13/viper"
 
 	apierrors "github.com/latitudesh/lsh/internal/api/errors"
-	"github.com/latitudesh/lsh/internal/output"
-	"github.com/latitudesh/lsh/internal/output/table"
-	tablerows "github.com/latitudesh/lsh/internal/output/table/rows"
+	"github.com/latitudesh/lsh/internal/renderer"
 	"github.com/latitudesh/lsh/models"
 )
 
@@ -107,45 +102,14 @@ func (o *GetProjectSSHKeysOK) GetPayload() *models.SSHKey {
 	return o.Payload
 }
 
-func (o *GetProjectSSHKeysOK) Render() {
-	formatAsJSON := viper.GetBool("json")
+func (o *GetProjectSSHKeysOK) GetData() []renderer.ResponseData {
+	var data []renderer.ResponseData
 
-	if formatAsJSON {
-		o.RenderJSON()
-		return
+	for _, v := range o.Payload.Data {
+		data = append(data, v)
 	}
 
-	formatOutputFlag := viper.GetString("output")
-
-	switch formatOutputFlag {
-	case "json":
-		o.RenderJSON()
-	case "table":
-		o.RenderTable()
-	default:
-		fmt.Println("Unsupported output format")
-	}
-}
-
-func (o *GetProjectSSHKeysOK) RenderJSON() {
-	if !swag.IsZero(o) && !swag.IsZero(o.Payload) {
-		JSONString, err := json.Marshal(o.Payload)
-		if err != nil {
-			fmt.Println("Could not decode the result as JSON.")
-		}
-
-		output.RenderJSON(JSONString)
-	}
-}
-
-func (o *GetProjectSSHKeysOK) RenderTable() {
-	if len(o.Payload.Data) == 0 {
-		table.RenderEmptyState("No results found.")
-		return
-	}
-
-	rows := tablerows.CreateSSHKeyRows(o.Payload.Data)
-	table.Render(rows)
+	return data
 }
 
 func (o *GetProjectSSHKeysOK) readResponse(response runtime.ClientResponse, consumer runtime.Consumer, formats strfmt.Registry) error {

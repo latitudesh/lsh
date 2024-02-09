@@ -151,7 +151,7 @@ func (o *CreateServerOperation) run(cmd *cobra.Command, args []string) error {
 	}
 
 	if !debug {
-		response.Render()
+		utils.Render(response.GetData())
 	}
 	return nil
 }
