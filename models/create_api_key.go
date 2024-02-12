@@ -264,7 +264,7 @@ type CreateAPIKeyDataAttributes struct {
 
 	// Name of the API Key
 	// Required: true
-	Name *string `json:"name"`
+	Name string `json:"name"`
 }
 
 // Validate validates this create API key data attributes
