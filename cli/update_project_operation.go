@@ -120,8 +120,6 @@ func (o *UpdateProjectOperation) run(cmd *cobra.Command, args []string) error {
 
 	params.Body.Data.ID = params.IDOrSlug
 
-	utils.PrintJSON(params)
-
 	if swag.IsZero(*params.Body.Data.Attributes) {
 		fmt.Println("Skipped action: no params provided")
 		return nil

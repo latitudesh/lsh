@@ -100,8 +100,6 @@ func (o *CreateProjectOperation) run(cmd *cobra.Command, args []string) error {
 	params := projects.NewCreateProjectParams()
 	operation.AssignBodyAttributes(o, params.Body.Data.Attributes)
 
-	utils.PrintJSON(params)
-
 	if dryRun {
 
 		logDebugf("dry-run flag specified. Skip sending request.")
