@@ -53,16 +53,18 @@ func (o *UpdateAPIKeyOperation) registerFlags(cmd *cobra.Command) {
 
 	schema := &cmdflag.FlagsSchema{
 		{
-			Name:         "id",
-			Description:  "ID",
-			DefaultValue: "",
-			Type:         "string",
+			Name:             "id",
+			Description:      "ID",
+			DefaultValue:     "",
+			Type:             "string",
+			RequestParamType: cmdflag.PathParam,
 		},
 		{
-			Name:         "name",
-			Description:  "Name of the API Key",
-			DefaultValue: "",
-			Type:         "string",
+			Name:             "name",
+			Description:      "Name of the API Key",
+			DefaultValue:     "",
+			Type:             "string",
+			RequestParamType: cmdflag.BodyParam,
 		},
 	}
 
@@ -73,7 +75,7 @@ func (o *UpdateAPIKeyOperation) GetFlags() cmdflag.Flags {
 	return o.Flags
 }
 
-func (o *UpdateAPIKeyOperation) PromptID(params interface{}) {
+func (o *UpdateAPIKeyOperation) PromptQueryParams(params interface{}) {
 	p := prompt.New(
 		prompt.NewInputText("id", "ID from the API Key you want to update"),
 	)
@@ -88,7 +90,7 @@ func (o *UpdateAPIKeyOperation) run(cmd *cobra.Command, args []string) error {
 	}
 
 	params := api_keys.NewUpdateAPIKeyParams()
-	operation.AssignResourceID(o, params)
+	operation.AssignPathParams(o, params)
 	operation.AssignBodyAttributes(o, params.Body.Data.Attributes)
 	params.Body.Data.ID = params.ID
 

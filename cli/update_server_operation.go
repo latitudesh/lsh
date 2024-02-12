@@ -57,22 +57,25 @@ func (o *UpdateServerOperation) registerFlags(cmd *cobra.Command) {
 
 	schema := &cmdflag.FlagsSchema{
 		{
-			Name:         "id",
-			Description:  "The Server Id (Required).",
-			DefaultValue: "",
-			Type:         "string",
+			Name:             "id",
+			Description:      "The Server Id (Required).",
+			DefaultValue:     "",
+			Type:             "string",
+			RequestParamType: cmdflag.PathParam,
 		},
 		{
-			Name:         "hostname",
-			Description:  "",
-			DefaultValue: "",
-			Type:         "string",
+			Name:             "hostname",
+			Description:      "",
+			DefaultValue:     "",
+			Type:             "string",
+			RequestParamType: cmdflag.BodyParam,
 		},
 		{
-			Name:         "billing",
-			Description:  "",
-			DefaultValue: "",
-			Type:         "string",
+			Name:             "billing",
+			Description:      "",
+			DefaultValue:     "",
+			Type:             "string",
+			RequestParamType: cmdflag.BodyParam,
 		},
 	}
 
@@ -83,7 +86,7 @@ func (o *UpdateServerOperation) GetFlags() cmdflag.Flags {
 	return o.Flags
 }
 
-func (o *UpdateServerOperation) PromptID(params interface{}) {
+func (o *UpdateServerOperation) PromptQueryParams(params interface{}) {
 	p := prompt.New(
 		prompt.NewInputText("id", "ID from the Server you want to update"),
 	)
@@ -98,7 +101,7 @@ func (o *UpdateServerOperation) run(cmd *cobra.Command, args []string) error {
 	}
 
 	params := servers.NewUpdateServerParams()
-	operation.AssignResourceID(o, params)
+	operation.AssignPathParams(o, params)
 	operation.AssignBodyAttributes(o, params.Body.Data.Attributes)
 
 	params.Body.Data.ID = params.ID

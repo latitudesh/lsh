@@ -62,34 +62,39 @@ func (o *UpdateProjectOperation) registerFlags(cmd *cobra.Command) {
 
 	schema := &cmdflag.FlagsSchema{
 		{
-			Name:         "id_or_slug",
-			Description:  "Required. The project ID or Slug",
-			DefaultValue: "",
-			Type:         "string",
+			Name:             "id_or_slug",
+			Description:      "Required. The project ID or Slug",
+			DefaultValue:     "",
+			Type:             "string",
+			RequestParamType: cmdflag.PathParam,
 		},
 		{
-			Name:         "name",
-			Description:  "The project name. Must be unique.",
-			DefaultValue: "",
-			Type:         "string",
+			Name:             "name",
+			Description:      "The project name. Must be unique.",
+			DefaultValue:     "",
+			Type:             "string",
+			RequestParamType: cmdflag.BodyParam,
 		},
 		{
-			Name:         "bandwidth_alert",
-			Description:  "Enable Bandwidth Alert",
-			DefaultValue: false,
-			Type:         "bool",
+			Name:             "bandwidth_alert",
+			Description:      "Enable Bandwidth Alert",
+			DefaultValue:     false,
+			Type:             "bool",
+			RequestParamType: cmdflag.BodyParam,
 		},
 		{
-			Name:         "description",
-			Description:  "The project description",
-			DefaultValue: "",
-			Type:         "string",
+			Name:             "description",
+			Description:      "The project description",
+			DefaultValue:     "",
+			Type:             "string",
+			RequestParamType: cmdflag.BodyParam,
 		},
 		{
-			Name:         "environment",
-			Description:  `Enum: ["Development","Staging","Production"].`,
-			DefaultValue: "",
-			Type:         "string",
+			Name:             "environment",
+			Description:      `Enum: ["Development","Staging","Production"].`,
+			DefaultValue:     "",
+			Type:             "string",
+			RequestParamType: cmdflag.BodyParam,
 		},
 	}
 
@@ -100,7 +105,7 @@ func (o *UpdateProjectOperation) GetFlags() cmdflag.Flags {
 	return o.Flags
 }
 
-func (o *UpdateProjectOperation) PromptID(params interface{}) {
+func (o *UpdateProjectOperation) PromptQueryParams(params interface{}) {
 	p := prompt.New(
 		prompt.NewInputText("id_or_slug", "ID or Slug from the Project you want to update"),
 	)
@@ -115,7 +120,7 @@ func (o *UpdateProjectOperation) run(cmd *cobra.Command, args []string) error {
 	}
 
 	params := projects.NewUpdateProjectParams()
-	operation.AssignResourceID(o, params)
+	operation.AssignPathParams(o, params)
 	operation.AssignBodyAttributes(o, params.Body.Data.Attributes)
 
 	params.Body.Data.ID = params.IDOrSlug

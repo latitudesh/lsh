@@ -50,10 +50,11 @@ func (o *CreateAPIKeyOperation) registerFlags(cmd *cobra.Command) {
 
 	schema := &cmdflag.FlagsSchema{
 		{
-			Name:         "name",
-			Description:  "Name of the API Key",
-			DefaultValue: "",
-			Type:         "string",
+			Name:             "name",
+			Description:      "Name of the API Key",
+			DefaultValue:     "",
+			Type:             "string",
+			RequestParamType: cmdflag.BodyParam,
 		},
 	}
 
@@ -64,7 +65,7 @@ func (o *CreateAPIKeyOperation) GetFlags() cmdflag.Flags {
 	return o.Flags
 }
 
-func (o *CreateAPIKeyOperation) PromptID(params interface{}) {
+func (o *CreateAPIKeyOperation) PromptQueryParams(params interface{}) {
 }
 
 func (o *CreateAPIKeyOperation) run(cmd *cobra.Command, args []string) error {

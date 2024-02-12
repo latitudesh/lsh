@@ -37,7 +37,7 @@ func (o *DestroyServerOperation) Register() (*cobra.Command, error) {
 	return cmd, nil
 }
 
-func (o *DestroyServerOperation) PromptID(params interface{}) {
+func (o *DestroyServerOperation) PromptQueryParams(params interface{}) {
 	p := prompt.New(
 		prompt.NewInputText("id", "ID from the Server you want to destroy"),
 	)
@@ -57,10 +57,11 @@ func (o *DestroyServerOperation) registerFlags(cmd *cobra.Command) {
 
 	schema := &cmdflag.FlagsSchema{
 		{
-			Name:         "id",
-			Description:  "Required. The server ID",
-			DefaultValue: "",
-			Type:         "string",
+			Name:             "id",
+			Description:      "Required. The server ID",
+			DefaultValue:     "",
+			Type:             "string",
+			RequestParamType: cmdflag.PathParam,
 		},
 	}
 
@@ -74,7 +75,7 @@ func (o *DestroyServerOperation) run(cmd *cobra.Command, args []string) error {
 	}
 
 	params := servers.NewDestroyServerParams()
-	operation.AssignResourceID(o, params)
+	operation.AssignPathParams(o, params)
 
 	if dryRun {
 		logDebugf("dry-run flag specified. Skip sending request.")

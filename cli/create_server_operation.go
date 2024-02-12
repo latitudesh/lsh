@@ -62,64 +62,74 @@ func (o *CreateServerOperation) registerFlags(cmd *cobra.Command) {
 
 	schema := &cmdflag.FlagsSchema{
 		{
-			Name:         "hostname",
-			Description:  "The server hostname",
-			DefaultValue: "",
-			Type:         "string",
+			Name:             "hostname",
+			Description:      "The server hostname",
+			DefaultValue:     "",
+			Type:             "string",
+			RequestParamType: cmdflag.BodyParam,
 		},
 		{
-			Name:         "billing",
-			Description:  "The server billing type. Accepts 'hourly', 'monthly' or 'yearly'.",
-			DefaultValue: "",
-			Type:         "string",
+			Name:             "billing",
+			Description:      "The server billing type. Accepts 'hourly', 'monthly' or 'yearly'.",
+			DefaultValue:     "",
+			Type:             "string",
+			RequestParamType: cmdflag.BodyParam,
 		},
 		{
-			Name:         "ipxe_url",
-			Description:  "URL where iPXE script is stored on, necessary for custom image deployments.This attribute is required when iPXE is selected as operating system.",
-			DefaultValue: "",
-			Type:         "string",
+			Name:             "ipxe_url",
+			Description:      "URL where iPXE script is stored on, necessary for custom image deployments.This attribute is required when iPXE is selected as operating system.",
+			DefaultValue:     "",
+			Type:             "string",
+			RequestParamType: cmdflag.BodyParam,
 		},
 		{
-			Name:         "operating_system",
-			Description:  `Enum: ["ipxe","windows_server_2019_std_v1","ubuntu_22_04_x64_lts","debian_11","rockylinux_8","debian_10","rhel8","centos_7_4_x64","centos_8_x64","ubuntu_20_04_x64_lts","debian_12","ubuntu22_ml_in_a_box","windows2022"]. The operating system for the new server`,
-			DefaultValue: "",
-			Type:         "string",
+			Name:             "operating_system",
+			Description:      `Enum: ["ipxe","windows_server_2019_std_v1","ubuntu_22_04_x64_lts","debian_11","rockylinux_8","debian_10","rhel8","centos_7_4_x64","centos_8_x64","ubuntu_20_04_x64_lts","debian_12","ubuntu22_ml_in_a_box","windows2022"]. The operating system for the new server`,
+			DefaultValue:     "",
+			Type:             "string",
+			RequestParamType: cmdflag.BodyParam,
 		},
 		{
-			Name:         "plan",
-			Description:  `Enum: ["c2-large-x86","c2-medium-x86","c2-small-x86","c3-large-x86","c3-medium-x86","c3-small-x86","c3-xlarge-x86","g3-large-x86","g3-medium-x86","g3-small-x86","g3-xlarge-x86","m3-large-x86","s2-small-x86","s3-large-x86"]. The plan to choose server from`,
-			DefaultValue: "",
-			Type:         "string",
+			Name:             "plan",
+			Description:      `Enum: ["c2-large-x86","c2-medium-x86","c2-small-x86","c3-large-x86","c3-medium-x86","c3-small-x86","c3-xlarge-x86","g3-large-x86","g3-medium-x86","g3-small-x86","g3-xlarge-x86","m3-large-x86","s2-small-x86","s3-large-x86"]. The plan to choose server from`,
+			DefaultValue:     "",
+			Type:             "string",
+			RequestParamType: cmdflag.BodyParam,
 		},
 		{
-			Name:         "project",
-			Description:  "The project (ID or Slug) to deploy the server",
-			DefaultValue: "",
-			Type:         "string",
+			Name:             "project",
+			Description:      "The project (ID or Slug) to deploy the server",
+			DefaultValue:     "",
+			Type:             "string",
+			RequestParamType: cmdflag.BodyParam,
 		},
 		{
-			Name:         "raid",
-			Description:  `Enum: ["raid-0","raid-1"]. RAID mode for the server`,
-			DefaultValue: "",
-			Type:         "string",
+			Name:             "raid",
+			Description:      `Enum: ["raid-0","raid-1"]. RAID mode for the server`,
+			DefaultValue:     "",
+			Type:             "string",
+			RequestParamType: cmdflag.BodyParam,
 		},
 		{
-			Name:         "site",
-			Description:  `Enum: ["ASH","BGT","BUE","CHI","DAL","FRA","LAX","LON","MEX","MEX2","MIA","MIA2","NYC","SAN","SAN2","SAO","SAO2","SYD","TYO","TYO2"]. The site to deploy the server`,
-			DefaultValue: "",
-			Type:         "string",
+			Name:             "site",
+			Description:      `Enum: ["ASH","BGT","BUE","CHI","DAL","FRA","LAX","LON","MEX","MEX2","MIA","MIA2","NYC","SAN","SAN2","SAO","SAO2","SYD","TYO","TYO2"]. The site to deploy the server`,
+			DefaultValue:     "",
+			Type:             "string",
+			RequestParamType: cmdflag.BodyParam,
 		},
 		{
-			Name:         "ssh_keys",
-			Description:  "The SSH Keys to set on the server",
-			DefaultValue: []string{},
-			Type:         "stringSlice",
+			Name:             "ssh_keys",
+			Description:      "The SSH Keys to set on the server",
+			DefaultValue:     []string{},
+			Type:             "stringSlice",
+			RequestParamType: cmdflag.BodyParam,
 		},
 		{
-			Name:         "user_data",
-			Description:  "User data to set on the server",
-			DefaultValue: int64(0),
-			Type:         "int64",
+			Name:             "user_data",
+			Description:      "User data to set on the server",
+			DefaultValue:     int64(0),
+			Type:             "int64",
+			RequestParamType: cmdflag.BodyParam,
 		},
 	}
 
@@ -130,7 +140,7 @@ func (o *CreateServerOperation) GetFlags() cmdflag.Flags {
 	return o.Flags
 }
 
-func (o *CreateServerOperation) PromptID(params interface{}) {
+func (o *CreateServerOperation) PromptQueryParams(params interface{}) {
 }
 
 func (o *CreateServerOperation) run(cmd *cobra.Command, args []string) error {

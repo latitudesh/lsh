@@ -56,28 +56,32 @@ func (o *CreateProjectOperation) registerFlags(cmd *cobra.Command) {
 
 	schema := &cmdflag.FlagsSchema{
 		{
-			Name:         "name",
-			Description:  "Required. The project name. Must be unique.",
-			DefaultValue: "",
-			Type:         "string",
+			Name:             "name",
+			Description:      "Required. The project name. Must be unique.",
+			DefaultValue:     "",
+			Type:             "string",
+			RequestParamType: cmdflag.BodyParam,
 		},
 		{
-			Name:         "description",
-			Description:  "The project description",
-			DefaultValue: "",
-			Type:         "string",
+			Name:             "description",
+			Description:      "The project description",
+			DefaultValue:     "",
+			Type:             "string",
+			RequestParamType: cmdflag.BodyParam,
 		},
 		{
-			Name:         "environment",
-			Description:  `Enum: ["Development","Staging","Production"].`,
-			DefaultValue: "",
-			Type:         "string",
+			Name:             "environment",
+			Description:      `Enum: ["Development","Staging","Production"].`,
+			DefaultValue:     "",
+			Type:             "string",
+			RequestParamType: cmdflag.BodyParam,
 		},
 		{
-			Name:         "provisioning_type",
-			Description:  `Enum: ["reserved","on_demand"]. Required. The provisioning type of the project. Default: on_demand`,
-			DefaultValue: "",
-			Type:         "string",
+			Name:             "provisioning_type",
+			Description:      `Enum: ["reserved","on_demand"]. Required. The provisioning type of the project. Default: on_demand`,
+			DefaultValue:     "",
+			Type:             "string",
+			RequestParamType: cmdflag.BodyParam,
 		},
 	}
 
@@ -88,7 +92,7 @@ func (o *CreateProjectOperation) GetFlags() cmdflag.Flags {
 	return o.Flags
 }
 
-func (o *CreateProjectOperation) PromptID(params interface{}) {
+func (o *CreateProjectOperation) PromptQueryParams(params interface{}) {
 }
 
 func (o *CreateProjectOperation) run(cmd *cobra.Command, args []string) error {

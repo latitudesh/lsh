@@ -45,10 +45,11 @@ func (o *DeleteAPIKeyOperation) registerFlags(cmd *cobra.Command) {
 
 	schema := &cmdflag.FlagsSchema{
 		{
-			Name:         "id",
-			Description:  "ID",
-			DefaultValue: "",
-			Type:         "string",
+			Name:             "id",
+			Description:      "ID",
+			DefaultValue:     "",
+			Type:             "string",
+			RequestParamType: cmdflag.PathParam,
 		},
 	}
 
@@ -59,7 +60,7 @@ func (o *DeleteAPIKeyOperation) GetFlags() cmdflag.Flags {
 	return o.Flags
 }
 
-func (o *DeleteAPIKeyOperation) PromptID(params interface{}) {
+func (o *DeleteAPIKeyOperation) PromptQueryParams(params interface{}) {
 	p := prompt.New(
 		prompt.NewInputText("id", "ID from the API Key you want to delete"),
 	)
@@ -74,7 +75,7 @@ func (o *DeleteAPIKeyOperation) run(cmd *cobra.Command, args []string) error {
 	}
 
 	params := api_keys.NewUpdateAPIKeyParams()
-	operation.AssignResourceID(o, params)
+	operation.AssignPathParams(o, params)
 
 	if dryRun {
 		logDebugf("dry-run flag specified. Skip sending request.")

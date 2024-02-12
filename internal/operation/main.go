@@ -12,21 +12,25 @@ import (
 
 type Operation interface {
 	GetFlags() cmdflag.Flags
-	PromptID(params interface{})
+	PromptQueryParams(params interface{})
 	PromptAttributes(attributes interface{})
 }
 
-func AssignResourceID(o Operation, params interface{}) error {
+func AssignPathParams(o Operation, params interface{}) error {
 	flags := o.GetFlags()
-	idFlagName := flags.ResourceIDFlagName()
-	id, err := flags.FlagSet.GetString(idFlagName)
-	if err != nil {
-		return err
+
+	for _, v := range flags.PathParamsFlags() {
+		value, err := flags.FlagSet.GetString(v.Name)
+		if err != nil {
+			return err
+		}
+
+		if !swag.IsZero(value) {
+			utils.AssignValue(params, v.Name, value)
+		}
 	}
 
-	utils.AssignValue(params, idFlagName, id)
-
-	o.PromptID(params)
+	o.PromptQueryParams(params)
 
 	return nil
 }
@@ -35,7 +39,7 @@ func AssignBodyAttributes(o Operation, attributes interface{}) error {
 	flags := o.GetFlags()
 
 	for _, v := range *flags.Schema {
-		if v.Name == "id" {
+		if v.RequestParamType != cmdflag.BodyParam {
 			continue
 		}
 
