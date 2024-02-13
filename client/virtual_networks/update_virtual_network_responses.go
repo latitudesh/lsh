@@ -231,15 +231,8 @@ type UpdateVirtualNetworkParamsBodyData struct {
 
 	// attributes
 	Attributes *UpdateVirtualNetworkParamsBodyDataAttributes `json:"attributes,omitempty"`
-
-	// id
-	// Required: true
-	ID *string `json:"id"`
-
-	// type
-	// Required: true
-	// Enum: [virtual_network]
-	Type *string `json:"type"`
+	ID         string                                        `json:"id"`
+	Type       *string                                       `json:"type"`
 }
 
 // Validate validates this update virtual network params body data

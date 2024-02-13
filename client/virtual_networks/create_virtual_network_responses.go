@@ -371,18 +371,9 @@ CreateVirtualNetworkParamsBodyDataAttributes create virtual network params body 
 swagger:model CreateVirtualNetworkParamsBodyDataAttributes
 */
 type CreateVirtualNetworkParamsBodyDataAttributes struct {
-
-	// description
-	// Required: true
-	Description *string `json:"description"`
-
-	// Project ID or slug
-	// Required: true
-	Project *string `json:"project"`
-
-	// Site ID or slug
-	// Enum: [ASH BGT BUE CHI DAL FRA LAX LON MEX MEX2 MIA MIA2 NYC SAN SAN2 SAO SAO2 SYD TYO TYO2]
-	Site string `json:"site,omitempty"`
+	Description string `json:"description"`
+	Project     string `json:"project"`
+	Site        string `json:"site,omitempty"`
 }
 
 // Validate validates this create virtual network params body data attributes

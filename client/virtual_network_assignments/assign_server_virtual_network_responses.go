@@ -384,11 +384,11 @@ type AssignServerVirtualNetworkParamsBodyDataAttributes struct {
 
 	// server id
 	// Required: true
-	ServerID string `json:"server_id"`
+	ServerID string `json:"server"`
 
 	// virtual network id
 	// Required: true
-	VirtualNetworkID string `json:"virtual_network_id"`
+	VirtualNetworkID string `json:"virtual_network"`
 }
 
 // Validate validates this assign server virtual network params body data attributes
