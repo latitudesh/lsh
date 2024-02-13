@@ -12,6 +12,7 @@ import (
 
 type Operation interface {
 	GetFlags() cmdflag.Flags
+	PromptPathParams(params interface{})
 	PromptQueryParams(params interface{})
 	PromptAttributes(attributes interface{})
 }
@@ -20,6 +21,25 @@ func AssignPathParams(o Operation, params interface{}) error {
 	flags := o.GetFlags()
 
 	for _, v := range flags.PathParamsFlags() {
+		value, err := flags.FlagSet.GetString(v.Name)
+		if err != nil {
+			return err
+		}
+
+		if !swag.IsZero(value) {
+			utils.AssignValue(params, v.Name, value)
+		}
+	}
+
+	o.PromptPathParams(params)
+
+	return nil
+}
+
+func AssignQueryParams(o Operation, params interface{}) error {
+	flags := o.GetFlags()
+
+	for _, v := range flags.QueryParamsFlags() {
 		value, err := flags.FlagSet.GetString(v.Name)
 		if err != nil {
 			return err

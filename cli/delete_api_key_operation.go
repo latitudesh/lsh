@@ -60,12 +60,15 @@ func (o *DeleteAPIKeyOperation) GetFlags() cmdflag.Flags {
 	return o.Flags
 }
 
-func (o *DeleteAPIKeyOperation) PromptQueryParams(params interface{}) {
+func (o *DeleteAPIKeyOperation) PromptPathParams(params interface{}) {
 	p := prompt.New(
 		prompt.NewInputText("id", "ID from the API Key you want to delete"),
 	)
 
 	p.Run(params)
+}
+
+func (o *DeleteAPIKeyOperation) PromptQueryParams(params interface{}) {
 }
 
 func (o *DeleteAPIKeyOperation) run(cmd *cobra.Command, args []string) error {

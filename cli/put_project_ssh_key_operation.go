@@ -45,13 +45,16 @@ func (o *UpdateSSHKeyOperation) PromptAttributes(attributes interface{}) {
 	p.Run(attributes)
 }
 
-func (o *UpdateSSHKeyOperation) PromptQueryParams(params interface{}) {
+func (o *UpdateSSHKeyOperation) PromptPathParams(params interface{}) {
 	p := prompt.New(
 		prompt.NewInputText("id", "ID from the SSH Key you want to update"),
 		prompt.NewInputText("project", "Project ID or Slug"),
 	)
 
 	p.Run(params)
+}
+
+func (o *UpdateSSHKeyOperation) PromptQueryParams(params interface{}) {
 }
 
 func (o *UpdateSSHKeyOperation) registerFlags(cmd *cobra.Command) {

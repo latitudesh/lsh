@@ -75,12 +75,15 @@ func (o *UpdateVirtualNetworkOperation) GetFlags() cmdflag.Flags {
 	return o.Flags
 }
 
-func (o *UpdateVirtualNetworkOperation) PromptQueryParams(params interface{}) {
+func (o *UpdateVirtualNetworkOperation) PromptPathParams(params interface{}) {
 	p := prompt.New(
 		prompt.NewInputText("id", "Virtual Network ID"),
 	)
 
 	p.Run(params)
+}
+
+func (o *UpdateVirtualNetworkOperation) PromptQueryParams(params interface{}) {
 }
 
 func (o *UpdateVirtualNetworkOperation) run(cmd *cobra.Command, args []string) error {

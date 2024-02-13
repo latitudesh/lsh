@@ -140,6 +140,9 @@ func (o *CreateServerOperation) GetFlags() cmdflag.Flags {
 	return o.Flags
 }
 
+func (o *CreateServerOperation) PromptPathParams(params interface{}) {
+}
+
 func (o *CreateServerOperation) PromptQueryParams(params interface{}) {
 }
 

@@ -75,12 +75,15 @@ func (o *UpdateAPIKeyOperation) GetFlags() cmdflag.Flags {
 	return o.Flags
 }
 
-func (o *UpdateAPIKeyOperation) PromptQueryParams(params interface{}) {
+func (o *UpdateAPIKeyOperation) PromptPathParams(params interface{}) {
 	p := prompt.New(
 		prompt.NewInputText("id", "ID from the API Key you want to update"),
 	)
 
 	p.Run(params)
+}
+
+func (o *UpdateAPIKeyOperation) PromptQueryParams(params interface{}) {
 }
 
 func (o *UpdateAPIKeyOperation) run(cmd *cobra.Command, args []string) error {

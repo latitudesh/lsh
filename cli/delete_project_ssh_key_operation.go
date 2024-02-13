@@ -40,13 +40,16 @@ func (o *DeleteSSHKeyOperation) Register() (*cobra.Command, error) {
 func (o *DeleteSSHKeyOperation) PromptAttributes(attributes interface{}) {
 }
 
-func (o *DeleteSSHKeyOperation) PromptQueryParams(params interface{}) {
+func (o *DeleteSSHKeyOperation) PromptPathParams(params interface{}) {
 	p := prompt.New(
 		prompt.NewInputText("id", "ID from the SSH Key you want to update"),
 		prompt.NewInputText("project", "Project ID or Slug"),
 	)
 
 	p.Run(params)
+}
+
+func (o *DeleteSSHKeyOperation) PromptQueryParams(params interface{}) {
 }
 
 func (o *DeleteSSHKeyOperation) registerFlags(cmd *cobra.Command) {

@@ -86,12 +86,15 @@ func (o *UpdateServerOperation) GetFlags() cmdflag.Flags {
 	return o.Flags
 }
 
-func (o *UpdateServerOperation) PromptQueryParams(params interface{}) {
+func (o *UpdateServerOperation) PromptPathParams(params interface{}) {
 	p := prompt.New(
 		prompt.NewInputText("id", "ID from the Server you want to update"),
 	)
 
 	p.Run(params)
+}
+
+func (o *UpdateServerOperation) PromptQueryParams(params interface{}) {
 }
 
 func (o *UpdateServerOperation) run(cmd *cobra.Command, args []string) error {

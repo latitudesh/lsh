@@ -37,12 +37,15 @@ func (o *DeleteVirtualNetworkOperation) Register() (*cobra.Command, error) {
 	return cmd, nil
 }
 
-func (o *DeleteVirtualNetworkOperation) PromptQueryParams(params interface{}) {
+func (o *DeleteVirtualNetworkOperation) PromptPathParams(params interface{}) {
 	p := prompt.New(
 		prompt.NewInputText("id", "ID"),
 	)
 
 	p.Run(params)
+}
+
+func (o *DeleteVirtualNetworkOperation) PromptQueryParams(params interface{}) {
 }
 
 func (o *DeleteVirtualNetworkOperation) PromptAttributes(attributes interface{}) {

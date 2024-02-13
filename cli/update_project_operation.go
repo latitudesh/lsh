@@ -105,12 +105,15 @@ func (o *UpdateProjectOperation) GetFlags() cmdflag.Flags {
 	return o.Flags
 }
 
-func (o *UpdateProjectOperation) PromptQueryParams(params interface{}) {
+func (o *UpdateProjectOperation) PromptPathParams(params interface{}) {
 	p := prompt.New(
 		prompt.NewInputText("id_or_slug", "ID or Slug from the Project you want to update"),
 	)
 
 	p.Run(params)
+}
+
+func (o *UpdateProjectOperation) PromptQueryParams(params interface{}) {
 }
 
 func (o *UpdateProjectOperation) run(cmd *cobra.Command, args []string) error {

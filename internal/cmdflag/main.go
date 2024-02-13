@@ -64,3 +64,15 @@ func (f *Flags) PathParamsFlags() FlagsSchema {
 
 	return pathParamsFlags
 }
+
+func (f *Flags) QueryParamsFlags() FlagsSchema {
+	var queryParamsFlags FlagsSchema
+
+	for _, v := range *f.Schema {
+		if v.RequestParamType == QueryParam {
+			queryParamsFlags = append(queryParamsFlags, v)
+		}
+	}
+
+	return queryParamsFlags
+}

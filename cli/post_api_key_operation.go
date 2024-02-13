@@ -65,6 +65,9 @@ func (o *CreateAPIKeyOperation) GetFlags() cmdflag.Flags {
 	return o.Flags
 }
 
+func (o *CreateAPIKeyOperation) PromptPathParams(params interface{}) {
+}
+
 func (o *CreateAPIKeyOperation) PromptQueryParams(params interface{}) {
 }
 

@@ -37,12 +37,15 @@ func (o *DeleteProjectOperation) Register() (*cobra.Command, error) {
 	return cmd, nil
 }
 
-func (o *DeleteProjectOperation) PromptQueryParams(params interface{}) {
+func (o *DeleteProjectOperation) PromptPathParams(params interface{}) {
 	p := prompt.New(
 		prompt.NewInputText("id_or_slug", "ID or Slug from the Project you want to destroy"),
 	)
 
 	p.Run(params)
+}
+
+func (o *DeleteProjectOperation) PromptQueryParams(params interface{}) {
 }
 
 func (o *DeleteProjectOperation) PromptAttributes(attributes interface{}) {

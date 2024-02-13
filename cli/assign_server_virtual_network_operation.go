@@ -73,6 +73,9 @@ func (o *CreateVirtualNetworkAssignmentOperation) GetFlags() cmdflag.Flags {
 	return o.Flags
 }
 
+func (o *CreateVirtualNetworkAssignmentOperation) PromptPathParams(params interface{}) {
+}
+
 func (o *CreateVirtualNetworkAssignmentOperation) PromptQueryParams(params interface{}) {
 }
 

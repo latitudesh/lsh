@@ -37,12 +37,15 @@ func (o *DestroyServerOperation) Register() (*cobra.Command, error) {
 	return cmd, nil
 }
 
-func (o *DestroyServerOperation) PromptQueryParams(params interface{}) {
+func (o *DestroyServerOperation) PromptPathParams(params interface{}) {
 	p := prompt.New(
 		prompt.NewInputText("id", "ID from the Server you want to destroy"),
 	)
 
 	p.Run(params)
+}
+
+func (o *DestroyServerOperation) PromptQueryParams(params interface{}) {
 }
 
 func (o *DestroyServerOperation) PromptAttributes(attributes interface{}) {

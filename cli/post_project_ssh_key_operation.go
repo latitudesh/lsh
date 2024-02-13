@@ -46,12 +46,15 @@ func (o *CreateSSHKeyOperation) PromptAttributes(attributes interface{}) {
 	p.Run(attributes)
 }
 
-func (o *CreateSSHKeyOperation) PromptQueryParams(params interface{}) {
+func (o *CreateSSHKeyOperation) PromptPathParams(params interface{}) {
 	p := prompt.New(
 		prompt.NewInputText("project", "ID or Slug from the project you want to add the SSH Key"),
 	)
 
 	p.Run(params)
+}
+
+func (o *CreateSSHKeyOperation) PromptQueryParams(params interface{}) {
 }
 
 func (o *CreateSSHKeyOperation) registerFlags(cmd *cobra.Command) {

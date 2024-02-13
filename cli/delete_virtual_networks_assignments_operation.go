@@ -62,12 +62,15 @@ func (o *DeleteVirtualNetworkAssignmentOperation) GetFlags() cmdflag.Flags {
 	return o.Flags
 }
 
-func (o *DeleteVirtualNetworkAssignmentOperation) PromptQueryParams(params interface{}) {
+func (o *DeleteVirtualNetworkAssignmentOperation) PromptPathParams(params interface{}) {
 	p := prompt.New(
 		prompt.NewInputText("id", "Virtual Network Assignment ID"),
 	)
 
 	p.Run(params)
+}
+
+func (o *DeleteVirtualNetworkAssignmentOperation) PromptQueryParams(params interface{}) {
 }
 
 func (o *DeleteVirtualNetworkAssignmentOperation) run(cmd *cobra.Command, args []string) error {
