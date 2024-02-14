@@ -49,7 +49,7 @@ func (o *CreateServerOperation) PromptAttributes(attributes interface{}) {
 		prompt.NewInputSelect("billing", "Billing", server.SupportedBillingTypes),
 		prompt.NewInputSelect("site", "Site", server.SupportedSites),
 		prompt.NewInputText("ipxe_url", "iPXE URL"),
-		prompt.NewInputList("ssh_keys", "SSH Keys"),
+		prompt.NewInputNumberList("ssh_keys", "SSH Keys"),
 		prompt.NewInputNumber("user_data", "User Data"),
 		prompt.NewInputSelect("raid", "RAID Level", server.SupportedRAIDLevels),
 	)
@@ -120,8 +120,8 @@ func (o *CreateServerOperation) registerFlags(cmd *cobra.Command) {
 		{
 			Name:         "ssh_keys",
 			Description:  "The SSH Keys to set on the server",
-			DefaultValue: []string{},
-			Type:         "stringSlice",
+			DefaultValue: []int64{},
+			Type:         "int64Slice",
 			Required:     false,
 		},
 		{
