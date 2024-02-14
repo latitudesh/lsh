@@ -153,7 +153,6 @@ func (o *CreateServerOperation) run(cmd *cobra.Command, args []string) error {
 	operation.AssignBodyAttributes(o, params.Body.Data.Attributes)
 
 	if dryRun {
-
 		logDebugf("dry-run flag specified. Skip sending request.")
 		return nil
 	}
