@@ -406,7 +406,7 @@ type CreateServerParamsBodyDataAttributes struct {
 	Site string `json:"site,omitempty"`
 
 	// SSH Keys to set on the server
-	SSHKeys []int64 `json:"ssh_keys,omitempty"`
+	SSHKeys []string `json:"ssh_keys,omitempty"`
 
 	// User data to set on the server
 	UserData int64 `json:"user_data,omitempty"`

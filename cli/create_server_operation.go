@@ -120,8 +120,8 @@ func (o *CreateServerOperation) registerFlags(cmd *cobra.Command) {
 		{
 			Name:         "ssh_keys",
 			Description:  "The SSH Keys to set on the server",
-			DefaultValue: []int64{},
-			Type:         "int64Slice",
+			DefaultValue: []string{},
+			Type:         "stringSlice",
 			Required:     false,
 		},
 		{

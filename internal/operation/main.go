@@ -72,17 +72,6 @@ func getFlagValue(flag cmdflag.FlagSchema, flagSet *pflag.FlagSet) (interface{},
 		return nil, nil
 	case "int64":
 		return flagSet.GetInt64(flag.Name)
-	case "int64Slice":
-		value, err := flagSet.GetInt64Slice(flag.Name)
-		if err != nil {
-			return nil, err
-		}
-
-		if len(value) > 0 {
-			return value, nil
-		}
-
-		return nil, nil
 	default:
 		return nil, errors.New(fmt.Sprintf("Unsupported data type for flag: %v", flag.Name))
 	}
