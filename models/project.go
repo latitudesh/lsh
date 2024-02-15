@@ -151,7 +151,7 @@ func (m *Project) TableRow() table.Row {
 			Value: table.String(attr.Team.Name),
 		},
 		"environment": table.Cell{
-			Label: "Plan",
+			Label: "Environment",
 			Value: table.String(attr.Environment),
 		},
 		"provisioning_type": table.Cell{
