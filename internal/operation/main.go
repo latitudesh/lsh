@@ -1,7 +1,6 @@
 package operation
 
 import (
-	"errors"
 	"fmt"
 
 	"github.com/go-openapi/swag"
@@ -75,6 +74,6 @@ func getFlagValue(flag cmdflag.FlagSchema, flagSet *pflag.FlagSet) (interface{},
 	case "bool":
 		return flagSet.GetBool(flag.Name)
 	default:
-		return nil, errors.New(fmt.Sprintf("Unsupported data type for flag: %v", flag.Name))
+		return nil, fmt.Errorf("unsupported data type for flag: %v", flag.Name)
 	}
 }
