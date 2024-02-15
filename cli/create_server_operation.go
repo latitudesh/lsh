@@ -49,7 +49,7 @@ func (o *CreateServerOperation) PromptAttributes(attributes interface{}) {
 		prompt.NewInputSelect("billing", "Billing", server.SupportedBillingTypes),
 		prompt.NewInputSelect("site", "Site", server.SupportedSites),
 		prompt.NewInputText("ipxe_url", "iPXE URL"),
-		prompt.NewInputNumberList("ssh_keys", "SSH Keys"),
+		prompt.NewInputStringList("ssh_keys", "SSH Keys"),
 		prompt.NewInputNumber("user_data", "User Data"),
 		prompt.NewInputSelect("raid", "RAID Level", server.SupportedRAIDLevels),
 	)

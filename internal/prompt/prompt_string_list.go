@@ -3,26 +3,25 @@ package prompt
 import (
 	"fmt"
 	"reflect"
-	"strconv"
 	"strings"
 
 	"github.com/latitudesh/lsh/internal/utils"
 	"github.com/manifoldco/promptui"
 )
 
-type InputNumberList struct {
+type InputStringList struct {
 	Name  string
 	Label string
 }
 
-func NewInputNumberList(name, label string) *InputNumberList {
-	return &InputNumberList{
+func NewInputStringList(name, label string) *InputStringList {
+	return &InputStringList{
 		Name:  name,
 		Label: label,
 	}
 }
 
-func (p *InputNumberList) AssignValue(attributes interface{}) {
+func (p *InputStringList) AssignValue(attributes interface{}) {
 	currentValue := utils.GetFieldValue(attributes, p.Name)
 
 	if currentValue.Kind() == reflect.Slice && currentValue.Len() == 0 {
@@ -39,18 +38,7 @@ func (p *InputNumberList) AssignValue(attributes interface{}) {
 			return
 		}
 
-		var numbers []int64
-
 		values := strings.Split(value, ",")
-		for _, v := range values {
-			number, err := strconv.Atoi(strings.TrimSpace(v))
-			if err != nil {
-				utils.Exit("Failed to read input", err)
-			}
-
-			numbers = append(numbers, int64(number))
-		}
-
-		utils.AssignValue(attributes, p.Name, numbers)
+		utils.AssignValue(attributes, p.Name, values)
 	}
 }
