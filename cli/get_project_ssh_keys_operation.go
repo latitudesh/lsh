@@ -37,7 +37,8 @@ func (o *ListSSHKeysOperation) Register() (*cobra.Command, error) {
 
 func (o *ListSSHKeysOperation) registerFlags(cmd *cobra.Command) {
 	o.QueryParamsFlags = cmdflag.Flags{
-		FlagSet: cmd.Flags(),
+		FlagSet:           cmd.Flags(),
+		PromptDescription: "Filter SSH Keys: (press ENTER to skip a filter)",
 	}
 
 	schema := &cmdflag.FlagsSchema{
