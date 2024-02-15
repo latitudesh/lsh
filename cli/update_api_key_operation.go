@@ -6,8 +6,6 @@ package cli
 import (
 	"github.com/latitudesh/lsh/client/api_keys"
 	"github.com/latitudesh/lsh/internal/cmdflag"
-	"github.com/latitudesh/lsh/internal/operation"
-	"github.com/latitudesh/lsh/internal/prompt"
 	"github.com/latitudesh/lsh/internal/utils"
 
 	"github.com/spf13/cobra"
@@ -25,7 +23,8 @@ func makeOperationAPIKeysUpdateAPIKeyCmd() (*cobra.Command, error) {
 }
 
 type UpdateAPIKeyOperation struct {
-	Flags cmdflag.Flags
+	PathParamFlags      cmdflag.Flags
+	BodyAttributesFlags cmdflag.Flags
 }
 
 func (o *UpdateAPIKeyOperation) Register() (*cobra.Command, error) {
@@ -40,50 +39,28 @@ func (o *UpdateAPIKeyOperation) Register() (*cobra.Command, error) {
 	return cmd, nil
 }
 
-func (o *UpdateAPIKeyOperation) PromptAttributes(attributes interface{}) {
-	p := prompt.New(
-		prompt.NewInputText("name", "Name of the API Key"),
-	)
-
-	p.Run(attributes)
-}
-
 func (o *UpdateAPIKeyOperation) registerFlags(cmd *cobra.Command) {
-	o.Flags = cmdflag.Flags{FlagSet: cmd.Flags()}
+	o.PathParamFlags = cmdflag.Flags{FlagSet: cmd.Flags()}
+	o.BodyAttributesFlags = cmdflag.Flags{FlagSet: cmd.Flags()}
 
-	schema := &cmdflag.FlagsSchema{
-		{
-			Name:             "id",
-			Description:      "ID",
-			DefaultValue:     "",
-			Type:             "string",
-			RequestParamType: cmdflag.PathParam,
-		},
-		{
-			Name:             "name",
-			Description:      "Name of the API Key",
-			DefaultValue:     "",
-			Type:             "string",
-			RequestParamType: cmdflag.BodyParam,
+	pathParamsSchema := &cmdflag.FlagsSchema{
+		&cmdflag.String{
+			Name:        "id",
+			Label:       "ID from the API Key you want to update",
+			Description: "ID",
 		},
 	}
 
-	o.Flags.Register(schema)
-}
+	bodyFlagsSchema := &cmdflag.FlagsSchema{
+		&cmdflag.String{
+			Name:        "name",
+			Label:       "Name of the API Key",
+			Description: "Name of the API Key",
+		},
+	}
 
-func (o *UpdateAPIKeyOperation) GetFlags() cmdflag.Flags {
-	return o.Flags
-}
-
-func (o *UpdateAPIKeyOperation) PromptPathParams(params interface{}) {
-	p := prompt.New(
-		prompt.NewInputText("id", "ID from the API Key you want to update"),
-	)
-
-	p.Run(params)
-}
-
-func (o *UpdateAPIKeyOperation) PromptQueryParams(params interface{}) {
+	o.PathParamFlags.Register(pathParamsSchema)
+	o.BodyAttributesFlags.Register(bodyFlagsSchema)
 }
 
 func (o *UpdateAPIKeyOperation) run(cmd *cobra.Command, args []string) error {
@@ -93,8 +70,8 @@ func (o *UpdateAPIKeyOperation) run(cmd *cobra.Command, args []string) error {
 	}
 
 	params := api_keys.NewUpdateAPIKeyParams()
-	operation.AssignPathParams(o, params)
-	operation.AssignBodyAttributes(o, params.Body.Data.Attributes)
+	o.PathParamFlags.AssignValues(params)
+	o.BodyAttributesFlags.AssignValues(params.Body.Data.Attributes)
 	params.Body.Data.ID = params.ID
 
 	if dryRun {

@@ -2,10 +2,7 @@ package cli
 
 import (
 	"github.com/latitudesh/lsh/client/projects"
-	"github.com/latitudesh/lsh/internal/api/resource"
 	"github.com/latitudesh/lsh/internal/cmdflag"
-	"github.com/latitudesh/lsh/internal/operation"
-	"github.com/latitudesh/lsh/internal/prompt"
 	"github.com/latitudesh/lsh/internal/utils"
 
 	"github.com/spf13/cobra"
@@ -23,7 +20,7 @@ func makeOperationProjectsCreateProjectCmd() (*cobra.Command, error) {
 }
 
 type CreateProjectOperation struct {
-	Flags cmdflag.Flags
+	BodyAttributesFlags cmdflag.Flags
 }
 
 func (o *CreateProjectOperation) Register() (*cobra.Command, error) {
@@ -38,64 +35,33 @@ func (o *CreateProjectOperation) Register() (*cobra.Command, error) {
 	return cmd, nil
 }
 
-func (o *CreateProjectOperation) PromptAttributes(attributes interface{}) {
-	project := resource.NewProjectResource()
-
-	p := prompt.New(
-		prompt.NewInputText("name", "Name"),
-		prompt.NewInputText("description", "Description"),
-		prompt.NewInputSelect("environment", "Environment", project.SupportedEnvironments),
-		prompt.NewInputSelect("provisioning_type", "Provisioning Type", project.SupportedProvisioningTypes),
-	)
-
-	p.Run(attributes)
-}
-
 func (o *CreateProjectOperation) registerFlags(cmd *cobra.Command) {
-	o.Flags = cmdflag.Flags{FlagSet: cmd.Flags()}
+	o.BodyAttributesFlags = cmdflag.Flags{FlagSet: cmd.Flags()}
 
 	schema := &cmdflag.FlagsSchema{
-		{
-			Name:             "name",
-			Description:      "Required. The project name. Must be unique.",
-			DefaultValue:     "",
-			Type:             "string",
-			RequestParamType: cmdflag.BodyParam,
+		&cmdflag.String{
+			Name:        "name",
+			Label:       "Name",
+			Description: "Required. The project name. Must be unique.",
 		},
-		{
-			Name:             "description",
-			Description:      "The project description",
-			DefaultValue:     "",
-			Type:             "string",
-			RequestParamType: cmdflag.BodyParam,
+		&cmdflag.String{
+			Name:        "description",
+			Label:       "Description",
+			Description: "The project description",
 		},
-		{
-			Name:             "environment",
-			Description:      `Enum: ["Development","Staging","Production"].`,
-			DefaultValue:     "",
-			Type:             "string",
-			RequestParamType: cmdflag.BodyParam,
+		&cmdflag.String{
+			Name:        "environment",
+			Label:       "Environment",
+			Description: `Enum: ["Development","Staging","Production"].`,
 		},
-		{
-			Name:             "provisioning_type",
-			Description:      `Enum: ["reserved","on_demand"]. Required. The provisioning type of the project. Default: on_demand`,
-			DefaultValue:     "",
-			Type:             "string",
-			RequestParamType: cmdflag.BodyParam,
+		&cmdflag.String{
+			Name:        "provisioning_type",
+			Label:       "Provisioning Type",
+			Description: `Enum: ["reserved","on_demand"]. Required. The provisioning type of the project. Default: on_demand`,
 		},
 	}
 
-	o.Flags.Register(schema)
-}
-
-func (o *CreateProjectOperation) GetFlags() cmdflag.Flags {
-	return o.Flags
-}
-
-func (o *CreateProjectOperation) PromptPathParams(params interface{}) {
-}
-
-func (o *CreateProjectOperation) PromptQueryParams(params interface{}) {
+	o.BodyAttributesFlags.Register(schema)
 }
 
 func (o *CreateProjectOperation) run(cmd *cobra.Command, args []string) error {
@@ -105,10 +71,9 @@ func (o *CreateProjectOperation) run(cmd *cobra.Command, args []string) error {
 	}
 
 	params := projects.NewCreateProjectParams()
-	operation.AssignBodyAttributes(o, params.Body.Data.Attributes)
+	o.BodyAttributesFlags.AssignValues(params.Body.Data.Attributes)
 
 	if dryRun {
-
 		logDebugf("dry-run flag specified. Skip sending request.")
 		return nil
 	}

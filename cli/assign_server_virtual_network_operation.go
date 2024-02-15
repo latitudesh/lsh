@@ -3,8 +3,6 @@ package cli
 import (
 	"github.com/latitudesh/lsh/client/virtual_network_assignments"
 	"github.com/latitudesh/lsh/internal/cmdflag"
-	"github.com/latitudesh/lsh/internal/operation"
-	"github.com/latitudesh/lsh/internal/prompt"
 	"github.com/latitudesh/lsh/internal/utils"
 
 	"github.com/spf13/cobra"
@@ -22,7 +20,7 @@ func makeOperationVirtualNetworkAssignmentsAssignServerVirtualNetworkCmd() (*cob
 }
 
 type CreateVirtualNetworkAssignmentOperation struct {
-	Flags cmdflag.Flags
+	BodyAttributesFlags cmdflag.Flags
 }
 
 func (o *CreateVirtualNetworkAssignmentOperation) Register() (*cobra.Command, error) {
@@ -37,46 +35,23 @@ func (o *CreateVirtualNetworkAssignmentOperation) Register() (*cobra.Command, er
 	return cmd, nil
 }
 
-func (o *CreateVirtualNetworkAssignmentOperation) PromptAttributes(attributes interface{}) {
-	p := prompt.New(
-		prompt.NewInputText("server", "Server ID"),
-		prompt.NewInputText("virtual_network", "Virtual Network ID"),
-	)
-
-	p.Run(attributes)
-}
-
 func (o *CreateVirtualNetworkAssignmentOperation) registerFlags(cmd *cobra.Command) {
-	o.Flags = cmdflag.Flags{FlagSet: cmd.Flags()}
+	o.BodyAttributesFlags = cmdflag.Flags{FlagSet: cmd.Flags()}
 
 	schema := &cmdflag.FlagsSchema{
-		{
-			Name:             "server",
-			Description:      "The Server ID (Required).",
-			DefaultValue:     "",
-			Type:             "string",
-			RequestParamType: cmdflag.BodyParam,
+		&cmdflag.String{
+			Name:        "server",
+			Label:       "Server ID",
+			Description: "The Server ID (Required).",
 		},
-		{
-			Name:             "virtual_network",
-			Description:      "The Virtual Network ID (Required).",
-			DefaultValue:     "",
-			Type:             "string",
-			RequestParamType: cmdflag.BodyParam,
+		&cmdflag.String{
+			Name:        "virtual_network",
+			Label:       "Virtual Network ID",
+			Description: "The Virtual Network ID (Required).",
 		},
 	}
 
-	o.Flags.Register(schema)
-}
-
-func (o *CreateVirtualNetworkAssignmentOperation) GetFlags() cmdflag.Flags {
-	return o.Flags
-}
-
-func (o *CreateVirtualNetworkAssignmentOperation) PromptPathParams(params interface{}) {
-}
-
-func (o *CreateVirtualNetworkAssignmentOperation) PromptQueryParams(params interface{}) {
+	o.BodyAttributesFlags.Register(schema)
 }
 
 func (o *CreateVirtualNetworkAssignmentOperation) run(cmd *cobra.Command, args []string) error {
@@ -86,7 +61,7 @@ func (o *CreateVirtualNetworkAssignmentOperation) run(cmd *cobra.Command, args [
 	}
 
 	params := virtual_network_assignments.NewAssignServerVirtualNetworkParams()
-	operation.AssignBodyAttributes(o, params.Body.Data.Attributes)
+	o.BodyAttributesFlags.AssignValues(params.Body.Data.Attributes)
 
 	if dryRun {
 		logDebugf("dry-run flag specified. Skip sending request.")

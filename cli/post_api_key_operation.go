@@ -3,8 +3,6 @@ package cli
 import (
 	"github.com/latitudesh/lsh/client/api_keys"
 	"github.com/latitudesh/lsh/internal/cmdflag"
-	"github.com/latitudesh/lsh/internal/operation"
-	"github.com/latitudesh/lsh/internal/prompt"
 	"github.com/latitudesh/lsh/internal/utils"
 
 	"github.com/spf13/cobra"
@@ -22,7 +20,7 @@ func makeOperationAPIKeysPostAPIKeyCmd() (*cobra.Command, error) {
 }
 
 type CreateAPIKeyOperation struct {
-	Flags cmdflag.Flags
+	BodyAttributesFlags cmdflag.Flags
 }
 
 func (o *CreateAPIKeyOperation) Register() (*cobra.Command, error) {
@@ -37,38 +35,18 @@ func (o *CreateAPIKeyOperation) Register() (*cobra.Command, error) {
 	return cmd, nil
 }
 
-func (o *CreateAPIKeyOperation) PromptAttributes(attributes interface{}) {
-	p := prompt.New(
-		prompt.NewInputText("name", "Name of the API Key"),
-	)
-
-	p.Run(attributes)
-}
-
 func (o *CreateAPIKeyOperation) registerFlags(cmd *cobra.Command) {
-	o.Flags = cmdflag.Flags{FlagSet: cmd.Flags()}
+	o.BodyAttributesFlags = cmdflag.Flags{FlagSet: cmd.Flags()}
 
 	schema := &cmdflag.FlagsSchema{
-		{
-			Name:             "name",
-			Description:      "Name of the API Key",
-			DefaultValue:     "",
-			Type:             "string",
-			RequestParamType: cmdflag.BodyParam,
+		&cmdflag.String{
+			Name:        "name",
+			Label:       "Name of the API Key",
+			Description: "Name of the API Key",
 		},
 	}
 
-	o.Flags.Register(schema)
-}
-
-func (o *CreateAPIKeyOperation) GetFlags() cmdflag.Flags {
-	return o.Flags
-}
-
-func (o *CreateAPIKeyOperation) PromptPathParams(params interface{}) {
-}
-
-func (o *CreateAPIKeyOperation) PromptQueryParams(params interface{}) {
+	o.BodyAttributesFlags.Register(schema)
 }
 
 func (o *CreateAPIKeyOperation) run(cmd *cobra.Command, args []string) error {
@@ -78,7 +56,7 @@ func (o *CreateAPIKeyOperation) run(cmd *cobra.Command, args []string) error {
 	}
 
 	params := api_keys.NewPostAPIKeyParams()
-	operation.AssignBodyAttributes(o, params.Body.Data.Attributes)
+	o.BodyAttributesFlags.AssignValues(params.Body.Data.Attributes)
 
 	if dryRun {
 		logDebugf("dry-run flag specified. Skip sending request.")

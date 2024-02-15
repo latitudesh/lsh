@@ -3,8 +3,6 @@ package cli
 import (
 	"github.com/latitudesh/lsh/client/servers"
 	"github.com/latitudesh/lsh/internal/cmdflag"
-	"github.com/latitudesh/lsh/internal/operation"
-	"github.com/latitudesh/lsh/internal/prompt"
 	"github.com/latitudesh/lsh/internal/utils"
 
 	"github.com/spf13/cobra"
@@ -22,7 +20,7 @@ func makeOperationServersDestroyServerCmd() (*cobra.Command, error) {
 }
 
 type DestroyServerOperation struct {
-	Flags cmdflag.Flags
+	PathParamFlags cmdflag.Flags
 }
 
 func (o *DestroyServerOperation) Register() (*cobra.Command, error) {
@@ -37,38 +35,18 @@ func (o *DestroyServerOperation) Register() (*cobra.Command, error) {
 	return cmd, nil
 }
 
-func (o *DestroyServerOperation) PromptPathParams(params interface{}) {
-	p := prompt.New(
-		prompt.NewInputText("id", "ID from the Server you want to destroy"),
-	)
-
-	p.Run(params)
-}
-
-func (o *DestroyServerOperation) PromptQueryParams(params interface{}) {
-}
-
-func (o *DestroyServerOperation) PromptAttributes(attributes interface{}) {
-}
-
-func (o *DestroyServerOperation) GetFlags() cmdflag.Flags {
-	return o.Flags
-}
-
 func (o *DestroyServerOperation) registerFlags(cmd *cobra.Command) {
-	o.Flags = cmdflag.Flags{FlagSet: cmd.Flags()}
+	o.PathParamFlags = cmdflag.Flags{FlagSet: cmd.Flags()}
 
 	schema := &cmdflag.FlagsSchema{
-		{
-			Name:             "id",
-			Description:      "Required. The server ID",
-			DefaultValue:     "",
-			Type:             "string",
-			RequestParamType: cmdflag.PathParam,
+		&cmdflag.String{
+			Name:        "id",
+			Label:       "ID from the Server you want to delete",
+			Description: "Required. The server ID",
 		},
 	}
 
-	o.Flags.Register(schema)
+	o.PathParamFlags.Register(schema)
 }
 
 func (o *DestroyServerOperation) run(cmd *cobra.Command, args []string) error {
@@ -78,7 +56,7 @@ func (o *DestroyServerOperation) run(cmd *cobra.Command, args []string) error {
 	}
 
 	params := servers.NewDestroyServerParams()
-	operation.AssignPathParams(o, params)
+	o.PathParamFlags.AssignValues(params)
 
 	if dryRun {
 		logDebugf("dry-run flag specified. Skip sending request.")

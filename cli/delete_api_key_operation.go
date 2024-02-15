@@ -3,8 +3,6 @@ package cli
 import (
 	"github.com/latitudesh/lsh/client/api_keys"
 	"github.com/latitudesh/lsh/internal/cmdflag"
-	"github.com/latitudesh/lsh/internal/operation"
-	"github.com/latitudesh/lsh/internal/prompt"
 	"github.com/latitudesh/lsh/internal/utils"
 
 	"github.com/spf13/cobra"
@@ -22,7 +20,7 @@ func makeOperationAPIKeysDeleteAPIKeyCmd() (*cobra.Command, error) {
 }
 
 type DeleteAPIKeyOperation struct {
-	Flags cmdflag.Flags
+	PathParamFlags cmdflag.Flags
 }
 
 func (o *DeleteAPIKeyOperation) Register() (*cobra.Command, error) {
@@ -37,38 +35,18 @@ func (o *DeleteAPIKeyOperation) Register() (*cobra.Command, error) {
 	return cmd, nil
 }
 
-func (o *DeleteAPIKeyOperation) PromptAttributes(attributes interface{}) {
-}
-
 func (o *DeleteAPIKeyOperation) registerFlags(cmd *cobra.Command) {
-	o.Flags = cmdflag.Flags{FlagSet: cmd.Flags()}
+	o.PathParamFlags = cmdflag.Flags{FlagSet: cmd.Flags()}
 
 	schema := &cmdflag.FlagsSchema{
-		{
-			Name:             "id",
-			Description:      "ID",
-			DefaultValue:     "",
-			Type:             "string",
-			RequestParamType: cmdflag.PathParam,
+		&cmdflag.String{
+			Name:        "id",
+			Label:       "ID from the API Key you want to delete",
+			Description: "ID",
 		},
 	}
 
-	o.Flags.Register(schema)
-}
-
-func (o *DeleteAPIKeyOperation) GetFlags() cmdflag.Flags {
-	return o.Flags
-}
-
-func (o *DeleteAPIKeyOperation) PromptPathParams(params interface{}) {
-	p := prompt.New(
-		prompt.NewInputText("id", "ID from the API Key you want to delete"),
-	)
-
-	p.Run(params)
-}
-
-func (o *DeleteAPIKeyOperation) PromptQueryParams(params interface{}) {
+	o.PathParamFlags.Register(schema)
 }
 
 func (o *DeleteAPIKeyOperation) run(cmd *cobra.Command, args []string) error {
@@ -78,7 +56,7 @@ func (o *DeleteAPIKeyOperation) run(cmd *cobra.Command, args []string) error {
 	}
 
 	params := api_keys.NewUpdateAPIKeyParams()
-	operation.AssignPathParams(o, params)
+	o.PathParamFlags.AssignValues(params)
 
 	if dryRun {
 		logDebugf("dry-run flag specified. Skip sending request.")

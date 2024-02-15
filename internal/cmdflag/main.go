@@ -1,78 +1,64 @@
 package cmdflag
 
 import (
+	"github.com/go-openapi/swag"
+	"github.com/latitudesh/lsh/internal/prompt"
+	"github.com/latitudesh/lsh/internal/utils"
 	"github.com/spf13/pflag"
 )
 
-type RequestParamType int64
-
-const (
-	PathParam RequestParamType = iota
-	QueryParam
-	BodyParam
-)
-
-type FlagSchema struct {
-	Name             string
-	Label            string
-	Description      string
-	DefaultValue     interface{}
-	Type             string
-	RequestParamType RequestParamType
+type FlagSchema interface {
+	Register(f *pflag.FlagSet)
+	GetValue() interface{}
+	GetName() string
+	Prompt() prompt.PromptInput
 }
 
 type FlagsSchema []FlagSchema
 
 type Flags struct {
-	Schema  *FlagsSchema
-	FlagSet *pflag.FlagSet
+	schema            *FlagsSchema
+	FlagSet           *pflag.FlagSet
+	InteractiveMode   bool
+	PromptDescription string
 }
 
 func (f *Flags) Register(s *FlagsSchema) {
-	f.Schema = s
+	f.schema = s
 
-	for _, v := range *f.Schema {
-		switch v.Type {
-		case "string":
-			if defaultValue, ok := v.DefaultValue.(string); ok {
-				f.FlagSet.String(v.Name, defaultValue, v.Description)
-			}
-		case "stringSlice":
-			if defaultValue, ok := v.DefaultValue.([]string); ok {
-				f.FlagSet.StringSlice(v.Name, defaultValue, v.Description)
-			}
-		case "int64":
-			if defaultValue, ok := v.DefaultValue.(int64); ok {
-				f.FlagSet.Int64(v.Name, defaultValue, v.Description)
-			}
-		case "bool":
-			if defaultValue, ok := v.DefaultValue.(bool); ok {
-				f.FlagSet.Bool(v.Name, defaultValue, v.Description)
-			}
-		}
+	f.InteractiveMode = true // TODO: allow users to enable/disable interactive mode
+
+	for _, v := range *s {
+		v.Register(f.FlagSet)
 	}
 }
 
-func (f *Flags) PathParamsFlags() FlagsSchema {
-	var pathParamsFlags FlagsSchema
+func (f *Flags) GetInputs() []prompt.PromptInput {
+	var inputs []prompt.PromptInput
 
-	for _, v := range *f.Schema {
-		if v.RequestParamType == PathParam {
-			pathParamsFlags = append(pathParamsFlags, v)
-		}
+	for _, v := range *f.schema {
+		inputs = append(inputs, v.Prompt())
 	}
 
-	return pathParamsFlags
+	return inputs
 }
 
-func (f *Flags) QueryParamsFlags() FlagsSchema {
-	var queryParamsFlags FlagsSchema
+func (f *Flags) AssignValues(params interface{}) error {
+	for _, v := range *f.schema {
+		value := v.GetValue()
 
-	for _, v := range *f.Schema {
-		if v.RequestParamType == QueryParam {
-			queryParamsFlags = append(queryParamsFlags, v)
+		if !swag.IsZero(value) {
+			utils.AssignValue(params, v.GetName(), value)
 		}
 	}
 
-	return queryParamsFlags
+	if f.InteractiveMode {
+		p := prompt.Prompt{
+			Description: f.PromptDescription,
+			Inputs:      f.GetInputs(),
+		}
+		p.Run(params)
+	}
+
+	return nil
 }

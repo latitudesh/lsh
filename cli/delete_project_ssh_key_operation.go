@@ -3,8 +3,6 @@ package cli
 import (
 	"github.com/latitudesh/lsh/client/ssh_keys"
 	"github.com/latitudesh/lsh/internal/cmdflag"
-	"github.com/latitudesh/lsh/internal/operation"
-	"github.com/latitudesh/lsh/internal/prompt"
 	"github.com/latitudesh/lsh/internal/utils"
 
 	"github.com/spf13/cobra"
@@ -22,7 +20,7 @@ func makeOperationSSHKeysDeleteProjectSSHKeyCmd() (*cobra.Command, error) {
 }
 
 type DeleteSSHKeyOperation struct {
-	Flags cmdflag.Flags
+	PathParamFlags cmdflag.Flags
 }
 
 func (o *DeleteSSHKeyOperation) Register() (*cobra.Command, error) {
@@ -37,46 +35,23 @@ func (o *DeleteSSHKeyOperation) Register() (*cobra.Command, error) {
 	return cmd, nil
 }
 
-func (o *DeleteSSHKeyOperation) PromptAttributes(attributes interface{}) {
-}
-
-func (o *DeleteSSHKeyOperation) PromptPathParams(params interface{}) {
-	p := prompt.New(
-		prompt.NewInputText("id", "ID from the SSH Key you want to update"),
-		prompt.NewInputText("project", "Project ID or Slug"),
-	)
-
-	p.Run(params)
-}
-
-func (o *DeleteSSHKeyOperation) PromptQueryParams(params interface{}) {
-}
-
 func (o *DeleteSSHKeyOperation) registerFlags(cmd *cobra.Command) {
-	o.Flags = cmdflag.Flags{FlagSet: cmd.Flags()}
+	o.PathParamFlags = cmdflag.Flags{FlagSet: cmd.Flags()}
 
 	schema := &cmdflag.FlagsSchema{
-		{
-			Name:             "id",
-			Description:      "ID from the SSH Key you want to update",
-			DefaultValue:     "",
-			Type:             "string",
-			RequestParamType: cmdflag.PathParam,
+		&cmdflag.String{
+			Name:        "id",
+			Label:       "ID from the SSH Key you want to update",
+			Description: "ID from the SSH Key you want to update",
 		},
-		{
-			Name:             "project",
-			Description:      "Project ID or Slug",
-			DefaultValue:     "",
-			Type:             "string",
-			RequestParamType: cmdflag.PathParam,
+		&cmdflag.String{
+			Name:        "project",
+			Label:       "Project ID or Slug",
+			Description: "Project ID or Slug",
 		},
 	}
 
-	o.Flags.Register(schema)
-}
-
-func (o *DeleteSSHKeyOperation) GetFlags() cmdflag.Flags {
-	return o.Flags
+	o.PathParamFlags.Register(schema)
 }
 
 func (o *DeleteSSHKeyOperation) run(cmd *cobra.Command, args []string) error {
@@ -86,7 +61,7 @@ func (o *DeleteSSHKeyOperation) run(cmd *cobra.Command, args []string) error {
 	}
 
 	params := ssh_keys.NewDeleteProjectSSHKeyParams()
-	operation.AssignPathParams(o, params)
+	o.PathParamFlags.AssignValues(params)
 
 	if dryRun {
 		logDebugf("dry-run flag specified. Skip sending request.")

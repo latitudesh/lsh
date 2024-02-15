@@ -9,8 +9,6 @@ import (
 	"github.com/latitudesh/lsh/client/projects"
 	"github.com/latitudesh/lsh/internal/api/resource"
 	"github.com/latitudesh/lsh/internal/cmdflag"
-	"github.com/latitudesh/lsh/internal/operation"
-	"github.com/latitudesh/lsh/internal/prompt"
 	"github.com/latitudesh/lsh/internal/utils"
 
 	"github.com/go-openapi/swag"
@@ -29,7 +27,8 @@ func makeOperationProjectsUpdateProjectCmd() (*cobra.Command, error) {
 }
 
 type UpdateProjectOperation struct {
-	Flags cmdflag.Flags
+	PathParamFlags      cmdflag.Flags
+	BodyAttributesFlags cmdflag.Flags
 }
 
 func (o *UpdateProjectOperation) Register() (*cobra.Command, error) {
@@ -44,73 +43,46 @@ func (o *UpdateProjectOperation) Register() (*cobra.Command, error) {
 	return cmd, nil
 }
 
-func (o *UpdateProjectOperation) PromptAttributes(attributes interface{}) {
+func (o *UpdateProjectOperation) registerFlags(cmd *cobra.Command) {
 	project := resource.NewProjectResource()
 
-	p := prompt.New(
-		prompt.NewInputText("name", "Name"),
-		prompt.NewInputText("description", "Description"),
-		prompt.NewInputSelect("environment", "Environment", project.SupportedEnvironments),
-		prompt.NewInputBool("bandwidth_alert", "Bandwidth Alert"),
-	)
+	o.PathParamFlags = cmdflag.Flags{FlagSet: cmd.Flags()}
+	o.BodyAttributesFlags = cmdflag.Flags{FlagSet: cmd.Flags()}
 
-	p.Run(attributes)
-}
-
-func (o *UpdateProjectOperation) registerFlags(cmd *cobra.Command) {
-	o.Flags = cmdflag.Flags{FlagSet: cmd.Flags()}
-
-	schema := &cmdflag.FlagsSchema{
-		{
-			Name:             "id_or_slug",
-			Description:      "Required. The project ID or Slug",
-			DefaultValue:     "",
-			Type:             "string",
-			RequestParamType: cmdflag.PathParam,
-		},
-		{
-			Name:             "name",
-			Description:      "The project name. Must be unique.",
-			DefaultValue:     "",
-			Type:             "string",
-			RequestParamType: cmdflag.BodyParam,
-		},
-		{
-			Name:             "bandwidth_alert",
-			Description:      "Enable Bandwidth Alert",
-			DefaultValue:     false,
-			Type:             "bool",
-			RequestParamType: cmdflag.BodyParam,
-		},
-		{
-			Name:             "description",
-			Description:      "The project description",
-			DefaultValue:     "",
-			Type:             "string",
-			RequestParamType: cmdflag.BodyParam,
-		},
-		{
-			Name:             "environment",
-			Description:      `Enum: ["Development","Staging","Production"].`,
-			DefaultValue:     "",
-			Type:             "string",
-			RequestParamType: cmdflag.BodyParam,
+	pathParamsSchema := &cmdflag.FlagsSchema{
+		&cmdflag.String{
+			Name:        "id_or_slug",
+			Label:       "ID or Slug from the Project you want to update",
+			Description: "Required. The project ID or Slug",
 		},
 	}
 
-	o.Flags.Register(schema)
-}
+	bodyFlagsSchema := &cmdflag.FlagsSchema{
+		&cmdflag.String{
+			Name:        "name",
+			Label:       "Name",
+			Description: "The project name. Must be unique.",
+		},
+		&cmdflag.String{
+			Name:        "description",
+			Label:       "Description",
+			Description: "The project description",
+		},
+		&cmdflag.Bool{
+			Name:        "bandwidth_alert",
+			Label:       "Bandwidth Alert",
+			Description: "Enable Bandwidth Alert",
+		},
+		&cmdflag.String{
+			Name:        "environment",
+			Label:       "Environment",
+			Description: `Enum: ["Development","Staging","Production"].`,
+			Options:     project.SupportedEnvironments,
+		},
+	}
 
-func (o *UpdateProjectOperation) GetFlags() cmdflag.Flags {
-	return o.Flags
-}
-
-func (o *UpdateProjectOperation) PromptPathParams(params interface{}) {
-	p := prompt.New(
-		prompt.NewInputText("id_or_slug", "ID or Slug from the Project you want to update"),
-	)
-
-	p.Run(params)
+	o.PathParamFlags.Register(pathParamsSchema)
+	o.BodyAttributesFlags.Register(bodyFlagsSchema)
 }
 
 func (o *UpdateProjectOperation) PromptQueryParams(params interface{}) {
@@ -123,9 +95,8 @@ func (o *UpdateProjectOperation) run(cmd *cobra.Command, args []string) error {
 	}
 
 	params := projects.NewUpdateProjectParams()
-	operation.AssignPathParams(o, params)
-	operation.AssignBodyAttributes(o, params.Body.Data.Attributes)
-
+	o.PathParamFlags.AssignValues(params)
+	o.BodyAttributesFlags.AssignValues(params.Body.Data.Attributes)
 	params.Body.Data.ID = params.IDOrSlug
 
 	if swag.IsZero(*params.Body.Data.Attributes) {

@@ -6,8 +6,6 @@ package cli
 import (
 	"github.com/latitudesh/lsh/client/virtual_networks"
 	"github.com/latitudesh/lsh/internal/cmdflag"
-	"github.com/latitudesh/lsh/internal/operation"
-	"github.com/latitudesh/lsh/internal/prompt"
 	"github.com/latitudesh/lsh/internal/utils"
 
 	"github.com/spf13/cobra"
@@ -25,7 +23,8 @@ func makeOperationVirtualNetworksUpdateVirtualNetworkCmd() (*cobra.Command, erro
 }
 
 type UpdateVirtualNetworkOperation struct {
-	Flags cmdflag.Flags
+	PathParamFlags      cmdflag.Flags
+	BodyAttributesFlags cmdflag.Flags
 }
 
 func (o *UpdateVirtualNetworkOperation) Register() (*cobra.Command, error) {
@@ -40,50 +39,28 @@ func (o *UpdateVirtualNetworkOperation) Register() (*cobra.Command, error) {
 	return cmd, nil
 }
 
-func (o *UpdateVirtualNetworkOperation) PromptAttributes(attributes interface{}) {
-	p := prompt.New(
-		prompt.NewInputText("description", "Description"),
-	)
-
-	p.Run(attributes)
-}
-
 func (o *UpdateVirtualNetworkOperation) registerFlags(cmd *cobra.Command) {
-	o.Flags = cmdflag.Flags{FlagSet: cmd.Flags()}
+	o.PathParamFlags = cmdflag.Flags{FlagSet: cmd.Flags()}
+	o.BodyAttributesFlags = cmdflag.Flags{FlagSet: cmd.Flags()}
 
-	schema := &cmdflag.FlagsSchema{
-		{
-			Name:             "id",
-			Description:      "Virtual Network ID",
-			DefaultValue:     "",
-			Type:             "string",
-			RequestParamType: cmdflag.PathParam,
-		},
-		{
-			Name:             "description",
-			Description:      "Description",
-			DefaultValue:     "",
-			Type:             "string",
-			RequestParamType: cmdflag.BodyParam,
+	pathParamsSchema := &cmdflag.FlagsSchema{
+		&cmdflag.String{
+			Name:        "id",
+			Label:       "Virtual Network ID",
+			Description: "Virtual Network ID",
 		},
 	}
 
-	o.Flags.Register(schema)
-}
+	bodyFlagsSchema := &cmdflag.FlagsSchema{
+		&cmdflag.String{
+			Name:        "description",
+			Label:       "Description",
+			Description: "Description",
+		},
+	}
 
-func (o *UpdateVirtualNetworkOperation) GetFlags() cmdflag.Flags {
-	return o.Flags
-}
-
-func (o *UpdateVirtualNetworkOperation) PromptPathParams(params interface{}) {
-	p := prompt.New(
-		prompt.NewInputText("id", "Virtual Network ID"),
-	)
-
-	p.Run(params)
-}
-
-func (o *UpdateVirtualNetworkOperation) PromptQueryParams(params interface{}) {
+	o.PathParamFlags.Register(pathParamsSchema)
+	o.BodyAttributesFlags.Register(bodyFlagsSchema)
 }
 
 func (o *UpdateVirtualNetworkOperation) run(cmd *cobra.Command, args []string) error {
@@ -93,8 +70,8 @@ func (o *UpdateVirtualNetworkOperation) run(cmd *cobra.Command, args []string) e
 	}
 
 	params := virtual_networks.NewUpdateVirtualNetworkParams()
-	operation.AssignPathParams(o, params)
-	operation.AssignBodyAttributes(o, params.Body.Data.Attributes)
+	o.PathParamFlags.AssignValues(params)
+	o.BodyAttributesFlags.AssignValues(params.Body.Data.Attributes)
 	params.Body.Data.ID = params.VirtualNetworkID
 
 	if dryRun {
