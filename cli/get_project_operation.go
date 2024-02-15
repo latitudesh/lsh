@@ -12,7 +12,7 @@ import (
 )
 
 type GetProjectOperation struct {
-	QueryParamsFlags cmdflag.Flags
+	PathParamsFlags cmdflag.Flags
 }
 
 func makeOperationProjectsGetProjectCmd() (*cobra.Command, error) {
@@ -39,7 +39,7 @@ func (o *GetProjectOperation) Register() (*cobra.Command, error) {
 }
 
 func (o *GetProjectOperation) registerFlags(cmd *cobra.Command) {
-	o.QueryParamsFlags = cmdflag.Flags{
+	o.PathParamsFlags = cmdflag.Flags{
 		FlagSet: cmd.Flags(),
 	}
 
@@ -51,7 +51,7 @@ func (o *GetProjectOperation) registerFlags(cmd *cobra.Command) {
 		},
 	}
 
-	o.QueryParamsFlags.Register(schema)
+	o.PathParamsFlags.Register(schema)
 }
 
 func (o *GetProjectOperation) run(cmd *cobra.Command, args []string) error {
@@ -61,7 +61,7 @@ func (o *GetProjectOperation) run(cmd *cobra.Command, args []string) error {
 	}
 
 	params := projects.NewGetProjectParams()
-	o.QueryParamsFlags.AssignValues(params)
+	o.PathParamsFlags.AssignValues(params)
 
 	if swag.IsZero(params.IDOrSlug) {
 		fmt.Println("Skipped action: 'id_or_slug' is required")

@@ -12,7 +12,7 @@ import (
 )
 
 type GetPlanOperation struct {
-	QueryParamsFlags cmdflag.Flags
+	PathParamsFlags cmdflag.Flags
 }
 
 func makeOperationPlansGetPlanCmd() (*cobra.Command, error) {
@@ -39,7 +39,7 @@ func (o *GetPlanOperation) Register() (*cobra.Command, error) {
 }
 
 func (o *GetPlanOperation) registerFlags(cmd *cobra.Command) {
-	o.QueryParamsFlags = cmdflag.Flags{FlagSet: cmd.Flags()}
+	o.PathParamsFlags = cmdflag.Flags{FlagSet: cmd.Flags()}
 
 	schema := &cmdflag.FlagsSchema{
 		&cmdflag.String{
@@ -49,7 +49,7 @@ func (o *GetPlanOperation) registerFlags(cmd *cobra.Command) {
 		},
 	}
 
-	o.QueryParamsFlags.Register(schema)
+	o.PathParamsFlags.Register(schema)
 }
 
 func (o *GetPlanOperation) run(cmd *cobra.Command, args []string) error {
@@ -59,7 +59,7 @@ func (o *GetPlanOperation) run(cmd *cobra.Command, args []string) error {
 	}
 
 	params := plans.NewGetPlanParams()
-	o.QueryParamsFlags.AssignValues(params)
+	o.PathParamsFlags.AssignValues(params)
 
 	if swag.IsZero(params.PlanID) {
 		fmt.Println("Skipped action: 'id' is required")

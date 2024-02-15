@@ -17,6 +17,7 @@ func NewServerResource() *ServerResource {
 			"yearly",
 		},
 		SupportedOperatingSystems: []string{
+			"SKIP",
 			"ipxe",
 			"windows_server_2019_std_v1",
 			"ubuntu_22_04_x64_lts",
@@ -32,6 +33,7 @@ func NewServerResource() *ServerResource {
 			"windows2022",
 		},
 		SupportedPlans: []string{
+			"SKIP",
 			"c2-large-x86",
 			"c2-medium-x86",
 			"c2-small-x86",
@@ -48,6 +50,7 @@ func NewServerResource() *ServerResource {
 			"s3-large-x86",
 		},
 		SupportedSites: []string{
+			"SKIP",
 			"ASH",
 			"BGT",
 			"BUE",
@@ -70,6 +73,7 @@ func NewServerResource() *ServerResource {
 			"TYO2",
 		},
 		SupportedRAIDLevels: []string{
+			"SKIP",
 			"raid-0",
 			"raid-1",
 		},
