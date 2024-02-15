@@ -70,6 +70,7 @@ func NewServerResource() *ServerResource {
 			"TYO2",
 		},
 		SupportedRAIDLevels: []string{
+			"SKIP",
 			"raid-0",
 			"raid-1",
 		},

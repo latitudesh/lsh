@@ -154,7 +154,7 @@ func (m *ServerData) TableRow() table.Row {
 		},
 		"operating_system": table.Cell{
 			Label:     "OS",
-			Value:     table.String(attr.OperatingSystem.Slug),
+			Value:     table.String(operatingSystem(attr)),
 			MaxLength: 10,
 		},
 	}
