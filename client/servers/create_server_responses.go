@@ -378,13 +378,13 @@ type CreateServerParamsBodyDataAttributes struct {
 
 	// The server billing type. Accepts `hourly` and `monthly` for on demand projects and `yearly` for reserved projects.
 	// Enum: [hourly monthly yearly]
-	Billing *string `json:"billing,omitempty"`
+	Billing string `json:"billing,omitempty"`
 
 	// The server hostname
 	Hostname string `json:"hostname,omitempty"`
 
 	// URL where iPXE script is stored on, necessary for custom image deployments.This attribute is required when iPXE is selected as operating system.
-	IpxeURL *string `json:"ipxe_url,omitempty"`
+	IpxeURL string `json:"ipxe_url,omitempty"`
 
 	// The operating system for the new server
 	// Enum: [ipxe windows_server_2019_std_v1 ubuntu_22_04_x64_lts debian_11 rockylinux_8 debian_10 rhel8 centos_7_4_x64 centos_8_x64 ubuntu_20_04_x64_lts debian_12 ubuntu22_ml_in_a_box windows2022]
@@ -399,7 +399,7 @@ type CreateServerParamsBodyDataAttributes struct {
 
 	// RAID mode for the server
 	// Enum: [raid-0 raid-1]
-	Raid *string `json:"raid,omitempty"`
+	Raid string `json:"raid,omitempty"`
 
 	// The site to deploy the server
 	// Enum: [ASH BGT BUE CHI DAL FRA LAX LON MEX MEX2 MIA MIA2 NYC SAN SAN2 SAO SAO2 SYD TYO TYO2]
@@ -409,7 +409,7 @@ type CreateServerParamsBodyDataAttributes struct {
 	SSHKeys []string `json:"ssh_keys,omitempty"`
 
 	// User data to set on the server
-	UserData *int64 `json:"user_data,omitempty"`
+	UserData int64 `json:"user_data,omitempty"`
 }
 
 // Validate validates this create server params body data attributes
@@ -480,7 +480,7 @@ func (o *CreateServerParamsBodyDataAttributes) validateBilling(formats strfmt.Re
 	}
 
 	// value enum
-	if err := o.validateBillingEnum("body"+"."+"data"+"."+"attributes"+"."+"billing", "body", *o.Billing); err != nil {
+	if err := o.validateBillingEnum("body"+"."+"data"+"."+"attributes"+"."+"billing", "body", o.Billing); err != nil {
 		return err
 	}
 
@@ -675,7 +675,7 @@ func (o *CreateServerParamsBodyDataAttributes) validateRaid(formats strfmt.Regis
 	}
 
 	// value enum
-	if err := o.validateRaidEnum("body"+"."+"data"+"."+"attributes"+"."+"raid", "body", *o.Raid); err != nil {
+	if err := o.validateRaidEnum("body"+"."+"data"+"."+"attributes"+"."+"raid", "body", o.Raid); err != nil {
 		return err
 	}
 

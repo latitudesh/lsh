@@ -2,7 +2,6 @@ package prompt
 
 import (
 	"fmt"
-	"os"
 	"reflect"
 	"strings"
 
@@ -10,19 +9,19 @@ import (
 	"github.com/manifoldco/promptui"
 )
 
-type InputList struct {
+type InputStringList struct {
 	Name  string
 	Label string
 }
 
-func NewInputList(name, label string) *InputList {
-	return &InputList{
+func NewInputStringList(name, label string) *InputStringList {
+	return &InputStringList{
 		Name:  name,
 		Label: label,
 	}
 }
 
-func (p *InputList) AssignValue(attributes interface{}) {
+func (p *InputStringList) AssignValue(attributes interface{}) {
 	currentValue := utils.GetFieldValue(attributes, p.Name)
 
 	if currentValue.Kind() == reflect.Slice && currentValue.Len() == 0 {
@@ -32,16 +31,14 @@ func (p *InputList) AssignValue(attributes interface{}) {
 
 		value, err := prompt.Run()
 		if err != nil {
-			fmt.Printf("Prompt failed %v\n", err)
-			os.Exit(1)
+			utils.Exit("Failed to read input", err)
+		}
+
+		if len(strings.TrimSpace(value)) <= 0 {
+			return
 		}
 
 		values := strings.Split(value, ",")
-
-		for i, v := range values {
-			values[i] = strings.TrimSpace(v)
-		}
-
 		utils.AssignValue(attributes, p.Name, values)
 	}
 }

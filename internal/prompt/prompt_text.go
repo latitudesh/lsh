@@ -23,8 +23,6 @@ func NewInputText(name, label string) *InputText {
 func (p *InputText) AssignValue(attributes interface{}) {
 	currentValue := utils.GetFieldValue(attributes, p.Name).String()
 
-	fmt.Println(p.Name, currentValue)
-
 	if currentValue == "" {
 		prompt := promptui.Prompt{
 			Label: p.Label,
@@ -32,7 +30,7 @@ func (p *InputText) AssignValue(attributes interface{}) {
 
 		value, err := prompt.Run()
 		if err != nil {
-			fmt.Printf("Prompt failed %v\n", err)
+			fmt.Printf("Failed to read input: %v\n", err)
 			os.Exit(1)
 		}
 
