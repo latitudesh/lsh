@@ -104,6 +104,9 @@ func MakeRootCmd() (*cobra.Command, error) {
 	// configure dry run flag
 	rootCmd.PersistentFlags().BoolVar(&dryRun, "dry-run", false, "do not send the request to server")
 
+	var noInput bool
+	rootCmd.PersistentFlags().BoolVar(&noInput, "no-input", false, "skip interactive mode")
+
 	// register security flags
 	if err := registerAuthInoWriterFlags(rootCmd); err != nil {
 		return nil, err

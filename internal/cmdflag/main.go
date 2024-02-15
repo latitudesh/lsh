@@ -1,6 +1,9 @@
 package cmdflag
 
 import (
+	"fmt"
+	"os"
+
 	"github.com/go-openapi/swag"
 	"github.com/latitudesh/lsh/internal/prompt"
 	"github.com/latitudesh/lsh/internal/utils"
@@ -19,14 +22,11 @@ type FlagsSchema []FlagSchema
 type Flags struct {
 	schema            *FlagsSchema
 	FlagSet           *pflag.FlagSet
-	InteractiveMode   bool
 	PromptDescription string
 }
 
 func (f *Flags) Register(s *FlagsSchema) {
 	f.schema = s
-
-	f.InteractiveMode = true // TODO: allow users to enable/disable interactive mode
 
 	for _, v := range *s {
 		v.Register(f.FlagSet)
@@ -44,6 +44,12 @@ func (f *Flags) GetInputs() []prompt.PromptInput {
 }
 
 func (f *Flags) AssignValues(params interface{}) error {
+	interactiveModeDisabled, err := f.FlagSet.GetBool("no-input")
+	if err != nil {
+		fmt.Println(err)
+		os.Exit(1)
+	}
+
 	for _, v := range *f.schema {
 		value := v.GetValue()
 
@@ -52,7 +58,7 @@ func (f *Flags) AssignValues(params interface{}) error {
 		}
 	}
 
-	if f.InteractiveMode {
+	if !interactiveModeDisabled {
 		p := prompt.Prompt{
 			Description: f.PromptDescription,
 			Inputs:      f.GetInputs(),

@@ -1,6 +1,9 @@
 package cli
 
 import (
+	"fmt"
+
+	"github.com/go-openapi/swag"
 	"github.com/latitudesh/lsh/client/plans"
 	"github.com/latitudesh/lsh/internal/cmdflag"
 	"github.com/latitudesh/lsh/internal/utils"
@@ -57,6 +60,11 @@ func (o *GetPlanOperation) run(cmd *cobra.Command, args []string) error {
 
 	params := plans.NewGetPlanParams()
 	o.QueryParamsFlags.AssignValues(params)
+
+	if swag.IsZero(params.PlanID) {
+		fmt.Println("Skipped action: 'id' is required")
+		return nil
+	}
 
 	if dryRun {
 		logDebugf("dry-run flag specified. Skip sending request.")
