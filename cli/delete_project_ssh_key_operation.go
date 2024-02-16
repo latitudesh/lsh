@@ -42,7 +42,7 @@ func (o *DeleteSSHKeyOperation) PromptAttributes(attributes interface{}) {
 
 func (o *DeleteSSHKeyOperation) PromptQueryParams(params interface{}) {
 	p := prompt.New(
-		prompt.NewInputText("id", "ID from the SSH Key you want to update"),
+		prompt.NewInputText("id", "ID from the SSH Key you want to delete"),
 		prompt.NewInputText("project", "Project ID or Slug"),
 	)
 
