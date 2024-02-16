@@ -49,7 +49,7 @@ func (o *CreateServerOperation) PromptAttributes(attributes interface{}) {
 		prompt.NewInputSelect("billing", "Billing", server.SupportedBillingTypes),
 		prompt.NewInputSelect("site", "Site", server.SupportedSites),
 		prompt.NewInputText("ipxe_url", "iPXE URL"),
-		prompt.NewInputList("ssh_keys", "SSH Keys"),
+		prompt.NewInputStringList("ssh_keys", "SSH Keys"),
 		prompt.NewInputNumber("user_data", "User Data"),
 		prompt.NewInputSelect("raid", "RAID Level", server.SupportedRAIDLevels),
 	)
@@ -67,6 +67,7 @@ func (o *CreateServerOperation) registerFlags(cmd *cobra.Command) {
 			DefaultValue:     "",
 			Type:             "string",
 			RequestParamType: cmdflag.BodyParam,
+			Required:         true,
 		},
 		{
 			Name:             "billing",
@@ -74,6 +75,7 @@ func (o *CreateServerOperation) registerFlags(cmd *cobra.Command) {
 			DefaultValue:     "",
 			Type:             "string",
 			RequestParamType: cmdflag.BodyParam,
+			Required:         false,
 		},
 		{
 			Name:             "ipxe_url",
@@ -81,6 +83,7 @@ func (o *CreateServerOperation) registerFlags(cmd *cobra.Command) {
 			DefaultValue:     "",
 			Type:             "string",
 			RequestParamType: cmdflag.BodyParam,
+			Required:         false,
 		},
 		{
 			Name:             "operating_system",
@@ -88,6 +91,7 @@ func (o *CreateServerOperation) registerFlags(cmd *cobra.Command) {
 			DefaultValue:     "",
 			Type:             "string",
 			RequestParamType: cmdflag.BodyParam,
+			Required:         true,
 		},
 		{
 			Name:             "plan",
@@ -95,6 +99,7 @@ func (o *CreateServerOperation) registerFlags(cmd *cobra.Command) {
 			DefaultValue:     "",
 			Type:             "string",
 			RequestParamType: cmdflag.BodyParam,
+			Required:         true,
 		},
 		{
 			Name:             "project",
@@ -102,6 +107,7 @@ func (o *CreateServerOperation) registerFlags(cmd *cobra.Command) {
 			DefaultValue:     "",
 			Type:             "string",
 			RequestParamType: cmdflag.BodyParam,
+			Required:         true,
 		},
 		{
 			Name:             "raid",
@@ -109,6 +115,7 @@ func (o *CreateServerOperation) registerFlags(cmd *cobra.Command) {
 			DefaultValue:     "",
 			Type:             "string",
 			RequestParamType: cmdflag.BodyParam,
+			Required:         false,
 		},
 		{
 			Name:             "site",
@@ -116,6 +123,7 @@ func (o *CreateServerOperation) registerFlags(cmd *cobra.Command) {
 			DefaultValue:     "",
 			Type:             "string",
 			RequestParamType: cmdflag.BodyParam,
+			Required:         true,
 		},
 		{
 			Name:             "ssh_keys",
@@ -123,6 +131,7 @@ func (o *CreateServerOperation) registerFlags(cmd *cobra.Command) {
 			DefaultValue:     []string{},
 			Type:             "stringSlice",
 			RequestParamType: cmdflag.BodyParam,
+			Required:         false,
 		},
 		{
 			Name:             "user_data",
@@ -130,6 +139,7 @@ func (o *CreateServerOperation) registerFlags(cmd *cobra.Command) {
 			DefaultValue:     int64(0),
 			Type:             "int64",
 			RequestParamType: cmdflag.BodyParam,
+			Required:         false,
 		},
 	}
 
@@ -153,7 +163,6 @@ func (o *CreateServerOperation) run(cmd *cobra.Command, args []string) error {
 	operation.AssignBodyAttributes(o, params.Body.Data.Attributes)
 
 	if dryRun {
-
 		logDebugf("dry-run flag specified. Skip sending request.")
 		return nil
 	}

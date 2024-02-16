@@ -1,6 +1,8 @@
 package cmdflag
 
 import (
+	"fmt"
+
 	"github.com/spf13/pflag"
 )
 
@@ -20,6 +22,7 @@ type FlagSchema struct {
 	Type             string
 	RequestParamType RequestParamType
 	CustomFlagName   string
+	Required         bool
 }
 
 func (s *FlagSchema) FlagName() string {
@@ -28,6 +31,14 @@ func (s *FlagSchema) FlagName() string {
 	}
 
 	return s.Name
+}
+
+func (s *FlagSchema) formattedDescription() string {
+	if !s.Required {
+		return s.Description
+	}
+
+	return fmt.Sprintf("[Required] %v", s.Description)
 }
 
 type FlagsSchema []FlagSchema
@@ -44,19 +55,19 @@ func (f *Flags) Register(s *FlagsSchema) {
 		switch v.Type {
 		case "string":
 			if defaultValue, ok := v.DefaultValue.(string); ok {
-				f.FlagSet.String(v.FlagName(), defaultValue, v.Description)
+				f.FlagSet.String(v.Name, defaultValue, v.formattedDescription())
 			}
 		case "stringSlice":
 			if defaultValue, ok := v.DefaultValue.([]string); ok {
-				f.FlagSet.StringSlice(v.FlagName(), defaultValue, v.Description)
-			}
-		case "int64":
-			if defaultValue, ok := v.DefaultValue.(int64); ok {
-				f.FlagSet.Int64(v.FlagName(), defaultValue, v.Description)
+				f.FlagSet.StringSlice(v.Name, defaultValue, v.formattedDescription())
 			}
 		case "bool":
 			if defaultValue, ok := v.DefaultValue.(bool); ok {
-				f.FlagSet.Bool(v.FlagName(), defaultValue, v.Description)
+				f.FlagSet.Bool(v.Name, defaultValue, v.formattedDescription())
+			}
+		case "int64":
+			if defaultValue, ok := v.DefaultValue.(int64); ok {
+				f.FlagSet.Int64(v.Name, defaultValue, v.formattedDescription())
 			}
 		}
 	}
