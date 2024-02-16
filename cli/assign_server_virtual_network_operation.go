@@ -39,8 +39,8 @@ func (o *CreateVirtualNetworkAssignmentOperation) Register() (*cobra.Command, er
 
 func (o *CreateVirtualNetworkAssignmentOperation) PromptAttributes(attributes interface{}) {
 	p := prompt.New(
-		prompt.NewInputText("server", "Server ID"),
-		prompt.NewInputText("virtual_network", "Virtual Network ID"),
+		prompt.NewInputText("server_id", "Server ID"),
+		prompt.NewInputText("virtual_network_id", "Virtual Network ID"),
 	)
 
 	p.Run(attributes)
@@ -51,14 +51,16 @@ func (o *CreateVirtualNetworkAssignmentOperation) registerFlags(cmd *cobra.Comma
 
 	schema := &cmdflag.FlagsSchema{
 		{
-			Name:             "server",
+			Name:             "server_id",
+			CustomFlagName:   "server",
 			Description:      "The Server ID (Required).",
 			DefaultValue:     "",
 			Type:             "string",
 			RequestParamType: cmdflag.BodyParam,
 		},
 		{
-			Name:             "virtual_network",
+			Name:             "virtual_network_id",
+			CustomFlagName:   "virtual_network",
 			Description:      "The Virtual Network ID (Required).",
 			DefaultValue:     "",
 			Type:             "string",

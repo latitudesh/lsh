@@ -19,6 +19,15 @@ type FlagSchema struct {
 	DefaultValue     interface{}
 	Type             string
 	RequestParamType RequestParamType
+	CustomFlagName   string
+}
+
+func (s *FlagSchema) FlagName() string {
+	if s.CustomFlagName != "" {
+		return s.CustomFlagName
+	}
+
+	return s.Name
 }
 
 type FlagsSchema []FlagSchema
@@ -35,19 +44,19 @@ func (f *Flags) Register(s *FlagsSchema) {
 		switch v.Type {
 		case "string":
 			if defaultValue, ok := v.DefaultValue.(string); ok {
-				f.FlagSet.String(v.Name, defaultValue, v.Description)
+				f.FlagSet.String(v.FlagName(), defaultValue, v.Description)
 			}
 		case "stringSlice":
 			if defaultValue, ok := v.DefaultValue.([]string); ok {
-				f.FlagSet.StringSlice(v.Name, defaultValue, v.Description)
+				f.FlagSet.StringSlice(v.FlagName(), defaultValue, v.Description)
 			}
 		case "int64":
 			if defaultValue, ok := v.DefaultValue.(int64); ok {
-				f.FlagSet.Int64(v.Name, defaultValue, v.Description)
+				f.FlagSet.Int64(v.FlagName(), defaultValue, v.Description)
 			}
 		case "bool":
 			if defaultValue, ok := v.DefaultValue.(bool); ok {
-				f.FlagSet.Bool(v.Name, defaultValue, v.Description)
+				f.FlagSet.Bool(v.FlagName(), defaultValue, v.Description)
 			}
 		}
 	}
