@@ -63,7 +63,7 @@ func (o *UpdateProjectOperation) registerFlags(cmd *cobra.Command) {
 	schema := &cmdflag.FlagsSchema{
 		{
 			Name:         "id_or_slug",
-			Description:  "Required. The project ID or Slug",
+			Description:  "The project ID or Slug",
 			DefaultValue: "",
 			Type:         "string",
 		},
@@ -117,7 +117,6 @@ func (o *UpdateProjectOperation) run(cmd *cobra.Command, args []string) error {
 	params := projects.NewUpdateProjectParams()
 	operation.AssignResourceID(o, params)
 	operation.AssignBodyAttributes(o, params.Body.Data.Attributes)
-
 	params.Body.Data.ID = params.IDOrSlug
 
 	if swag.IsZero(*params.Body.Data.Attributes) {

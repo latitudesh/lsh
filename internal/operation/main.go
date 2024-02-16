@@ -34,7 +34,7 @@ func AssignBodyAttributes(o Operation, attributes interface{}) error {
 	flags := o.GetFlags()
 
 	for _, v := range *flags.Schema {
-		if v.Name == "id" {
+		if v.Name == "id" || v.Name == "id_or_slug" {
 			continue
 		}
 
