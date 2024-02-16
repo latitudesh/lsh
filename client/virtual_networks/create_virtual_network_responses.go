@@ -17,7 +17,6 @@ import (
 
 	apierrors "github.com/latitudesh/lsh/internal/api/errors"
 	"github.com/latitudesh/lsh/internal/renderer"
-	"github.com/latitudesh/lsh/models"
 )
 
 // CreateVirtualNetworkReader is a Reader for the CreateVirtualNetwork structure.
@@ -68,7 +67,7 @@ CreateVirtualNetworkCreated describes a response with status code 201, with defa
 Created
 */
 type CreateVirtualNetworkCreated struct {
-	Payload *models.VirtualNetwork
+	Payload *GetVirtualNetworkOKBody
 }
 
 // IsSuccess returns true when this create virtual network created response has a 2xx status code
@@ -109,17 +108,17 @@ func (o *CreateVirtualNetworkCreated) String() string {
 	return fmt.Sprintf("[POST /virtual_networks][%d] createVirtualNetworkCreated  %+v", 201, o.Payload)
 }
 
-func (o *CreateVirtualNetworkCreated) GetPayload() *models.VirtualNetwork {
+func (o *CreateVirtualNetworkCreated) GetPayload() *GetVirtualNetworkOKBody {
 	return o.Payload
 }
 
 func (o *CreateVirtualNetworkCreated) GetData() []renderer.ResponseData {
-	return []renderer.ResponseData{o.Payload}
+	return []renderer.ResponseData{o.Payload.Data}
 }
 
 func (o *CreateVirtualNetworkCreated) readResponse(response runtime.ClientResponse, consumer runtime.Consumer, formats strfmt.Registry) error {
 
-	o.Payload = new(models.VirtualNetwork)
+	o.Payload = new(GetVirtualNetworkOKBody)
 
 	// response payload
 	if err := consumer.Consume(response.Body(), o.Payload); err != nil && err != io.EOF {
