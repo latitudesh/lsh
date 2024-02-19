@@ -12,6 +12,10 @@ import (
 	"github.com/latitudesh/lsh/internal/output/table"
 )
 
+type VirtualNetworkAssignmentPayload struct {
+	Data *VirtualNetworkAssignment `json:"data,omitempty"`
+}
+
 // VirtualNetworkAssignment virtual network assignment
 //
 // swagger:model virtual_network_assignment

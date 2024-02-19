@@ -52,22 +52,24 @@ func (f *Flags) Register(s *FlagsSchema) {
 	f.Schema = s
 
 	for _, v := range *f.Schema {
+		flagName := v.FlagName()
+
 		switch v.Type {
 		case "string":
 			if defaultValue, ok := v.DefaultValue.(string); ok {
-				f.FlagSet.String(v.Name, defaultValue, v.formattedDescription())
+				f.FlagSet.String(flagName, defaultValue, v.formattedDescription())
 			}
 		case "stringSlice":
 			if defaultValue, ok := v.DefaultValue.([]string); ok {
-				f.FlagSet.StringSlice(v.Name, defaultValue, v.formattedDescription())
+				f.FlagSet.StringSlice(flagName, defaultValue, v.formattedDescription())
 			}
 		case "bool":
 			if defaultValue, ok := v.DefaultValue.(bool); ok {
-				f.FlagSet.Bool(v.Name, defaultValue, v.formattedDescription())
+				f.FlagSet.Bool(flagName, defaultValue, v.formattedDescription())
 			}
 		case "int64":
 			if defaultValue, ok := v.DefaultValue.(int64); ok {
-				f.FlagSet.Int64(v.Name, defaultValue, v.formattedDescription())
+				f.FlagSet.Int64(flagName, defaultValue, v.formattedDescription())
 			}
 		}
 	}
