@@ -37,7 +37,7 @@ func (o *DeleteProjectOperation) Register() (*cobra.Command, error) {
 	return cmd, nil
 }
 
-func (o *DeleteProjectOperation) PromptID(params interface{}) {
+func (o *DeleteProjectOperation) PromptQueryParams(params interface{}) {
 	p := prompt.New(
 		prompt.NewInputText("id_or_slug", "ID or Slug from the Project you want to destroy"),
 	)
@@ -57,10 +57,11 @@ func (o *DeleteProjectOperation) registerFlags(cmd *cobra.Command) {
 
 	schema := &cmdflag.FlagsSchema{
 		{
-			Name:         "id_or_slug",
-			Description:  "Required. The project ID or Slug",
-			DefaultValue: "",
-			Type:         "string",
+			Name:             "id_or_slug",
+			Description:      "Required. The project ID or Slug",
+			DefaultValue:     "",
+			Type:             "string",
+			RequestParamType: cmdflag.PathParam,
 		},
 	}
 
@@ -74,7 +75,7 @@ func (o *DeleteProjectOperation) run(cmd *cobra.Command, args []string) error {
 	}
 
 	params := projects.NewDeleteProjectParams()
-	operation.AssignResourceID(o, params)
+	operation.AssignPathParams(o, params)
 	if dryRun {
 
 		logDebugf("dry-run flag specified. Skip sending request.")

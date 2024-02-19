@@ -56,32 +56,36 @@ func (o *CreateProjectOperation) registerFlags(cmd *cobra.Command) {
 
 	schema := &cmdflag.FlagsSchema{
 		{
-			Name:         "name",
-			Description:  "The project name. Must be unique.",
-			DefaultValue: "",
-			Type:         "string",
-			Required:     true,
+			Name:             "name",
+			Description:      "The project name. Must be unique.",
+			DefaultValue:     "",
+			Type:             "string",
+			RequestParamType: cmdflag.BodyParam,
+			Required:         true,
 		},
 		{
-			Name:         "description",
-			Description:  "The project description",
-			DefaultValue: "",
-			Type:         "string",
-			Required:     false,
+			Name:             "description",
+			Description:      "The project description",
+			DefaultValue:     "",
+			Type:             "string",
+			RequestParamType: cmdflag.BodyParam,
+			Required:         false,
 		},
 		{
-			Name:         "environment",
-			Description:  `Enum: ["Development","Staging","Production"].`,
-			DefaultValue: "",
-			Type:         "string",
-			Required:     false,
+			Name:             "environment",
+			Description:      `Enum: ["Development","Staging","Production"].`,
+			DefaultValue:     "",
+			Type:             "string",
+			RequestParamType: cmdflag.BodyParam,
+			Required:         false,
 		},
 		{
-			Name:         "provisioning_type",
-			Description:  `Enum: ["reserved","on_demand"]. The provisioning type of the project. Default: on_demand`,
-			DefaultValue: "",
-			Type:         "string",
-			Required:     true,
+			Name:             "provisioning_type",
+			Description:      `Enum: ["reserved","on_demand"]. The provisioning type of the project. Default: on_demand`,
+			DefaultValue:     "",
+			Type:             "string",
+			RequestParamType: cmdflag.BodyParam,
+			Required:         true,
 		},
 	}
 
@@ -92,7 +96,7 @@ func (o *CreateProjectOperation) GetFlags() cmdflag.Flags {
 	return o.Flags
 }
 
-func (o *CreateProjectOperation) PromptID(params interface{}) {
+func (o *CreateProjectOperation) PromptQueryParams(params interface{}) {
 }
 
 func (o *CreateProjectOperation) run(cmd *cobra.Command, args []string) error {

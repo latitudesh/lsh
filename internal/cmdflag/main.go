@@ -6,13 +6,31 @@ import (
 	"github.com/spf13/pflag"
 )
 
+type RequestParamType int64
+
+const (
+	PathParam RequestParamType = iota
+	QueryParam
+	BodyParam
+)
+
 type FlagSchema struct {
-	Name         string
-	Label        string
-	Description  string
-	DefaultValue interface{}
-	Type         string
-	Required     bool
+	Name             string
+	Label            string
+	Description      string
+	DefaultValue     interface{}
+	Type             string
+	RequestParamType RequestParamType
+	CustomFlagName   string
+	Required         bool
+}
+
+func (s *FlagSchema) FlagName() string {
+	if s.CustomFlagName != "" {
+		return s.CustomFlagName
+	}
+
+	return s.Name
 }
 
 func (s *FlagSchema) formattedDescription() string {
@@ -55,7 +73,14 @@ func (f *Flags) Register(s *FlagsSchema) {
 	}
 }
 
-func (f *Flags) ResourceIDFlagName() string {
-	schema := *f.Schema
-	return schema[0].Name
+func (f *Flags) PathParamsFlags() FlagsSchema {
+	var pathParamsFlags FlagsSchema
+
+	for _, v := range *f.Schema {
+		if v.RequestParamType == PathParam {
+			pathParamsFlags = append(pathParamsFlags, v)
+		}
+	}
+
+	return pathParamsFlags
 }

@@ -336,7 +336,7 @@ type PutProjectSSHKeyParamsBodyData struct {
 
 	// id
 	// Required: true
-	ID *string `json:"id"`
+	ID string `json:"id"`
 
 	// type
 	// Required: true

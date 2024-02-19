@@ -4,48 +4,97 @@ package cli
 // Editing this file might prove futile when you re-run the swagger generate command
 
 import (
-	"encoding/json"
-	"fmt"
-
 	"github.com/latitudesh/lsh/client/api_keys"
+	"github.com/latitudesh/lsh/internal/cmdflag"
+	"github.com/latitudesh/lsh/internal/operation"
+	"github.com/latitudesh/lsh/internal/prompt"
 	"github.com/latitudesh/lsh/internal/utils"
-	"github.com/latitudesh/lsh/models"
 
-	"github.com/go-openapi/swag"
 	"github.com/spf13/cobra"
 )
 
-// makeOperationAPIKeysUpdateAPIKeyCmd returns a cmd to handle operation updateApiKey
 func makeOperationAPIKeysUpdateAPIKeyCmd() (*cobra.Command, error) {
-	cmd := &cobra.Command{
-		Use:   "update",
-		Short: `Regenerate an existing API Key that is tied to the current user. This overrides the previous key.`,
-		RunE:  runOperationAPIKeysUpdateAPIKey,
-	}
+	operation := UpdateAPIKeyOperation{}
 
-	if err := registerOperationAPIKeysUpdateAPIKeyParamFlags(cmd); err != nil {
+	cmd, err := operation.Register()
+	if err != nil {
 		return nil, err
 	}
 
 	return cmd, nil
 }
 
-// runOperationAPIKeysUpdateAPIKey uses cmd flags to call endpoint api
-func runOperationAPIKeysUpdateAPIKey(cmd *cobra.Command, args []string) error {
+type UpdateAPIKeyOperation struct {
+	Flags cmdflag.Flags
+}
+
+func (o *UpdateAPIKeyOperation) Register() (*cobra.Command, error) {
+	cmd := &cobra.Command{
+		Use:   "update",
+		Short: `Regenerate an existing API Key that is tied to the current user. This overrides the previous key.`,
+		RunE:  o.run,
+	}
+
+	o.registerFlags(cmd)
+
+	return cmd, nil
+}
+
+func (o *UpdateAPIKeyOperation) PromptAttributes(attributes interface{}) {
+	p := prompt.New(
+		prompt.NewInputText("name", "Name of the API Key"),
+	)
+
+	p.Run(attributes)
+}
+
+func (o *UpdateAPIKeyOperation) registerFlags(cmd *cobra.Command) {
+	o.Flags = cmdflag.Flags{FlagSet: cmd.Flags()}
+
+	schema := &cmdflag.FlagsSchema{
+		{
+			Name:             "id",
+			Description:      "ID",
+			DefaultValue:     "",
+			Type:             "string",
+			RequestParamType: cmdflag.PathParam,
+		},
+		{
+			Name:             "name",
+			Description:      "Name of the API Key",
+			DefaultValue:     "",
+			Type:             "string",
+			RequestParamType: cmdflag.BodyParam,
+		},
+	}
+
+	o.Flags.Register(schema)
+}
+
+func (o *UpdateAPIKeyOperation) GetFlags() cmdflag.Flags {
+	return o.Flags
+}
+
+func (o *UpdateAPIKeyOperation) PromptQueryParams(params interface{}) {
+	p := prompt.New(
+		prompt.NewInputText("id", "ID from the API Key you want to update"),
+	)
+
+	p.Run(params)
+}
+
+func (o *UpdateAPIKeyOperation) run(cmd *cobra.Command, args []string) error {
 	appCli, err := makeClient(cmd, args)
 	if err != nil {
 		return err
 	}
-	// retrieve flag values from cmd and fill params
-	params := api_keys.NewUpdateAPIKeyParams()
-	if err, _ := retrieveOperationAPIKeysUpdateAPIKeyBodyFlag(params, "", cmd); err != nil {
-		return err
-	}
-	if err, _ := retrieveOperationAPIKeysUpdateAPIKeyIDFlag(params, "", cmd); err != nil {
-		return err
-	}
-	if dryRun {
 
+	params := api_keys.NewUpdateAPIKeyParams()
+	operation.AssignPathParams(o, params)
+	operation.AssignBodyAttributes(o, params.Body.Data.Attributes)
+	params.Body.Data.ID = params.ID
+
+	if dryRun {
 		logDebugf("dry-run flag specified. Skip sending request.")
 		return nil
 	}
@@ -60,177 +109,4 @@ func runOperationAPIKeysUpdateAPIKey(cmd *cobra.Command, args []string) error {
 		utils.Render(response.GetData())
 	}
 	return nil
-}
-
-// registerOperationAPIKeysUpdateAPIKeyParamFlags registers all flags needed to fill params
-func registerOperationAPIKeysUpdateAPIKeyParamFlags(cmd *cobra.Command) error {
-	if err := registerOperationAPIKeysUpdateAPIKeyBodyParamFlags("", cmd); err != nil {
-		return err
-	}
-	if err := registerOperationAPIKeysUpdateAPIKeyIDParamFlags("", cmd); err != nil {
-		return err
-	}
-	return nil
-}
-
-func registerOperationAPIKeysUpdateAPIKeyBodyParamFlags(cmdPrefix string, cmd *cobra.Command) error {
-
-	var bodyFlagName string
-	if cmdPrefix == "" {
-		bodyFlagName = "body"
-	} else {
-		bodyFlagName = fmt.Sprintf("%v.body", cmdPrefix)
-	}
-
-	_ = cmd.PersistentFlags().String(bodyFlagName, "", "Optional json string for [body]. ")
-
-	// add flags for body
-	if err := registerModelUpdateAPIKeyFlags(0, "", cmd); err != nil {
-		return err
-	}
-
-	return nil
-}
-func registerOperationAPIKeysUpdateAPIKeyIDParamFlags(cmdPrefix string, cmd *cobra.Command) error {
-
-	idDescription := `Required. `
-
-	var idFlagName string
-	if cmdPrefix == "" {
-		idFlagName = "id"
-	} else {
-		idFlagName = fmt.Sprintf("%v.id", cmdPrefix)
-	}
-
-	var idFlagDefault string
-
-	_ = cmd.PersistentFlags().String(idFlagName, idFlagDefault, idDescription)
-	cmd.MarkPersistentFlagRequired(idFlagName)
-
-	return nil
-}
-
-func retrieveOperationAPIKeysUpdateAPIKeyBodyFlag(m *api_keys.UpdateAPIKeyParams, cmdPrefix string, cmd *cobra.Command) (error, bool) {
-	retAdded := false
-	if cmd.Flags().Changed("body") {
-		// Read body string from cmd and unmarshal
-		bodyValueStr, err := cmd.Flags().GetString("body")
-		if err != nil {
-			return err, false
-		}
-
-		bodyValue := models.UpdateAPIKey{}
-		if err := json.Unmarshal([]byte(bodyValueStr), &bodyValue); err != nil {
-			return fmt.Errorf("cannot unmarshal body string in models.UpdateAPIKey: %v", err), false
-		}
-		m.Body = &bodyValue
-	}
-	bodyValueModel := m.Body
-	if swag.IsZero(bodyValueModel) {
-		bodyValueModel = &models.UpdateAPIKey{}
-	}
-	err, added := retrieveModelUpdateAPIKeyFlags(0, bodyValueModel, "", cmd)
-	if err != nil {
-		return err, false
-	}
-	if added {
-		m.Body = bodyValueModel
-	}
-	if dryRun && debug {
-
-		bodyValueDebugBytes, err := json.Marshal(m.Body)
-		if err != nil {
-			return err, false
-		}
-		logDebugf("Body dry-run payload: %v", string(bodyValueDebugBytes))
-	}
-	retAdded = retAdded || added
-
-	return nil, retAdded
-}
-func retrieveOperationAPIKeysUpdateAPIKeyIDFlag(m *api_keys.UpdateAPIKeyParams, cmdPrefix string, cmd *cobra.Command) (error, bool) {
-	retAdded := false
-	if cmd.Flags().Changed("id") {
-
-		var idFlagName string
-		if cmdPrefix == "" {
-			idFlagName = "id"
-		} else {
-			idFlagName = fmt.Sprintf("%v.id", cmdPrefix)
-		}
-
-		idFlagValue, err := cmd.Flags().GetString(idFlagName)
-		if err != nil {
-			return err, false
-		}
-		m.ID = idFlagValue
-		m.Body.Data.ID = m.ID
-
-	}
-	return nil, retAdded
-}
-
-// register flags to command
-func registerModelUpdateAPIKeyOKBodyFlags(depth int, cmdPrefix string, cmd *cobra.Command) error {
-
-	if err := registerUpdateAPIKeyOKBodyData(depth, cmdPrefix, cmd); err != nil {
-		return err
-	}
-
-	return nil
-}
-
-func registerUpdateAPIKeyOKBodyData(depth int, cmdPrefix string, cmd *cobra.Command) error {
-	if depth > maxDepth {
-		return nil
-	}
-
-	var dataFlagName = ""
-
-	if err := registerModelAPIKeyFlags(depth+1, dataFlagName, cmd); err != nil {
-		return err
-	}
-
-	return nil
-}
-
-// retrieve flags from commands, and set value in model. Return true if any flag is passed by user to fill model field.
-func retrieveModelUpdateAPIKeyOKBodyFlags(depth int, m *api_keys.UpdateAPIKeyOKBody, cmdPrefix string, cmd *cobra.Command) (error, bool) {
-	retAdded := false
-
-	err, dataAdded := retrieveUpdateAPIKeyOKBodyDataFlags(depth, m, cmdPrefix, cmd)
-	if err != nil {
-		return err, false
-	}
-	retAdded = retAdded || dataAdded
-
-	return nil, retAdded
-}
-
-func retrieveUpdateAPIKeyOKBodyDataFlags(depth int, m *api_keys.UpdateAPIKeyOKBody, cmdPrefix string, cmd *cobra.Command) (error, bool) {
-	if depth > maxDepth {
-		return nil, false
-	}
-	retAdded := false
-
-	dataFlagName := fmt.Sprintf("%vdata", cmdPrefix)
-	if cmd.Flags().Changed(dataFlagName) {
-		// info: complex object data models.APIKey is retrieved outside this Changed() block
-	}
-	dataFlagValue := m.Data
-	if swag.IsZero(dataFlagValue) {
-		dataFlagValue = &models.APIKey{}
-	}
-
-	dataFlagName = ""
-	err, dataAdded := retrieveModelAPIKeyFlags(depth+1, dataFlagValue, dataFlagName, cmd)
-	if err != nil {
-		return err, false
-	}
-	retAdded = retAdded || dataAdded
-	if dataAdded {
-		m.Data = dataFlagValue
-	}
-
-	return nil, retAdded
 }

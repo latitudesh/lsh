@@ -62,7 +62,7 @@ DeleteVirtualNetworksAssignmentsParams contains all the parameters to send to th
 type DeleteVirtualNetworksAssignmentsParams struct {
 
 	// AssignmentID.
-	AssignmentID string
+	AssignmentID string `json:"id"`
 
 	timeout    time.Duration
 	Context    context.Context
