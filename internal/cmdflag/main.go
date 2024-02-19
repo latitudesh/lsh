@@ -43,6 +43,10 @@ func (f *Flags) Register(s *FlagsSchema) {
 			if defaultValue, ok := v.DefaultValue.([]string); ok {
 				f.FlagSet.StringSlice(v.Name, defaultValue, v.formattedDescription())
 			}
+		case "bool":
+			if defaultValue, ok := v.DefaultValue.(bool); ok {
+				f.FlagSet.Bool(v.Name, defaultValue, v.formattedDescription())
+			}
 		case "int64":
 			if defaultValue, ok := v.DefaultValue.(int64); ok {
 				f.FlagSet.Int64(v.Name, defaultValue, v.formattedDescription())

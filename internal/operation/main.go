@@ -1,7 +1,6 @@
 package operation
 
 import (
-	"errors"
 	"fmt"
 
 	"github.com/go-openapi/swag"
@@ -35,7 +34,7 @@ func AssignBodyAttributes(o Operation, attributes interface{}) error {
 	flags := o.GetFlags()
 
 	for _, v := range *flags.Schema {
-		if v.Name == "id" {
+		if v.Name == "id" || v.Name == "id_or_slug" {
 			continue
 		}
 
@@ -72,7 +71,9 @@ func getFlagValue(flag cmdflag.FlagSchema, flagSet *pflag.FlagSet) (interface{},
 		return nil, nil
 	case "int64":
 		return flagSet.GetInt64(flag.Name)
+	case "bool":
+		return flagSet.GetBool(flag.Name)
 	default:
-		return nil, errors.New(fmt.Sprintf("Unsupported data type for flag: %v", flag.Name))
+		return nil, fmt.Errorf("unsupported data type for flag: %v", flag.Name)
 	}
 }

@@ -115,7 +115,7 @@ func (o *CreateServerOperation) registerFlags(cmd *cobra.Command) {
 			Description:  `Enum: ["ASH","BGT","BUE","CHI","DAL","FRA","LAX","LON","MEX","MEX2","MIA","MIA2","NYC","SAN","SAN2","SAO","SAO2","SYD","TYO","TYO2"]. The site to deploy the server`,
 			DefaultValue: "",
 			Type:         "string",
-			Required:     false,
+			Required:     true,
 		},
 		{
 			Name:         "ssh_keys",
