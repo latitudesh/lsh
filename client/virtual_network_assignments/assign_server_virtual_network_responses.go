@@ -77,7 +77,7 @@ AssignServerVirtualNetworkCreated describes a response with status code 201, wit
 Created
 */
 type AssignServerVirtualNetworkCreated struct {
-	Payload *models.VirtualNetworkAssignment
+	Payload *models.VirtualNetworkAssignmentPayload
 }
 
 // IsSuccess returns true when this assign server virtual network created response has a 2xx status code
@@ -118,17 +118,17 @@ func (o *AssignServerVirtualNetworkCreated) String() string {
 	return fmt.Sprintf("[POST /virtual_networks/assignments][%d] assignServerVirtualNetworkCreated  %+v", 201, o.Payload)
 }
 
-func (o *AssignServerVirtualNetworkCreated) GetPayload() *models.VirtualNetworkAssignment {
+func (o *AssignServerVirtualNetworkCreated) GetPayload() *models.VirtualNetworkAssignmentPayload {
 	return o.Payload
 }
 
 func (o *AssignServerVirtualNetworkCreated) GetData() []renderer.ResponseData {
-	return []renderer.ResponseData{o.Payload}
+	return []renderer.ResponseData{o.Payload.Data}
 }
 
 func (o *AssignServerVirtualNetworkCreated) readResponse(response runtime.ClientResponse, consumer runtime.Consumer, formats strfmt.Registry) error {
 
-	o.Payload = new(models.VirtualNetworkAssignment)
+	o.Payload = new(models.VirtualNetworkAssignmentPayload)
 
 	// response payload
 	if err := consumer.Consume(response.Body(), o.Payload); err != nil && err != io.EOF {
