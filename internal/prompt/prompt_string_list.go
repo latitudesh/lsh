@@ -34,11 +34,9 @@ func (p *InputStringList) AssignValue(attributes interface{}) {
 			utils.Exit("Failed to read input", err)
 		}
 
-		if len(strings.TrimSpace(value)) <= 0 {
-			return
+		if len(strings.TrimSpace(value)) > 0 {
+			values := strings.Split(value, ",")
+			utils.AssignValue(attributes, p.Name, values)
 		}
-
-		values := strings.Split(value, ",")
-		utils.AssignValue(attributes, p.Name, values)
 	}
 }
