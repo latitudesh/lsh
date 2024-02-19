@@ -106,7 +106,7 @@ You can see more examples [here](https://docs.latitude.sh/docs/examples-1). Reac
 
 For more information, see the documentation.
 
-- [lsh Docs](https://docs.latitude.sh/docs/getting-started)
+- [lsh Docs](https://docs.latitude.sh/docs/cli)
 
 - [Product Docs](https://docs.latitude.sh/docs)
 
