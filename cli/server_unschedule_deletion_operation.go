@@ -3,8 +3,6 @@ package cli
 import (
 	"github.com/latitudesh/lsh/client/servers"
 	"github.com/latitudesh/lsh/internal/cmdflag"
-	"github.com/latitudesh/lsh/internal/operation"
-	"github.com/latitudesh/lsh/internal/prompt"
 	"github.com/latitudesh/lsh/internal/utils"
 
 	"github.com/spf13/cobra"
@@ -22,7 +20,7 @@ func makeOperationServersServerUnscheduleDeletionCmd() (*cobra.Command, error) {
 }
 
 type UnscheduleServerDeletionOperation struct {
-	Flags cmdflag.Flags
+	PathParamFlags cmdflag.Flags
 }
 
 func (o *UnscheduleServerDeletionOperation) Register() (*cobra.Command, error) {
@@ -41,31 +39,17 @@ func (o *UnscheduleServerDeletionOperation) PromptAttributes(attributes interfac
 }
 
 func (o *UnscheduleServerDeletionOperation) registerFlags(cmd *cobra.Command) {
-	o.Flags = cmdflag.Flags{FlagSet: cmd.Flags()}
+	o.PathParamFlags = cmdflag.Flags{FlagSet: cmd.Flags()}
 
 	schema := &cmdflag.FlagsSchema{
-		{
-			Name:             "id",
-			Description:      "The Server Id (Required).",
-			DefaultValue:     "",
-			Type:             "string",
-			RequestParamType: cmdflag.PathParam,
+		&cmdflag.String{
+			Name:        "id",
+			Label:       "Server ID",
+			Description: "The Server Id (Required).",
 		},
 	}
 
-	o.Flags.Register(schema)
-}
-
-func (o *UnscheduleServerDeletionOperation) GetFlags() cmdflag.Flags {
-	return o.Flags
-}
-
-func (o *UnscheduleServerDeletionOperation) PromptQueryParams(params interface{}) {
-	p := prompt.New(
-		prompt.NewInputText("id", "Server ID"),
-	)
-
-	p.Run(params)
+	o.PathParamFlags.Register(schema)
 }
 
 func (o *UnscheduleServerDeletionOperation) run(cmd *cobra.Command, args []string) error {
@@ -75,8 +59,7 @@ func (o *UnscheduleServerDeletionOperation) run(cmd *cobra.Command, args []strin
 	}
 
 	params := servers.NewServerUnscheduleDeletionParams()
-
-	operation.AssignPathParams(o, params)
+	o.PathParamFlags.AssignValues(params)
 
 	if dryRun {
 		logDebugf("dry-run flag specified. Skip sending request.")
