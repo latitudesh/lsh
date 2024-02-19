@@ -41,14 +41,6 @@ func (o *UpdateServerOperation) Register() (*cobra.Command, error) {
 	return cmd, nil
 }
 
-func (o *UpdateServerOperation) promptID(bodyData interface{}) {
-	p := prompt.New(
-		prompt.NewInputText("id", "ID from the Server you want to update"),
-	)
-
-	p.Run(bodyData)
-}
-
 func (o *UpdateServerOperation) PromptAttributes(attributes interface{}) {
 	server := resource.NewServerResource()
 
