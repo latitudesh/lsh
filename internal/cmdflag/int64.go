@@ -11,6 +11,7 @@ type Int64 struct {
 	Description  string
 	Value        *int64
 	defaultValue int64
+	Required     bool
 }
 
 func NewInt64(name string, label string, description string) *Int64 {

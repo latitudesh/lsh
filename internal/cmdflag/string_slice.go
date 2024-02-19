@@ -11,6 +11,7 @@ type StringSlice struct {
 	Description  string
 	defaultValue []string
 	Value        *[]string
+	Required     bool
 }
 
 func (f *StringSlice) GetValue() interface{} {

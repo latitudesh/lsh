@@ -55,7 +55,7 @@ func (o *DeleteAPIKeyOperation) run(cmd *cobra.Command, args []string) error {
 		return err
 	}
 
-	params := api_keys.NewUpdateAPIKeyParams()
+	params := api_keys.NewDeleteAPIKeyParams()
 	o.PathParamFlags.AssignValues(params)
 
 	if dryRun {
@@ -63,14 +63,14 @@ func (o *DeleteAPIKeyOperation) run(cmd *cobra.Command, args []string) error {
 		return nil
 	}
 
-	response, err := appCli.APIKeys.UpdateAPIKey(params, nil)
+	response, err := appCli.APIKeys.DeleteAPIKey(params, nil)
 	if err != nil {
 		utils.PrintError(err)
 		return nil
 	}
 
 	if !debug {
-		utils.Render(response.GetData())
+		response.Render()
 	}
 	return nil
 }

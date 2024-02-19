@@ -41,23 +41,23 @@ func (o *CreateProjectOperation) registerFlags(cmd *cobra.Command) {
 	schema := &cmdflag.FlagsSchema{
 		&cmdflag.String{
 			Name:        "name",
-			Label:       "Name",
-			Description: "Required. The project name. Must be unique.",
+			Description: "The project name. Must be unique.",
+			Required:    true,
 		},
 		&cmdflag.String{
 			Name:        "description",
-			Label:       "Description",
 			Description: "The project description",
+			Required:    false,
 		},
 		&cmdflag.String{
 			Name:        "environment",
-			Label:       "Environment",
 			Description: `Enum: ["Development","Staging","Production"].`,
+			Required:    false,
 		},
 		&cmdflag.String{
 			Name:        "provisioning_type",
-			Label:       "Provisioning Type",
-			Description: `Enum: ["reserved","on_demand"]. Required. The provisioning type of the project. Default: on_demand`,
+			Description: `Enum: ["reserved","on_demand"]. The provisioning type of the project. Default: on_demand`,
+			Required:    true,
 		},
 	}
 

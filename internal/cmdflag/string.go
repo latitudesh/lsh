@@ -6,12 +6,14 @@ import (
 )
 
 type String struct {
-	Name         string
-	Label        string
-	Description  string
-	defaultValue string
-	Value        *string
-	Options      []string
+	Name           string
+	CustomFlagName string
+	Label          string
+	Description    string
+	defaultValue   string
+	Value          *string
+	Options        []string
+	Required       bool
 }
 
 func NewString(name string, label string, description string) *String {

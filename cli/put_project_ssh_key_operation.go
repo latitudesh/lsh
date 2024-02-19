@@ -73,7 +73,7 @@ func (o *UpdateSSHKeyOperation) run(cmd *cobra.Command, args []string) error {
 	params := ssh_keys.NewPutProjectSSHKeyParams()
 	o.PathParamFlags.AssignValues(params)
 	o.BodyAttributesFlags.AssignValues(params.Body.Data.Attributes)
-	params.Body.Data.ID = &params.SSHKeyID
+	params.Body.Data.ID = params.SSHKeyID
 
 	if dryRun {
 		logDebugf("dry-run flag specified. Skip sending request.")

@@ -11,6 +11,7 @@ type Bool struct {
 	Description  string
 	Value        *bool
 	defaultValue bool
+	Required     bool
 }
 
 func NewBool(name string, label string, description string) *Bool {

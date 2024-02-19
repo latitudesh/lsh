@@ -17,7 +17,6 @@ import (
 
 	apierrors "github.com/latitudesh/lsh/internal/api/errors"
 	"github.com/latitudesh/lsh/internal/renderer"
-	"github.com/latitudesh/lsh/models"
 )
 
 // UpdateVirtualNetworkReader is a Reader for the UpdateVirtualNetwork structure.
@@ -68,7 +67,7 @@ UpdateVirtualNetworkOK describes a response with status code 200, with default h
 Updated
 */
 type UpdateVirtualNetworkOK struct {
-	Payload *models.VirtualNetwork
+	Payload *GetVirtualNetworkOKBody
 }
 
 // IsSuccess returns true when this update virtual network o k response has a 2xx status code
@@ -109,17 +108,17 @@ func (o *UpdateVirtualNetworkOK) String() string {
 	return fmt.Sprintf("[PATCH /virtual_networks/{virtual_network_id}][%d] updateVirtualNetworkOK  %+v", 200, o.Payload)
 }
 
-func (o *UpdateVirtualNetworkOK) GetPayload() *models.VirtualNetwork {
+func (o *UpdateVirtualNetworkOK) GetPayload() *GetVirtualNetworkOKBody {
 	return o.Payload
 }
 
 func (o *UpdateVirtualNetworkOK) GetData() []renderer.ResponseData {
-	return []renderer.ResponseData{o.Payload}
+	return []renderer.ResponseData{o.Payload.Data}
 }
 
 func (o *UpdateVirtualNetworkOK) readResponse(response runtime.ClientResponse, consumer runtime.Consumer, formats strfmt.Registry) error {
 
-	o.Payload = new(models.VirtualNetwork)
+	o.Payload = new(GetVirtualNetworkOKBody)
 
 	// response payload
 	if err := consumer.Consume(response.Body(), o.Payload); err != nil && err != io.EOF {

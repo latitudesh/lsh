@@ -40,14 +40,14 @@ func (o *CreateVirtualNetworkAssignmentOperation) registerFlags(cmd *cobra.Comma
 
 	schema := &cmdflag.FlagsSchema{
 		&cmdflag.String{
-			Name:        "server",
-			Label:       "Server ID",
-			Description: "The Server ID (Required).",
+			Name:           "server_id",
+			CustomFlagName: "server",
+			Description:    "The Server ID (Required).",
 		},
 		&cmdflag.String{
-			Name:        "virtual_network",
-			Label:       "Virtual Network ID",
-			Description: "The Virtual Network ID (Required).",
+			Name:           "virtual_network_id",
+			CustomFlagName: "virtual_network",
+			Description:    "The Virtual Network ID (Required).",
 		},
 	}
 
