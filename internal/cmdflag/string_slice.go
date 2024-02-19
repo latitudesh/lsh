@@ -23,7 +23,7 @@ func (f *StringSlice) GetName() string {
 }
 
 func (f *StringSlice) Prompt() prompt.PromptInput {
-	return prompt.NewInputList(f.Name, f.Label)
+	return prompt.NewInputStringList(f.Name, f.Label)
 }
 
 func (f *StringSlice) Register(s *pflag.FlagSet) {
