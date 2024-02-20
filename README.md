@@ -13,11 +13,16 @@ lsh is the [Latitude.sh](http://latitude.sh/) command-line interface that will h
 
 #### MacOS / Linux / WSL
 
-  
-
 Installing the latest version
 
-  
+#### Homebrew:
+
+
+```
+brew install latitudesh/tools/lsh
+```
+
+#### Instalation Script:
 
 ```bash
 
@@ -25,7 +30,6 @@ curl -sSL  https://raw.githubusercontent.com/latitudesh/lsh/main/install.sh | ba
 
 ```
 
-  
 
 #### Windows is not supported yet.
 
