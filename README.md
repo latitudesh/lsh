@@ -17,12 +17,11 @@ Installing the latest version
 
 #### Homebrew:
 
-
 ```
 brew install latitudesh/tools/lsh
 ```
 
-#### Instalation Script:
+#### Installation Script:
 
 ```bash
 
