@@ -7,8 +7,6 @@ import (
 	"github.com/latitudesh/lsh/client/servers"
 	"github.com/latitudesh/lsh/internal/api/resource"
 	"github.com/latitudesh/lsh/internal/cmdflag"
-	"github.com/latitudesh/lsh/internal/operation"
-	"github.com/latitudesh/lsh/internal/prompt"
 	"github.com/latitudesh/lsh/internal/utils"
 
 	"github.com/spf13/cobra"
@@ -26,7 +24,8 @@ func makeOperationServersUpdateServerCmd() (*cobra.Command, error) {
 }
 
 type UpdateServerOperation struct {
-	Flags cmdflag.Flags
+	PathParamFlags      cmdflag.Flags
+	BodyAttributesFlags cmdflag.Flags
 }
 
 func (o *UpdateServerOperation) Register() (*cobra.Command, error) {
@@ -41,57 +40,42 @@ func (o *UpdateServerOperation) Register() (*cobra.Command, error) {
 	return cmd, nil
 }
 
-func (o *UpdateServerOperation) PromptAttributes(attributes interface{}) {
+func (o *UpdateServerOperation) registerFlags(cmd *cobra.Command) {
 	server := resource.NewServerResource()
 
-	p := prompt.New(
-		prompt.NewInputText("hostname", "Hostname"),
-		prompt.NewInputSelect("billing", "Billing", server.SupportedBillingTypes),
-	)
+	o.PathParamFlags = cmdflag.Flags{FlagSet: cmd.Flags()}
+	o.BodyAttributesFlags = cmdflag.Flags{FlagSet: cmd.Flags()}
 
-	p.Run(attributes)
-}
-
-func (o *UpdateServerOperation) registerFlags(cmd *cobra.Command) {
-	o.Flags = cmdflag.Flags{FlagSet: cmd.Flags()}
-
-	schema := &cmdflag.FlagsSchema{
-		{
-			Name:             "id",
-			Description:      "The Server Id (Required).",
-			DefaultValue:     "",
-			Type:             "string",
-			RequestParamType: cmdflag.PathParam,
-		},
-		{
-			Name:             "hostname",
-			Description:      "",
-			DefaultValue:     "",
-			Type:             "string",
-			RequestParamType: cmdflag.BodyParam,
-		},
-		{
-			Name:             "billing",
-			Description:      "",
-			DefaultValue:     "",
-			Type:             "string",
-			RequestParamType: cmdflag.BodyParam,
+	pathParamsSchema := &cmdflag.FlagsSchema{
+		&cmdflag.String{
+			Name:        "id",
+			Label:       "ID from the Server you want to update",
+			Description: "Server ID",
+			Required:    true,
 		},
 	}
 
-	o.Flags.Register(schema)
-}
+	bodyFlagsSchema := &cmdflag.FlagsSchema{
+		&cmdflag.String{
+			Name:        "hostname",
+			Label:       "Hostname",
+			Description: "Hostname",
+			Required:    false,
+		},
+		&cmdflag.String{
+			Name:        "billing",
+			Label:       "Billing",
+			Description: "Billing",
+			Options:     server.SupportedBillingTypes,
+			Required:    false,
+		},
+	}
 
-func (o *UpdateServerOperation) GetFlags() cmdflag.Flags {
-	return o.Flags
+	o.PathParamFlags.Register(pathParamsSchema)
+	o.BodyAttributesFlags.Register(bodyFlagsSchema)
 }
 
 func (o *UpdateServerOperation) PromptQueryParams(params interface{}) {
-	p := prompt.New(
-		prompt.NewInputText("id", "ID from the Server you want to update"),
-	)
-
-	p.Run(params)
 }
 
 func (o *UpdateServerOperation) run(cmd *cobra.Command, args []string) error {
@@ -101,9 +85,8 @@ func (o *UpdateServerOperation) run(cmd *cobra.Command, args []string) error {
 	}
 
 	params := servers.NewUpdateServerParams()
-	operation.AssignPathParams(o, params)
-	operation.AssignBodyAttributes(o, params.Body.Data.Attributes)
-
+	o.PathParamFlags.AssignValues(params)
+	o.BodyAttributesFlags.AssignValues(params.Body.Data.Attributes)
 	params.Body.Data.ID = params.ID
 
 	if swag.IsZero(*params.Body.Data.Attributes) {

@@ -3,15 +3,13 @@ package cli
 import (
 	"github.com/latitudesh/lsh/client/projects"
 	"github.com/latitudesh/lsh/internal/cmdflag"
-	"github.com/latitudesh/lsh/internal/operation"
-	"github.com/latitudesh/lsh/internal/prompt"
 	"github.com/latitudesh/lsh/internal/utils"
 
 	"github.com/spf13/cobra"
 )
 
 type DeleteProjectOperation struct {
-	Flags cmdflag.Flags
+	PathParamFlags cmdflag.Flags
 }
 
 func makeOperationProjectsDeleteProjectCmd() (*cobra.Command, error) {
@@ -37,35 +35,19 @@ func (o *DeleteProjectOperation) Register() (*cobra.Command, error) {
 	return cmd, nil
 }
 
-func (o *DeleteProjectOperation) PromptQueryParams(params interface{}) {
-	p := prompt.New(
-		prompt.NewInputText("id_or_slug", "ID or Slug from the Project you want to destroy"),
-	)
-
-	p.Run(params)
-}
-
-func (o *DeleteProjectOperation) PromptAttributes(attributes interface{}) {
-}
-
-func (o *DeleteProjectOperation) GetFlags() cmdflag.Flags {
-	return o.Flags
-}
-
 func (o *DeleteProjectOperation) registerFlags(cmd *cobra.Command) {
-	o.Flags = cmdflag.Flags{FlagSet: cmd.Flags()}
+	o.PathParamFlags = cmdflag.Flags{FlagSet: cmd.Flags()}
 
 	schema := &cmdflag.FlagsSchema{
-		{
-			Name:             "id_or_slug",
-			Description:      "Required. The project ID or Slug",
-			DefaultValue:     "",
-			Type:             "string",
-			RequestParamType: cmdflag.PathParam,
+		&cmdflag.String{
+			Name:        "id_or_slug",
+			Label:       "ID or Slug from the Project you want to delete",
+			Description: "The project ID or Slug",
+			Required:    true,
 		},
 	}
 
-	o.Flags.Register(schema)
+	o.PathParamFlags.Register(schema)
 }
 
 func (o *DeleteProjectOperation) run(cmd *cobra.Command, args []string) error {
@@ -75,9 +57,9 @@ func (o *DeleteProjectOperation) run(cmd *cobra.Command, args []string) error {
 	}
 
 	params := projects.NewDeleteProjectParams()
-	operation.AssignPathParams(o, params)
-	if dryRun {
+	o.PathParamFlags.AssignValues(params)
 
+	if dryRun {
 		logDebugf("dry-run flag specified. Skip sending request.")
 		return nil
 	}

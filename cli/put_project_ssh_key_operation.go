@@ -3,8 +3,6 @@ package cli
 import (
 	"github.com/latitudesh/lsh/client/ssh_keys"
 	"github.com/latitudesh/lsh/internal/cmdflag"
-	"github.com/latitudesh/lsh/internal/operation"
-	"github.com/latitudesh/lsh/internal/prompt"
 	"github.com/latitudesh/lsh/internal/utils"
 
 	"github.com/spf13/cobra"
@@ -22,7 +20,8 @@ func makeOperationSSHKeysPutProjectSSHKeyCmd() (*cobra.Command, error) {
 }
 
 type UpdateSSHKeyOperation struct {
-	Flags cmdflag.Flags
+	PathParamFlags      cmdflag.Flags
+	BodyAttributesFlags cmdflag.Flags
 }
 
 func (o *UpdateSSHKeyOperation) Register() (*cobra.Command, error) {
@@ -37,57 +36,37 @@ func (o *UpdateSSHKeyOperation) Register() (*cobra.Command, error) {
 	return cmd, nil
 }
 
-func (o *UpdateSSHKeyOperation) PromptAttributes(attributes interface{}) {
-	p := prompt.New(
-		prompt.NewInputText("name", "Name of the API Key"),
-	)
-
-	p.Run(attributes)
-}
-
-func (o *UpdateSSHKeyOperation) PromptQueryParams(params interface{}) {
-	p := prompt.New(
-		prompt.NewInputText("id", "ID from the SSH Key you want to update"),
-		prompt.NewInputText("project", "Project ID or Slug"),
-	)
-
-	p.Run(params)
-}
-
 func (o *UpdateSSHKeyOperation) registerFlags(cmd *cobra.Command) {
-	o.Flags = cmdflag.Flags{FlagSet: cmd.Flags()}
+	o.PathParamFlags = cmdflag.Flags{FlagSet: cmd.Flags()}
+	o.BodyAttributesFlags = cmdflag.Flags{FlagSet: cmd.Flags()}
 
-	schema := &cmdflag.FlagsSchema{
-		{
-			Name:             "id",
-			Description:      "ID from the SSH Key you want to update",
-			DefaultValue:     "",
-			Type:             "string",
-			RequestParamType: cmdflag.PathParam,
+	pathParamsSchema := &cmdflag.FlagsSchema{
+		&cmdflag.String{
+			Name:        "id",
+			Label:       "ID from the SSH Key you want to update",
+			Description: "ID from the SSH Key you want to update",
+			Required:    true,
 		},
-		{
-			Name:             "project",
-			Description:      "Project ID or Slug",
-			DefaultValue:     "",
-			Type:             "string",
-			RequestParamType: cmdflag.PathParam,
-		},
-		{
-			Name:             "name",
-			Description:      "Name of the SSH Key",
-			DefaultValue:     "",
-			Type:             "string",
-			RequestParamType: cmdflag.BodyParam,
+		&cmdflag.String{
+			Name:        "project",
+			Label:       "Project ID or Slug",
+			Description: "Project ID or Slug",
+			Required:    true,
 		},
 	}
 
-	o.Flags.Register(schema)
-}
+	bodyFlagsSchema := &cmdflag.FlagsSchema{
+		&cmdflag.String{
+			Name:        "name",
+			Label:       "Name of the SSH Key",
+			Description: "Name of the SSH Key",
+			Required:    true,
+		},
+	}
 
-func (o *UpdateSSHKeyOperation) GetFlags() cmdflag.Flags {
-	return o.Flags
+	o.PathParamFlags.Register(pathParamsSchema)
+	o.BodyAttributesFlags.Register(bodyFlagsSchema)
 }
-
 func (o *UpdateSSHKeyOperation) run(cmd *cobra.Command, args []string) error {
 	appCli, err := makeClient(cmd, args)
 	if err != nil {
@@ -95,8 +74,8 @@ func (o *UpdateSSHKeyOperation) run(cmd *cobra.Command, args []string) error {
 	}
 
 	params := ssh_keys.NewPutProjectSSHKeyParams()
-	operation.AssignPathParams(o, params)
-	operation.AssignBodyAttributes(o, params.Body.Data.Attributes)
+	o.PathParamFlags.AssignValues(params)
+	o.BodyAttributesFlags.AssignValues(params.Body.Data.Attributes)
 	params.Body.Data.ID = params.SSHKeyID
 
 	if dryRun {
