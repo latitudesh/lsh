@@ -35,7 +35,7 @@ func (f *String) Prompt() prompt.PromptInput {
 }
 
 func (f *String) Register(s *pflag.FlagSet) {
-	f.Value = s.String(f.Name, f.defaultValue, f.Description)
+	f.Value = s.String(f.Name, f.defaultValue, f.description())
 }
 
 func (f *String) label() string {
@@ -44,4 +44,12 @@ func (f *String) label() string {
 	}
 
 	return fmt.Sprintf("[Optional] %v", f.Label)
+}
+
+func (f *String) description() string {
+	if !f.Required {
+		return f.Description
+	}
+
+	return fmt.Sprintf("[Required] %v", f.Description)
 }

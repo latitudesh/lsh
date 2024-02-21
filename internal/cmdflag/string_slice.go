@@ -29,7 +29,7 @@ func (f *StringSlice) Prompt() prompt.PromptInput {
 }
 
 func (f *StringSlice) Register(s *pflag.FlagSet) {
-	f.Value = s.StringSlice(f.Name, f.defaultValue, f.Description)
+	f.Value = s.StringSlice(f.Name, f.defaultValue, f.description())
 }
 
 func (f *StringSlice) label() string {
@@ -38,4 +38,12 @@ func (f *StringSlice) label() string {
 	}
 
 	return fmt.Sprintf("[Optional] %v", f.Label)
+}
+
+func (f *StringSlice) description() string {
+	if !f.Required {
+		return f.Description
+	}
+
+	return fmt.Sprintf("[Required] %v", f.Description)
 }

@@ -29,7 +29,7 @@ func (f *Int64) Prompt() prompt.PromptInput {
 }
 
 func (f *Int64) Register(s *pflag.FlagSet) {
-	f.Value = s.Int64(f.Name, f.defaultValue, f.Description)
+	f.Value = s.Int64(f.Name, f.defaultValue, f.description())
 }
 
 func (f *Int64) label() string {
@@ -38,4 +38,12 @@ func (f *Int64) label() string {
 	}
 
 	return fmt.Sprintf("[Optional] %v", f.Label)
+}
+
+func (f *Int64) description() string {
+	if !f.Required {
+		return f.Description
+	}
+
+	return fmt.Sprintf("[Required] %v", f.Description)
 }
