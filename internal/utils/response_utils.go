@@ -4,6 +4,7 @@ package utils
 import (
 	"errors"
 	"fmt"
+	"os"
 
 	apierrors "github.com/latitudesh/lsh/internal/api/errors"
 	"github.com/latitudesh/lsh/internal/output"
@@ -45,7 +46,8 @@ func Render(data []renderer.ResponseData) {
 	case formatOutputFlag == "table":
 		r = renderer.TableRenderer{}
 	default:
-		fmt.Println("Unsupported output format")
+		fmt.Printf("\nUnsupported output format\n\n")
+		os.Exit(1)
 	}
 
 	renderContext := renderer.NewRenderContext(r)
