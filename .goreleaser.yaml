@@ -52,3 +52,11 @@ changelog:
     exclude:
       - "^docs:"
       - "^test:"
+
+brews:
+  - name: lsh
+    homepage: "https://www.latitude.sh/"
+    repository:
+      owner: latitudesh
+      name: homebrew-tools
+
