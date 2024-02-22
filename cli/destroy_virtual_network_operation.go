@@ -25,9 +25,10 @@ func makeOperationVirtualNetworksDestroyVirtualNetworkCmd() (*cobra.Command, err
 
 func (o *DeleteVirtualNetworkOperation) Register() (*cobra.Command, error) {
 	cmd := &cobra.Command{
-		Use:   "destroy",
-		Short: "Delete virtual network.",
-		RunE:  o.run,
+		Use:    "destroy",
+		Short:  "Delete virtual network.",
+		RunE:   o.run,
+		PreRun: o.preRun,
 	}
 
 	o.registerFlags(cmd)
@@ -48,6 +49,10 @@ func (o *DeleteVirtualNetworkOperation) registerFlags(cmd *cobra.Command) {
 	}
 
 	o.PathParamFlags.Register(schema)
+}
+
+func (o *DeleteVirtualNetworkOperation) preRun(cmd *cobra.Command, args []string) {
+	o.PathParamFlags.PreRun(cmd, args)
 }
 
 func (o *DeleteVirtualNetworkOperation) run(cmd *cobra.Command, args []string) error {

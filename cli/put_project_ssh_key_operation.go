@@ -26,9 +26,10 @@ type UpdateSSHKeyOperation struct {
 
 func (o *UpdateSSHKeyOperation) Register() (*cobra.Command, error) {
 	cmd := &cobra.Command{
-		Use:   "update",
-		Short: `Allow you update SSH Key in a project. These keys can be used to access servers after deploy and reinstall actions.`,
-		RunE:  o.run,
+		Use:    "update",
+		Short:  `Allow you update SSH Key in a project. These keys can be used to access servers after deploy and reinstall actions.`,
+		RunE:   o.run,
+		PreRun: o.preRun,
 	}
 
 	o.registerFlags(cmd)
@@ -67,6 +68,12 @@ func (o *UpdateSSHKeyOperation) registerFlags(cmd *cobra.Command) {
 	o.PathParamFlags.Register(pathParamsSchema)
 	o.BodyAttributesFlags.Register(bodyFlagsSchema)
 }
+
+func (o *UpdateSSHKeyOperation) preRun(cmd *cobra.Command, args []string) {
+	o.PathParamFlags.PreRun(cmd, args)
+	o.BodyAttributesFlags.PreRun(cmd, args)
+}
+
 func (o *UpdateSSHKeyOperation) run(cmd *cobra.Command, args []string) error {
 	appCli, err := makeClient(cmd, args)
 	if err != nil {

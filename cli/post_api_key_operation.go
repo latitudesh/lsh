@@ -25,9 +25,10 @@ type CreateAPIKeyOperation struct {
 
 func (o *CreateAPIKeyOperation) Register() (*cobra.Command, error) {
 	cmd := &cobra.Command{
-		Use:   "create",
-		Short: `Create a new API Key that is tied to the current user account. The created API key is only listed ONCE upon creation. It can however be regenerated or deleted.`,
-		RunE:  o.run,
+		Use:    "create",
+		Short:  `Create a new API Key that is tied to the current user account. The created API key is only listed ONCE upon creation. It can however be regenerated or deleted.`,
+		RunE:   o.run,
+		PreRun: o.preRun,
 	}
 
 	o.registerFlags(cmd)
@@ -48,6 +49,10 @@ func (o *CreateAPIKeyOperation) registerFlags(cmd *cobra.Command) {
 	}
 
 	o.BodyAttributesFlags.Register(schema)
+}
+
+func (o *CreateAPIKeyOperation) preRun(cmd *cobra.Command, args []string) {
+	o.BodyAttributesFlags.PreRun(cmd, args)
 }
 
 func (o *CreateAPIKeyOperation) run(cmd *cobra.Command, args []string) error {

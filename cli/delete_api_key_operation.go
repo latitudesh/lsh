@@ -25,9 +25,10 @@ type DeleteAPIKeyOperation struct {
 
 func (o *DeleteAPIKeyOperation) Register() (*cobra.Command, error) {
 	cmd := &cobra.Command{
-		Use:   "destroy",
-		Short: `Delete an existing API Key. Once deleted, the API Key can no longer be used to access the API.`,
-		RunE:  o.run,
+		Use:    "destroy",
+		Short:  `Delete an existing API Key. Once deleted, the API Key can no longer be used to access the API.`,
+		RunE:   o.run,
+		PreRun: o.preRun,
 	}
 
 	o.registerFlags(cmd)
@@ -48,6 +49,10 @@ func (o *DeleteAPIKeyOperation) registerFlags(cmd *cobra.Command) {
 	}
 
 	o.PathParamFlags.Register(schema)
+}
+
+func (o *DeleteAPIKeyOperation) preRun(cmd *cobra.Command, args []string) {
+	o.PathParamFlags.PreRun(cmd, args)
 }
 
 func (o *DeleteAPIKeyOperation) run(cmd *cobra.Command, args []string) error {

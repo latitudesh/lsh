@@ -26,6 +26,10 @@ func (f *String) GetName() string {
 	return f.Name
 }
 
+func (f *String) IsRequired() bool {
+	return f.Required
+}
+
 func (f *String) Prompt() prompt.PromptInput {
 	if len(f.Options) > 0 {
 		return prompt.NewInputSelect(f.Name, f.Label, f.Options)

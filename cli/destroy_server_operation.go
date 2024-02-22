@@ -25,9 +25,10 @@ type DestroyServerOperation struct {
 
 func (o *DestroyServerOperation) Register() (*cobra.Command, error) {
 	cmd := &cobra.Command{
-		Use:   "destroy",
-		Short: "Remove a server.",
-		RunE:  o.run,
+		Use:    "destroy",
+		Short:  "Remove a server.",
+		RunE:   o.run,
+		PreRun: o.preRun,
 	}
 
 	o.registerFlags(cmd)
@@ -48,6 +49,10 @@ func (o *DestroyServerOperation) registerFlags(cmd *cobra.Command) {
 	}
 
 	o.PathParamFlags.Register(schema)
+}
+
+func (o *DestroyServerOperation) preRun(cmd *cobra.Command, args []string) {
+	o.PathParamFlags.PreRun(cmd, args)
 }
 
 func (o *DestroyServerOperation) run(cmd *cobra.Command, args []string) error {

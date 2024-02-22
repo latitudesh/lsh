@@ -24,6 +24,10 @@ func (f *Bool) GetName() string {
 	return f.Name
 }
 
+func (f *Bool) IsRequired() bool {
+	return f.Required
+}
+
 func (f *Bool) Prompt() prompt.PromptInput {
 	return prompt.NewInputBool(f.Name, f.label())
 }

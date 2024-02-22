@@ -26,9 +26,10 @@ type CreateVirtualNetworkOperation struct {
 
 func (o *CreateVirtualNetworkOperation) Register() (*cobra.Command, error) {
 	cmd := &cobra.Command{
-		Use:   "create",
-		Short: "Creates a new Virtual Network.",
-		RunE:  o.run,
+		Use:    "create",
+		Short:  "Creates a new Virtual Network.",
+		RunE:   o.run,
+		PreRun: o.preRun,
 	}
 
 	o.registerFlags(cmd)
@@ -64,6 +65,10 @@ func (o *CreateVirtualNetworkOperation) registerFlags(cmd *cobra.Command) {
 	}
 
 	o.BodyAttributesFlags.Register(schema)
+}
+
+func (o *CreateVirtualNetworkOperation) preRun(cmd *cobra.Command, args []string) {
+	o.BodyAttributesFlags.PreRun(cmd, args)
 }
 
 func (o *CreateVirtualNetworkOperation) run(cmd *cobra.Command, args []string) error {

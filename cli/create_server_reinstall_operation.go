@@ -30,9 +30,10 @@ type CreateServerReinstallOperation struct {
 
 func (o *CreateServerReinstallOperation) Register() (*cobra.Command, error) {
 	cmd := &cobra.Command{
-		Use:   "reinstall",
-		Short: "Submit a reinstall request to a server.",
-		RunE:  o.run,
+		Use:    "reinstall",
+		Short:  "Submit a reinstall request to a server.",
+		RunE:   o.run,
+		PreRun: o.preRun,
 	}
 
 	o.registerFlags(cmd)
@@ -50,6 +51,7 @@ func (o *CreateServerReinstallOperation) registerFlags(cmd *cobra.Command) {
 			Name:        "id",
 			Label:       "Server ID",
 			Description: "The Server Id (Required).",
+			Required:    true,
 		},
 	}
 
@@ -97,6 +99,11 @@ func (o *CreateServerReinstallOperation) registerFlags(cmd *cobra.Command) {
 	o.BodyAttributesFlags.Register(bodyAttributesFlagsSchema)
 	o.PathParamFlags.Register(pathParamsFlagsSchema)
 
+}
+
+func (o *CreateServerReinstallOperation) preRun(cmd *cobra.Command, args []string) {
+	o.PathParamFlags.PreRun(cmd, args)
+	o.BodyAttributesFlags.PreRun(cmd, args)
 }
 
 func (o *CreateServerReinstallOperation) run(cmd *cobra.Command, args []string) error {

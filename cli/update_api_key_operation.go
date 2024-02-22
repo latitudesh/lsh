@@ -26,9 +26,10 @@ type UpdateAPIKeyOperation struct {
 
 func (o *UpdateAPIKeyOperation) Register() (*cobra.Command, error) {
 	cmd := &cobra.Command{
-		Use:   "update",
-		Short: `Regenerate an existing API Key that is tied to the current user. This overrides the previous key.`,
-		RunE:  o.run,
+		Use:    "update",
+		Short:  `Regenerate an existing API Key that is tied to the current user. This overrides the previous key.`,
+		RunE:   o.run,
+		PreRun: o.preRun,
 	}
 
 	o.registerFlags(cmd)
@@ -60,6 +61,11 @@ func (o *UpdateAPIKeyOperation) registerFlags(cmd *cobra.Command) {
 
 	o.PathParamFlags.Register(pathParamsSchema)
 	o.BodyAttributesFlags.Register(bodyFlagsSchema)
+}
+
+func (o *UpdateAPIKeyOperation) preRun(cmd *cobra.Command, args []string) {
+	o.PathParamFlags.PreRun(cmd, args)
+	o.BodyAttributesFlags.PreRun(cmd, args)
 }
 
 func (o *UpdateAPIKeyOperation) run(cmd *cobra.Command, args []string) error {

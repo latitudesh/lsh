@@ -24,6 +24,10 @@ func (f *Int64) GetName() string {
 	return f.Name
 }
 
+func (f *Int64) IsRequired() bool {
+	return f.Required
+}
+
 func (f *Int64) Prompt() prompt.PromptInput {
 	return prompt.NewInputNumber(f.Name, f.label())
 }

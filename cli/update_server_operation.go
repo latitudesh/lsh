@@ -30,9 +30,10 @@ type UpdateServerOperation struct {
 
 func (o *UpdateServerOperation) Register() (*cobra.Command, error) {
 	cmd := &cobra.Command{
-		Use:   "update",
-		Short: "Update server information.",
-		RunE:  o.run,
+		Use:    "update",
+		Short:  "Update server information.",
+		RunE:   o.run,
+		PreRun: o.preRun,
 	}
 
 	o.registerFlags(cmd)
@@ -76,6 +77,11 @@ func (o *UpdateServerOperation) registerFlags(cmd *cobra.Command) {
 }
 
 func (o *UpdateServerOperation) PromptQueryParams(params interface{}) {
+}
+
+func (o *UpdateServerOperation) preRun(cmd *cobra.Command, args []string) {
+	o.PathParamFlags.PreRun(cmd, args)
+	o.BodyAttributesFlags.PreRun(cmd, args)
 }
 
 func (o *UpdateServerOperation) run(cmd *cobra.Command, args []string) error {

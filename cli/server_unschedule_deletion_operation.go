@@ -25,9 +25,10 @@ type UnscheduleServerDeletionOperation struct {
 
 func (o *UnscheduleServerDeletionOperation) Register() (*cobra.Command, error) {
 	cmd := &cobra.Command{
-		Use:   "unschedule-deletion",
-		Short: "Unschedules the server removal at the end of the billing cycle.",
-		RunE:  o.run,
+		Use:    "unschedule-deletion",
+		Short:  "Unschedules the server removal at the end of the billing cycle.",
+		RunE:   o.run,
+		PreRun: o.preRun,
 	}
 
 	o.registerFlags(cmd)
@@ -51,6 +52,10 @@ func (o *UnscheduleServerDeletionOperation) registerFlags(cmd *cobra.Command) {
 	}
 
 	o.PathParamFlags.Register(schema)
+}
+
+func (o *UnscheduleServerDeletionOperation) preRun(cmd *cobra.Command, args []string) {
+	o.PathParamFlags.PreRun(cmd, args)
 }
 
 func (o *UnscheduleServerDeletionOperation) run(cmd *cobra.Command, args []string) error {

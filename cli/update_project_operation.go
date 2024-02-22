@@ -33,9 +33,10 @@ type UpdateProjectOperation struct {
 
 func (o *UpdateProjectOperation) Register() (*cobra.Command, error) {
 	cmd := &cobra.Command{
-		Use:   "update",
-		Short: "Updates a project.",
-		RunE:  o.run,
+		Use:    "update",
+		Short:  "Updates a project.",
+		RunE:   o.run,
+		PreRun: o.preRun,
 	}
 
 	o.registerFlags(cmd)
@@ -91,6 +92,11 @@ func (o *UpdateProjectOperation) registerFlags(cmd *cobra.Command) {
 }
 
 func (o *UpdateProjectOperation) PromptQueryParams(params interface{}) {
+}
+
+func (o *UpdateProjectOperation) preRun(cmd *cobra.Command, args []string) {
+	o.PathParamFlags.PreRun(cmd, args)
+	o.BodyAttributesFlags.PreRun(cmd, args)
 }
 
 func (o *UpdateProjectOperation) run(cmd *cobra.Command, args []string) error {

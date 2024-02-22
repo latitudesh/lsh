@@ -7,6 +7,7 @@ import (
 	"github.com/go-openapi/swag"
 	"github.com/latitudesh/lsh/internal/prompt"
 	"github.com/latitudesh/lsh/internal/utils"
+	"github.com/spf13/cobra"
 	"github.com/spf13/pflag"
 )
 
@@ -15,6 +16,7 @@ type FlagSchema interface {
 	GetValue() interface{}
 	GetName() string
 	Prompt() prompt.PromptInput
+	IsRequired() bool
 }
 
 type FlagsSchema []FlagSchema
@@ -44,12 +46,6 @@ func (f *Flags) GetInputs() []prompt.PromptInput {
 }
 
 func (f *Flags) AssignValues(params interface{}) error {
-	interactiveModeDisabled, err := f.FlagSet.GetBool("no-input")
-	if err != nil {
-		fmt.Println(err)
-		os.Exit(1)
-	}
-
 	for _, v := range *f.schema {
 		value := v.GetValue()
 
@@ -58,7 +54,7 @@ func (f *Flags) AssignValues(params interface{}) error {
 		}
 	}
 
-	if !interactiveModeDisabled {
+	if f.interactiveModeEnabled() {
 		p := prompt.Prompt{
 			Description: f.PromptDescription,
 			Inputs:      f.GetInputs(),
@@ -67,4 +63,26 @@ func (f *Flags) AssignValues(params interface{}) error {
 	}
 
 	return nil
+}
+
+func (f *Flags) PreRun(cmd *cobra.Command, args []string) {
+	if f.interactiveModeEnabled() {
+		return
+	}
+
+	for _, v := range *f.schema {
+		if v.IsRequired() {
+			cmd.MarkFlagRequired(v.GetName())
+		}
+	}
+}
+
+func (f *Flags) interactiveModeEnabled() bool {
+	isDisabled, err := f.FlagSet.GetBool("no-input")
+	if err != nil {
+		fmt.Println(err)
+		os.Exit(1)
+	}
+
+	return !isDisabled
 }

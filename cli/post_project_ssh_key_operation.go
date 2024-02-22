@@ -26,9 +26,10 @@ type CreateSSHKeyOperation struct {
 
 func (o *CreateSSHKeyOperation) Register() (*cobra.Command, error) {
 	cmd := &cobra.Command{
-		Use:   "create",
-		Short: `Allow you create SSH Keys in a project. These keys can be used to access servers after deploy and reinstall actions.`,
-		RunE:  o.run,
+		Use:    "create",
+		Short:  `Allow you create SSH Keys in a project. These keys can be used to access servers after deploy and reinstall actions.`,
+		RunE:   o.run,
+		PreRun: o.preRun,
 	}
 
 	o.registerFlags(cmd)
@@ -66,6 +67,11 @@ func (o *CreateSSHKeyOperation) registerFlags(cmd *cobra.Command) {
 
 	o.PathParamFlags.Register(pathParamsSchema)
 	o.BodyAttributesFlags.Register(bodyFlagsSchema)
+}
+
+func (o *CreateSSHKeyOperation) preRun(cmd *cobra.Command, args []string) {
+	o.PathParamFlags.PreRun(cmd, args)
+	o.BodyAttributesFlags.PreRun(cmd, args)
 }
 
 func (o *CreateSSHKeyOperation) run(cmd *cobra.Command, args []string) error {

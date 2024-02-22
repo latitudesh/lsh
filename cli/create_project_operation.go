@@ -25,9 +25,10 @@ type CreateProjectOperation struct {
 
 func (o *CreateProjectOperation) Register() (*cobra.Command, error) {
 	cmd := &cobra.Command{
-		Use:   "create",
-		Short: "Creates a project.",
-		RunE:  o.run,
+		Use:    "create",
+		Short:  "Creates a project.",
+		RunE:   o.run,
+		PreRun: o.preRun,
 	}
 
 	o.registerFlags(cmd)
@@ -66,6 +67,10 @@ func (o *CreateProjectOperation) registerFlags(cmd *cobra.Command) {
 	}
 
 	o.BodyAttributesFlags.Register(schema)
+}
+
+func (o *CreateProjectOperation) preRun(cmd *cobra.Command, args []string) {
+	o.BodyAttributesFlags.PreRun(cmd, args)
 }
 
 func (o *CreateProjectOperation) run(cmd *cobra.Command, args []string) error {

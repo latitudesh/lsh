@@ -25,9 +25,10 @@ type DeleteSSHKeyOperation struct {
 
 func (o *DeleteSSHKeyOperation) Register() (*cobra.Command, error) {
 	cmd := &cobra.Command{
-		Use:   "destroy",
-		Short: `Allow you remove SSH Keys in a project. Remove a SSH Key from the project won't revoke the SSH Keys access for previously deploy and reinstall actions.`,
-		RunE:  o.run,
+		Use:    "destroy",
+		Short:  `Allow you remove SSH Keys in a project. Remove a SSH Key from the project won't revoke the SSH Keys access for previously deploy and reinstall actions.`,
+		RunE:   o.run,
+		PreRun: o.preRun,
 	}
 
 	o.registerFlags(cmd)
@@ -54,6 +55,10 @@ func (o *DeleteSSHKeyOperation) registerFlags(cmd *cobra.Command) {
 	}
 
 	o.PathParamFlags.Register(schema)
+}
+
+func (o *DeleteSSHKeyOperation) preRun(cmd *cobra.Command, args []string) {
+	o.PathParamFlags.PreRun(cmd, args)
 }
 
 func (o *DeleteSSHKeyOperation) run(cmd *cobra.Command, args []string) error {

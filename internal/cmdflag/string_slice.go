@@ -24,6 +24,10 @@ func (f *StringSlice) GetName() string {
 	return f.Name
 }
 
+func (f *StringSlice) IsRequired() bool {
+	return f.Required
+}
+
 func (f *StringSlice) Prompt() prompt.PromptInput {
 	return prompt.NewInputStringList(f.Name, f.label())
 }

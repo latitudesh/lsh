@@ -25,9 +25,10 @@ func makeOperationProjectsDeleteProjectCmd() (*cobra.Command, error) {
 
 func (o *DeleteProjectOperation) Register() (*cobra.Command, error) {
 	cmd := &cobra.Command{
-		Use:   "destroy",
-		Short: `Deletes a project from the current team`,
-		RunE:  o.run,
+		Use:    "destroy",
+		Short:  `Deletes a project from the current team`,
+		RunE:   o.run,
+		PreRun: o.preRun,
 	}
 
 	o.registerFlags(cmd)
@@ -48,6 +49,10 @@ func (o *DeleteProjectOperation) registerFlags(cmd *cobra.Command) {
 	}
 
 	o.PathParamFlags.Register(schema)
+}
+
+func (o *DeleteProjectOperation) preRun(cmd *cobra.Command, args []string) {
+	o.PathParamFlags.PreRun(cmd, args)
 }
 
 func (o *DeleteProjectOperation) run(cmd *cobra.Command, args []string) error {

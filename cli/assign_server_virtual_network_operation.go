@@ -25,9 +25,10 @@ type CreateVirtualNetworkAssignmentOperation struct {
 
 func (o *CreateVirtualNetworkAssignmentOperation) Register() (*cobra.Command, error) {
 	cmd := &cobra.Command{
-		Use:   "create",
-		Short: "Assign a server to a virtual network.",
-		RunE:  o.run,
+		Use:    "create",
+		Short:  "Assign a server to a virtual network.",
+		RunE:   o.run,
+		PreRun: o.preRun,
 	}
 
 	o.registerFlags(cmd)
@@ -56,6 +57,10 @@ func (o *CreateVirtualNetworkAssignmentOperation) registerFlags(cmd *cobra.Comma
 	}
 
 	o.BodyAttributesFlags.Register(schema)
+}
+
+func (o *CreateVirtualNetworkAssignmentOperation) preRun(cmd *cobra.Command, args []string) {
+	o.BodyAttributesFlags.PreRun(cmd, args)
 }
 
 func (o *CreateVirtualNetworkAssignmentOperation) run(cmd *cobra.Command, args []string) error {

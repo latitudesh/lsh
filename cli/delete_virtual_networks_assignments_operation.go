@@ -25,9 +25,10 @@ type DeleteVirtualNetworkAssignmentOperation struct {
 
 func (o *DeleteVirtualNetworkAssignmentOperation) Register() (*cobra.Command, error) {
 	cmd := &cobra.Command{
-		Use:   "destroy",
-		Short: "Allow you to remove a Virtual Network assignment.",
-		RunE:  o.run,
+		Use:    "destroy",
+		Short:  "Allow you to remove a Virtual Network assignment.",
+		RunE:   o.run,
+		PreRun: o.preRun,
 	}
 
 	o.registerFlags(cmd)
@@ -51,6 +52,10 @@ func (o *DeleteVirtualNetworkAssignmentOperation) registerFlags(cmd *cobra.Comma
 	}
 
 	o.PathParamFlags.Register(schema)
+}
+
+func (o *DeleteVirtualNetworkAssignmentOperation) preRun(cmd *cobra.Command, args []string) {
+	o.PathParamFlags.PreRun(cmd, args)
 }
 
 func (o *DeleteVirtualNetworkAssignmentOperation) run(cmd *cobra.Command, args []string) error {

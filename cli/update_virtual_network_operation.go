@@ -26,9 +26,10 @@ type UpdateVirtualNetworkOperation struct {
 
 func (o *UpdateVirtualNetworkOperation) Register() (*cobra.Command, error) {
 	cmd := &cobra.Command{
-		Use:   "update",
-		Short: "Update a Virtual Network.",
-		RunE:  o.run,
+		Use:    "update",
+		Short:  "Update a Virtual Network.",
+		RunE:   o.run,
+		PreRun: o.preRun,
 	}
 
 	o.registerFlags(cmd)
@@ -60,6 +61,11 @@ func (o *UpdateVirtualNetworkOperation) registerFlags(cmd *cobra.Command) {
 
 	o.PathParamFlags.Register(pathParamsSchema)
 	o.BodyAttributesFlags.Register(bodyFlagsSchema)
+}
+
+func (o *UpdateVirtualNetworkOperation) preRun(cmd *cobra.Command, args []string) {
+	o.PathParamFlags.PreRun(cmd, args)
+	o.BodyAttributesFlags.PreRun(cmd, args)
 }
 
 func (o *UpdateVirtualNetworkOperation) run(cmd *cobra.Command, args []string) error {
