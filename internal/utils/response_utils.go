@@ -26,7 +26,7 @@ func PrintError(respErr error) error {
 	case *apierrors.UnprocessableEntity:
 		output.PrintUnprocessableEntityError(e)
 	default:
-		return errors.New("An unknown error occurred.")
+		return errors.New("an unknown error occurred")
 	}
 
 	return nil
@@ -35,24 +35,19 @@ func PrintError(respErr error) error {
 func Render(data []renderer.ResponseData) {
 	var r renderer.Renderer
 
-	formatAsJSON := viper.GetBool("json")
-
-	if formatAsJSON {
-		r = renderer.JSONRenderer{}
-	}
-
 	formatOutputFlag := viper.GetString("output")
 
-	switch formatOutputFlag {
-	case "json":
+	switch {
+	case viper.GetBool("json"):
 		r = renderer.JSONRenderer{}
-	case "table":
+	case formatOutputFlag == "json":
+		r = renderer.JSONRenderer{}
+	case formatOutputFlag == "table":
 		r = renderer.TableRenderer{}
 	default:
 		fmt.Println("Unsupported output format")
 	}
 
 	renderContext := renderer.NewRenderContext(r)
-
 	renderContext.Render(data)
 }
