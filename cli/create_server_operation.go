@@ -81,6 +81,7 @@ func (o *CreateServerOperation) registerFlags(cmd *cobra.Command) {
 			Label:       "Billing Type",
 			Description: "The server billing type. Accepts 'hourly', 'monthly' or 'yearly'.",
 			Required:    false,
+			Options:     server.SupportedBillingTypes,
 		},
 		&cmdflag.String{
 			Name:        "ipxe_url",
