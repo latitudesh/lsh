@@ -2,6 +2,7 @@ package cli
 
 import (
 	"github.com/latitudesh/lsh/client/projects"
+	"github.com/latitudesh/lsh/internal/api/resource"
 	"github.com/latitudesh/lsh/internal/cmdflag"
 	"github.com/latitudesh/lsh/internal/utils"
 
@@ -37,6 +38,7 @@ func (o *CreateProjectOperation) Register() (*cobra.Command, error) {
 }
 
 func (o *CreateProjectOperation) registerFlags(cmd *cobra.Command) {
+	project := resource.NewProjectResource()
 	o.BodyAttributesFlags = cmdflag.Flags{FlagSet: cmd.Flags()}
 
 	schema := &cmdflag.FlagsSchema{
@@ -51,6 +53,7 @@ func (o *CreateProjectOperation) registerFlags(cmd *cobra.Command) {
 			Label:       "Provisioning Type",
 			Description: `Enum: ["reserved","on_demand"]. The provisioning type of the project. Default: on_demand`,
 			Required:    true,
+			Options:     project.SupportedProvisioningTypes,
 		},
 		&cmdflag.String{
 			Name:        "description",
@@ -63,6 +66,7 @@ func (o *CreateProjectOperation) registerFlags(cmd *cobra.Command) {
 			Label:       "Environment",
 			Description: `Enum: ["Development","Staging","Production"].`,
 			Required:    false,
+			Options:     project.SupportedEnvironments,
 		},
 	}
 
