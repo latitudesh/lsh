@@ -3,15 +3,13 @@ package cli
 import (
 	"github.com/latitudesh/lsh/client/virtual_networks"
 	"github.com/latitudesh/lsh/internal/cmdflag"
-	"github.com/latitudesh/lsh/internal/operation"
-	"github.com/latitudesh/lsh/internal/prompt"
 	"github.com/latitudesh/lsh/internal/utils"
 
 	"github.com/spf13/cobra"
 )
 
 type DeleteVirtualNetworkOperation struct {
-	Flags cmdflag.Flags
+	PathParamFlags cmdflag.Flags
 }
 
 func makeOperationVirtualNetworksDestroyVirtualNetworkCmd() (*cobra.Command, error) {
@@ -27,9 +25,10 @@ func makeOperationVirtualNetworksDestroyVirtualNetworkCmd() (*cobra.Command, err
 
 func (o *DeleteVirtualNetworkOperation) Register() (*cobra.Command, error) {
 	cmd := &cobra.Command{
-		Use:   "destroy",
-		Short: "Delete virtual network.",
-		RunE:  o.run,
+		Use:    "destroy",
+		Short:  "Delete virtual network.",
+		RunE:   o.run,
+		PreRun: o.preRun,
 	}
 
 	o.registerFlags(cmd)
@@ -37,35 +36,23 @@ func (o *DeleteVirtualNetworkOperation) Register() (*cobra.Command, error) {
 	return cmd, nil
 }
 
-func (o *DeleteVirtualNetworkOperation) PromptQueryParams(params interface{}) {
-	p := prompt.New(
-		prompt.NewInputText("id", "ID"),
-	)
-
-	p.Run(params)
-}
-
-func (o *DeleteVirtualNetworkOperation) PromptAttributes(attributes interface{}) {
-}
-
-func (o *DeleteVirtualNetworkOperation) GetFlags() cmdflag.Flags {
-	return o.Flags
-}
-
 func (o *DeleteVirtualNetworkOperation) registerFlags(cmd *cobra.Command) {
-	o.Flags = cmdflag.Flags{FlagSet: cmd.Flags()}
+	o.PathParamFlags = cmdflag.Flags{FlagSet: cmd.Flags()}
 
 	schema := &cmdflag.FlagsSchema{
-		{
-			Name:             "id",
-			Description:      "The virtual network ID",
-			DefaultValue:     "",
-			Type:             "string",
-			RequestParamType: cmdflag.PathParam,
+		&cmdflag.String{
+			Name:        "id",
+			Label:       "Virtual Network ID",
+			Description: "The virtual network ID",
+			Required:    true,
 		},
 	}
 
-	o.Flags.Register(schema)
+	o.PathParamFlags.Register(schema)
+}
+
+func (o *DeleteVirtualNetworkOperation) preRun(cmd *cobra.Command, args []string) {
+	o.PathParamFlags.PreRun(cmd, args)
 }
 
 func (o *DeleteVirtualNetworkOperation) run(cmd *cobra.Command, args []string) error {
@@ -75,7 +62,7 @@ func (o *DeleteVirtualNetworkOperation) run(cmd *cobra.Command, args []string) e
 	}
 
 	params := virtual_networks.NewDestroyVirtualNetworkParams()
-	operation.AssignPathParams(o, params)
+	o.PathParamFlags.AssignValues(params)
 
 	if dryRun {
 		logDebugf("dry-run flag specified. Skip sending request.")

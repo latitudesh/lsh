@@ -3,8 +3,6 @@ package cli
 import (
 	"github.com/latitudesh/lsh/client/ssh_keys"
 	"github.com/latitudesh/lsh/internal/cmdflag"
-	"github.com/latitudesh/lsh/internal/operation"
-	"github.com/latitudesh/lsh/internal/prompt"
 	"github.com/latitudesh/lsh/internal/utils"
 
 	"github.com/spf13/cobra"
@@ -22,14 +20,16 @@ func makeOperationSSHKeysPostProjectSSHKeyCmd() (*cobra.Command, error) {
 }
 
 type CreateSSHKeyOperation struct {
-	Flags cmdflag.Flags
+	PathParamFlags      cmdflag.Flags
+	BodyAttributesFlags cmdflag.Flags
 }
 
 func (o *CreateSSHKeyOperation) Register() (*cobra.Command, error) {
 	cmd := &cobra.Command{
-		Use:   "create",
-		Short: `Allow you create SSH Keys in a project. These keys can be used to access servers after deploy and reinstall actions.`,
-		RunE:  o.run,
+		Use:    "create",
+		Short:  `Allow you create SSH Keys in a project. These keys can be used to access servers after deploy and reinstall actions.`,
+		RunE:   o.run,
+		PreRun: o.preRun,
 	}
 
 	o.registerFlags(cmd)
@@ -37,55 +37,41 @@ func (o *CreateSSHKeyOperation) Register() (*cobra.Command, error) {
 	return cmd, nil
 }
 
-func (o *CreateSSHKeyOperation) PromptAttributes(attributes interface{}) {
-	p := prompt.New(
-		prompt.NewInputText("name", "Name of the API Key"),
-		prompt.NewInputText("public_key", "SSH Public Key"),
-	)
-
-	p.Run(attributes)
-}
-
-func (o *CreateSSHKeyOperation) PromptQueryParams(params interface{}) {
-	p := prompt.New(
-		prompt.NewInputText("project", "ID or Slug from the project you want to add the SSH Key"),
-	)
-
-	p.Run(params)
-}
-
 func (o *CreateSSHKeyOperation) registerFlags(cmd *cobra.Command) {
-	o.Flags = cmdflag.Flags{FlagSet: cmd.Flags()}
+	o.PathParamFlags = cmdflag.Flags{FlagSet: cmd.Flags()}
+	o.BodyAttributesFlags = cmdflag.Flags{FlagSet: cmd.Flags()}
 
-	schema := &cmdflag.FlagsSchema{
-		{
-			Name:             "project",
-			Description:      "ID or Slug from the project you want to add the SSH Key",
-			DefaultValue:     "",
-			Type:             "string",
-			RequestParamType: cmdflag.PathParam,
-		},
-		{
-			Name:             "name",
-			Description:      "Name of the SSH Key",
-			DefaultValue:     "",
-			Type:             "string",
-			RequestParamType: cmdflag.BodyParam,
-		},
-		{
-			Name:             "public_key",
-			Description:      "SSH Public Key",
-			DefaultValue:     "",
-			Type:             "string",
-			RequestParamType: cmdflag.BodyParam,
+	pathParamsSchema := &cmdflag.FlagsSchema{
+		&cmdflag.String{
+			Name:        "project",
+			Label:       "ID or Slug from the project you want to add the SSH Key",
+			Description: "ID or Slug from the project you want to add the SSH Key",
+			Required:    true,
 		},
 	}
 
-	o.Flags.Register(schema)
+	bodyFlagsSchema := &cmdflag.FlagsSchema{
+		&cmdflag.String{
+			Name:        "name",
+			Label:       "Name of the SSH Key",
+			Description: "Name of the SSH Key",
+			Required:    true,
+		},
+		&cmdflag.String{
+			Name:        "public_key",
+			Label:       "SSH Public Key",
+			Description: "SSH Public Key",
+			Required:    true,
+		},
+	}
+
+	o.PathParamFlags.Register(pathParamsSchema)
+	o.BodyAttributesFlags.Register(bodyFlagsSchema)
 }
 
-func (o *CreateSSHKeyOperation) GetFlags() cmdflag.Flags {
-	return o.Flags
+func (o *CreateSSHKeyOperation) preRun(cmd *cobra.Command, args []string) {
+	o.PathParamFlags.PreRun(cmd, args)
+	o.BodyAttributesFlags.PreRun(cmd, args)
 }
 
 func (o *CreateSSHKeyOperation) run(cmd *cobra.Command, args []string) error {
@@ -95,8 +81,8 @@ func (o *CreateSSHKeyOperation) run(cmd *cobra.Command, args []string) error {
 	}
 
 	params := ssh_keys.NewPostProjectSSHKeyParams()
-	operation.AssignPathParams(o, params)
-	operation.AssignBodyAttributes(o, params.Body.Data.Attributes)
+	o.PathParamFlags.AssignValues(params)
+	o.BodyAttributesFlags.AssignValues(params.Body.Data.Attributes)
 
 	if dryRun {
 		logDebugf("dry-run flag specified. Skip sending request.")

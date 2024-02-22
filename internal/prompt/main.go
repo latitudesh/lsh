@@ -1,23 +1,23 @@
 package prompt
 
+import "fmt"
+
 type PromptInput interface {
 	AssignValue(attributes interface{})
 }
 
-type Prompt []PromptInput
-
-func New(inputs ...PromptInput) Prompt {
-	var prompt Prompt
-
-	for _, input := range inputs {
-		prompt = append(prompt, input)
-	}
-
-	return prompt
+type Prompt struct {
+	Inputs      []PromptInput
+	Description string
+	ParamsType  string
 }
 
-func (p *Prompt) Run(attributes interface{}) {
-	for _, input := range *p {
-		input.AssignValue(attributes)
+func (p *Prompt) Run(params interface{}) {
+	if p.Description != "" {
+		fmt.Printf("\n%v\n\n", p.Description)
+	}
+
+	for _, v := range p.Inputs {
+		v.AssignValue(params)
 	}
 }

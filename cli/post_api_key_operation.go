@@ -3,8 +3,6 @@ package cli
 import (
 	"github.com/latitudesh/lsh/client/api_keys"
 	"github.com/latitudesh/lsh/internal/cmdflag"
-	"github.com/latitudesh/lsh/internal/operation"
-	"github.com/latitudesh/lsh/internal/prompt"
 	"github.com/latitudesh/lsh/internal/utils"
 
 	"github.com/spf13/cobra"
@@ -22,14 +20,15 @@ func makeOperationAPIKeysPostAPIKeyCmd() (*cobra.Command, error) {
 }
 
 type CreateAPIKeyOperation struct {
-	Flags cmdflag.Flags
+	BodyAttributesFlags cmdflag.Flags
 }
 
 func (o *CreateAPIKeyOperation) Register() (*cobra.Command, error) {
 	cmd := &cobra.Command{
-		Use:   "create",
-		Short: `Create a new API Key that is tied to the current user account. The created API key is only listed ONCE upon creation. It can however be regenerated or deleted.`,
-		RunE:  o.run,
+		Use:    "create",
+		Short:  `Create a new API Key that is tied to the current user account. The created API key is only listed ONCE upon creation. It can however be regenerated or deleted.`,
+		RunE:   o.run,
+		PreRun: o.preRun,
 	}
 
 	o.registerFlags(cmd)
@@ -37,35 +36,23 @@ func (o *CreateAPIKeyOperation) Register() (*cobra.Command, error) {
 	return cmd, nil
 }
 
-func (o *CreateAPIKeyOperation) PromptAttributes(attributes interface{}) {
-	p := prompt.New(
-		prompt.NewInputText("name", "Name of the API Key"),
-	)
-
-	p.Run(attributes)
-}
-
 func (o *CreateAPIKeyOperation) registerFlags(cmd *cobra.Command) {
-	o.Flags = cmdflag.Flags{FlagSet: cmd.Flags()}
+	o.BodyAttributesFlags = cmdflag.Flags{FlagSet: cmd.Flags()}
 
 	schema := &cmdflag.FlagsSchema{
-		{
-			Name:             "name",
-			Description:      "Name of the API Key",
-			DefaultValue:     "",
-			Type:             "string",
-			RequestParamType: cmdflag.BodyParam,
+		&cmdflag.String{
+			Name:        "name",
+			Label:       "Name of the API Key",
+			Description: "Name of the API Key",
+			Required:    true,
 		},
 	}
 
-	o.Flags.Register(schema)
+	o.BodyAttributesFlags.Register(schema)
 }
 
-func (o *CreateAPIKeyOperation) GetFlags() cmdflag.Flags {
-	return o.Flags
-}
-
-func (o *CreateAPIKeyOperation) PromptQueryParams(params interface{}) {
+func (o *CreateAPIKeyOperation) preRun(cmd *cobra.Command, args []string) {
+	o.BodyAttributesFlags.PreRun(cmd, args)
 }
 
 func (o *CreateAPIKeyOperation) run(cmd *cobra.Command, args []string) error {
@@ -75,7 +62,7 @@ func (o *CreateAPIKeyOperation) run(cmd *cobra.Command, args []string) error {
 	}
 
 	params := api_keys.NewPostAPIKeyParams()
-	operation.AssignBodyAttributes(o, params.Body.Data.Attributes)
+	o.BodyAttributesFlags.AssignValues(params.Body.Data.Attributes)
 
 	if dryRun {
 		logDebugf("dry-run flag specified. Skip sending request.")

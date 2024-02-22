@@ -4,8 +4,6 @@ import (
 	"github.com/latitudesh/lsh/client/virtual_networks"
 	"github.com/latitudesh/lsh/internal/api/resource"
 	"github.com/latitudesh/lsh/internal/cmdflag"
-	"github.com/latitudesh/lsh/internal/operation"
-	"github.com/latitudesh/lsh/internal/prompt"
 	"github.com/latitudesh/lsh/internal/utils"
 
 	"github.com/spf13/cobra"
@@ -23,14 +21,15 @@ func makeOperationVirtualNetworksCreateVirtualNetworkCmd() (*cobra.Command, erro
 }
 
 type CreateVirtualNetworkOperation struct {
-	Flags cmdflag.Flags
+	BodyAttributesFlags cmdflag.Flags
 }
 
 func (o *CreateVirtualNetworkOperation) Register() (*cobra.Command, error) {
 	cmd := &cobra.Command{
-		Use:   "create",
-		Short: "Creates a new Virtual Network.",
-		RunE:  o.run,
+		Use:    "create",
+		Short:  "Creates a new Virtual Network.",
+		RunE:   o.run,
+		PreRun: o.preRun,
 	}
 
 	o.registerFlags(cmd)
@@ -38,53 +37,38 @@ func (o *CreateVirtualNetworkOperation) Register() (*cobra.Command, error) {
 	return cmd, nil
 }
 
-func (o *CreateVirtualNetworkOperation) PromptAttributes(attributes interface{}) {
+func (o *CreateVirtualNetworkOperation) registerFlags(cmd *cobra.Command) {
 	virtualNetwork := resource.NewVirtualNetworkResource()
 
-	p := prompt.New(
-		prompt.NewInputText("description", "Description"),
-		prompt.NewInputText("project", "Project ID or slug"),
-		prompt.NewInputSelect("site", "Site ID or Slug", virtualNetwork.SupportedSites),
-	)
-
-	p.Run(attributes)
-}
-
-func (o *CreateVirtualNetworkOperation) registerFlags(cmd *cobra.Command) {
-	o.Flags = cmdflag.Flags{FlagSet: cmd.Flags()}
+	o.BodyAttributesFlags = cmdflag.Flags{FlagSet: cmd.Flags()}
 
 	schema := &cmdflag.FlagsSchema{
-		{
-			Name:             "description",
-			Description:      "Description",
-			DefaultValue:     "",
-			Type:             "string",
-			RequestParamType: cmdflag.BodyParam,
+		&cmdflag.String{
+			Name:        "description",
+			Label:       "Description",
+			Description: "Description",
+			Required:    true,
 		},
-		{
-			Name:             "project",
-			Description:      "Project ID or slug",
-			DefaultValue:     "",
-			Type:             "string",
-			RequestParamType: cmdflag.BodyParam,
+		&cmdflag.String{
+			Name:        "project",
+			Label:       "Project ID or slug",
+			Description: "Project ID or slug",
+			Required:    true,
 		},
-		{
-			Name:             "site",
-			Description:      "Site ID or slug",
-			DefaultValue:     "",
-			Type:             "string",
-			RequestParamType: cmdflag.BodyParam,
+		&cmdflag.String{
+			Name:        "site",
+			Label:       "Site ID or slug",
+			Description: "Site ID or slug",
+			Options:     virtualNetwork.SupportedSites,
+			Required:    false,
 		},
 	}
 
-	o.Flags.Register(schema)
+	o.BodyAttributesFlags.Register(schema)
 }
 
-func (o *CreateVirtualNetworkOperation) GetFlags() cmdflag.Flags {
-	return o.Flags
-}
-
-func (o *CreateVirtualNetworkOperation) PromptQueryParams(params interface{}) {
+func (o *CreateVirtualNetworkOperation) preRun(cmd *cobra.Command, args []string) {
+	o.BodyAttributesFlags.PreRun(cmd, args)
 }
 
 func (o *CreateVirtualNetworkOperation) run(cmd *cobra.Command, args []string) error {
@@ -94,7 +78,7 @@ func (o *CreateVirtualNetworkOperation) run(cmd *cobra.Command, args []string) e
 	}
 
 	params := virtual_networks.NewCreateVirtualNetworkParams()
-	operation.AssignBodyAttributes(o, params.Body.Data.Attributes)
+	o.BodyAttributesFlags.AssignValues(params.Body.Data.Attributes)
 
 	if dryRun {
 		logDebugf("dry-run flag specified. Skip sending request.")

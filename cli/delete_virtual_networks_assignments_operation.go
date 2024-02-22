@@ -1,12 +1,8 @@
 package cli
 
 import (
-	"fmt"
-
 	"github.com/latitudesh/lsh/client/virtual_network_assignments"
 	"github.com/latitudesh/lsh/internal/cmdflag"
-	"github.com/latitudesh/lsh/internal/operation"
-	"github.com/latitudesh/lsh/internal/prompt"
 	"github.com/latitudesh/lsh/internal/utils"
 
 	"github.com/spf13/cobra"
@@ -24,14 +20,15 @@ func makeOperationVirtualNetworkAssignmentsDeleteVirtualNetworksAssignmentsCmd()
 }
 
 type DeleteVirtualNetworkAssignmentOperation struct {
-	Flags cmdflag.Flags
+	PathParamFlags cmdflag.Flags
 }
 
 func (o *DeleteVirtualNetworkAssignmentOperation) Register() (*cobra.Command, error) {
 	cmd := &cobra.Command{
-		Use:   "destroy",
-		Short: "Allow you to remove a Virtual Network assignment.",
-		RunE:  o.run,
+		Use:    "destroy",
+		Short:  "Allow you to remove a Virtual Network assignment.",
+		RunE:   o.run,
+		PreRun: o.preRun,
 	}
 
 	o.registerFlags(cmd)
@@ -43,31 +40,22 @@ func (o *DeleteVirtualNetworkAssignmentOperation) PromptAttributes(attributes in
 }
 
 func (o *DeleteVirtualNetworkAssignmentOperation) registerFlags(cmd *cobra.Command) {
-	o.Flags = cmdflag.Flags{FlagSet: cmd.Flags()}
+	o.PathParamFlags = cmdflag.Flags{FlagSet: cmd.Flags()}
 
 	schema := &cmdflag.FlagsSchema{
-		{
-			Name:             "id",
-			Description:      "Virtual Network Assignment Id (Required).",
-			DefaultValue:     "",
-			Type:             "string",
-			RequestParamType: cmdflag.PathParam,
+		&cmdflag.String{
+			Name:        "id",
+			Label:       "Virtual Network Assignment ID",
+			Description: "Virtual Network Assignment ID.",
+			Required:    true,
 		},
 	}
 
-	o.Flags.Register(schema)
+	o.PathParamFlags.Register(schema)
 }
 
-func (o *DeleteVirtualNetworkAssignmentOperation) GetFlags() cmdflag.Flags {
-	return o.Flags
-}
-
-func (o *DeleteVirtualNetworkAssignmentOperation) PromptQueryParams(params interface{}) {
-	p := prompt.New(
-		prompt.NewInputText("id", "Virtual Network Assignment ID"),
-	)
-
-	p.Run(params)
+func (o *DeleteVirtualNetworkAssignmentOperation) preRun(cmd *cobra.Command, args []string) {
+	o.PathParamFlags.PreRun(cmd, args)
 }
 
 func (o *DeleteVirtualNetworkAssignmentOperation) run(cmd *cobra.Command, args []string) error {
@@ -77,7 +65,7 @@ func (o *DeleteVirtualNetworkAssignmentOperation) run(cmd *cobra.Command, args [
 	}
 
 	params := virtual_network_assignments.NewDeleteVirtualNetworksAssignmentsParams()
-	operation.AssignPathParams(o, params)
+	o.PathParamFlags.AssignValues(params)
 
 	if dryRun {
 		logDebugf("dry-run flag specified. Skip sending request.")
@@ -94,81 +82,4 @@ func (o *DeleteVirtualNetworkAssignmentOperation) run(cmd *cobra.Command, args [
 		response.Render()
 	}
 	return nil
-}
-
-// runOperationVirtualNetworkAssignmentsDeleteVirtualNetworksAssignments uses cmd flags to call endpoint api
-func runOperationVirtualNetworkAssignmentsDeleteVirtualNetworksAssignments(cmd *cobra.Command, args []string) error {
-	appCli, err := makeClient(cmd, args)
-	if err != nil {
-		return err
-	}
-	// retrieve flag values from cmd and fill params
-	params := virtual_network_assignments.NewDeleteVirtualNetworksAssignmentsParams()
-	if err, _ := retrieveOperationVirtualNetworkAssignmentsDeleteVirtualNetworksAssignmentsAssignmentIDFlag(params, "", cmd); err != nil {
-		return err
-	}
-	if dryRun {
-
-		logDebugf("dry-run flag specified. Skip sending request.")
-		return nil
-	}
-
-	response, err := appCli.VirtualNetworkAssignments.DeleteVirtualNetworksAssignments(params, nil)
-	if err != nil {
-		utils.PrintError(err)
-		return nil
-	}
-
-	if !debug {
-		response.Render()
-	}
-	return nil
-}
-
-// registerOperationVirtualNetworkAssignmentsDeleteVirtualNetworksAssignmentsParamFlags registers all flags needed to fill params
-func registerOperationVirtualNetworkAssignmentsDeleteVirtualNetworksAssignmentsParamFlags(cmd *cobra.Command) error {
-	if err := registerOperationVirtualNetworkAssignmentsDeleteVirtualNetworksAssignmentsAssignmentIDParamFlags("", cmd); err != nil {
-		return err
-	}
-	return nil
-}
-
-func registerOperationVirtualNetworkAssignmentsDeleteVirtualNetworksAssignmentsAssignmentIDParamFlags(cmdPrefix string, cmd *cobra.Command) error {
-
-	assignmentIdDescription := `Virtual Network Assignment Id (Required).`
-
-	var assignmentIdFlagName string
-	if cmdPrefix == "" {
-		assignmentIdFlagName = "id"
-	} else {
-		assignmentIdFlagName = fmt.Sprintf("%v.id", cmdPrefix)
-	}
-
-	var assignmentIdFlagDefault string
-
-	_ = cmd.PersistentFlags().String(assignmentIdFlagName, assignmentIdFlagDefault, assignmentIdDescription)
-	cmd.MarkPersistentFlagRequired(assignmentIdFlagName)
-
-	return nil
-}
-
-func retrieveOperationVirtualNetworkAssignmentsDeleteVirtualNetworksAssignmentsAssignmentIDFlag(m *virtual_network_assignments.DeleteVirtualNetworksAssignmentsParams, cmdPrefix string, cmd *cobra.Command) (error, bool) {
-	retAdded := false
-	if cmd.Flags().Changed("id") {
-
-		var assignmentIdFlagName string
-		if cmdPrefix == "" {
-			assignmentIdFlagName = "id"
-		} else {
-			assignmentIdFlagName = fmt.Sprintf("%v.id", cmdPrefix)
-		}
-
-		assignmentIdFlagValue, err := cmd.Flags().GetString(assignmentIdFlagName)
-		if err != nil {
-			return err, false
-		}
-		m.AssignmentID = assignmentIdFlagValue
-
-	}
-	return nil, retAdded
 }
