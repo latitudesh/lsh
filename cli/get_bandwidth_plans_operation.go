@@ -16,7 +16,7 @@ import (
 func makeOperationPlansGetBandwidthPlansCmd() (*cobra.Command, error) {
 	cmd := &cobra.Command{
 		Use:   "list-bandwidth",
-		Short: `Lists all bandwidth plans.`,
+		Short: "List bandwidth package plans",
 		RunE:  runOperationPlansGetBandwidthPlans,
 	}
 
