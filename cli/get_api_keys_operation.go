@@ -14,7 +14,8 @@ import (
 func makeOperationAPIKeysGetAPIKeysCmd() (*cobra.Command, error) {
 	cmd := &cobra.Command{
 		Use:   "list",
-		Short: `Returns a list of all API keys from the team members`,
+		Short: "List API Keys",
+		Long:  `Returns a list of all API keys from the team members.`,
 		RunE:  runOperationAPIKeysGetAPIKeys,
 	}
 
