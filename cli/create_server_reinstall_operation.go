@@ -31,7 +31,7 @@ type CreateServerReinstallOperation struct {
 func (o *CreateServerReinstallOperation) Register() (*cobra.Command, error) {
 	cmd := &cobra.Command{
 		Use:    "reinstall",
-		Short:  "Reintall a server.",
+		Short:  "Reintall a server",
 		Long:   "Submit a reinstall request to a server.",
 		RunE:   o.run,
 		PreRun: o.preRun,

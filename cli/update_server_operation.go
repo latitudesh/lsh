@@ -31,7 +31,7 @@ type UpdateServerOperation struct {
 func (o *UpdateServerOperation) Register() (*cobra.Command, error) {
 	cmd := &cobra.Command{
 		Use:    "update",
-		Short:  "Update a server.",
+		Short:  "Update a server",
 		Long:   "Update server information.",
 		RunE:   o.run,
 		PreRun: o.preRun,
