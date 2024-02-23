@@ -103,6 +103,15 @@ lsh plans list --gpu true
 You can see more examples [here](https://docs.latitude.sh/docs/examples-1). Reach out if you want to see other use cases on `lsh`.
   
 
+## Troubleshooting
+If you encounter any problems when installing the CLI with the installation script, you can use the command below to uninstall the CLI.
+
+```bash
+
+curl -sSL  https://raw.githubusercontent.com/latitudesh/lsh/main/uninstall.sh | bash
+
+```
+
 ## Docs
 
   

@@ -8,11 +8,11 @@ mkdir -p $INSTALL_DIR
 # Detect the current shell and add the directory to the user's PATH
 SHELL_NAME=$(basename "$SHELL")
 SHELL_CONFIG_PATH=""
-echo -e "Removing $INSTALL_DIR from PATH\n";
+echo -e "Removing $INSTALL_DIR from PATH\n"
 
 if echo $PATH | grep -q $INSTALL_DIR 
 then
-NEW_PATH=$(echo $PATH | sed 's|:'$HOME_DIR/.lsh'||g');
+NEW_PATH=$(echo $PATH | sed 's|:'$HOME_DIR/.lsh'||g')
 case "$SHELL_NAME" in
     "bash")
         SHELL_CONFIG_PATH=~/.bashrc
@@ -31,8 +31,8 @@ case "$SHELL_NAME" in
         ;;
 esac
 
-echo -e "Deleting $INSTALL_DIR\n";
-rm -dr $INSTALL_DIR;
+echo -e "Deleting $INSTALL_DIR\n"
+rm -dr $INSTALL_DIR
 
 echo -e "Uninstall finished successfully\nrun: \n"
 echo -e "    source $SHELL_CONFIG_PATH\n"
