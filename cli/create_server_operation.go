@@ -27,7 +27,7 @@ type CreateServerOperation struct {
 func (o *CreateServerOperation) Register() (*cobra.Command, error) {
 	cmd := &cobra.Command{
 		Use:    "create",
-		Short:  "Deploy a new server.",
+		Short:  "Deploy a bare metal server.",
 		RunE:   o.run,
 		PreRun: o.preRun,
 	}
