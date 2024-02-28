@@ -157,7 +157,6 @@ type GetServersParams struct {
 	*/
 	FilterStatus *string
 
-
 	timeout    time.Duration
 	Context    context.Context
 	HTTPClient *http.Client
