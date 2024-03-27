@@ -69,14 +69,8 @@ func makeClient(cmd *cobra.Command, args []string) (*client.LatitudeShAPI, error
 }
 
 // MakeRootCmd returns the root cmd
-func MakeRootCmd() (*cobra.Command, error) {
+func MakeRootCmd(rootCmd *cobra.Command) (*cobra.Command, error) {
 	cobra.OnInitialize(initViperConfigs)
-
-	// Use executable name as the command name
-	rootCmd := &cobra.Command{
-		Use:     exeName,
-		Version: version.Version,
-	}
 
 	// Edit commands template
 	rootCmd.SetVersionTemplate(fmt.Sprintf("lsh %s\n", rootCmd.Version))
