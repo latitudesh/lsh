@@ -12,7 +12,7 @@ before:
     - go mod download
 
 builds:
-  - main: ./cmd/lsh/main.go
+  -
     env:
       - CGO_ENABLED=0
     ldflags:
