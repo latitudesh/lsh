@@ -8,12 +8,16 @@ import (
 
 	"github.com/latitudesh/lsh/cli"
 	"github.com/spf13/cobra"
+	"golang.org/x/text/cases"
+	"golang.org/x/text/language"
 )
 
 const IGNORED = 0
 const GENERAL = 1
 
-// Map to Control the output
+var caser = cases.Title(language.English)
+
+// cmdSelections to customize the output
 var cmdSelection = map[string]int{
 	"completion": 0,
 	"update":     1,
@@ -63,12 +67,15 @@ func main() {
 			f.WriteString(cmdSection)
 		}
 	}
+
+	// Help section
+	f.WriteString(buildHelp())
 }
 
 func buildSection(cmd *cobra.Command) string {
 	var section strings.Builder
 	header := fmt.Sprintf("## %s\n", cmd.Name())
-	section.WriteString(strings.Title(strings.Replace(header, "_", " ", 1)))
+	section.WriteString(caser.String(strings.Replace(header, "_", " ", 1)))
 
 	subCmdString := ""
 	for _, subCmd := range cmd.Commands() {
@@ -89,7 +96,7 @@ func buildSection(cmd *cobra.Command) string {
 func buildSubSection(cmd *cobra.Command) string {
 	var section strings.Builder
 	header := fmt.Sprintf("## %s %s\n", cmd.Parent().Name(), cmd.Name())
-	section.WriteString(strings.Title(strings.Replace(header, "_", " ", 1)))
+	section.WriteString(caser.String(strings.Replace(header, "_", " ", 1)))
 
 	for _, subCmd := range cmd.Commands() {
 		section.WriteString(fmt.Sprintf("**%s**\n", subCmd.Short))
@@ -107,4 +114,10 @@ func buildGeneral(cmds []*cobra.Command) string {
 		section.WriteString(fmt.Sprintf("```Shell\nlsh %s\n```\n", cmd.Name()))
 	}
 	return section.String()
+}
+
+func buildHelp() string {
+	return `## Help
+- Use lsh -h to get a list of all available commands
+- To see how to use a command, use lsh <resource> -h`
 }
