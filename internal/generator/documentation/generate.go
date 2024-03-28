@@ -28,7 +28,6 @@ func main() {
 	rootCmd, err := cli.MakeRootCmd()
 	if err != nil {
 		log.Fatal("Cmd construction error: ", err)
-		os.Exit(1)
 	}
 
 	f, err := os.Create("commands.md")
@@ -40,18 +39,18 @@ func main() {
 	generalCmds := []*cobra.Command{}
 	lshCmds := []*cobra.Command{}
 
-	for _, c := range rootCmd.Commands() {
-		value, ok := cmdSelection[c.Name()]
+	for _, cmd := range rootCmd.Commands() {
+		value, ok := cmdSelection[cmd.Name()]
 		if ok {
 			if value == IGNORED {
 				continue
 			}
 			if value == GENERAL {
-				generalCmds = append(generalCmds, c)
+				generalCmds = append(generalCmds, cmd)
 				continue
 			}
 		}
-		lshCmds = append(lshCmds, c)
+		lshCmds = append(lshCmds, cmd)
 	}
 
 	// If command is a general command
