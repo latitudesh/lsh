@@ -16,7 +16,8 @@ import (
 func makeOperationVirtualNetworkAssignmentsGetVirtualNetworksAssignmentsCmd() (*cobra.Command, error) {
 	cmd := &cobra.Command{
 		Use:   "list",
-		Short: `Returns a list of all servers assigned to virtual networks.`,
+		Short: "List assignments",
+		Long:  `Returns a list of all servers assigned to virtual networks.`,
 		RunE:  runOperationVirtualNetworkAssignmentsGetVirtualNetworksAssignments,
 	}
 

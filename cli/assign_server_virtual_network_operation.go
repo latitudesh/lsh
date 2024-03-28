@@ -26,7 +26,7 @@ type CreateVirtualNetworkAssignmentOperation struct {
 func (o *CreateVirtualNetworkAssignmentOperation) Register() (*cobra.Command, error) {
 	cmd := &cobra.Command{
 		Use:    "create",
-		Short:  "Assign a server to a virtual network.",
+		Short:  "Assign a server to a virtual network",
 		RunE:   o.run,
 		PreRun: o.preRun,
 	}

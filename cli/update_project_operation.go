@@ -34,7 +34,7 @@ type UpdateProjectOperation struct {
 func (o *UpdateProjectOperation) Register() (*cobra.Command, error) {
 	cmd := &cobra.Command{
 		Use:    "update",
-		Short:  "Updates a project.",
+		Short:  "Update a project",
 		RunE:   o.run,
 		PreRun: o.preRun,
 	}

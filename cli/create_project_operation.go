@@ -27,7 +27,7 @@ type CreateProjectOperation struct {
 func (o *CreateProjectOperation) Register() (*cobra.Command, error) {
 	cmd := &cobra.Command{
 		Use:    "create",
-		Short:  "Creates a project.",
+		Short:  "Create a project",
 		RunE:   o.run,
 		PreRun: o.preRun,
 	}

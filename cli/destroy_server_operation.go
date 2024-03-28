@@ -26,7 +26,7 @@ type DestroyServerOperation struct {
 func (o *DestroyServerOperation) Register() (*cobra.Command, error) {
 	cmd := &cobra.Command{
 		Use:    "destroy",
-		Short:  "Remove a server.",
+		Short:  "Delete a server",
 		RunE:   o.run,
 		PreRun: o.preRun,
 	}
