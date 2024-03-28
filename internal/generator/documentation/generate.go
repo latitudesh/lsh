@@ -74,7 +74,7 @@ func main() {
 
 func buildSection(cmd *cobra.Command) string {
 	var section strings.Builder
-	header := fmt.Sprintf("## %s\n", cmd.Name())
+	header := fmt.Sprintf("## %s\n\n", cmd.Name())
 	section.WriteString(caser.String(strings.Replace(header, "_", " ", 1)))
 
 	subCmdString := ""
@@ -85,8 +85,8 @@ func buildSection(cmd *cobra.Command) string {
 			continue
 		}
 
-		section.WriteString(fmt.Sprintf("**%s**\n", subCmd.Short))
-		section.WriteString(fmt.Sprintf("```Shell\nlsh %s %s\n```\n", cmd.Name(), subCmd.Name()))
+		section.WriteString(fmt.Sprintf("**%s**\n\n", subCmd.Short))
+		section.WriteString(fmt.Sprintf("```Shell\nlsh %s %s\n```\n\n", cmd.Name(), subCmd.Name()))
 	}
 	section.WriteString(subCmdString)
 
@@ -95,29 +95,29 @@ func buildSection(cmd *cobra.Command) string {
 
 func buildSubSection(cmd *cobra.Command) string {
 	var section strings.Builder
-	header := fmt.Sprintf("## %s %s\n", cmd.Parent().Name(), cmd.Name())
+	header := fmt.Sprintf("## %s %s\n\n", cmd.Parent().Name(), cmd.Name())
 	section.WriteString(caser.String(strings.Replace(header, "_", " ", 1)))
 
 	for _, subCmd := range cmd.Commands() {
-		section.WriteString(fmt.Sprintf("**%s**\n", subCmd.Short))
-		section.WriteString(fmt.Sprintf("```Shell\nlsh %s %s %s\n```\n", cmd.Name(), cmd.Parent().Name(), subCmd.Name()))
+		section.WriteString(fmt.Sprintf("**%s**\n\n", subCmd.Short))
+		section.WriteString(fmt.Sprintf("```Shell\nlsh %s %s %s\n```\n\n", cmd.Name(), cmd.Parent().Name(), subCmd.Name()))
 	}
 	return section.String()
 }
 
 func buildGeneral(cmds []*cobra.Command) string {
 	var section strings.Builder
-	header := "## General\n"
+	header := "## General\n\n"
 	section.WriteString(header)
 	for _, cmd := range cmds {
-		section.WriteString(fmt.Sprintf("**%s**\n", cmd.Short))
-		section.WriteString(fmt.Sprintf("```Shell\nlsh %s\n```\n", cmd.Name()))
+		section.WriteString(fmt.Sprintf("**%s**\n\n", cmd.Short))
+		section.WriteString(fmt.Sprintf("```Shell\nlsh %s\n```\n\n", cmd.Name()))
 	}
 	return section.String()
 }
 
 func buildHelp() string {
-	return `## Help
+	return `### Help
 - Use lsh -h to get a list of all available commands
 - To see how to use a command, use lsh <resource> -h`
 }
