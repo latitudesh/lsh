@@ -19,9 +19,9 @@ var caser = cases.Title(language.English)
 
 // cmdSelections to customize the output
 var cmdSelection = map[string]int{
-	"completion": 0,
-	"update":     1,
-	"login":      1,
+	"completion": IGNORED,
+	"update":     GENERAL,
+	"login":      GENERAL,
 }
 
 func main() {
