@@ -70,6 +70,12 @@ func (o *UpdateServerOperation) registerFlags(cmd *cobra.Command) {
 			Options:     server.SupportedBillingTypes,
 			Required:    false,
 		},
+		&cmdflag.StringSlice{
+			Name:        "tags",
+			Label:       "Tags",
+			Description: "Tags",
+			Required:    false,
+		},
 	}
 
 	o.PathParamFlags.Register(pathParamsSchema)
