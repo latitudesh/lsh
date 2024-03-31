@@ -51,6 +51,12 @@ func (o *UpdateVirtualNetworkOperation) registerFlags(cmd *cobra.Command) {
 	}
 
 	bodyFlagsSchema := &cmdflag.FlagsSchema{
+		&cmdflag.StringSlice{
+			Name:        "tags",
+			Label:       "Tags",
+			Description: "Tags",
+			Required:    false,
+		},
 		&cmdflag.String{
 			Name:        "description",
 			Label:       "Description",
