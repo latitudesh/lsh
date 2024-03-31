@@ -38,6 +38,9 @@ func runOperationSSHKeysGetProjectSSHKeys(cmd *cobra.Command, args []string) err
 	if err, _ := retrieveOperationSSHKeysGetProjectSSHKeysProjectIDOrSlugFlag(params, "", cmd); err != nil {
 		return err
 	}
+	if err, _ := retrieveOperationSSHKeysFilterTagsFlag(params, "", cmd); err != nil {
+		return err
+	}
 	if dryRun {
 
 		logDebugf("dry-run flag specified. Skip sending request.")
@@ -59,6 +62,9 @@ func runOperationSSHKeysGetProjectSSHKeys(cmd *cobra.Command, args []string) err
 // registerOperationSSHKeysGetProjectSSHKeysParamFlags registers all flags needed to fill params
 func registerOperationSSHKeysGetProjectSSHKeysParamFlags(cmd *cobra.Command) error {
 	if err := registerOperationSSHKeysGetProjectSSHKeysProjectIDOrSlugParamFlags("", cmd); err != nil {
+		return err
+	}
+	if err := registerOperationSSHKeysFilterTagsFlag("", cmd); err != nil {
 		return err
 	}
 	return nil
@@ -83,6 +89,24 @@ func registerOperationSSHKeysGetProjectSSHKeysProjectIDOrSlugParamFlags(cmdPrefi
 	return nil
 }
 
+func registerOperationSSHKeysFilterTagsFlag(cmdPrefix string, cmd *cobra.Command) error {
+
+	filterTagsDescription := `The Tags to filter by`
+
+	var filterTagsFlagName string
+	if cmdPrefix == "" {
+		filterTagsFlagName = "tags"
+	} else {
+		filterTagsFlagName = fmt.Sprintf("%v.tags", cmdPrefix)
+	}
+
+	var filterTagsFlagDefault = ""
+
+	_ = cmd.PersistentFlags().String(filterTagsFlagName, filterTagsFlagDefault, filterTagsDescription)
+
+	return nil
+}
+
 func retrieveOperationSSHKeysGetProjectSSHKeysProjectIDOrSlugFlag(m *ssh_keys.GetProjectSSHKeysParams, cmdPrefix string, cmd *cobra.Command) (error, bool) {
 	retAdded := false
 	if cmd.Flags().Changed("project") {
@@ -99,6 +123,27 @@ func retrieveOperationSSHKeysGetProjectSSHKeysProjectIDOrSlugFlag(m *ssh_keys.Ge
 			return err, false
 		}
 		m.ProjectIDOrSlug = projectIdOrSlugFlagValue
+
+	}
+	return nil, retAdded
+}
+
+func retrieveOperationSSHKeysFilterTagsFlag(m *ssh_keys.GetProjectSSHKeysParams, cmdPrefix string, cmd *cobra.Command) (error, bool) {
+	retAdded := false
+	if cmd.Flags().Changed("tags") {
+
+		var filterTagsFlagName string
+		if cmdPrefix == "" {
+			filterTagsFlagName = "tags"
+		} else {
+			filterTagsFlagName = fmt.Sprintf("%v.tags", cmdPrefix)
+		}
+
+		filterTagsFlagValue, err := cmd.Flags().GetString(filterTagsFlagName)
+		if err != nil {
+			return err, false
+		}
+		m.FilterTags = &filterTagsFlagValue
 
 	}
 	return nil, retAdded

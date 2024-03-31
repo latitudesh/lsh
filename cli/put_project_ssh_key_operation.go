@@ -63,6 +63,12 @@ func (o *UpdateSSHKeyOperation) registerFlags(cmd *cobra.Command) {
 			Description: "Name of the SSH Key",
 			Required:    true,
 		},
+		&cmdflag.StringSlice{
+			Name:        "tags",
+			Label:       "Tags",
+			Description: "Tags",
+			Required:    false,
+		},
 	}
 
 	o.PathParamFlags.Register(pathParamsSchema)
