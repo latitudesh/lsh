@@ -86,6 +86,9 @@ func runOperationServersGetServers(cmd *cobra.Command, args []string) error {
 	if err, _ := retrieveOperationServersGetServersFilterStatusFlag(params, "", cmd); err != nil {
 		return err
 	}
+	if err, _ := retrieveOperationServersGetServersFilterTagsFlag(params, "", cmd); err != nil {
+		return err
+	}
 	if dryRun {
 
 		logDebugf("dry-run flag specified. Skip sending request.")
@@ -157,6 +160,10 @@ func registerOperationServersGetServersParamFlags(cmd *cobra.Command) error {
 	if err := registerOperationServersGetServersFilterStatusParamFlags("", cmd); err != nil {
 		return err
 	}
+	if err := registerOperationServersGetServersFilterTagsParamFlags("", cmd); err != nil {
+		return err
+	}
+
 	return nil
 }
 
@@ -446,6 +453,23 @@ func registerOperationServersGetServersFilterStatusParamFlags(cmdPrefix string, 
 	var filterStatusFlagDefault string
 
 	_ = cmd.PersistentFlags().String(filterStatusFlagName, filterStatusFlagDefault, filterStatusDescription)
+
+	return nil
+}
+func registerOperationServersGetServersFilterTagsParamFlags(cmdPrefix string, cmd *cobra.Command) error {
+
+	filterTagsDescription := `The Tags to filter by`
+
+	var filterTagsFlagName string
+	if cmdPrefix == "" {
+		filterTagsFlagName = "tags"
+	} else {
+		filterTagsFlagName = fmt.Sprintf("%v.tags", cmdPrefix)
+	}
+
+	var filterTagsFlagDefault = ""
+
+	_ = cmd.PersistentFlags().String(filterTagsFlagName, filterTagsFlagDefault, filterTagsDescription)
 
 	return nil
 }
@@ -786,6 +810,26 @@ func retrieveOperationServersGetServersFilterStatusFlag(m *servers.GetServersPar
 			return err, false
 		}
 		m.FilterStatus = &filterStatusFlagValue
+
+	}
+	return nil, retAdded
+}
+func retrieveOperationServersGetServersFilterTagsFlag(m *servers.GetServersParams, cmdPrefix string, cmd *cobra.Command) (error, bool) {
+	retAdded := false
+	if cmd.Flags().Changed("tags") {
+
+		var filterTagsFlagName string
+		if cmdPrefix == "" {
+			filterTagsFlagName = "tags"
+		} else {
+			filterTagsFlagName = fmt.Sprintf("%v.tags", cmdPrefix)
+		}
+
+		filterTagsFlagValue, err := cmd.Flags().GetString(filterTagsFlagName)
+		if err != nil {
+			return err, false
+		}
+		m.FilterTags = &filterTagsFlagValue
 
 	}
 	return nil, retAdded

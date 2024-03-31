@@ -125,7 +125,7 @@ func (m *ServerData) TableRow() table.Row {
 		},
 		"tags": table.Cell{
 			Label: "Tags",
-			Value: table.StringList(tags(attr), ","),
+			Value: table.StringList(tags(attr.Tags), ","),
 		},
 		"hostname": table.Cell{
 			Label:     "Hostname",
@@ -204,10 +204,8 @@ func plan(attributes *ServerDataAttributes) string {
 	return ""
 }
 
-func tags(attributes *ServerDataAttributes) []string {
+func tags(tags []*TagsIncude) []string {
 	name := []string{}
-	tags := attributes.Tags
-
 	for _, tag := range tags {
 		name = append(name, tag.Name)
 	}
@@ -218,7 +216,7 @@ func tags(attributes *ServerDataAttributes) []string {
 //
 // swagger:model ServerDataAttributes
 type ServerDataAttributes struct {
-	Tags []*ServerDataAttributesTags `json:"tags,omitempty"`
+	Tags []*TagsIncude `json:"tags,omitempty"`
 
 	// created at
 	CreatedAt *string `json:"created_at,omitempty"`
@@ -710,13 +708,6 @@ func (m *ServerDataAttributes) UnmarshalBinary(b []byte) error {
 	}
 	*m = res
 	return nil
-}
-
-type ServerDataAttributesTags struct {
-	Id          string `json:"id,omitempty"`
-	Name        string `json:"name,omitempty"`
-	Description string `json:"description,omitempty"`
-	Color       string `json:"color,omitempty"`
 }
 
 // ServerDataAttributesOperatingSystem server data attributes operating system
