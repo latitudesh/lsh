@@ -549,6 +549,8 @@ type UpdateProjectParamsBodyDataAttributes struct {
 
 	// name
 	Name string `json:"name,omitempty"`
+
+	Tags []string `json:"tags,omitempty"`
 }
 
 // Validate validates this update project params body data attributes

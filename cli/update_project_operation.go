@@ -66,6 +66,12 @@ func (o *UpdateProjectOperation) registerFlags(cmd *cobra.Command) {
 			Description: "The project name. Must be unique.",
 			Required:    false,
 		},
+		&cmdflag.StringSlice{
+			Name:        "tags",
+			Label:       "Tags",
+			Description: "Tags",
+			Required:    false,
+		},
 		&cmdflag.String{
 			Name:        "description",
 			Label:       "Description",
