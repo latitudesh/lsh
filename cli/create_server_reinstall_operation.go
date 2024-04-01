@@ -4,6 +4,7 @@ import (
 	"fmt"
 
 	"github.com/latitudesh/lsh/client/server_reinstall"
+	"github.com/latitudesh/lsh/cmd/lsh"
 	"github.com/latitudesh/lsh/internal/api/resource"
 	"github.com/latitudesh/lsh/internal/cmdflag"
 	"github.com/latitudesh/lsh/internal/utils"
@@ -121,8 +122,8 @@ func (o *CreateServerReinstallOperation) run(cmd *cobra.Command, args []string) 
 		return nil
 	}
 
-	if dryRun {
-		logDebugf("dry-run flag specified. Skip sending request.")
+	if lsh.DryRun {
+		lsh.LogDebugf("dry-run flag specified. Skip sending request.")
 		return nil
 	}
 
@@ -132,7 +133,7 @@ func (o *CreateServerReinstallOperation) run(cmd *cobra.Command, args []string) 
 		return nil
 	}
 
-	if !debug {
+	if !lsh.Debug {
 		response.Render()
 	}
 	return nil
