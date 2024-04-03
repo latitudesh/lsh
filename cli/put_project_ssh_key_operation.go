@@ -28,7 +28,8 @@ type UpdateSSHKeyOperation struct {
 func (o *UpdateSSHKeyOperation) Register() (*cobra.Command, error) {
 	cmd := &cobra.Command{
 		Use:    "update",
-		Short:  `Allow you update SSH Key in a project. These keys can be used to access servers after deploy and reinstall actions.`,
+		Short:  "Update an SSH key",
+		Long:   `Allow you update SSH Key in a project. These keys can be used to access servers after deploy and reinstall actions.`,
 		RunE:   o.run,
 		PreRun: o.preRun,
 	}

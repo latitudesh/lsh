@@ -17,7 +17,8 @@ import (
 func makeOperationSSHKeysGetProjectSSHKeyCmd() (*cobra.Command, error) {
 	cmd := &cobra.Command{
 		Use:   "get",
-		Short: `Returns a SSH Key in the project. These keys can be used to access servers after deploy and reinstall actions.`,
+		Short: "Retrieve an SSH key",
+		Long:  `Returns a SSH Key in the project. These keys can be used to access servers after deploy and reinstall actions.`,
 		RunE:  runOperationSSHKeysGetProjectSSHKey,
 	}
 

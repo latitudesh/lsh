@@ -28,7 +28,8 @@ type UpdateAPIKeyOperation struct {
 func (o *UpdateAPIKeyOperation) Register() (*cobra.Command, error) {
 	cmd := &cobra.Command{
 		Use:    "update",
-		Short:  `Regenerate an existing API Key that is tied to the current user. This overrides the previous key.`,
+		Short:  "Update an API Key",
+		Long:   `Regenerate an existing API Key that is tied to the current user. This overrides the previous key.`,
 		RunE:   o.run,
 		PreRun: o.preRun,
 	}
