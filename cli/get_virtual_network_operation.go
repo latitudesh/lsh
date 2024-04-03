@@ -7,6 +7,7 @@ import (
 	"fmt"
 
 	"github.com/latitudesh/lsh/client/virtual_networks"
+	"github.com/latitudesh/lsh/cmd/lsh"
 	"github.com/latitudesh/lsh/internal/utils"
 
 	"github.com/spf13/cobra"
@@ -38,9 +39,9 @@ func runOperationVirtualNetworksGetVirtualNetwork(cmd *cobra.Command, args []str
 	if err, _ := retrieveOperationVirtualNetworksGetVirtualNetworkIDFlag(params, "", cmd); err != nil {
 		return err
 	}
-	if dryRun {
+	if lsh.DryRun {
 
-		logDebugf("dry-run flag specified. Skip sending request.")
+		lsh.LogDebugf("dry-run flag specified. Skip sending request.")
 		return nil
 	}
 
@@ -50,7 +51,7 @@ func runOperationVirtualNetworksGetVirtualNetwork(cmd *cobra.Command, args []str
 		return nil
 	}
 
-	if !debug {
+	if !lsh.Debug {
 		utils.Render(response.GetData())
 	}
 	return nil

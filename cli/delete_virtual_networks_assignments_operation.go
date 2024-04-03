@@ -2,6 +2,7 @@ package cli
 
 import (
 	"github.com/latitudesh/lsh/client/virtual_network_assignments"
+	"github.com/latitudesh/lsh/cmd/lsh"
 	"github.com/latitudesh/lsh/internal/cmdflag"
 	"github.com/latitudesh/lsh/internal/utils"
 
@@ -67,8 +68,8 @@ func (o *DeleteVirtualNetworkAssignmentOperation) run(cmd *cobra.Command, args [
 	params := virtual_network_assignments.NewDeleteVirtualNetworksAssignmentsParams()
 	o.PathParamFlags.AssignValues(params)
 
-	if dryRun {
-		logDebugf("dry-run flag specified. Skip sending request.")
+	if lsh.DryRun {
+		lsh.LogDebugf("dry-run flag specified. Skip sending request.")
 		return nil
 	}
 
@@ -78,7 +79,7 @@ func (o *DeleteVirtualNetworkAssignmentOperation) run(cmd *cobra.Command, args [
 		return nil
 	}
 
-	if !debug {
+	if !lsh.Debug {
 		response.Render()
 	}
 	return nil

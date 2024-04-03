@@ -8,6 +8,7 @@ import (
 	"fmt"
 
 	"github.com/latitudesh/lsh/client/plans"
+	"github.com/latitudesh/lsh/cmd/lsh"
 	"github.com/latitudesh/lsh/internal/utils"
 
 	"github.com/spf13/cobra"
@@ -72,9 +73,9 @@ func runOperationPlansGetPlans(cmd *cobra.Command, args []string) error {
 	if err, _ := retrieveOperationPlansGetPlansFilterStockLevelFlag(params, "", cmd); err != nil {
 		return err
 	}
-	if dryRun {
+	if lsh.DryRun {
 
-		logDebugf("dry-run flag specified. Skip sending request.")
+		lsh.LogDebugf("dry-run flag specified. Skip sending request.")
 		return nil
 	}
 
@@ -84,7 +85,7 @@ func runOperationPlansGetPlans(cmd *cobra.Command, args []string) error {
 		return nil
 	}
 
-	if !debug {
+	if !lsh.Debug {
 		utils.Render(response.GetData())
 	}
 	return nil

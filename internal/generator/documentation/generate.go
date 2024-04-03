@@ -6,7 +6,7 @@ import (
 	"os"
 	"strings"
 
-	"github.com/latitudesh/lsh/cli"
+	"github.com/latitudesh/lsh/cmd"
 	"github.com/spf13/cobra"
 	"golang.org/x/text/cases"
 	"golang.org/x/text/language"
@@ -25,7 +25,7 @@ var cmdSelection = map[string]int{
 }
 
 func main() {
-	rootCmd, err := cli.MakeRootCmd()
+	rootCmd, err := cmd.Execute()
 	if err != nil {
 		log.Fatal("Cmd construction error: ", err)
 	}
