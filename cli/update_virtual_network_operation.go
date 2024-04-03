@@ -27,7 +27,7 @@ type UpdateVirtualNetworkOperation struct {
 func (o *UpdateVirtualNetworkOperation) Register() (*cobra.Command, error) {
 	cmd := &cobra.Command{
 		Use:    "update",
-		Short:  "Update a Virtual Network.",
+		Short:  "Update a virtual network",
 		RunE:   o.run,
 		PreRun: o.preRun,
 	}

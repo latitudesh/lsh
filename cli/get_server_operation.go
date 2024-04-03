@@ -16,7 +16,7 @@ import (
 func makeOperationServersGetServerCmd() (*cobra.Command, error) {
 	cmd := &cobra.Command{
 		Use:   "get",
-		Short: `Returns a server that belongs to the team.`,
+		Short: "Get information on a server",
 		RunE:  runOperationServersGetServer,
 	}
 
