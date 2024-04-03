@@ -36,6 +36,7 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GORELEASER_TOKEN }}
 
   generate-docs:
+    runs-on: ubuntu-latest
     steps:
       -
         name: Set up Go
