@@ -7,6 +7,7 @@ import (
 	"fmt"
 
 	"github.com/latitudesh/lsh/client/ssh_keys"
+	"github.com/latitudesh/lsh/cmd/lsh"
 	"github.com/latitudesh/lsh/internal/utils"
 
 	"github.com/spf13/cobra"
@@ -16,7 +17,8 @@ import (
 func makeOperationSSHKeysGetProjectSSHKeyCmd() (*cobra.Command, error) {
 	cmd := &cobra.Command{
 		Use:   "get",
-		Short: `Returns a SSH Key in the project. These keys can be used to access servers after deploy and reinstall actions.`,
+		Short: "Retrieve an SSH key",
+		Long:  `Returns a SSH Key in the project. These keys can be used to access servers after deploy and reinstall actions.`,
 		RunE:  runOperationSSHKeysGetProjectSSHKey,
 	}
 
@@ -41,9 +43,9 @@ func runOperationSSHKeysGetProjectSSHKey(cmd *cobra.Command, args []string) erro
 	if err, _ := retrieveOperationSSHKeysGetProjectSSHKeySSHKeyIDFlag(params, "", cmd); err != nil {
 		return err
 	}
-	if dryRun {
+	if lsh.DryRun {
 
-		logDebugf("dry-run flag specified. Skip sending request.")
+		lsh.LogDebugf("dry-run flag specified. Skip sending request.")
 		return nil
 	}
 
@@ -53,7 +55,7 @@ func runOperationSSHKeysGetProjectSSHKey(cmd *cobra.Command, args []string) erro
 		return nil
 	}
 
-	if !debug {
+	if !lsh.Debug {
 		utils.Render(response.GetData())
 	}
 	return nil

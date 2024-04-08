@@ -123,6 +123,10 @@ func (m *ServerData) TableRow() table.Row {
 			Label: "ID",
 			Value: table.String(m.ID),
 		},
+		"tags": table.Cell{
+			Label: "Tags",
+			Value: table.StringList(tags(attr.Tags), ","),
+		},
 		"hostname": table.Cell{
 			Label:     "Hostname",
 			Value:     table.String(attr.Hostname),
@@ -200,10 +204,19 @@ func plan(attributes *ServerDataAttributes) string {
 	return ""
 }
 
+func tags(tags []*TagsIncude) []string {
+	name := []string{}
+	for _, tag := range tags {
+		name = append(name, tag.Name)
+	}
+	return name
+}
+
 // ServerDataAttributes server data attributes
 //
 // swagger:model ServerDataAttributes
 type ServerDataAttributes struct {
+	Tags []*TagsIncude `json:"tags,omitempty"`
 
 	// created at
 	CreatedAt *string `json:"created_at,omitempty"`

@@ -6,6 +6,7 @@ import (
 	"path/filepath"
 
 	"github.com/latitudesh/lsh/cli"
+	"github.com/latitudesh/lsh/cmd/lsh"
 	"github.com/latitudesh/lsh/internal/version"
 	"github.com/spf13/cobra"
 )
@@ -26,6 +27,9 @@ func Execute() (*cobra.Command, error) {
 	if err != nil {
 		log.Fatal("Cmd construction error: ", err)
 	}
+
+	rootCmd.PersistentFlags().BoolVar(&lsh.DryRun, "dry-run", false, "do not send the request to server")
+	rootCmd.PersistentFlags().BoolVar(&lsh.Debug, "debug", false, "output debug logs")
 
 	return cmd, cmd.Execute()
 }
