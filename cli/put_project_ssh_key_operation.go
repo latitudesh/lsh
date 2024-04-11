@@ -2,6 +2,7 @@ package cli
 
 import (
 	"github.com/latitudesh/lsh/client/ssh_keys"
+	"github.com/latitudesh/lsh/cmd/lsh"
 	"github.com/latitudesh/lsh/internal/cmdflag"
 	"github.com/latitudesh/lsh/internal/utils"
 
@@ -27,7 +28,8 @@ type UpdateSSHKeyOperation struct {
 func (o *UpdateSSHKeyOperation) Register() (*cobra.Command, error) {
 	cmd := &cobra.Command{
 		Use:    "update",
-		Short:  `Allow you update SSH Key in a project. These keys can be used to access servers after deploy and reinstall actions.`,
+		Short:  "Update an SSH key",
+		Long:   `Allow you update SSH Key in a project. These keys can be used to access servers after deploy and reinstall actions.`,
 		RunE:   o.run,
 		PreRun: o.preRun,
 	}
@@ -63,6 +65,12 @@ func (o *UpdateSSHKeyOperation) registerFlags(cmd *cobra.Command) {
 			Description: "Name of the SSH Key",
 			Required:    true,
 		},
+		&cmdflag.StringSlice{
+			Name:        "tags",
+			Label:       "Tags",
+			Description: "Tags",
+			Required:    false,
+		},
 	}
 
 	o.PathParamFlags.Register(pathParamsSchema)
@@ -85,8 +93,8 @@ func (o *UpdateSSHKeyOperation) run(cmd *cobra.Command, args []string) error {
 	o.BodyAttributesFlags.AssignValues(params.Body.Data.Attributes)
 	params.Body.Data.ID = params.SSHKeyID
 
-	if dryRun {
-		logDebugf("dry-run flag specified. Skip sending request.")
+	if lsh.DryRun {
+		lsh.LogDebugf("dry-run flag specified. Skip sending request.")
 		return nil
 	}
 
@@ -96,7 +104,7 @@ func (o *UpdateSSHKeyOperation) run(cmd *cobra.Command, args []string) error {
 		return nil
 	}
 
-	if !debug {
+	if !lsh.Debug {
 		utils.Render(response.GetData())
 	}
 	return nil

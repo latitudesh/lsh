@@ -2,6 +2,7 @@ package cli
 
 import (
 	"github.com/latitudesh/lsh/client/servers"
+	"github.com/latitudesh/lsh/cmd/lsh"
 	"github.com/latitudesh/lsh/internal/api/resource"
 	"github.com/latitudesh/lsh/internal/cmdflag"
 	"github.com/latitudesh/lsh/internal/utils"
@@ -27,7 +28,7 @@ type CreateServerOperation struct {
 func (o *CreateServerOperation) Register() (*cobra.Command, error) {
 	cmd := &cobra.Command{
 		Use:    "create",
-		Short:  "Deploy a new server.",
+		Short:  "Deploy a bare metal server",
 		RunE:   o.run,
 		PreRun: o.preRun,
 	}
@@ -126,8 +127,8 @@ func (o *CreateServerOperation) run(cmd *cobra.Command, args []string) error {
 	params := servers.NewCreateServerParams()
 	o.BodyAttributesFlags.AssignValues(params.Body.Data.Attributes)
 
-	if dryRun {
-		logDebugf("dry-run flag specified. Skip sending request.")
+	if lsh.DryRun {
+		lsh.LogDebugf("dry-run flag specified. Skip sending request.")
 		return nil
 	}
 
@@ -137,7 +138,7 @@ func (o *CreateServerOperation) run(cmd *cobra.Command, args []string) error {
 		return nil
 	}
 
-	if !debug {
+	if !lsh.Debug {
 		utils.Render(response.GetData())
 	}
 
