@@ -36,8 +36,9 @@ func ParseSpec(commands []string, spec []byte) []Command {
 		// ie: /tags and /tags/{tag_id} belong to the same CLI command
 		relatedPaths := []string{}
 		allPaths := model.Index.GetAllPaths()
+		relatedPaths = append(relatedPaths, "/"+cmd)
 		for k := range allPaths {
-			if strings.Contains(k, cmd) {
+			if strings.Contains(k, cmd+"/{") {
 				relatedPaths = append(relatedPaths, k)
 			}
 		}

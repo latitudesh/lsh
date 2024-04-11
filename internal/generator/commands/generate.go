@@ -10,13 +10,15 @@ import (
 	commands "github.com/latitudesh/lsh/internal/generator/commands/utils"
 )
 
+const ApiSpecUrl = "https://api.latitude.sh/api-docs/v3/swagger.json"
+
 func main() {
 	cmdToGenerate := os.Args[1:]
 	if len(cmdToGenerate) == 0 {
 		log.Fatal("No commands passed")
 	}
 
-	apiSpec, err := GetApiSpec("https://api.latitude.sh/api-docs/v3/swagger.json")
+	apiSpec, err := GetApiSpec(ApiSpecUrl)
 	if err != nil {
 		log.Fatal(err)
 	}
@@ -33,6 +35,9 @@ func main() {
 		// Generate commands inside command folder
 		commands.GenerateCmd(cmd)
 	}
+
+	// Generate resource file
+	commands.GenerateResource(parsedCmds[0])
 
 	// Generate builder file
 	commands.GenerateCmdBuilder(parsedCmds)
