@@ -42,13 +42,29 @@ func genNewFunc(cmd Command, f *jen.File) {
 		jen.Return(jen.Id("cmd")),
 	)
 }
+
 func genOperation(cmd Command, f *jen.File) {
 	cmdName := parseCmdName(cmd.Name, cmd.Root)
 	titledCmd := utils.TitleStr(cmdName)
 	titledRoot := utils.TitleStr(cmd.Root)
 	opName := fmt.Sprintf("%s%sOperation", titledCmd, titledRoot)
 
-	f.Type().Id(opName).Struct()
+	jenParams := []jen.Code{}
+
+	switch cmdName {
+	case "list":
+	case "get", "destroy":
+		jenParams = append(jenParams, jen.Id("PathParamFlags").Qual("github.com/latitudesh/lsh/internal/cmdflag", "Flags"))
+	case "create":
+		jenParams = append(jenParams, jen.Id("BodyAttributesFlags").Qual("github.com/latitudesh/lsh/internal/cmdflag", "Flags"))
+	default:
+		jenParams = append(jenParams,
+			jen.Id("PathParamFlags").Qual("github.com/latitudesh/lsh/internal/cmdflag", "Flags"),
+			jen.Id("BodyAttributesFlags").Qual("github.com/latitudesh/lsh/internal/cmdflag", "Flags"),
+		)
+	}
+
+	f.Type().Id(opName).Struct(jenParams...)
 }
 
 func genRun(cmd Command, f *jen.File) {
@@ -71,35 +87,123 @@ func genRun(cmd Command, f *jen.File) {
 			jen.Return(jen.Nil()),
 		),
 		jen.Line(),
-		jen.List(jen.Id(cmd.Root), jen.Id("_"), jen.Id("err")).Op(":=").Id("c").Dot(titledRoot).Dot(titledCmd).Call(jen.Nil()),
+
+		genkSdkFunc(cmd),
+
 		jen.If(jen.Id("err").Op("!=").Nil()).Block(
 			jen.Qual("github.com/latitudesh/lsh/internal/utils", "PrintError").Call(jen.Id("err")),
 			jen.Return(jen.Id("err")),
 		),
 		jen.Line(),
-		jen.Id("lshData").Op(":=").Index().Op("*").Id(utils.Singular(titledRoot)).Block(),
-		jen.For().List(jen.Id("_"), jen.Id(utils.Singular(cmd.Root))).Op(":=").Range().Id(cmd.Root).Block(
-			jen.Id(fmt.Sprintf("lsh%s", utils.Singular(titledRoot))).Op(":=").Id(utils.Singular(titledRoot)).Values(
-				jen.Dict{
-					jen.Id("Attributes"): jen.Id(utils.Singular(cmd.Root)),
-				},
-			),
-			jen.Id("lshData").Op("=").Append(jen.Id("lshData"), jen.Op("&").Id(fmt.Sprintf("lsh%s", utils.Singular(titledRoot)))),
-		),
+
+		genDataSection(cmd),
+
 		jen.Line(),
-		jen.Id(fmt.Sprintf("lsh%s", titledRoot)).Op(":=").Id(titledRoot).Values(
-			jen.Dict{
-				jen.Id("Data"): jen.Id("lshData"),
-			},
-		),
-		jen.Line(),
-		jen.If(jen.Op("!").Qual("github.com/latitudesh/lsh/cmd/lsh", "Debug")).Block(
-			jen.Qual("github.com/latitudesh/lsh/internal/utils", "Render").Call(jen.Id(fmt.Sprintf("lsh%s", titledRoot)).Dot("GetData").Call()),
-		),
+
+		genRenderSection(cmd),
+
 		jen.Line(),
 		jen.Return(jen.Nil()),
 	)
 
+}
+
+func genkSdkFunc(cmd Command) *jen.Statement {
+	cmdName := parseCmdName(cmd.Name, cmd.Root)
+	titledRoot := utils.TitleStr(cmd.Root)
+	titledCmd := utils.TitleStr(cmdName)
+
+	sdkSection := jen.Statement{}
+
+	switch cmdName {
+	case "get", "update":
+		sdkSection = jen.Statement{
+			jen.Id("attr").Op(":=").Struct(jen.Id("ID").String().Tag(map[string]string{"json": "id"})).Block(),
+			jen.Line(),
+			jen.Id("op").Dot("PathParamFlags").Dot("AssignValues").Call(jen.Op("&").Id("attr")),
+			jen.Line(),
+			jen.List(jen.Id(cmd.Root), jen.Id("_"), jen.Id("err")).Op(":=").Id("c").Dot(titledRoot).Dot(titledCmd).Call(jen.Id("attr").Dot("ID"), jen.Nil()),
+		}
+	case "destroy":
+		sdkSection = jen.Statement{
+			jen.Id("attr").Op(":=").Struct(jen.Id("ID").String().Tag(map[string]string{"json": "id"})).Block(),
+			jen.Line(),
+			jen.Id("op").Dot("PathParamFlags").Dot("AssignValues").Call(jen.Op("&").Id("attr")),
+			jen.Line(),
+			jen.List(jen.Id("resp"), jen.Id("err")).Op(":=").Id("c").Dot(titledRoot).Dot("Delete").Call(jen.Id("attr").Dot("ID")),
+		}
+	default:
+		sdkSection = jen.Statement{jen.List(jen.Id(cmd.Root), jen.Id("_"), jen.Id("err")).Op(":=").Id("c").Dot(titledRoot).Dot(titledCmd).Call(jen.Nil())}
+	}
+
+	return &sdkSection
+}
+
+func genDataSection(cmd Command) *jen.Statement {
+	cmdName := parseCmdName(cmd.Name, cmd.Root)
+	titledRoot := utils.TitleStr(cmd.Root)
+
+	dataSection := jen.Statement{}
+
+	switch cmdName {
+	case "list":
+		dataSection = jen.Statement{
+			jen.Id("lshData").Op(":=").Index().Op("*").Id(utils.Singular(titledRoot)).Block(),
+			jen.Line(),
+			jen.For().List(jen.Id("_"), jen.Id(utils.Singular(cmd.Root))).Op(":=").Range().Id(cmd.Root).Block(
+				jen.Id(fmt.Sprintf("lsh%s", utils.Singular(titledRoot))).Op(":=").Id(utils.Singular(titledRoot)).Values(
+					jen.Dict{
+						jen.Id("Attributes"): jen.Id(utils.Singular(cmd.Root)),
+					},
+				),
+				jen.Id("lshData").Op("=").Append(jen.Id("lshData"), jen.Op("&").Id(fmt.Sprintf("lsh%s", utils.Singular(titledRoot)))),
+			),
+			jen.Line(),
+			jen.Id(fmt.Sprintf("lsh%s", titledRoot)).Op(":=").Id(titledRoot).Values(
+				jen.Dict{
+					jen.Id("Data"): jen.Id("lshData"),
+				},
+			),
+		}
+	case "destroy":
+	default:
+		dataSection = jen.Statement{
+			jen.Id(fmt.Sprintf("lsh%s", titledRoot)).Op(":=").Id(utils.Singular(titledRoot)).Values(
+				jen.Dict{
+					jen.Id("Attributes"): jen.Op("*").Id(cmd.Root),
+				},
+			),
+		}
+	}
+
+	return &dataSection
+}
+
+func genRenderSection(cmd Command) *jen.Statement {
+	cmdName := parseCmdName(cmd.Name, cmd.Root)
+	titledRoot := utils.TitleStr(cmd.Root)
+
+	renderSection := jen.Statement{}
+
+	switch cmdName {
+	case "destroy":
+		renderSection = jen.Statement{
+			jen.If(jen.Op("!").Qual("github.com/latitudesh/lsh/cmd/lsh", "Debug")).Block(
+				jen.If(jen.Id("resp").Dot("StatusCode").Op("!=").Qual("net/http", "StatusNoContent")).Block(
+					jen.Qual("log", "Fatal").Call(jen.Lit("Something went wrong while deleting resource.")),
+				),
+				jen.Qual("fmt", "Printf").Call(jen.Lit(fmt.Sprintf("\n\n%s deleted successfully!\n\n", utils.Singular(titledRoot)))),
+			),
+		}
+	default:
+		renderSection = jen.Statement{
+			jen.If(jen.Op("!").Qual("github.com/latitudesh/lsh/cmd/lsh", "Debug")).Block(
+				jen.Qual("github.com/latitudesh/lsh/internal/utils", "Render").Call(jen.Id(fmt.Sprintf("lsh%s", titledRoot)).Dot("GetData").Call()),
+			),
+		}
+	}
+
+	return &renderSection
 }
 
 func parseCmdName(name, root string) string {
