@@ -4,7 +4,7 @@ import (
 	"context"
 	"fmt"
 	"log"
-	"strings"
+	"regexp"
 
 	"github.com/pb33f/libopenapi"
 	"github.com/pb33f/libopenapi/orderedmap"
@@ -37,8 +37,10 @@ func ParseSpec(commands []string, spec []byte) []Command {
 		relatedPaths := []string{}
 		allPaths := model.Index.GetAllPaths()
 		relatedPaths = append(relatedPaths, "/"+cmd)
+
+		rx := regexp.MustCompile(fmt.Sprintf("%s/{.*}$", cmd))
 		for k := range allPaths {
-			if strings.Contains(k, cmd+"/{") {
+			if rx.MatchString(k) {
 				relatedPaths = append(relatedPaths, k)
 			}
 		}
