@@ -67,14 +67,23 @@ func GenerateResource(cmd Command) {
 		jen.Return(jen.Nil()),
 	)
 
-	f.Comment("// TODO: Table to be rendered")
-	//TODO: Table generation
+	f.Comment("// TODO: The render table needs to be filled manually")
+	//Table generation only generates a table with an ID column, other values should be added manually
 	f.Func().Params(
 		jen.Id("m").Op("*").Id(utils.Singular(titledRoot)),
 	).Id("TableRow").Params().Qual("github.com/latitudesh/lsh/internal/output/table", "Row").Block(
 		jen.Id("attr").Op(":=").Id("m").Dot("Attributes"),
 		jen.Line(),
-		jen.Return(jen.Nil()),
+		jen.Return(jen.Id("table").Dot("Row").Values(
+			jen.Dict{
+				jen.Lit("id"): jen.Id("table").Dot("Cell").Values(
+					jen.Dict{
+						jen.Id("Label"): jen.Lit("ID"),
+						jen.Id("Value"): jen.Id("table").Dot("String").Call(jen.Id("attr").Dot("ID")),
+					},
+				),
+			},
+		)),
 	)
 
 	filepath := path.Join("cmd", cmd.Root, cmd.Root+".go")

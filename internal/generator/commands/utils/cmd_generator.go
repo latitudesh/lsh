@@ -33,18 +33,24 @@ func genNewFunc(cmd Command, f *jen.File) {
 	titledRoot := utils.TitleStr(cmd.Root)
 	opName := fmt.Sprintf("%s%sOperation", titledCmd, titledRoot)
 
+	cmdOptions := jen.Dict{
+		jen.Id("Use"):   jen.Lit(cmdName),
+		jen.Id("Short"): jen.Lit(cmd.Short),
+		jen.Id("Long"):  jen.Lit(cmd.Long),
+		jen.Id("RunE"):  jen.Id("op").Dot("run"),
+	}
+
+	registerFlags := jen.Statement{}
+
+	if len(cmd.Parameters) != 0 {
+		cmdOptions[jen.Id("PreRun")] = jen.Id("op").Dot("preRun")
+		registerFlags = *jen.Id("op").Dot("registerFlags").Call(jen.Id("cmd"))
+	}
+
 	f.Func().Id(fmt.Sprintf("New%sCmd", titledCmd)).Params().Op("*").Qual("github.com/spf13/cobra", "Command").Block(
 		jen.Id("op").Op(":=").Id(opName).Block(),
-		jen.Id("cmd").Op(":=").Op("&").Qual("github.com/spf13/cobra", "Command").Values(jen.Dict{
-			jen.Id("Use"):    jen.Lit(cmdName),
-			jen.Id("Short"):  jen.Lit(cmd.Short),
-			jen.Id("Long"):   jen.Lit(cmd.Long),
-			jen.Id("PreRun"): jen.Id("op").Dot("preRun"),
-			jen.Id("RunE"):   jen.Id("op").Dot("run"),
-		}),
-
-		jen.Id("op").Dot("registerFlags").Call(jen.Id("cmd")),
-
+		jen.Id("cmd").Op(":=").Op("&").Qual("github.com/spf13/cobra", "Command").Values(cmdOptions),
+		&registerFlags,
 		jen.Return(jen.Id("cmd")),
 	)
 }
@@ -59,6 +65,9 @@ func genOperation(cmd Command, f *jen.File) {
 
 	switch cmdName {
 	case "list":
+		if len(cmd.Parameters) != 0 {
+			jenParams = append(jenParams, jen.Id("PathParamFlags").Qual("github.com/latitudesh/lsh/internal/cmdflag", "Flags"))
+		}
 	case "get", "destroy":
 		jenParams = append(jenParams, jen.Id("PathParamFlags").Qual("github.com/latitudesh/lsh/internal/cmdflag", "Flags"))
 	case "create":
@@ -74,12 +83,25 @@ func genOperation(cmd Command, f *jen.File) {
 }
 
 func genFlags(cmd Command, f *jen.File) {
+	if len(cmd.Parameters) == 0 {
+		return
+	}
+
 	cmdName := parseCmdName(cmd.Name, cmd.Root)
 	titledCmd := utils.TitleStr(cmdName)
 	titledRoot := utils.TitleStr(cmd.Root)
 	opName := fmt.Sprintf("%s%sOperation", titledCmd, titledRoot)
 
-	fmt.Println(cmd.Parameters)
+	schema := []jen.Code{}
+
+	for _, param := range cmd.Parameters {
+		schema = append(schema, jen.Op("&").Qual("github.com/latitudesh/lsh/internal/cmdflag", "String").Values(jen.Dict{
+			jen.Id("Name"):        jen.Lit(param.Name),
+			jen.Id("Label"):       jen.Lit(param.Name),
+			jen.Id("Description"): jen.Lit(param.Description),
+			jen.Id("Required"):    jen.Lit(param.Required),
+		}))
+	}
 
 	f.Func().Params(
 		jen.Id("op").Op("*").Id(opName),
@@ -89,19 +111,16 @@ func genFlags(cmd Command, f *jen.File) {
 		jen.Id("op").Dot("PathParamFlags").Op("=").Qual("github.com/latitudesh/lsh/internal/cmdflag", "Flags").Values(jen.Dict{
 			jen.Id("FlagSet"): jen.Id("cmd").Dot("Flags").Call(),
 		}),
-		jen.Id("schema").Op(":=").Op("&").Qual("github.com/latitudesh/lsh/internal/cmdflag", "FlagsSchema").Values(
-			jen.Op("&").Qual("github.com/latitudesh/lsh/internal/cmdflag", "String").Values(jen.Dict{
-				jen.Id("Name"):        jen.Lit(cmdName),
-				jen.Id("Label"):       jen.Lit(cmdName),
-				jen.Id("Description"): jen.Lit(cmdName),
-				jen.Id("Required"):    jen.Lit(false),
-			}),
-		),
+		jen.Id("schema").Op(":=").Op("&").Qual("github.com/latitudesh/lsh/internal/cmdflag", "FlagsSchema").Values(schema...),
 		jen.Id("op").Dot("PathParamFlags").Dot("Register").Call(jen.Id("schema")),
 	)
 }
 
 func genPreRun(cmd Command, f *jen.File) {
+	if len(cmd.Parameters) == 0 {
+		return
+	}
+
 	cmdName := parseCmdName(cmd.Name, cmd.Root)
 	titledCmd := utils.TitleStr(cmdName)
 	titledRoot := utils.TitleStr(cmd.Root)

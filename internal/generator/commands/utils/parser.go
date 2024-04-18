@@ -7,6 +7,7 @@ import (
 	"regexp"
 
 	"github.com/pb33f/libopenapi"
+	v3 "github.com/pb33f/libopenapi/datamodel/high/v3"
 	"github.com/pb33f/libopenapi/orderedmap"
 )
 
@@ -55,16 +56,33 @@ func ParseSpec(commands []string, spec []byte) []Command {
 
 			c := orderedmap.Iterate(ctx, path.GetOperations())
 			for pr := range c {
+
 				cmd := Command{
-					Name:   pr.Value().OperationId,
-					Short:  pr.Value().Summary,
-					Long:   pr.Value().Description,
-					Method: pr.Key(),
-					Root:   cmd,
+					Name:       pr.Value().OperationId,
+					Short:      pr.Value().Summary,
+					Long:       pr.Value().Description,
+					Method:     pr.Key(),
+					Root:       cmd,
+					Parameters: parseParameters(pr.Value()),
 				}
 				cmdToGenerate = append(cmdToGenerate, cmd)
 			}
 		}
 	}
 	return cmdToGenerate
+}
+
+func parseParameters(params *v3.Operation) []CmdParameter {
+	result := []CmdParameter{}
+
+	for _, param := range params.Parameters {
+		param := CmdParameter{
+			Name:        param.Name,
+			Description: param.Description,
+			Required:    *param.Required,
+		}
+		result = append(result, param)
+	}
+
+	return result
 }

@@ -6,5 +6,11 @@ type Command struct {
 	Long       string
 	Method     string
 	Root       string
-	Parameters []string
+	Parameters []CmdParameter
+}
+
+type CmdParameter struct {
+	Name        string
+	Description string
+	Required    bool
 }
