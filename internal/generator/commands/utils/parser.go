@@ -5,7 +5,9 @@ import (
 	"fmt"
 	"log"
 	"regexp"
+	"strings"
 
+	"github.com/latitudesh/lsh/internal/utils"
 	"github.com/pb33f/libopenapi"
 	v3 "github.com/pb33f/libopenapi/datamodel/high/v3"
 	"github.com/pb33f/libopenapi/orderedmap"
@@ -54,7 +56,6 @@ func ParseSpec(commands []string, spec []byte) []Command {
 
 			c := orderedmap.Iterate(ctx, path.GetOperations())
 			for pr := range c {
-
 				cmd := Command{
 					Name:       pr.Value().OperationId,
 					Short:      pr.Value().Summary,
@@ -72,10 +73,29 @@ func ParseSpec(commands []string, spec []byte) []Command {
 
 func parseParameters(params *v3.Operation) []CmdParameter {
 	result := []CmdParameter{}
+	resourceName := utils.Singular(strings.Split(params.OperationId, "-")[1])
+	rx := regexp.MustCompile(`\[(.*)\]`)
 
 	for _, param := range params.Parameters {
+
+		paramName := param.Name
+
+		fmt.Println(paramName)
+		fmt.Printf("%+v\n\n\n", param.Schema.Schema())
+
+		if strings.Split(paramName, "_")[0] == resourceName {
+			paramName = "id"
+		}
+
+		matchName := rx.FindStringSubmatch(paramName)
+		if len(matchName) > 1 {
+			paramName = matchName[1]
+		}
+
+		paramName = strings.Replace(paramName, "][", "_", -1)
+
 		param := CmdParameter{
-			Name:        param.Name,
+			Name:        paramName,
 			Description: param.Description,
 			Required:    *param.Required,
 		}
