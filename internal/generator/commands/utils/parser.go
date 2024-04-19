@@ -63,12 +63,42 @@ func ParseSpec(commands []string, spec []byte) []Command {
 					Method:     pr.Key(),
 					Root:       cmd,
 					Parameters: parseParameters(pr.Value()),
+					Body:       parseBody(pr.Value()),
 				}
 				cmdToGenerate = append(cmdToGenerate, cmd)
 			}
 		}
 	}
 	return cmdToGenerate
+}
+
+func parseBody(params *v3.Operation) []CmdBody {
+	result := []CmdBody{}
+	firstContent := params.RequestBody
+	if firstContent != nil {
+		if firstContent.Content.First().Value().Schema.Schema().Properties.First().Value().Schema().Properties != nil {
+			rend, _ := firstContent.Content.First().Value().Schema.Schema().Properties.First().Value().Schema().Properties.Get("attributes")
+
+			ctx, cancel := context.WithCancel(context.Background())
+			defer cancel()
+
+			c := orderedmap.Iterate(ctx, rend.Schema().Properties)
+			for pr := range c {
+				nullable := true
+				if pr.Value().Schema().Nullable != nil {
+					nullable = *pr.Value().Schema().Nullable
+				}
+
+				body := CmdBody{
+					Name:        pr.Key(),
+					Description: pr.Value().Schema().Description,
+					Nullable:    nullable,
+				}
+				result = append(result, body)
+			}
+		}
+	}
+	return result
 }
 
 func parseParameters(params *v3.Operation) []CmdParameter {

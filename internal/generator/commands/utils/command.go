@@ -7,10 +7,17 @@ type Command struct {
 	Method     string
 	Root       string
 	Parameters []CmdParameter
+	Body       []CmdBody
 }
 
 type CmdParameter struct {
 	Name        string
 	Description string
 	Required    bool
+}
+
+type CmdBody struct {
+	Name        string
+	Description string
+	Nullable    bool
 }
