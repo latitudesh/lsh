@@ -80,9 +80,6 @@ func parseParameters(params *v3.Operation) []CmdParameter {
 
 		paramName := param.Name
 
-		fmt.Println(paramName)
-		fmt.Printf("%+v\n\n\n", param.Schema.Schema())
-
 		if strings.Split(paramName, "_")[0] == resourceName {
 			paramName = "id"
 		}
