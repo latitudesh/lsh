@@ -32,8 +32,10 @@ func main() {
 			os.MkdirAll(folderPath, 0700)
 		}
 
+		cmdGenerator := commands.NewCmdGenerator(cmd)
+
 		// Generate commands inside command folder
-		commands.GenerateCmd(cmd)
+		cmdGenerator.GenerateCmd()
 	}
 
 	// Generate resource file

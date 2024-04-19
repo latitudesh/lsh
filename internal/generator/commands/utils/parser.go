@@ -11,8 +11,6 @@ import (
 	"github.com/pb33f/libopenapi/orderedmap"
 )
 
-// var rootName = "tags"
-
 func ParseSpec(commands []string, spec []byte) []Command {
 	document, err := libopenapi.NewDocument(spec)
 	if err != nil {
