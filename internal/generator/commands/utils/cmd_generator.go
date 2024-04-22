@@ -196,7 +196,11 @@ func (cg *CmdGenerator) genkSdkFunc() *jen.Statement {
 			jen.List(jen.Id("resp"), jen.Id("err")).Op(":=").Id("c").Dot(cg.Root).Dot("Delete").Call(jen.Id("attr").Dot("ID")),
 		}
 	default:
-		sdkSection = jen.Statement{jen.List(jen.Id(cg.Cmd.Root), jen.Id("_"), jen.Id("err")).Op(":=").Id("c").Dot(cg.Root).Dot(titledCmd).Call(jen.Nil())}
+		if cg.Cmd.Root == "servers" && titledCmd == "List" {
+			sdkSection = jen.Statement{jen.List(jen.Id(cg.Cmd.Root), jen.Id("_"), jen.Id("err")).Op(":=").Id("c").Dot(cg.Root).Dot(titledCmd).Call(jen.Lit(""), jen.Nil())}
+		} else {
+			sdkSection = jen.Statement{jen.List(jen.Id(cg.Cmd.Root), jen.Id("_"), jen.Id("err")).Op(":=").Id("c").Dot(cg.Root).Dot(titledCmd).Call(jen.Nil())}
+		}
 	}
 
 	return &sdkSection
