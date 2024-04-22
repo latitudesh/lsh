@@ -53,6 +53,9 @@ func ParseSpec(commands []string, spec []byte) []Command {
 		// Get info about root command
 		for _, subC := range relatedPaths {
 			path := model.Model.Paths.PathItems.GetOrZero(subC)
+			if path == nil {
+				log.Fatalf("%s path not found in OpenApi specification. Aborting execution!", subC)
+			}
 
 			c := orderedmap.Iterate(ctx, path.GetOperations())
 			for pr := range c {
