@@ -51,12 +51,6 @@ func (o *CreateVirtualNetworkOperation) registerFlags(cmd *cobra.Command) {
 			Required:    true,
 		},
 		&cmdflag.String{
-			Name:        "project",
-			Label:       "Project ID or slug",
-			Description: "Project ID or slug",
-			Required:    true,
-		},
-		&cmdflag.String{
 			Name:        "site",
 			Label:       "Site ID or slug",
 			Description: "Site ID or slug",
@@ -69,6 +63,18 @@ func (o *CreateVirtualNetworkOperation) registerFlags(cmd *cobra.Command) {
 }
 
 func (o *CreateVirtualNetworkOperation) preRun(cmd *cobra.Command, args []string) {
+	projects := fetchUserProjects()
+	schema := &cmdflag.FlagsSchema{
+		&cmdflag.String{
+			Name:        "project",
+			Label:       "Project ID or Slug",
+			Description: "Project ID or Slug",
+			Required:    true,
+			Options:     projects,
+		},
+	}
+	o.BodyAttributesFlags.AppendFlags(schema)
+
 	o.BodyAttributesFlags.PreRun(cmd, args)
 }
 

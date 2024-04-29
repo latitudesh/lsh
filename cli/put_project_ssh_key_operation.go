@@ -50,12 +50,6 @@ func (o *UpdateSSHKeyOperation) registerFlags(cmd *cobra.Command) {
 			Description: "ID from the SSH Key you want to update",
 			Required:    true,
 		},
-		&cmdflag.String{
-			Name:        "project",
-			Label:       "Project ID or Slug",
-			Description: "Project ID or Slug",
-			Required:    true,
-		},
 	}
 
 	bodyFlagsSchema := &cmdflag.FlagsSchema{
@@ -78,6 +72,18 @@ func (o *UpdateSSHKeyOperation) registerFlags(cmd *cobra.Command) {
 }
 
 func (o *UpdateSSHKeyOperation) preRun(cmd *cobra.Command, args []string) {
+	projects := fetchUserProjects()
+	schema := &cmdflag.FlagsSchema{
+		&cmdflag.String{
+			Name:        "project",
+			Label:       "Project ID or Slug",
+			Description: "Project ID or Slug",
+			Required:    true,
+			Options:     projects,
+		},
+	}
+	o.PathParamFlags.AppendFlags(schema)
+
 	o.PathParamFlags.PreRun(cmd, args)
 	o.BodyAttributesFlags.PreRun(cmd, args)
 }
