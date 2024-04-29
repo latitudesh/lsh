@@ -35,6 +35,14 @@ func (f *Flags) Register(s *FlagsSchema) {
 	}
 }
 
+func (f *Flags) AppendFlags(s *FlagsSchema) {
+	*f.schema = append(*f.schema, *s...)
+
+	for _, v := range *s {
+		v.Register(f.FlagSet)
+	}
+}
+
 func (f *Flags) GetInputs() []prompt.PromptInput {
 	var inputs []prompt.PromptInput
 
