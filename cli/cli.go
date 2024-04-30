@@ -3,7 +3,6 @@ package cli
 import (
 	"fmt"
 	"os"
-	"path"
 	"path/filepath"
 
 	"github.com/latitudesh/lsh/client"
@@ -13,7 +12,6 @@ import (
 	"github.com/go-openapi/runtime"
 	httptransport "github.com/go-openapi/runtime/client"
 	"github.com/go-openapi/strfmt"
-	homedir "github.com/mitchellh/go-homedir"
 	"github.com/spf13/cobra"
 	"github.com/spf13/viper"
 )
@@ -56,7 +54,7 @@ func makeClient(cmd *cobra.Command, args []string) (*client.LatitudeShAPI, error
 
 // MakeRootCmd returns the root cmd
 func MakeRootCmd(rootCmd *cobra.Command) (*cobra.Command, error) {
-	cobra.OnInitialize(initViperConfigs)
+	lsh.InitViperConfigs()
 
 	// Edit commands template
 	rootCmd.SetVersionTemplate(fmt.Sprintf("lsh %s\n", rootCmd.Version))
@@ -141,30 +139,6 @@ func MakeRootCmd(rootCmd *cobra.Command) (*cobra.Command, error) {
 	rootCmd.AddCommand(makeGenCompletionCmd())
 
 	return rootCmd, nil
-}
-
-// initViperConfigs initialize viper config using config file in '$HOME/.config/<cli name>/config.<json|yaml...>'
-// currently hostname, scheme and auth tokens can be specified in this config file.
-func initViperConfigs() {
-	if configFile != "" {
-		// use user specified config file location
-		viper.SetConfigFile(configFile)
-	} else {
-		// look for default config
-		// Find home directory.
-		home, err := homedir.Dir()
-		cobra.CheckErr(err)
-
-		// Search config in home directory with name ".cobra" (without extension).
-		viper.AddConfigPath(path.Join(home, ".config", exeName))
-		viper.SetConfigName("config")
-	}
-
-	if err := viper.ReadInConfig(); err != nil {
-		lsh.LogDebugf("Error: loading config file: %v", err)
-		return
-	}
-	lsh.LogDebugf("Using config file: %v", viper.ConfigFileUsed())
 }
 
 // registerAuthInoWriterFlags registers all flags needed to perform authentication

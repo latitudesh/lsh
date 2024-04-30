@@ -65,12 +65,6 @@ func (o *CreateServerOperation) registerFlags(cmd *cobra.Command) {
 			Options:     server.SupportedPlans,
 		},
 		&cmdflag.String{
-			Name:        "project",
-			Label:       "Project",
-			Description: "The project (ID or Slug) to deploy the server",
-			Required:    true,
-		},
-		&cmdflag.String{
 			Name:        "site",
 			Label:       "Site",
 			Description: `Enum: ["ASH","BGT","BUE","CHI","DAL","FRA","LAX","LON","MEX","MEX2","MIA","MIA2","NYC","SAN","SAN2","SAO","SAO2","SYD","TYO","TYO2"]. The site to deploy the server`,
@@ -115,6 +109,18 @@ func (o *CreateServerOperation) registerFlags(cmd *cobra.Command) {
 }
 
 func (o *CreateServerOperation) preRun(cmd *cobra.Command, args []string) {
+	projects := fetchUserProjects()
+	schema := &cmdflag.FlagsSchema{
+		&cmdflag.String{
+			Name:        "project",
+			Label:       "Project",
+			Description: "The project (ID or Slug) to deploy the server",
+			Required:    true,
+			Options:     projects,
+		},
+	}
+	o.BodyAttributesFlags.AppendFlags(schema)
+
 	o.BodyAttributesFlags.PreRun(cmd, args)
 }
 
@@ -143,4 +149,21 @@ func (o *CreateServerOperation) run(cmd *cobra.Command, args []string) error {
 	}
 
 	return nil
+}
+
+func fetchUserProjects() []string {
+	userProjects := []string{}
+	c := lsh.NewClient()
+
+	projects, _, err := c.Projects.List(nil)
+	if err != nil {
+		utils.PrintError(err)
+		return nil
+	}
+
+	for _, proj := range projects {
+		userProjects = append(userProjects, proj.Name)
+	}
+
+	return userProjects
 }
