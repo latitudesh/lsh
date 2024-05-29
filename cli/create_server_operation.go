@@ -103,6 +103,12 @@ func (o *CreateServerOperation) registerFlags(cmd *cobra.Command) {
 			Description: "User data to set on the server",
 			Required:    false,
 		},
+		&cmdflag.String{
+			Name:        "project",
+			Label:       "Project",
+			Description: "The project (ID or Slug) to deploy the server",
+			Required:    true,
+		},
 	}
 
 	o.BodyAttributesFlags.Register(schema)
@@ -110,16 +116,7 @@ func (o *CreateServerOperation) registerFlags(cmd *cobra.Command) {
 
 func (o *CreateServerOperation) preRun(cmd *cobra.Command, args []string) {
 	projects := fetchUserProjects()
-	schema := &cmdflag.FlagsSchema{
-		&cmdflag.String{
-			Name:        "project",
-			Label:       "Project",
-			Description: "The project (ID or Slug) to deploy the server",
-			Required:    true,
-			Options:     projects,
-		},
-	}
-	o.BodyAttributesFlags.AppendFlags(schema)
+	o.BodyAttributesFlags.AddFlagOption("project", projects)
 
 	o.BodyAttributesFlags.PreRun(cmd, args)
 }

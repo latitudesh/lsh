@@ -43,7 +43,13 @@ func (o *CreateSSHKeyOperation) registerFlags(cmd *cobra.Command) {
 	o.PathParamFlags = cmdflag.Flags{FlagSet: cmd.Flags()}
 	o.BodyAttributesFlags = cmdflag.Flags{FlagSet: cmd.Flags()}
 
-	pathParamsSchema := &cmdflag.FlagsSchema{}
+	pathParamsSchema := &cmdflag.FlagsSchema{
+		&cmdflag.String{
+			Name:        "project",
+			Label:       "Project ID or Slug",
+			Description: "Project ID or Slug",
+			Required:    true,
+		}}
 
 	bodyFlagsSchema := &cmdflag.FlagsSchema{
 		&cmdflag.String{
@@ -66,16 +72,7 @@ func (o *CreateSSHKeyOperation) registerFlags(cmd *cobra.Command) {
 
 func (o *CreateSSHKeyOperation) preRun(cmd *cobra.Command, args []string) {
 	projects := fetchUserProjects()
-	schema := &cmdflag.FlagsSchema{
-		&cmdflag.String{
-			Name:        "project",
-			Label:       "ID or Slug from the project you want to add the SSH Key",
-			Description: "ID or Slug from the project you want to add the SSH Key",
-			Required:    true,
-			Options:     projects,
-		},
-	}
-	o.PathParamFlags.AppendFlags(schema)
+	o.PathParamFlags.AddFlagOption("project", projects)
 
 	o.PathParamFlags.PreRun(cmd, args)
 	o.BodyAttributesFlags.PreRun(cmd, args)
