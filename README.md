@@ -67,7 +67,7 @@ List your servers
 
   
 
-The list of the available commands is available [here](https://docs.latitude.sh/docs/commands).
+The list of the available commands is available [here](https://www.latitude.sh/docs/cli/commands).
 
   
   
@@ -100,7 +100,7 @@ lsh plans list --gpu true
 
 ```
 
-You can see more examples [here](https://docs.latitude.sh/docs/examples-1). Reach out if you want to see other use cases on `lsh`.
+You can see more examples [here](https://docs.latitude.sh/docs/cli/examples). Reach out if you want to see other use cases on `lsh`.
   
 
 ## Troubleshooting
@@ -118,9 +118,9 @@ curl -sSL  https://raw.githubusercontent.com/latitudesh/lsh/main/uninstall.sh | 
 
 For more information, see the documentation.
 
-- [lsh Docs](https://docs.latitude.sh/docs/cli)
+- [lsh Docs](https://www.latitude.sh/docs/cli)
 
-- [Product Docs](https://docs.latitude.sh/docs)
+- [Product Docs](https://www.latitude.sh/docs)
 
 - [API Docs](https://docs.latitude.sh/reference)
 
