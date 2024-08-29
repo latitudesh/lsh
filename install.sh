@@ -33,11 +33,11 @@ SHELL_CONFIG_PATH=""
 case "$SHELL_NAME" in
     "bash")
         SHELL_CONFIG_PATH=~/.bashrc
-        echo "export PATH=$PATH:$HOME_DIR/.lsh" >> $SHELL_CONFIG_PATH
+        echo 'export PATH="$PATH:$HOME/.lsh"' >> $SHELL_CONFIG_PATH
         ;;
     "zsh")
         SHELL_CONFIG_PATH=~/.zshrc
-        echo "export PATH=$PATH:$HOME_DIR/.lsh" >> $SHELL_CONFIG_PATH
+        echo 'export PATH="$PATH:$HOME/.lsh"' >> $SHELL_CONFIG_PATH
         ;;
     "fish")
         SHELL_CONFIG_PATH=~/.config/fish/config.fish
